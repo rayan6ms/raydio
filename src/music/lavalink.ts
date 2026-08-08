@@ -2,8 +2,9 @@ import type { Client } from "discord.js";
 import type { Logger } from "pino";
 import {
   Connectors,
-  Shoukaku,
+  type Node,
   type NodeOption,
+  Shoukaku,
   type ShoukakuOptions,
 } from "shoukaku";
 
@@ -30,6 +31,7 @@ export interface LavalinkReadiness {
 
 export interface LavalinkService extends LavalinkReadiness {
   readonly manager: Shoukaku;
+  getReadyNode(): Node | undefined;
   stop(): Promise<void>;
 }
 
@@ -52,11 +54,9 @@ export function createLavalinkService(
   config: Config["lavalink"],
   logger: Logger,
 ): LavalinkService {
-  const manager = new Shoukaku(
-    new Connectors.DiscordJS(client),
-    [createLavalinkNode(config)],
-    SHOUKAKU_OPTIONS,
-  );
+  const manager = new Shoukaku(new Connectors.DiscordJS(client), [createLavalinkNode(config)], {
+    ...SHOUKAKU_OPTIONS,
+  });
   let status: LavalinkStatus = "connecting";
   let stopped = false;
 
@@ -132,13 +132,18 @@ export function createLavalinkService(
       return;
     }
 
+    const nodeRemoved = !manager.nodes.has(nodeName);
+    if (nodeRemoved) {
+      status = "unavailable";
+    }
+
     logger.error(
       {
-        event: "lavalink_error",
+        event: nodeRemoved ? "lavalink_unavailable" : "lavalink_error",
         nodeName,
         ...errorFields(error),
       },
-      "Lavalink node error",
+      nodeRemoved ? "Lavalink reconnect attempts exhausted" : "Lavalink node error",
     );
   });
 
@@ -150,6 +155,9 @@ export function createLavalinkService(
     isReady(): boolean {
       return status === "ready";
     },
+    getReadyNode(): Node | undefined {
+      return status === "ready" ? manager.getIdealNode() : undefined;
+    },
     async stop(): Promise<void> {
       if (stopped) {
         return;
@@ -159,8 +167,9 @@ export function createLavalinkService(
       status = "stopped";
 
       const guildIds = new Set([...manager.connections.keys(), ...manager.players.keys()]);
+      const guildIdList = [...guildIds];
       const leaveResults = await Promise.allSettled(
-        [...guildIds].map((guildId) => manager.leaveVoiceChannel(guildId)),
+        guildIdList.map((guildId) => manager.leaveVoiceChannel(guildId)),
       );
 
       for (const [index, result] of leaveResults.entries()) {
@@ -168,7 +177,7 @@ export function createLavalinkService(
           logger.warn(
             {
               event: "lavalink_player_shutdown_failed",
-              guildId: [...guildIds][index],
+              guildId: guildIdList[index],
               ...errorFields(result.reason),
             },
             "Could not close Lavalink player during shutdown",
@@ -178,6 +187,7 @@ export function createLavalinkService(
 
       for (const nodeName of [...manager.nodes.keys()]) {
         try {
+          manager.nodes.get(nodeName)?.ws?.removeAllListeners("close");
           manager.removeNode(nodeName, "Raydio shutdown");
         } catch (error: unknown) {
           logger.warn(

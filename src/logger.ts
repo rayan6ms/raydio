@@ -1,4 +1,4 @@
-import pino, { type Logger } from "pino";
+import pino, { type DestinationStream, type Logger } from "pino";
 
 import type { LogLevel } from "./config.js";
 
@@ -13,15 +13,18 @@ const SECRET_PATHS = [
   "req.headers.authorization",
 ] as const;
 
-export function createLogger(level: LogLevel): Logger {
-  return pino({
-    level,
-    base: {
-      service: "raydio",
+export function createLogger(level: LogLevel, destination?: DestinationStream): Logger {
+  return pino(
+    {
+      level,
+      base: {
+        service: "raydio",
+      },
+      redact: {
+        paths: [...SECRET_PATHS],
+        censor: "[REDACTED]",
+      },
     },
-    redact: {
-      paths: [...SECRET_PATHS],
-      censor: "[REDACTED]",
-    },
-  });
+    destination,
+  );
 }

@@ -28,6 +28,7 @@ function context(
   return {
     discordLatencyMs: 42.4,
     discordReady: true,
+    lavalinkReady: true,
     ...overrides,
     send: async (content) => {
       sent.push(content);
@@ -118,7 +119,7 @@ describe("dispatchCommand", () => {
     const result = await dispatchCommand({ name: "ping", argument: "" }, context(sent));
 
     assert.equal(result, "handled");
-    assert.deepEqual(sent, ["Pong! Discord: 42 ms."]);
+    assert.deepEqual(sent, ["Pong! Discord: 42 ms. Lavalink: ready."]);
   });
 
   it("reports unavailable latency before readiness", async () => {
@@ -128,15 +129,31 @@ describe("dispatchCommand", () => {
       context(sent, { discordLatencyMs: -1, discordReady: false }),
     );
 
-    assert.deepEqual(sent, ["Pong! Discord: unavailable."]);
+    assert.deepEqual(sent, ["Pong! Discord: unavailable. Lavalink: ready."]);
   });
 
-  it("recognizes planned music aliases without pretending playback is available", async () => {
+  it("reports Lavalink unavailability in ping and fails music commands fast", async () => {
+    const sent: string[] = [];
+
+    await dispatchCommand({ name: "ping", argument: "" }, context(sent, { lavalinkReady: false }));
+    const result = await dispatchCommand(
+      { name: "p", argument: "song" },
+      context(sent, { lavalinkReady: false }),
+    );
+
+    assert.equal(result, "unavailable");
+    assert.deepEqual(sent, [
+      "Pong! Discord: 42 ms. Lavalink: unavailable.",
+      "Music service is temporarily unavailable.",
+    ]);
+  });
+
+  it("does not pretend the next playback milestone is implemented when Lavalink is ready", async () => {
     const sent: string[] = [];
     const result = await dispatchCommand({ name: "p", argument: "song" }, context(sent));
 
     assert.equal(result, "unavailable");
-    assert.deepEqual(sent, ["Music playback is not connected yet."]);
+    assert.deepEqual(sent, ["Music playback is not implemented yet."]);
   });
 
   it("responds concisely to unknown commands", async () => {

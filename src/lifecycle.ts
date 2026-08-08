@@ -2,9 +2,7 @@ export interface StoppableService {
   stop(): Promise<void>;
 }
 
-export async function stopServicesInOrder(
-  services: readonly StoppableService[],
-): Promise<void> {
+export async function stopServicesInOrder(services: readonly StoppableService[]): Promise<void> {
   const errors: unknown[] = [];
 
   for (const service of services) {
