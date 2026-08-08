@@ -1,12 +1,6 @@
 import type { Client } from "discord.js";
 import type { Logger } from "pino";
-import {
-  Connectors,
-  type Node,
-  type NodeOption,
-  Shoukaku,
-  type ShoukakuOptions,
-} from "shoukaku";
+import { Connectors, type Node, type NodeOption, Shoukaku, type ShoukakuOptions } from "shoukaku";
 
 import type { Config } from "../config.js";
 import { errorFields } from "../utils.js";

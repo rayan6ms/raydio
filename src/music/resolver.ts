@@ -1,9 +1,5 @@
 import type { Logger } from "pino";
-import {
-  type LavalinkResponse,
-  LoadType,
-  type Track as LavalinkTrack,
-} from "shoukaku";
+import { type LavalinkResponse, type Track as LavalinkTrack, LoadType } from "shoukaku";
 
 import type { Config } from "../config.js";
 import { errorFields } from "../utils.js";
@@ -30,10 +26,7 @@ export interface ResolvedTrack {
   readonly author: string;
   readonly durationMs: number;
   readonly isStream: boolean;
-  readonly isSeekable: boolean;
   readonly uri: string | null;
-  readonly artworkUrl: string | null;
-  readonly isrc: string | null;
   readonly sourceName: string;
 }
 
@@ -110,10 +103,7 @@ function normalizeTrack(track: LavalinkTrack): ResolvedTrack {
     author: track.info.author,
     durationMs: track.info.length,
     isStream: track.info.isStream,
-    isSeekable: track.info.isSeekable,
     uri: track.info.uri ?? null,
-    artworkUrl: track.info.artworkUrl ?? null,
-    isrc: track.info.isrc ?? null,
     sourceName: track.info.sourceName,
   };
 }
@@ -132,6 +122,7 @@ function normalizeTracks(
   candidates: readonly LavalinkTrack[],
   limit: number,
   limits: ResolverLimits,
+  mode: ResolutionMode,
 ): Pick<
   Extract<ResolveResult, { kind: "tracks" }>,
   "rejectedTrackCount" | "tracks" | "truncatedTrackCount"
@@ -150,12 +141,16 @@ function normalizeTracks(
     if (tracks.length < limit) {
       tracks.push(normalizeTrack(candidate));
     }
+
+    if (mode === "single") {
+      break;
+    }
   }
 
   return {
     tracks,
     rejectedTrackCount,
-    truncatedTrackCount: suitableTrackCount - tracks.length,
+    truncatedTrackCount: mode === "playlist" ? suitableTrackCount - tracks.length : 0,
   };
 }
 
@@ -201,7 +196,7 @@ function normalizeResponse(
     mode === "playlist"
       ? Math.min(availableCapacity, limits.maxPlaylistTracks)
       : Math.min(availableCapacity, 1);
-  const normalized = normalizeTracks(responseTracks(response), resultLimit, limits);
+  const normalized = normalizeTracks(responseTracks(response), resultLimit, limits, mode);
 
   if (normalized.tracks.length === 0) {
     return { kind: "no-match", reason: "no-suitable-tracks" };
@@ -264,9 +259,7 @@ export function createTrackResolver(
         availableCapacity < 0 ||
         availableCapacity > limits.maxQueueTracks
       ) {
-        throw new RangeError(
-          `availableCapacity must be between 0 and ${limits.maxQueueTracks}`,
-        );
+        throw new RangeError(`availableCapacity must be between 0 and ${limits.maxQueueTracks}`);
       }
 
       const playInput = classifyPlayInput(input);

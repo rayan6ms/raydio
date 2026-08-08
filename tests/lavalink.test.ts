@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
+import { Constants, Node } from "shoukaku";
+
 import { createDiscordClient } from "../src/discord.js";
 import { createLogger } from "../src/logger.js";
 import {
@@ -57,6 +59,12 @@ describe("createLavalinkService", () => {
     service.manager.emit("ready", LAVALINK_NODE_NAME, false, false);
     assert.equal(service.getStatus(), "ready");
     assert.equal(service.isReady(), true);
+
+    const node = new Node(service.manager, createLavalinkNode(config));
+    node.state = Constants.State.CONNECTED;
+    service.manager.nodes.set(LAVALINK_NODE_NAME, node);
+    assert.equal(service.getReadyNode(), node);
+    service.manager.nodes.delete(LAVALINK_NODE_NAME);
 
     service.manager.emit("close", LAVALINK_NODE_NAME, 1006, "connection lost");
     assert.equal(service.getStatus(), "reconnecting");
