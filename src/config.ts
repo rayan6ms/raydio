@@ -105,10 +105,14 @@ function boolean(env: NodeJS.ProcessEnv, name: string, defaultValue: boolean): b
   throw new ConfigError(name, 'must be exactly "true" or "false"');
 }
 
+function isLogLevel(value: string): value is LogLevel {
+  return LOG_LEVELS.some((level) => level === value);
+}
+
 function logLevel(env: NodeJS.ProcessEnv): LogLevel {
   const value = stringWithDefault(env, "LOG_LEVEL", "info");
 
-  if (!LOG_LEVELS.some((level) => level === value)) {
+  if (!isLogLevel(value)) {
     throw new ConfigError("LOG_LEVEL", `must be one of: ${LOG_LEVELS.join(", ")}`);
   }
 
