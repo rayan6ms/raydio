@@ -33,6 +33,10 @@ function logError(logger: Logger, event: string, error: unknown, message: string
 }
 
 async function handleMessage(message: Message, logger: Logger): Promise<void> {
+  if (!message.inGuild()) {
+    return;
+  }
+
   const parsed = parseCommand({
     authorIsBot: message.author.bot,
     content: message.content,

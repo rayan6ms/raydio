@@ -3,12 +3,14 @@ import { escapeMarkdown } from "discord.js";
 export const DISCORD_MESSAGE_LIMIT = 2_000;
 
 export function escapeExternalText(text: string): string {
-  return escapeMarkdown(text, {
+  const escaped = escapeMarkdown(text, {
     bulletedList: true,
     heading: true,
     maskedLink: true,
     numberedList: true,
   });
+
+  return escaped.replaceAll(/^(\s*)(>|-#)/gm, "$1\\$2");
 }
 
 export function truncateMessage(content: string, maximumLength = DISCORD_MESSAGE_LIMIT): string {

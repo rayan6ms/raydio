@@ -58,7 +58,13 @@ export function classifyPlayInput(input: string): PlayInput {
     return { kind: "search", query: trimmedInput };
   }
 
-  if ((url.protocol !== "http:" && url.protocol !== "https:") || !YOUTUBE_HOSTS.has(url.hostname)) {
+  if (
+    (url.protocol !== "http:" && url.protocol !== "https:") ||
+    !YOUTUBE_HOSTS.has(url.hostname) ||
+    url.username !== "" ||
+    url.password !== "" ||
+    url.port !== ""
+  ) {
     return { kind: "unsupported-url", url: url.href };
   }
 

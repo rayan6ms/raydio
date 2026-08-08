@@ -61,7 +61,10 @@ async function main(): Promise<void> {
       return;
     }
 
-    logger.error({ event: "discord_startup_failed", ...errorFields(error) }, "Discord login failed");
+    logger.error(
+      { event: "discord_startup_failed", ...errorFields(error) },
+      "Discord login failed",
+    );
     await shutdown("startup_failure");
     throw error;
   }

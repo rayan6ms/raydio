@@ -30,8 +30,6 @@ const COMMAND_ALIASES = new Map<string, CommandName>([
   ["dc", "leave"],
 ]);
 
-const CANONICAL_COMMAND_SET = new Set<string>(CANONICAL_COMMANDS);
-
 const MUSIC_COMMANDS = new Set<CommandName>(
   CANONICAL_COMMANDS.filter((name) => name !== "help" && name !== "ping"),
 );
@@ -83,11 +81,15 @@ export function parseCommand(input: CommandMessageInput): ParsedCommand | null {
   };
 }
 
+function isCommandName(name: string): name is CommandName {
+  return CANONICAL_COMMANDS.some((commandName) => commandName === name);
+}
+
 export function resolveCommandName(name: string): CommandName | null {
   const normalizedName = name.toLowerCase();
 
-  if (CANONICAL_COMMAND_SET.has(normalizedName)) {
-    return normalizedName as CommandName;
+  if (isCommandName(normalizedName)) {
+    return normalizedName;
   }
 
   return COMMAND_ALIASES.get(normalizedName) ?? null;
