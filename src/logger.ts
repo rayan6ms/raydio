@@ -8,6 +8,7 @@ const SECRET_PATHS = [
   "DISCORD_TOKEN",
   "lavalinkPassword",
   "password",
+  "auth",
   "LAVALINK_PASSWORD",
   "req.headers.authorization",
 ] as const;

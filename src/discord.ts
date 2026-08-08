@@ -8,6 +8,7 @@ import {
 import type { Logger } from "pino";
 
 import { dispatchCommand, parseCommand } from "./commands.js";
+import type { LavalinkReadiness } from "./music/lavalink.js";
 import { errorFields, truncateMessage } from "./utils.js";
 
 export const DISCORD_INTENTS = [
@@ -32,7 +33,11 @@ function logError(logger: Logger, event: string, error: unknown, message: string
   logger.error({ event, ...errorFields(error) }, message);
 }
 
-async function handleMessage(message: Message, logger: Logger): Promise<void> {
+async function handleMessage(
+  message: Message,
+  logger: Logger,
+  lavalink: LavalinkReadiness,
+): Promise<void> {
   if (!message.inGuild()) {
     return;
   }
@@ -61,6 +66,7 @@ async function handleMessage(message: Message, logger: Logger): Promise<void> {
     await dispatchCommand(parsed, {
       discordLatencyMs: message.client.ws.ping,
       discordReady: message.client.isReady(),
+      lavalinkReady: lavalink.isReady(),
       send: async (content) => {
         await message.channel.send({ content: truncateMessage(content) });
       },
@@ -79,11 +85,18 @@ async function handleMessage(message: Message, logger: Logger): Promise<void> {
   }
 }
 
-export function createDiscordService(logger: Logger): DiscordService {
-  const client = new Client({
+export function createDiscordClient(): Client {
+  return new Client({
     intents: DISCORD_INTENTS,
     allowedMentions: SAFE_ALLOWED_MENTIONS,
   });
+}
+
+export function createDiscordService(
+  client: Client,
+  logger: Logger,
+  lavalink: LavalinkReadiness,
+): DiscordService {
   let acceptingCommands = false;
   let started = false;
   let stopped = false;
@@ -127,7 +140,7 @@ export function createDiscordService(logger: Logger): DiscordService {
 
   client.on(Events.MessageCreate, (message) => {
     if (acceptingCommands) {
-      void handleMessage(message, logger);
+      void handleMessage(message, logger, lavalink);
     }
   });
 

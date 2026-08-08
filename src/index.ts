@@ -1,6 +1,8 @@
 import { ConfigError, loadConfig } from "./config.js";
-import { createDiscordService } from "./discord.js";
+import { createDiscordClient, createDiscordService } from "./discord.js";
+import { stopServicesInOrder } from "./lifecycle.js";
 import { createLogger } from "./logger.js";
+import { createLavalinkService } from "./music/lavalink.js";
 import { errorFields } from "./utils.js";
 
 const SHUTDOWN_TIMEOUT_MS = 10_000;
@@ -9,7 +11,9 @@ type ShutdownReason = NodeJS.Signals | "startup_failure";
 async function main(): Promise<void> {
   const config = loadConfig();
   const logger = createLogger(config.logLevel);
-  const discord = createDiscordService(logger);
+  const client = createDiscordClient();
+  const lavalink = createLavalinkService(client, config.lavalink, logger);
+  const discord = createDiscordService(client, logger, lavalink);
   let isShuttingDown = false;
 
   const shutdown = async (reason: ShutdownReason): Promise<void> => {
@@ -27,7 +31,7 @@ async function main(): Promise<void> {
     forcedExit.unref();
 
     try {
-      await discord.stop();
+      await stopServicesInOrder([lavalink, discord]);
       logger.info({ event: "shutdown_complete", reason }, "Raydio stopped");
     } catch (error: unknown) {
       logger.error(

@@ -8,6 +8,17 @@ services:
       - ./lavalink/application.yml:/opt/Lavalink/application.yml:ro
     expose:
       - "2333"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          wget --quiet --spider -T 3
+          --header="Authorization: $${LAVALINK_SERVER_PASSWORD}"
+          http://127.0.0.1:2333/version
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
     networks:
       - raydio
 

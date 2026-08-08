@@ -37,8 +37,8 @@ const MUSIC_COMMANDS = new Set<CommandName>(
 const HELP_MESSAGE = [
   "Raydio commands available now:",
   "`\\help` — show this command list",
-  "`\\ping` — show the Discord connection latency",
-  "Music commands are recognized but playback is not connected yet.",
+  "`\\ping` — show Discord latency and Lavalink readiness",
+  "Music commands are recognized; playback implementation is the next milestone.",
 ].join("\n");
 
 export interface CommandMessageInput {
@@ -55,6 +55,7 @@ export interface ParsedCommand {
 export interface CommandContext {
   readonly discordLatencyMs: number;
   readonly discordReady: boolean;
+  readonly lavalinkReady: boolean;
   send(content: string): Promise<void>;
 }
 
@@ -121,12 +122,17 @@ export async function dispatchCommand(
 
   if (commandName === "ping") {
     const latency = formatDiscordLatency(context.discordReady, context.discordLatencyMs);
-    await context.send(`Pong! Discord: ${latency}.`);
+    const lavalinkStatus = context.lavalinkReady ? "ready" : "unavailable";
+    await context.send(`Pong! Discord: ${latency}. Lavalink: ${lavalinkStatus}.`);
     return "handled";
   }
 
   if (MUSIC_COMMANDS.has(commandName)) {
-    await context.send("Music playback is not connected yet.");
+    await context.send(
+      context.lavalinkReady
+        ? "Music playback is not implemented yet."
+        : "Music service is temporarily unavailable.",
+    );
     return "unavailable";
   }
 
