@@ -1,0 +1,18 @@
+# Dependencies and build output
+node_modules/
+dist/
+coverage/
+
+# Local configuration and logs
+.env
+.env.*
+!.env.example
+*.log
+
+# Editor and operating-system files
+.idea/
+.vscode/
+.DS_Store
+
+# Agent-only planning and project memory. Never commit this directory.
+/docs/
