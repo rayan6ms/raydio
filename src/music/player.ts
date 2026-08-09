@@ -1,10 +1,6 @@
 import type { Player, Shoukaku, Track, TrackExceptionEvent } from "shoukaku";
 
-import type {
-  PlaybackJoinOptions,
-  PlaybackSession,
-  PlaybackTransport,
-} from "./transport.js";
+import type { PlaybackJoinOptions, PlaybackSession, PlaybackTransport } from "./transport.js";
 
 interface ShoukakuVoiceClient {
   joinVoiceChannel(options: {
@@ -64,11 +60,26 @@ function createSession(
       }
       return player.playTrack({ track: { encoded: encodedTrack } });
     },
+    setPaused(paused) {
+      if (destroyed) {
+        return Promise.reject(new Error("Playback session has been destroyed"));
+      }
+      return player.setPaused(paused);
+    },
+    setVolume(volume) {
+      if (destroyed) {
+        return Promise.reject(new Error("Playback session has been destroyed"));
+      }
+      return player.setGlobalVolume(volume);
+    },
     stop() {
       if (destroyed) {
         return Promise.resolve();
       }
       return player.stopTrack();
+    },
+    getPositionMs() {
+      return Number.isFinite(player.position) && player.position >= 0 ? player.position : 0;
     },
     async destroy() {
       if (destroyed) {

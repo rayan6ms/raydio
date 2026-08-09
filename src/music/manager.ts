@@ -1,6 +1,7 @@
 import type { Logger } from "pino";
 
 import type { Config } from "../config.js";
+import { errorFields } from "../utils.js";
 import type { ResolveResult, TrackResolver } from "./resolver.js";
 import { KeyedSerialExecutor } from "./serial.js";
 import {
@@ -12,11 +13,18 @@ import {
   type TrackRequester,
   toQueueTrack,
 } from "./state.js";
+import type {
+  PlaybackEndReason,
+  PlaybackSession,
+  PlaybackSessionCallbacks,
+  PlaybackTransport,
+} from "./transport.js";
+import type { VoiceAccessResult } from "./voice.js";
 
 const MILLISECONDS_PER_SECOND = 1_000;
 const FAILURE_LIMIT = 3;
 
-export type TrackEndReason = "finished" | "loadFailed" | "stopped" | "replaced" | "cleanup";
+export type TrackEndReason = PlaybackEndReason;
 
 export interface TimerHandle {
   unref?(): void;
@@ -31,10 +39,29 @@ export interface PlayRequest {
   readonly guildId: string;
   readonly notificationChannelId: string;
   readonly intendedVoiceChannelId: string;
+  readonly shardId: number;
   readonly input: string;
   readonly requestedBy: TrackRequester;
-  readonly getRequesterVoiceChannelId: () => string | null;
+  readonly validateCommit: () => VoiceAccessResult;
 }
+
+export interface PlaybackControlRequest {
+  readonly guildId: string;
+  readonly intendedVoiceChannelId: string;
+  readonly playerToken: PlayerToken;
+  readonly validateCommit: () => boolean;
+}
+
+export type ControlRejectionReason =
+  | "no-session"
+  | "stale-session"
+  | "wrong-channel"
+  | "voice-changed";
+
+export type ControlResult<Value> =
+  | { readonly kind: "ok"; readonly value: Value }
+  | { readonly kind: "rejected"; readonly reason: ControlRejectionReason }
+  | { readonly kind: "transport-failed" };
 
 type UnqueuedResolution = Exclude<ResolveResult, { kind: "tracks" }>;
 
@@ -47,13 +74,17 @@ export type PlayRequestResult =
       readonly truncatedTrackCount: number;
       readonly commitTruncatedTrackCount: number;
       readonly playlistName: string | null;
+      readonly firstTrack: QueueTrack;
     }
   | { readonly kind: "not-queued"; readonly resolution: UnqueuedResolution }
   | { readonly kind: "pending-limit" }
   | { readonly kind: "stale" }
-  | { readonly kind: "voice-changed" }
+  | { readonly kind: "commit-rejected"; readonly reason: VoiceAccessResult }
   | { readonly kind: "wrong-channel" }
-  | { readonly kind: "queue-full" };
+  | { readonly kind: "queue-full" }
+  | { readonly kind: "join-failed" }
+  | { readonly kind: "play-failed" }
+  | { readonly kind: "closed" };
 
 export type TransitionResult =
   | { readonly kind: "advanced"; readonly current: QueueTrack | null }
@@ -74,13 +105,21 @@ export interface MusicManager {
   getSnapshot(guildId: string): GuildPlaybackSnapshot | undefined;
   getPendingPlayRequestCount(guildId: string): number;
   requestPlay(request: PlayRequest): Promise<PlayRequestResult>;
-  setLoopMode(guildId: string, loopMode: LoopMode): Promise<boolean>;
-  removeUpcoming(guildId: string, displayedIndex: number): Promise<QueueTrack | undefined>;
-  clearUpcoming(guildId: string): Promise<number>;
-  shuffleUpcoming(guildId: string): Promise<boolean>;
-  skip(guildId: string): Promise<TransitionResult>;
-  stop(guildId: string): Promise<boolean>;
-  leave(guildId: string): Promise<boolean>;
+  setPaused(
+    request: PlaybackControlRequest,
+    paused: boolean,
+  ): Promise<ControlResult<"updated" | "unchanged" | "no-current">>;
+  setVolume(request: PlaybackControlRequest, volume: number): Promise<ControlResult<number>>;
+  setLoopMode(request: PlaybackControlRequest, loopMode: LoopMode): Promise<ControlResult<LoopMode>>;
+  removeUpcoming(
+    request: PlaybackControlRequest,
+    displayedIndex: number,
+  ): Promise<ControlResult<QueueTrack | null>>;
+  clearUpcoming(request: PlaybackControlRequest): Promise<ControlResult<number>>;
+  shuffleUpcoming(request: PlaybackControlRequest): Promise<ControlResult<boolean>>;
+  skip(request: PlaybackControlRequest): Promise<ControlResult<TransitionResult>>;
+  stop(request: PlaybackControlRequest): Promise<ControlResult<"stopped" | "unchanged">>;
+  leave(request: PlaybackControlRequest): Promise<ControlResult<true>>;
   cleanupUnexpected(guildId: string): Promise<boolean>;
   handleTrackEnd(
     event: PlayerEventIdentity & { readonly reason: TrackEndReason },
@@ -88,6 +127,7 @@ export interface MusicManager {
   handleTrackException(event: PlayerEventIdentity): Promise<TransitionResult>;
   handleTrackStuck(event: PlayerEventIdentity): Promise<TransitionResult>;
   updateAloneStatus(guildId: string, playerToken: PlayerToken, alone: boolean): Promise<boolean>;
+  stopService(): Promise<void>;
 }
 
 type ManagerConfig = Pick<
@@ -118,11 +158,16 @@ interface GuildPlaybackState {
   alone: boolean;
   idleTimer: TimerHandle | null;
   aloneTimer: TimerHandle | null;
+  readonly session: PlaybackSession;
 }
 
 interface MusicManagerDependencies {
   readonly resolver: TrackResolver;
+  readonly transport: PlaybackTransport;
   readonly logger: Logger;
+  readonly notifier?: {
+    send(channelId: string, content: string): Promise<void>;
+  };
   readonly scheduler?: TimerScheduler;
   readonly random?: () => number;
   readonly createPlayerToken?: () => PlayerToken;
@@ -169,6 +214,7 @@ function copySnapshot(state: GuildPlaybackState): GuildPlaybackSnapshot {
     loopMode: state.loopMode,
     volume: state.volume,
     paused: state.paused,
+    positionMs: state.current === null ? 0 : state.session.getPositionMs(),
     consecutiveFailures: state.consecutiveFailures,
     alone: state.alone,
   };
@@ -198,6 +244,7 @@ export function createMusicManager(
   const scheduler = dependencies.scheduler ?? defaultScheduler;
   const random = dependencies.random ?? Math.random;
   const createPlayerToken = dependencies.createPlayerToken ?? (() => Symbol("player"));
+  let acceptingPlayRequests = true;
 
   function coordinatorFor(guildId: string): GuildCoordinator {
     const existing = coordinators.get(guildId);
@@ -239,7 +286,7 @@ export function createMusicManager(
     return coordinator;
   }
 
-  function deleteState(guildId: string, state: GuildPlaybackState): boolean {
+  async function deleteState(guildId: string, state: GuildPlaybackState): Promise<boolean> {
     if (states.get(guildId) !== state) {
       return false;
     }
@@ -248,6 +295,14 @@ export function createMusicManager(
     cancelStateTimers(state);
     states.delete(guildId);
     discardCoordinatorIfIdle(guildId, coordinator);
+    try {
+      await state.session.destroy();
+    } catch (error: unknown) {
+      dependencies.logger.warn(
+        { event: "player_destroy_failed", guildId, ...errorFields(error) },
+        "Could not destroy playback session cleanly",
+      );
+    }
     return true;
   }
 
@@ -259,7 +314,7 @@ export function createMusicManager(
     let handle: TimerHandle;
     handle = scheduler.setTimeout(() => {
       void stateExecutor
-        .run(state.guildId, () => {
+        .run(state.guildId, async () => {
           const active = states.get(state.guildId);
           if (
             active !== state ||
@@ -271,7 +326,7 @@ export function createMusicManager(
           }
 
           active.idleTimer = null;
-          deleteState(state.guildId, active);
+          await deleteState(state.guildId, active);
         })
         .catch((error: unknown) => {
           dependencies.logger.error(
@@ -292,14 +347,14 @@ export function createMusicManager(
     let handle: TimerHandle;
     handle = scheduler.setTimeout(() => {
       void stateExecutor
-        .run(state.guildId, () => {
+        .run(state.guildId, async () => {
           const active = states.get(state.guildId);
           if (active !== state || active.aloneTimer !== handle || !active.alone) {
             return;
           }
 
           active.aloneTimer = null;
-          deleteState(state.guildId, active);
+          await deleteState(state.guildId, active);
         })
         .catch((error: unknown) => {
           dependencies.logger.error(
@@ -377,6 +432,245 @@ export function createMusicManager(
     return { state };
   }
 
+  function validateControl(
+    request: PlaybackControlRequest,
+  ):
+    | { readonly state: GuildPlaybackState }
+    | { readonly result: ControlResult<never> } {
+    const state = states.get(request.guildId);
+    if (state === undefined) {
+      return { result: { kind: "rejected", reason: "no-session" } };
+    }
+    if (state.playerToken !== request.playerToken) {
+      return { result: { kind: "rejected", reason: "stale-session" } };
+    }
+    if (state.voiceChannelId !== request.intendedVoiceChannelId) {
+      return { result: { kind: "rejected", reason: "wrong-channel" } };
+    }
+    if (!request.validateCommit()) {
+      return { result: { kind: "rejected", reason: "voice-changed" } };
+    }
+    return { state };
+  }
+
+  async function applyPlaybackEffect(
+    state: GuildPlaybackState,
+    initialResult: TransitionResult,
+  ): Promise<TransitionResult> {
+    let result = initialResult;
+    while (result.kind === "advanced" || result.kind === "replayed") {
+      if (result.current === null) {
+        return result;
+      }
+
+      try {
+        await state.session.play(result.current.encoded);
+        return result;
+      } catch (error: unknown) {
+        dependencies.logger.warn(
+          {
+            event: "track_play_failed",
+            guildId: state.guildId,
+            trackIdentifier: result.current.identifier,
+            ...errorFields(error),
+          },
+          "Could not start the selected track",
+        );
+        result = transitionCurrent(state, "failure");
+      }
+    }
+    if (result.kind === "failure-guard") {
+      dependencies.logger.warn(
+        { event: "playback_failure_guard", guildId: state.guildId },
+        "Automatic playback stopped after consecutive failures",
+      );
+      void dependencies.notifier
+        ?.send(
+          state.notificationChannelId,
+          "Playback stopped after three consecutive track failures. The source may be unhealthy.",
+        )
+        .catch((error: unknown) => {
+          dependencies.logger.warn(
+            {
+              event: "failure_guard_notification_failed",
+              guildId: state.guildId,
+              ...errorFields(error),
+            },
+            "Could not send the playback failure warning",
+          );
+        });
+    }
+    return result;
+  }
+
+  async function stopPlaybackBestEffort(state: GuildPlaybackState): Promise<void> {
+    try {
+      await state.session.stop();
+    } catch (error: unknown) {
+      dependencies.logger.warn(
+        { event: "player_stop_failed", guildId: state.guildId, ...errorFields(error) },
+        "Could not stop the current transport track cleanly",
+      );
+    }
+  }
+
+  function reportEventFailure(guildId: string, event: string, error: unknown): void {
+    dependencies.logger.error(
+      { event, guildId, ...errorFields(error) },
+      "Playback event handling failed",
+    );
+  }
+
+  function handleTrackStartInternal(event: PlayerEventIdentity): Promise<void> {
+    const capturedState = states.get(event.guildId);
+    const capturedCurrent = capturedState?.current;
+    return stateExecutor.run(event.guildId, () => {
+      const validation = validateEvent(event, capturedState, capturedCurrent);
+      if ("result" in validation) {
+        return;
+      }
+      dependencies.logger.info(
+        {
+          event: "track_started",
+          guildId: event.guildId,
+          trackIdentifier: validation.state.current?.identifier,
+        },
+        "Track started",
+      );
+    });
+  }
+
+  function handleTrackEndInternal(
+    event: PlayerEventIdentity & { readonly reason: TrackEndReason },
+  ): Promise<TransitionResult> {
+    const capturedState = states.get(event.guildId);
+    const capturedCurrent = capturedState?.current;
+    return stateExecutor.run(event.guildId, async () => {
+      if (event.reason === "stopped" || event.reason === "replaced" || event.reason === "cleanup") {
+        const state = states.get(event.guildId);
+        if (state === undefined) {
+          return { kind: "ignored", reason: "no-state" };
+        }
+        if (state.playerToken !== event.playerToken) {
+          return { kind: "ignored", reason: "stale-session" };
+        }
+        return { kind: "ignored", reason: "end-reason" };
+      }
+
+      const validation = validateEvent(event, capturedState, capturedCurrent);
+      if ("result" in validation) {
+        return validation.result;
+      }
+      const result = transitionCurrent(
+        validation.state,
+        event.reason === "finished" ? "finished" : "failure",
+      );
+      return applyPlaybackEffect(validation.state, result);
+    });
+  }
+
+  function handleTrackExceptionInternal(event: PlayerEventIdentity): Promise<TransitionResult> {
+    const capturedState = states.get(event.guildId);
+    const capturedCurrent = capturedState?.current;
+    return stateExecutor.run(event.guildId, () => {
+      const validation = validateEvent(event, capturedState, capturedCurrent);
+      if ("result" in validation) {
+        return validation.result;
+      }
+      dependencies.logger.warn(
+        {
+          event: "track_exception",
+          guildId: event.guildId,
+          trackIdentifier: validation.state.current?.identifier,
+        },
+        "Player reported a track exception",
+      );
+      return { kind: "ignored", reason: "end-reason" };
+    });
+  }
+
+  function handleTrackStuckInternal(event: PlayerEventIdentity): Promise<TransitionResult> {
+    const capturedState = states.get(event.guildId);
+    const capturedCurrent = capturedState?.current;
+    return stateExecutor.run(event.guildId, async () => {
+      const validation = validateEvent(event, capturedState, capturedCurrent);
+      if ("result" in validation) {
+        return validation.result;
+      }
+      dependencies.logger.warn(
+        {
+          event: "track_stuck",
+          guildId: event.guildId,
+          trackIdentifier: validation.state.current?.identifier,
+        },
+        "Player reported a stuck track",
+      );
+      await stopPlaybackBestEffort(validation.state);
+      const result = transitionCurrent(validation.state, "failure");
+      return applyPlaybackEffect(validation.state, result);
+    });
+  }
+
+  function handleClosedInternal(
+    guildId: string,
+    playerToken: PlayerToken,
+    code: number,
+    byRemote: boolean,
+  ): Promise<void> {
+    return stateExecutor.run(guildId, async () => {
+      const state = states.get(guildId);
+      if (state === undefined || state.playerToken !== playerToken) {
+        return;
+      }
+      dependencies.logger.warn(
+        { event: "voice_websocket_closed", guildId, closeCode: code, byRemote },
+        "Discord voice websocket closed",
+      );
+      await deleteState(guildId, state);
+    });
+  }
+
+  function sessionCallbacks(guildId: string, playerToken: PlayerToken): PlaybackSessionCallbacks {
+    return {
+      onStart(encodedTrack) {
+        void handleTrackStartInternal({ guildId, playerToken, encodedTrack }).catch((error) =>
+          reportEventFailure(guildId, "track_start_handler_failed", error),
+        );
+      },
+      onEnd(encodedTrack, reason) {
+        void handleTrackEndInternal({ guildId, playerToken, encodedTrack, reason }).catch((error) =>
+          reportEventFailure(guildId, "track_end_handler_failed", error),
+        );
+      },
+      onException(encodedTrack, severity) {
+        if (encodedTrack === null) {
+          dependencies.logger.warn(
+            { event: "track_exception_without_track", guildId, severity },
+            "Player reported a track exception without track identity",
+          );
+          return;
+        }
+        void handleTrackExceptionInternal({ guildId, playerToken, encodedTrack }).catch((error) =>
+          reportEventFailure(guildId, "track_exception_handler_failed", error),
+        );
+      },
+      onStuck(encodedTrack, thresholdMs) {
+        dependencies.logger.warn(
+          { event: "track_stuck_threshold", guildId, thresholdMs },
+          "Track exceeded the stuck threshold",
+        );
+        void handleTrackStuckInternal({ guildId, playerToken, encodedTrack }).catch((error) =>
+          reportEventFailure(guildId, "track_stuck_handler_failed", error),
+        );
+      },
+      onClosed(code, byRemote) {
+        void handleClosedInternal(guildId, playerToken, code, byRemote).catch((error) =>
+          reportEventFailure(guildId, "voice_close_handler_failed", error),
+        );
+      },
+    };
+  }
+
   return {
     getSnapshot(guildId) {
       const state = states.get(guildId);
@@ -388,6 +682,12 @@ export function createMusicManager(
     },
 
     async requestPlay(request) {
+      if (!acceptingPlayRequests) {
+        return { kind: "closed" };
+      }
+      if (!Number.isSafeInteger(request.shardId) || request.shardId < 0) {
+        throw new RangeError("shardId must be a nonnegative safe integer");
+      }
       const coordinator = coordinatorFor(request.guildId);
       if (coordinator.pendingPlayRequests >= config.maxPendingPlayRequests) {
         return { kind: "pending-limit" };
@@ -424,12 +724,16 @@ export function createMusicManager(
             return { kind: "not-queued", resolution };
           }
 
-          return stateExecutor.run(request.guildId, (): PlayRequestResult => {
+          return stateExecutor.run(request.guildId, async (): Promise<PlayRequestResult> => {
             if (coordinator.epoch !== capturedEpoch) {
               return { kind: "stale" };
             }
-            if (request.getRequesterVoiceChannelId() !== request.intendedVoiceChannelId) {
-              return { kind: "voice-changed" };
+            const commitAccess = request.validateCommit();
+            if (
+              commitAccess.kind !== "ready" ||
+              commitAccess.voiceChannelId !== request.intendedVoiceChannelId
+            ) {
+              return { kind: "commit-rejected", reason: commitAccess };
             }
 
             let state = states.get(request.guildId);
@@ -447,12 +751,35 @@ export function createMusicManager(
               return { kind: "queue-full" };
             }
 
+            let createdState = false;
             if (state === undefined) {
+              const playerToken = createPlayerToken();
+              let session: PlaybackSession;
+              try {
+                session = await dependencies.transport.join({
+                  guildId: request.guildId,
+                  voiceChannelId: request.intendedVoiceChannelId,
+                  shardId: request.shardId,
+                  initialVolume: config.defaultVolume,
+                  callbacks: sessionCallbacks(request.guildId, playerToken),
+                });
+              } catch (error: unknown) {
+                dependencies.logger.warn(
+                  {
+                    event: "player_join_failed",
+                    guildId: request.guildId,
+                    voiceChannelId: request.intendedVoiceChannelId,
+                    ...errorFields(error),
+                  },
+                  "Could not create a playback session",
+                );
+                return { kind: "join-failed" };
+              }
               state = {
                 guildId: request.guildId,
                 voiceChannelId: request.intendedVoiceChannelId,
                 notificationChannelId: request.notificationChannelId,
-                playerToken: createPlayerToken(),
+                playerToken,
                 current: null,
                 upcoming: [],
                 loopMode: "off",
@@ -462,12 +789,21 @@ export function createMusicManager(
                 alone: false,
                 idleTimer: null,
                 aloneTimer: null,
+                session,
               };
               states.set(request.guildId, state);
+              createdState = true;
             }
 
             const becameCurrent = state.current === null;
+            const previousCurrent = state.current;
+            const previousUpcoming = [...state.upcoming];
+            const previousFailureCount = state.consecutiveFailures;
             const queueTracks = accepted.map((track) => toQueueTrack(track, request.requestedBy));
+            const firstTrack = queueTracks[0];
+            if (firstTrack === undefined) {
+              throw new Error("Resolved track commit unexpectedly contained no tracks");
+            }
             if (state.current === null) {
               state.current = queueTracks.shift() ?? null;
               state.consecutiveFailures = 0;
@@ -479,6 +815,31 @@ export function createMusicManager(
             cancelTimer(state.aloneTimer);
             state.aloneTimer = null;
 
+            if (becameCurrent) {
+              try {
+                await state.session.play(firstTrack.encoded);
+              } catch (error: unknown) {
+                dependencies.logger.warn(
+                  {
+                    event: "initial_track_play_failed",
+                    guildId: request.guildId,
+                    trackIdentifier: firstTrack.identifier,
+                    ...errorFields(error),
+                  },
+                  "Could not start the initial track",
+                );
+                if (createdState) {
+                  await deleteState(request.guildId, state);
+                } else {
+                  state.current = previousCurrent;
+                  state.upcoming = previousUpcoming;
+                  state.consecutiveFailures = previousFailureCount;
+                  scheduleIdleTimer(state);
+                }
+                return { kind: "play-failed" };
+              }
+            }
+
             return {
               kind: "queued",
               addedTrackCount: accepted.length,
@@ -487,6 +848,7 @@ export function createMusicManager(
               truncatedTrackCount: resolution.truncatedTrackCount,
               commitTruncatedTrackCount: resolution.tracks.length - accepted.length,
               playlistName: resolution.playlistName,
+              firstTrack: copyQueueTrack(firstTrack),
             };
           });
         });
@@ -569,7 +931,7 @@ export function createMusicManager(
       const playerToken = captured?.playerToken;
       const current = captured?.current;
 
-      return stateExecutor.run(guildId, () => {
+      return stateExecutor.run(guildId, async () => {
         const state = states.get(guildId);
         if (state === undefined) {
           return { kind: "ignored", reason: "no-state" };
@@ -583,18 +945,21 @@ export function createMusicManager(
             reason: current === undefined || current === null ? "no-current" : "stale-track",
           };
         }
-        return transitionCurrent(state, "manual-skip");
+        await stopPlaybackBestEffort(state);
+        const result = transitionCurrent(state, "manual-skip");
+        return applyPlaybackEffect(state, result);
       });
     },
 
     stop(guildId) {
-      return stateExecutor.run(guildId, () => {
+      return stateExecutor.run(guildId, async () => {
         const coordinator = invalidate(guildId);
         const state = states.get(guildId);
         if (state === undefined) {
           discardCoordinatorIfIdle(guildId, coordinator);
           return false;
         }
+        await stopPlaybackBestEffort(state);
         state.current = null;
         state.upcoming = [];
         state.paused = false;
@@ -605,97 +970,39 @@ export function createMusicManager(
     },
 
     leave(guildId) {
-      return stateExecutor.run(guildId, () => {
+      return stateExecutor.run(guildId, async () => {
         const state = states.get(guildId);
         if (state === undefined) {
           const coordinator = invalidate(guildId);
           discardCoordinatorIfIdle(guildId, coordinator);
           return false;
         }
-        return deleteState(guildId, state);
+        return await deleteState(guildId, state);
       });
     },
 
     cleanupUnexpected(guildId) {
-      return stateExecutor.run(guildId, () => {
+      return stateExecutor.run(guildId, async () => {
         const state = states.get(guildId);
         if (state === undefined) {
           const coordinator = invalidate(guildId);
           discardCoordinatorIfIdle(guildId, coordinator);
           return false;
         }
-        return deleteState(guildId, state);
+        return await deleteState(guildId, state);
       });
     },
 
     handleTrackEnd(event) {
-      const capturedState = states.get(event.guildId);
-      const capturedCurrent = capturedState?.current;
-      return stateExecutor.run(event.guildId, () => {
-        if (
-          event.reason === "stopped" ||
-          event.reason === "replaced" ||
-          event.reason === "cleanup"
-        ) {
-          const state = states.get(event.guildId);
-          if (state === undefined) {
-            return { kind: "ignored", reason: "no-state" };
-          }
-          if (state.playerToken !== event.playerToken) {
-            return { kind: "ignored", reason: "stale-session" };
-          }
-          return { kind: "ignored", reason: "end-reason" };
-        }
-
-        const validation = validateEvent(event, capturedState, capturedCurrent);
-        if ("result" in validation) {
-          return validation.result;
-        }
-        return transitionCurrent(
-          validation.state,
-          event.reason === "finished" ? "finished" : "failure",
-        );
-      });
+      return handleTrackEndInternal(event);
     },
 
     handleTrackException(event) {
-      const capturedState = states.get(event.guildId);
-      const capturedCurrent = capturedState?.current;
-      return stateExecutor.run(event.guildId, () => {
-        const validation = validateEvent(event, capturedState, capturedCurrent);
-        if ("result" in validation) {
-          return validation.result;
-        }
-        dependencies.logger.warn(
-          {
-            event: "track_exception",
-            guildId: event.guildId,
-            trackIdentifier: validation.state.current?.identifier,
-          },
-          "Player reported a track exception",
-        );
-        return { kind: "ignored", reason: "end-reason" };
-      });
+      return handleTrackExceptionInternal(event);
     },
 
     handleTrackStuck(event) {
-      const capturedState = states.get(event.guildId);
-      const capturedCurrent = capturedState?.current;
-      return stateExecutor.run(event.guildId, () => {
-        const validation = validateEvent(event, capturedState, capturedCurrent);
-        if ("result" in validation) {
-          return validation.result;
-        }
-        dependencies.logger.warn(
-          {
-            event: "track_stuck",
-            guildId: event.guildId,
-            trackIdentifier: validation.state.current?.identifier,
-          },
-          "Player reported a stuck track",
-        );
-        return transitionCurrent(validation.state, "failure");
-      });
+      return handleTrackStuckInternal(event);
     },
 
     updateAloneStatus(guildId, playerToken, alone) {
@@ -713,6 +1020,24 @@ export function createMusicManager(
         }
         return true;
       });
+    },
+
+    async stopService() {
+      acceptingPlayRequests = false;
+      const guildIds = new Set([...states.keys(), ...coordinators.keys()]);
+      await Promise.all(
+        [...guildIds].map((guildId) =>
+          stateExecutor.run(guildId, async () => {
+            const state = states.get(guildId);
+            if (state !== undefined) {
+              await deleteState(guildId, state);
+              return;
+            }
+            const coordinator = invalidate(guildId);
+            discardCoordinatorIfIdle(guildId, coordinator);
+          }),
+        ),
+      );
     },
   };
 }

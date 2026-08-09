@@ -31,14 +31,15 @@ const COMMAND_ALIASES = new Map<string, CommandName>([
 ]);
 
 const MUSIC_COMMANDS = new Set<CommandName>(
-  CANONICAL_COMMANDS.filter((name) => name !== "help" && name !== "ping"),
+  CANONICAL_COMMANDS.filter((name) => name !== "help" && name !== "ping" && name !== "play"),
 );
 
 const HELP_MESSAGE = [
   "Raydio commands available now:",
+  "`\\play <song or YouTube URL>` (`\\p`) — play or queue music",
   "`\\help` — show this command list",
   "`\\ping` — show Discord latency and Lavalink readiness",
-  "Music commands are recognized; playback implementation is the next milestone.",
+  "Other music controls are recognized and will be enabled next.",
 ].join("\n");
 
 export interface CommandMessageInput {
@@ -56,6 +57,7 @@ export interface CommandContext {
   readonly discordLatencyMs: number;
   readonly discordReady: boolean;
   readonly lavalinkReady: boolean;
+  play(input: string): Promise<string>;
   send(content: string): Promise<void>;
 }
 
@@ -124,6 +126,19 @@ export async function dispatchCommand(
     const latency = formatDiscordLatency(context.discordReady, context.discordLatencyMs);
     const lavalinkStatus = context.lavalinkReady ? "ready" : "unavailable";
     await context.send(`Pong! Discord: ${latency}. Lavalink: ${lavalinkStatus}.`);
+    return "handled";
+  }
+
+  if (commandName === "play") {
+    if (!parsed.argument) {
+      await context.send("Usage: `\\play <song or YouTube URL>`.");
+      return "handled";
+    }
+    if (!context.lavalinkReady) {
+      await context.send("Music service is temporarily unavailable.");
+      return "unavailable";
+    }
+    await context.send(await context.play(parsed.argument));
     return "handled";
   }
 

@@ -22,6 +22,7 @@ export interface GuildPlaybackSnapshot {
   readonly loopMode: LoopMode;
   readonly volume: number;
   readonly paused: boolean;
+  readonly positionMs: number;
   readonly consecutiveFailures: number;
   readonly alone: boolean;
 }

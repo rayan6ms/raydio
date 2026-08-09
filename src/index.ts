@@ -1,8 +1,15 @@
 import { ConfigError, loadConfig } from "./config.js";
-import { createDiscordClient, createDiscordService } from "./discord.js";
+import {
+  createDiscordClient,
+  createDiscordMusicNotifier,
+  createDiscordService,
+} from "./discord.js";
 import { stopServicesInOrder } from "./lifecycle.js";
 import { createLogger } from "./logger.js";
 import { createLavalinkService } from "./music/lavalink.js";
+import { createMusicManager } from "./music/manager.js";
+import { createShoukakuPlaybackTransport } from "./music/player.js";
+import { createTrackResolver } from "./music/resolver.js";
 import { errorFields } from "./utils.js";
 
 const SHUTDOWN_TIMEOUT_MS = 10_000;
@@ -13,7 +20,14 @@ async function main(): Promise<void> {
   const logger = createLogger(config.logLevel);
   const client = createDiscordClient();
   const lavalink = createLavalinkService(client, config.lavalink, logger);
-  const discord = createDiscordService(client, logger, lavalink);
+  const resolver = createTrackResolver(lavalink, config.playback, logger);
+  const music = createMusicManager(config.playback, {
+    resolver,
+    transport: createShoukakuPlaybackTransport(lavalink.manager),
+    logger,
+    notifier: createDiscordMusicNotifier(client),
+  });
+  const discord = createDiscordService(client, logger, lavalink, music);
   let isShuttingDown = false;
 
   const shutdown = async (reason: ShutdownReason): Promise<void> => {
@@ -31,7 +45,7 @@ async function main(): Promise<void> {
     forcedExit.unref();
 
     try {
-      await stopServicesInOrder([lavalink, discord]);
+      await stopServicesInOrder([{ stop: () => music.stopService() }, lavalink, discord]);
       logger.info({ event: "shutdown_complete", reason }, "Raydio stopped");
     } catch (error: unknown) {
       logger.error(

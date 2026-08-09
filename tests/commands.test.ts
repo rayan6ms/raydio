@@ -29,6 +29,7 @@ function context(
     discordLatencyMs: 42.4,
     discordReady: true,
     lavalinkReady: true,
+    play: async (input) => `playing:${input}`,
     ...overrides,
     send: async (content) => {
       sent.push(content);
@@ -148,12 +149,30 @@ describe("dispatchCommand", () => {
     ]);
   });
 
-  it("does not pretend the next playback milestone is implemented when Lavalink is ready", async () => {
+  it("dispatches play aliases with the preserved argument", async () => {
     const sent: string[] = [];
     const result = await dispatchCommand({ name: "p", argument: "song" }, context(sent));
 
-    assert.equal(result, "unavailable");
-    assert.deepEqual(sent, ["Music playback is not implemented yet."]);
+    assert.equal(result, "handled");
+    assert.deepEqual(sent, ["playing:song"]);
+  });
+
+  it("shows play usage without invoking playback when the argument is empty", async () => {
+    const sent: string[] = [];
+    let playCalls = 0;
+    const result = await dispatchCommand(
+      { name: "play", argument: "" },
+      context(sent, {
+        play: async () => {
+          playCalls += 1;
+          return "unused";
+        },
+      }),
+    );
+
+    assert.equal(result, "handled");
+    assert.equal(playCalls, 0);
+    assert.deepEqual(sent, ["Usage: `\\play <song or YouTube URL>`."]);
   });
 
   it("responds concisely to unknown commands", async () => {

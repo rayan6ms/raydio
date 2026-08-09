@@ -12,6 +12,11 @@ import {
 } from "../src/music/manager.js";
 import type { ResolvedTrack, ResolveResult, TrackResolver } from "../src/music/resolver.js";
 import type { PlayerToken, QueueTrack } from "../src/music/state.js";
+import type {
+  PlaybackJoinOptions,
+  PlaybackSession,
+  PlaybackTransport,
+} from "../src/music/transport.js";
 
 const defaultConfig = {
   aloneDisconnectSeconds: 120,
@@ -119,15 +124,57 @@ class FakeScheduler implements TimerScheduler {
   }
 }
 
+class FakeSession implements PlaybackSession {
+  readonly played: string[] = [];
+  stopCount = 0;
+  destroyCount = 0;
+  playError: Error | undefined;
+  readonly failingTracks = new Set<string>();
+
+  async play(encodedTrack: string): Promise<void> {
+    this.played.push(encodedTrack);
+    if (this.playError !== undefined || this.failingTracks.has(encodedTrack)) {
+      throw this.playError ?? new Error(`play failed for ${encodedTrack}`);
+    }
+  }
+
+  async stop(): Promise<void> {
+    this.stopCount += 1;
+  }
+
+  async destroy(): Promise<void> {
+    this.destroyCount += 1;
+  }
+}
+
+class FakeTransport implements PlaybackTransport {
+  readonly joins: PlaybackJoinOptions[] = [];
+  readonly sessions: FakeSession[] = [];
+  joinError: Error | undefined;
+  sessionPlayError: Error | undefined;
+
+  async join(options: PlaybackJoinOptions): Promise<PlaybackSession> {
+    this.joins.push(options);
+    if (this.joinError !== undefined) {
+      throw this.joinError;
+    }
+    const session = new FakeSession();
+    session.playError = this.sessionPlayError;
+    this.sessions.push(session);
+    return session;
+  }
+}
+
 function request(input: string, overrides: Partial<PlayRequest> = {}): PlayRequest {
   const intendedVoiceChannelId = overrides.intendedVoiceChannelId ?? "voice-1";
   return {
     guildId: "guild-1",
     notificationChannelId: "text-1",
     intendedVoiceChannelId,
+    shardId: 0,
     input,
     requestedBy: { id: "user-1", label: "Requester" },
-    getRequesterVoiceChannelId: () => intendedVoiceChannelId,
+    validateCommit: () => ({ kind: "ready", voiceChannelId: intendedVoiceChannelId }),
     ...overrides,
   };
 }
@@ -139,13 +186,17 @@ function managerWith(
     readonly scheduler?: TimerScheduler;
     readonly random?: () => number;
     readonly createPlayerToken?: () => PlayerToken;
+    readonly transport?: PlaybackTransport;
+    readonly notifier?: { send(channelId: string, content: string): Promise<void> };
   } = {},
 ): MusicManager {
   return createMusicManager(
     { ...defaultConfig, ...options.config },
     {
       resolver,
+      transport: options.transport ?? new FakeTransport(),
       logger: createLogger("silent"),
+      ...(options.notifier === undefined ? {} : { notifier: options.notifier }),
       ...(options.scheduler === undefined ? {} : { scheduler: options.scheduler }),
       ...(options.random === undefined ? {} : { random: options.random }),
       ...(options.createPlayerToken === undefined
@@ -184,6 +235,10 @@ describe("createMusicManager", () => {
       truncatedTrackCount: 0,
       commitTruncatedTrackCount: 0,
       playlistName: "test playlist",
+      firstTrack: {
+        ...track("a"),
+        requestedBy: { id: "user-1", label: "Requester" },
+      },
     });
     assert.deepEqual(
       manager.getSnapshot("guild-1")?.upcoming.map((item) => item.identifier),
@@ -203,6 +258,119 @@ describe("createMusicManager", () => {
     const fullResult = await manager.requestPlay(request("extra"));
     assert.deepEqual(fullResult, { kind: "queue-full" });
     assert.equal(resolver.calls[1]?.availableCapacity, 0);
+  });
+
+  it("joins once with the captured shard/channel and starts only the first committed track", async () => {
+    const transport = new FakeTransport();
+    const manager = managerWith(new FakeResolver(), { transport });
+
+    assert.equal((await manager.requestPlay(request("first", { shardId: 3 }))).kind, "queued");
+    assert.equal((await manager.requestPlay(request("second", { shardId: 3 }))).kind, "queued");
+    assert.equal(transport.joins.length, 1);
+    const join = transport.joins[0];
+    assert.ok(join);
+    assert.deepEqual(
+      {
+        guildId: join.guildId,
+        voiceChannelId: join.voiceChannelId,
+        shardId: join.shardId,
+        initialVolume: join.initialVolume,
+      },
+      {
+        guildId: "guild-1",
+        voiceChannelId: "voice-1",
+        shardId: 3,
+        initialVolume: 70,
+      },
+    );
+    assert.deepEqual(transport.sessions[0]?.played, ["encoded-first"]);
+    assert.equal(manager.getSnapshot("guild-1")?.upcoming[0]?.identifier, "second");
+  });
+
+  it("rolls back join and initial play failures without leaving a session", async () => {
+    const transport = new FakeTransport();
+    const manager = managerWith(new FakeResolver(), { transport });
+
+    transport.joinError = new Error("join secret detail");
+    assert.deepEqual(await manager.requestPlay(request("join-fails")), { kind: "join-failed" });
+    assert.equal(manager.getSnapshot("guild-1"), undefined);
+
+    transport.joinError = undefined;
+    transport.sessionPlayError = new Error("play secret detail");
+    assert.deepEqual(await manager.requestPlay(request("play-fails")), { kind: "play-failed" });
+    assert.equal(manager.getSnapshot("guild-1"), undefined);
+    assert.equal(transport.sessions[0]?.destroyCount, 1);
+
+    transport.sessionPlayError = undefined;
+    assert.equal((await manager.requestPlay(request("recovery"))).kind, "queued");
+    assert.equal(manager.getSnapshot("guild-1")?.current?.identifier, "recovery");
+  });
+
+  it("maps transport callbacks through manager transitions and cleans a closed session", async () => {
+    const transport = new FakeTransport();
+    const resolver = new FakeResolver(async () => tracks(track("a"), track("b"), track("c")));
+    const manager = managerWith(resolver, { transport });
+    await queue(manager, "playlist");
+    const callbacks = transport.joins[0]?.callbacks;
+    const session = transport.sessions[0];
+    assert.ok(callbacks);
+    assert.ok(session);
+
+    callbacks.onStart("encoded-a");
+    callbacks.onException("encoded-a", "common");
+    callbacks.onEnd("encoded-a", "finished");
+    await waitForImmediate();
+    assert.equal(manager.getSnapshot("guild-1")?.current?.identifier, "b");
+    assert.deepEqual(session.played, ["encoded-a", "encoded-b"]);
+
+    callbacks.onStuck("encoded-b", 5_000);
+    await waitForImmediate();
+    assert.equal(manager.getSnapshot("guild-1")?.current?.identifier, "c");
+    assert.equal(session.stopCount, 1);
+    assert.deepEqual(session.played, ["encoded-a", "encoded-b", "encoded-c"]);
+
+    callbacks.onClosed(4017, true);
+    await waitForImmediate();
+    assert.equal(manager.getSnapshot("guild-1"), undefined);
+    assert.equal(session.destroyCount, 1);
+  });
+
+  it("treats a transport play rejection as one bounded failure and starts the following track", async () => {
+    const transport = new FakeTransport();
+    const resolver = new FakeResolver(async () => tracks(track("a"), track("b"), track("c")));
+    const manager = managerWith(resolver, { transport });
+    await queue(manager, "playlist");
+    const callbacks = transport.joins[0]?.callbacks;
+    const session = transport.sessions[0];
+    assert.ok(callbacks);
+    assert.ok(session);
+    session.failingTracks.add("encoded-b");
+
+    callbacks.onEnd("encoded-a", "finished");
+    await waitForImmediate();
+    assert.equal(manager.getSnapshot("guild-1")?.current?.identifier, "c");
+    assert.equal(manager.getSnapshot("guild-1")?.consecutiveFailures, 1);
+    assert.deepEqual(session.played, ["encoded-a", "encoded-b", "encoded-c"]);
+  });
+
+  it("stops intake, destroys sessions, and invalidates in-flight work during service shutdown", async () => {
+    const blocked = deferred<ResolveResult>();
+    const transport = new FakeTransport();
+    const resolver = new FakeResolver(async (input) =>
+      input === "pending" ? blocked.promise : tracks(track(input)),
+    );
+    const manager = managerWith(resolver, { transport });
+    await queue(manager, "current");
+    const pending = manager.requestPlay(request("pending"));
+    await waitForImmediate();
+
+    await manager.stopService();
+    assert.equal(manager.getSnapshot("guild-1"), undefined);
+    assert.equal(transport.sessions[0]?.destroyCount, 1);
+    blocked.resolve(tracks(track("late")));
+    assert.deepEqual(await pending, { kind: "stale" });
+    assert.deepEqual(await manager.requestPlay(request("after-stop")), { kind: "closed" });
+    await manager.stopService();
   });
 
   it("removes, clears, and deterministically shuffles upcoming tracks without touching current", async () => {
@@ -330,12 +498,20 @@ describe("createMusicManager", () => {
     const manager = managerWith(resolver);
     let actualVoice: string | null = "voice-1";
     const pending = manager.requestPlay(
-      request("changed", { getRequesterVoiceChannelId: () => actualVoice }),
+      request("changed", {
+        validateCommit: () =>
+          actualVoice === "voice-1"
+            ? { kind: "ready", voiceChannelId: actualVoice }
+            : { kind: "voice-changed" },
+      }),
     );
     await waitForImmediate();
     actualVoice = "voice-2";
     changed.resolve(tracks(track("changed")));
-    assert.deepEqual(await pending, { kind: "voice-changed" });
+    assert.deepEqual(await pending, {
+      kind: "commit-rejected",
+      reason: { kind: "voice-changed" },
+    });
     assert.equal(manager.getSnapshot("guild-1"), undefined);
 
     await queue(manager, "first");
@@ -343,7 +519,7 @@ describe("createMusicManager", () => {
       await manager.requestPlay(
         request("other-channel", {
           intendedVoiceChannelId: "voice-2",
-          getRequesterVoiceChannelId: () => "voice-2",
+          validateCommit: () => ({ kind: "ready", voiceChannelId: "voice-2" }),
         }),
       ),
       { kind: "wrong-channel" },
@@ -476,7 +652,14 @@ describe("createMusicManager", () => {
     const resolver = new FakeResolver(async () =>
       tracks(track("a"), track("b"), track("c"), track("d")),
     );
-    const manager = managerWith(resolver);
+    const notifications: string[] = [];
+    const manager = managerWith(resolver, {
+      notifier: {
+        async send(channelId, content) {
+          notifications.push(`${channelId}:${content}`);
+        },
+      },
+    });
     await queue(manager, "playlist");
 
     const first = currentIdentity(manager);
@@ -501,6 +684,10 @@ describe("createMusicManager", () => {
     assert.equal(manager.getSnapshot("guild-1")?.current, null);
     assert.deepEqual(manager.getSnapshot("guild-1")?.upcoming, []);
     assert.equal(manager.getSnapshot("guild-1")?.consecutiveFailures, 3);
+    await Promise.resolve();
+    assert.deepEqual(notifications, [
+      "text-1:Playback stopped after three consecutive track failures. The source may be unhealthy.",
+    ]);
 
     await queue(manager, "recovery");
     assert.equal(manager.getSnapshot("guild-1")?.consecutiveFailures, 0);

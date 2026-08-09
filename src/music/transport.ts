@@ -18,7 +18,10 @@ export interface PlaybackJoinOptions {
 
 export interface PlaybackSession {
   play(encodedTrack: string): Promise<void>;
+  setPaused(paused: boolean): Promise<void>;
+  setVolume(volume: number): Promise<void>;
   stop(): Promise<void>;
+  getPositionMs(): number;
   destroy(): Promise<void>;
 }
 
