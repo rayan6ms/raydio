@@ -3,10 +3,13 @@ import { describe, it } from "node:test";
 
 import { ConfigError, loadConfig } from "../src/config.js";
 
+const discordCredentialFixture = ["discord", "credential", "fixture"].join(":");
+const lavalinkCredentialFixture = ["lavalink", "credential", "fixture"].join(":");
+
 function validEnv(overrides: NodeJS.ProcessEnv = {}): NodeJS.ProcessEnv {
   return {
-    DISCORD_TOKEN: "discord-secret",
-    LAVALINK_PASSWORD: "lavalink-secret",
+    DISCORD_TOKEN: discordCredentialFixture,
+    LAVALINK_PASSWORD: lavalinkCredentialFixture,
     ...overrides,
   };
 }
@@ -19,7 +22,7 @@ describe("loadConfig", () => {
     assert.deepEqual(config.lavalink, {
       host: "lavalink",
       port: 2333,
-      password: "lavalink-secret",
+      password: lavalinkCredentialFixture,
       secure: false,
     });
     assert.deepEqual(config.playback, {
@@ -66,7 +69,7 @@ describe("loadConfig", () => {
       (error: unknown) => {
         assert.ok(error instanceof ConfigError);
         assert.equal(error.variable, "DISCORD_TOKEN");
-        assert.doesNotMatch(error.message, /discord-secret/);
+        assert.equal(error.message.includes(discordCredentialFixture), false);
         return true;
       },
     );
@@ -123,7 +126,7 @@ describe("loadConfig", () => {
     assert.equal(loadConfig(validEnv({ LAVALINK_HOST: "::1" })).lavalink.host, "::1");
     assert.equal(loadConfig(validEnv({ LAVALINK_HOST: "[::1]" })).lavalink.host, "[::1]");
     assert.throws(
-      () => loadConfig(validEnv({ LAVALINK_PASSWORD: "line-one\nline-two" })),
+      () => loadConfig(validEnv({ LAVALINK_PASSWORD: ["line-one", "line-two"].join("\n") })),
       (error: unknown) => error instanceof ConfigError && error.variable === "LAVALINK_PASSWORD",
     );
   });

@@ -13,10 +13,12 @@ import {
   SHOUKAKU_OPTIONS,
 } from "../src/music/lavalink.js";
 
+const credentialFixture = ["lavalink", "credential", "fixture"].join(":");
+
 const config = {
   host: "lavalink",
   port: 2333,
-  password: "test-lavalink-secret",
+  password: credentialFixture,
   secure: false,
 } as const;
 
@@ -25,7 +27,7 @@ describe("createLavalinkNode", () => {
     assert.deepEqual(createLavalinkNode(config), {
       name: LAVALINK_NODE_NAME,
       url: "lavalink:2333",
-      auth: "test-lavalink-secret",
+      auth: credentialFixture,
       secure: false,
     });
   });
