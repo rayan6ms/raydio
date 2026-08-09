@@ -7,6 +7,9 @@ import { parse } from "yaml";
 import { COMMAND_ALIASES, COMMAND_NAMES } from "../src/commands.js";
 
 interface PackageMetadata {
+  readonly devDependencies?: {
+    readonly typescript?: string;
+  };
   readonly license?: string;
   readonly scripts?: {
     readonly dev?: string;
@@ -136,5 +139,11 @@ describe("public documentation", () => {
 
     assert.match(packageMetadata.scripts?.dev ?? "", /--env-file-if-exists=\.env/);
     assert.match(packageMetadata.scripts?.start ?? "", /--env-file-if-exists=\.env/);
+  });
+
+  it("keeps the compiler on an exact TypeScript 7 release", () => {
+    const packageMetadata = JSON.parse(readText("package.json")) as PackageMetadata;
+
+    assert.match(packageMetadata.devDependencies?.typescript ?? "", /^7\.\d+\.\d+$/);
   });
 });
