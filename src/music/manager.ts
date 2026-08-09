@@ -82,7 +82,9 @@ export interface MusicManager {
   stop(guildId: string): Promise<boolean>;
   leave(guildId: string): Promise<boolean>;
   cleanupUnexpected(guildId: string): Promise<boolean>;
-  handleTrackEnd(event: PlayerEventIdentity & { readonly reason: TrackEndReason }): Promise<TransitionResult>;
+  handleTrackEnd(
+    event: PlayerEventIdentity & { readonly reason: TrackEndReason },
+  ): Promise<TransitionResult>;
   handleTrackException(event: PlayerEventIdentity): Promise<TransitionResult>;
   handleTrackStuck(event: PlayerEventIdentity): Promise<TransitionResult>;
   updateAloneStatus(guildId: string, playerToken: PlayerToken, alone: boolean): Promise<boolean>;
@@ -355,6 +357,8 @@ export function createMusicManager(
 
   function validateEvent(
     event: PlayerEventIdentity,
+    capturedState: GuildPlaybackState | undefined,
+    capturedCurrent: QueueTrack | null | undefined,
   ): { readonly state: GuildPlaybackState } | { readonly result: TransitionResult } {
     const state = states.get(event.guildId);
     if (state === undefined) {
@@ -363,7 +367,11 @@ export function createMusicManager(
     if (state.playerToken !== event.playerToken) {
       return { result: { kind: "ignored", reason: "stale-session" } };
     }
-    if (state.current?.encoded !== event.encodedTrack) {
+    if (
+      state !== capturedState ||
+      state.current !== capturedCurrent ||
+      state.current?.encoded !== event.encodedTrack
+    ) {
       return { result: { kind: "ignored", reason: "stale-track" } };
     }
     return { state };
@@ -462,10 +470,14 @@ export function createMusicManager(
             const queueTracks = accepted.map((track) => toQueueTrack(track, request.requestedBy));
             if (state.current === null) {
               state.current = queueTracks.shift() ?? null;
+              state.consecutiveFailures = 0;
             }
             state.upcoming.push(...queueTracks);
             cancelTimer(state.idleTimer);
             state.idleTimer = null;
+            state.alone = false;
+            cancelTimer(state.aloneTimer);
+            state.aloneTimer = null;
 
             return {
               kind: "queued",
@@ -531,19 +543,23 @@ export function createMusicManager(
           return false;
         }
 
-        for (let index = state.upcoming.length - 1; index > 0; index -= 1) {
+        const shuffled = [...state.upcoming];
+        for (let index = shuffled.length - 1; index > 0; index -= 1) {
           const sample = random();
           if (!Number.isFinite(sample) || sample < 0 || sample >= 1) {
-            throw new RangeError("random must return a finite number from 0 up to, but not including, 1");
+            throw new RangeError(
+              "random must return a finite number from 0 up to, but not including, 1",
+            );
           }
           const swapIndex = Math.floor(sample * (index + 1));
-          const current = state.upcoming[index];
-          const replacement = state.upcoming[swapIndex];
+          const current = shuffled[index];
+          const replacement = shuffled[swapIndex];
           if (current !== undefined && replacement !== undefined) {
-            state.upcoming[index] = replacement;
-            state.upcoming[swapIndex] = current;
+            shuffled[index] = replacement;
+            shuffled[swapIndex] = current;
           }
         }
+        state.upcoming = shuffled;
         return true;
       });
     },
@@ -551,7 +567,7 @@ export function createMusicManager(
     skip(guildId) {
       const captured = states.get(guildId);
       const playerToken = captured?.playerToken;
-      const encodedTrack = captured?.current?.encoded;
+      const current = captured?.current;
 
       return stateExecutor.run(guildId, () => {
         const state = states.get(guildId);
@@ -561,8 +577,11 @@ export function createMusicManager(
         if (state.playerToken !== playerToken) {
           return { kind: "ignored", reason: "stale-session" };
         }
-        if (encodedTrack === undefined || state.current?.encoded !== encodedTrack) {
-          return { kind: "ignored", reason: encodedTrack === undefined ? "no-current" : "stale-track" };
+        if (current === undefined || current === null || state.current !== current) {
+          return {
+            kind: "ignored",
+            reason: current === undefined || current === null ? "no-current" : "stale-track",
+          };
         }
         return transitionCurrent(state, "manual-skip");
       });
@@ -610,8 +629,14 @@ export function createMusicManager(
     },
 
     handleTrackEnd(event) {
+      const capturedState = states.get(event.guildId);
+      const capturedCurrent = capturedState?.current;
       return stateExecutor.run(event.guildId, () => {
-        if (event.reason === "stopped" || event.reason === "replaced" || event.reason === "cleanup") {
+        if (
+          event.reason === "stopped" ||
+          event.reason === "replaced" ||
+          event.reason === "cleanup"
+        ) {
           const state = states.get(event.guildId);
           if (state === undefined) {
             return { kind: "ignored", reason: "no-state" };
@@ -622,7 +647,7 @@ export function createMusicManager(
           return { kind: "ignored", reason: "end-reason" };
         }
 
-        const validation = validateEvent(event);
+        const validation = validateEvent(event, capturedState, capturedCurrent);
         if ("result" in validation) {
           return validation.result;
         }
@@ -634,8 +659,10 @@ export function createMusicManager(
     },
 
     handleTrackException(event) {
+      const capturedState = states.get(event.guildId);
+      const capturedCurrent = capturedState?.current;
       return stateExecutor.run(event.guildId, () => {
-        const validation = validateEvent(event);
+        const validation = validateEvent(event, capturedState, capturedCurrent);
         if ("result" in validation) {
           return validation.result;
         }
@@ -652,8 +679,10 @@ export function createMusicManager(
     },
 
     handleTrackStuck(event) {
+      const capturedState = states.get(event.guildId);
+      const capturedCurrent = capturedState?.current;
       return stateExecutor.run(event.guildId, () => {
-        const validation = validateEvent(event);
+        const validation = validateEvent(event, capturedState, capturedCurrent);
         if ("result" in validation) {
           return validation.result;
         }
