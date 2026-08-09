@@ -125,12 +125,13 @@ describe("Bot container image", () => {
     const dockerfile = readText("Dockerfile");
     const packageJson = JSON.parse(readText("package.json")) as unknown;
     const base =
-      "docker.io/library/node:24.18.0-bookworm-slim@sha256:6f7b03f7c2c8e2e784dcf9295400527b9b1270fd37b7e9a7285cf83b6951452d";
+      "docker.io/library/node:24.19.0-bookworm-slim@sha256:3638d9a6fe4030bd716be989438248074489337ba3275657f93595428be4fc03";
     const fromLines = dockerfile.split("\n").filter((line) => line.startsWith("FROM "));
 
     assert.deepEqual(fromLines, [`FROM ${base} AS build`, `FROM ${base} AS runtime`]);
-    assert.equal(readText(".nvmrc"), "24.18.0\n");
-    assert.equal(valueAt(packageJson, ["engines", "node"]), ">=24.18.0 <25");
+    assert.equal(readText(".nvmrc"), "24.19.0\n");
+    assert.equal(valueAt(packageJson, ["engines", "node"]), ">=24.19.0 <25");
+    assert.equal(valueAt(packageJson, ["packageManager"]), "npm@11.17.0");
     assert.equal(valueAt(packageJson, ["scripts", "build"]), "node scripts/build.mjs");
     assert.match(dockerfile, /RUN npm ci --ignore-scripts/);
     assert.match(dockerfile, /node scripts\/patch-shoukaku-reconnect\.mjs/);
@@ -213,9 +214,10 @@ describe("GitHub continuous integration", () => {
       .map((step) => stringProperty(step, "uses"))
       .filter((uses): uses is string => typeof uses === "string");
     assert.equal(actions.length, 2);
-    for (const action of actions) {
-      assert.match(action, /^actions\/(?:checkout|setup-node)@[a-f0-9]{40}$/);
-    }
+    assert.deepEqual(actions, [
+      "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+    ]);
 
     const commands = steps
       .filter(isRecord)

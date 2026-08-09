@@ -107,7 +107,7 @@ The command prefix is fixed in v1.
 
 ## Development
 
-Local tooling is pinned to Node 24.18.0, npm 11.16.0, and TypeScript 7.0.2. Install from the
+Local tooling is pinned to Node 24.19.0, npm 11.17.0, and TypeScript 7.0.2. Install from the
 lockfile and run every static check, test, and build:
 
 ```sh
