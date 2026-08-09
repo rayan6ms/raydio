@@ -27,6 +27,13 @@ export interface GuildPlaybackSnapshot {
   readonly alone: boolean;
 }
 
+/** Lightweight identity for event routing that does not copy the playback queue. */
+export interface GuildPlaybackIdentity {
+  readonly guildId: string;
+  readonly voiceChannelId: string;
+  readonly playerToken: PlayerToken;
+}
+
 export function toQueueTrack(track: ResolvedTrack, requestedBy: TrackRequester): QueueTrack {
   return {
     encoded: track.encoded,

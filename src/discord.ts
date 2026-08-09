@@ -12,7 +12,11 @@ import {
 } from "discord.js";
 import type { Logger } from "pino";
 
-import { type ControlCommandInvocation, dispatchCommand, parseCommand } from "./commands.js";
+import {
+  dispatchCommand,
+  type ExecutableControlCommandInvocation,
+  parseCommand,
+} from "./commands.js";
 import type { LavalinkReadiness } from "./music/lavalink.js";
 import type {
   ControlResult,
@@ -20,7 +24,7 @@ import type {
   PlaybackControlRequest,
   PlayRequestResult,
 } from "./music/manager.js";
-import type { GuildPlaybackSnapshot } from "./music/state.js";
+import type { GuildPlaybackIdentity, GuildPlaybackSnapshot } from "./music/state.js";
 import {
   type VoiceAccessFacts,
   type VoiceAccessResult,
@@ -30,7 +34,6 @@ import {
 import {
   createQueueViewController,
   formatDuration,
-  formatQueueSnapshot,
   isQueueViewCustomId,
   type QueueViewController,
 } from "./queue-view.js";
@@ -61,8 +64,9 @@ export interface DiscordMusicNotifier {
 type MusicController = Pick<
   MusicManager,
   | "cleanupUnexpected"
+  | "getIdentities"
+  | "getIdentity"
   | "getSnapshot"
-  | "getSnapshots"
   | "requestPlay"
   | "setPaused"
   | "setVolume"
@@ -129,16 +133,15 @@ async function handleMessage(
       lavalinkReady: lavalink.isReady(),
       play: async (input) => handlePlay(message, input, music),
       control: async (invocation) => handleControl(message, invocation, music),
-      send: async (content, presentation) => {
-        if (presentation === "queue") {
-          const view = queueViews.render(music.getSnapshot(message.guildId));
-          await message.channel.send({
-            content: view.content,
-            components: view.components,
-            allowedMentions: SAFE_ALLOWED_MENTIONS,
-          });
-          return;
-        }
+      presentQueue: async () => {
+        const view = queueViews.render(music.getSnapshot(message.guildId));
+        await message.channel.send({
+          content: view.content,
+          components: view.components,
+          allowedMentions: SAFE_ALLOWED_MENTIONS,
+        });
+      },
+      send: async (content) => {
         await message.channel.send({
           content: truncateMessage(content),
           allowedMentions: SAFE_ALLOWED_MENTIONS,
@@ -349,10 +352,10 @@ function prepareControl(
   music: MusicController,
   allowMissingSession = false,
 ): PlaybackControlRequest | { readonly message: string } {
-  const snapshot = music.getSnapshot(message.guildId);
+  const identity = music.getIdentity(message.guildId);
   const access = validateControlVoiceAccess(
     voiceFacts(message),
-    snapshot?.voiceChannelId ?? null,
+    identity?.voiceChannelId ?? null,
     allowMissingSession,
   );
   if (access.kind !== "ready") {
@@ -370,7 +373,7 @@ function prepareControl(
   return {
     guildId: message.guildId,
     intendedVoiceChannelId: access.voiceChannelId,
-    playerToken: snapshot?.playerToken ?? null,
+    playerToken: identity?.playerToken ?? null,
     validateCommit: () => supportedCallerVoice(message, access.voiceChannelId),
   };
 }
@@ -395,12 +398,9 @@ function controlFailure(result: ControlResult<unknown>): string | null {
 
 async function handleControl(
   message: Message<true>,
-  invocation: ControlCommandInvocation,
+  invocation: ExecutableControlCommandInvocation,
   music: MusicController,
 ): Promise<string> {
-  if (invocation.name === "queue") {
-    return formatQueueSnapshot(music.getSnapshot(message.guildId));
-  }
   if (invocation.name === "nowplaying") {
     return formatNowPlayingSnapshot(music.getSnapshot(message.guildId));
   }
@@ -570,16 +570,16 @@ async function handlePlay(
     validateCommit: () => validateVoiceAccess(voiceFacts(message), initialAccess.voiceChannelId),
   });
   if (result.kind === "queued") {
-    const snapshot = music.getSnapshot(message.guildId);
+    const identity = music.getIdentity(message.guildId);
     const channel = message.guild?.channels.cache.get(initialAccess.voiceChannelId);
     if (
-      snapshot !== undefined &&
-      snapshot.voiceChannelId === initialAccess.voiceChannelId &&
+      identity !== undefined &&
+      identity.voiceChannelId === initialAccess.voiceChannelId &&
       channel?.isVoiceBased()
     ) {
       await music.updateAloneStatus(
-        snapshot.guildId,
-        snapshot.playerToken,
+        identity.guildId,
+        identity.playerToken,
         !hasHumanVoiceMember(channel.members.values()),
       );
     }
@@ -626,30 +626,30 @@ export function createDiscordService(
     });
   }
 
-  function updateAloneStatus(snapshot: GuildPlaybackSnapshot, channel: VoiceBasedChannel): void {
+  function updateAloneStatus(identity: GuildPlaybackIdentity, channel: VoiceBasedChannel): void {
     const alone = !hasHumanVoiceMember(channel.members.values());
     void music
-      .updateAloneStatus(snapshot.guildId, snapshot.playerToken, alone)
+      .updateAloneStatus(identity.guildId, identity.playerToken, alone)
       .catch((error: unknown) => {
         logError(logger, "alone_status_update_failed", error, "Alone status update failed");
       });
   }
 
-  function reconcileSnapshot(snapshot: GuildPlaybackSnapshot): void {
-    const guild = client.guilds.cache.get(snapshot.guildId);
+  function reconcileIdentity(identity: GuildPlaybackIdentity): void {
+    const guild = client.guilds.cache.get(identity.guildId);
     if (guild === undefined) {
       return;
     }
-    if (guild.members.me?.voice.channelId !== snapshot.voiceChannelId) {
-      cleanupUnexpected(snapshot.guildId);
+    if (guild.members.me?.voice.channelId !== identity.voiceChannelId) {
+      cleanupUnexpected(identity.guildId);
       return;
     }
-    const channel = guild.channels.cache.get(snapshot.voiceChannelId);
+    const channel = guild.channels.cache.get(identity.voiceChannelId);
     if (channel === undefined || !channel.isVoiceBased()) {
-      cleanupUnexpected(snapshot.guildId);
+      cleanupUnexpected(identity.guildId);
       return;
     }
-    updateAloneStatus(snapshot, channel);
+    updateAloneStatus(identity, channel);
   }
 
   client.once(Events.ClientReady, (readyClient) => {
@@ -687,10 +687,10 @@ export function createDiscordService(
       { event: "discord_shard_resumed", shardId, replayedEvents },
       "Discord shard resumed",
     );
-    for (const snapshot of music.getSnapshots()) {
-      const guild = client.guilds.cache.get(snapshot.guildId);
+    for (const identity of music.getIdentities()) {
+      const guild = client.guilds.cache.get(identity.guildId);
       if (guild?.shardId === shardId) {
-        reconcileSnapshot(snapshot);
+        reconcileIdentity(identity);
       }
     }
   });
@@ -739,33 +739,33 @@ export function createDiscordService(
   });
 
   client.on(Events.VoiceStateUpdate, (oldState, newState) => {
-    const snapshot = music.getSnapshot(newState.guild.id);
-    if (snapshot === undefined) {
+    const identity = music.getIdentity(newState.guild.id);
+    if (identity === undefined) {
       return;
     }
 
     const botUserId = newState.guild.members.me?.id ?? client.user?.id;
     if (newState.id === botUserId) {
-      if (newState.channelId !== snapshot.voiceChannelId) {
+      if (newState.channelId !== identity.voiceChannelId) {
         cleanupUnexpected(newState.guild.id);
       } else {
-        reconcileSnapshot(snapshot);
+        reconcileIdentity(identity);
       }
       return;
     }
 
     if (
-      oldState.channelId !== snapshot.voiceChannelId &&
-      newState.channelId !== snapshot.voiceChannelId
+      oldState.channelId !== identity.voiceChannelId &&
+      newState.channelId !== identity.voiceChannelId
     ) {
       return;
     }
-    const channel = newState.guild.channels.cache.get(snapshot.voiceChannelId);
+    const channel = newState.guild.channels.cache.get(identity.voiceChannelId);
     if (channel === undefined || !channel.isVoiceBased()) {
       cleanupUnexpected(newState.guild.id);
       return;
     }
-    updateAloneStatus(snapshot, channel);
+    updateAloneStatus(identity, channel);
   });
 
   return {

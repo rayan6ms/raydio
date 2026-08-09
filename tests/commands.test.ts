@@ -31,6 +31,9 @@ function context(
     lavalinkReady: true,
     play: async (input) => `playing:${input}`,
     control: async (invocation) => `control:${invocation.name}`,
+    presentQueue: async () => {
+      sent.push("queue");
+    },
     ...overrides,
     send: async (content) => {
       sent.push(content);
@@ -211,7 +214,6 @@ describe("dispatchCommand", () => {
       { name: "resume" },
       { name: "skip" },
       { name: "stop" },
-      { name: "queue" },
       { name: "nowplaying" },
       { name: "volume", volume: null },
       { name: "volume", volume: 0 },
@@ -224,22 +226,28 @@ describe("dispatchCommand", () => {
     ]);
     assert.deepEqual(
       sent,
-      Array.from({ length: commands.length }, () => "ok"),
+      commands.map((command) => (command.name === "q" ? "queue" : "ok")),
     );
   });
 
-  it("marks a valid queue response for interactive presentation only", async () => {
-    const presentations: Array<"queue" | undefined> = [];
+  it("presents a valid queue directly without computing a discarded text response", async () => {
+    let queuePresentations = 0;
+    let controlCalls = 0;
     const testContext = context([]);
-    testContext.send = async (_content, presentation) => {
-      presentations.push(presentation);
+    testContext.presentQueue = async () => {
+      queuePresentations += 1;
+    };
+    testContext.control = async (invocation) => {
+      controlCalls += 1;
+      return `control:${invocation.name}`;
     };
 
     await dispatchCommand({ name: "queue", argument: "" }, testContext);
     await dispatchCommand({ name: "queue", argument: "unexpected" }, testContext);
     await dispatchCommand({ name: "nowplaying", argument: "" }, testContext);
 
-    assert.deepEqual(presentations, ["queue", undefined, undefined]);
+    assert.equal(queuePresentations, 1);
+    assert.equal(controlCalls, 1);
   });
 
   it("rejects malformed control arguments before invoking the adapter", async () => {
@@ -296,7 +304,8 @@ describe("dispatchCommand", () => {
     ]) {
       assert.equal(await dispatchCommand(parsed, testContext), "handled");
     }
-    assert.deepEqual(invocations, ["volume", "queue", "stop", "leave"]);
+    assert.deepEqual(invocations, ["volume", "stop", "leave"]);
+    assert.equal(sent.includes("queue"), true);
   });
 
   it("responds concisely to unknown commands", async () => {

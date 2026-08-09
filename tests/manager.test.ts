@@ -252,12 +252,12 @@ function control(
   overrides: Partial<PlaybackControlRequest> = {},
 ): PlaybackControlRequest {
   const guildId = overrides.guildId ?? "guild-1";
-  const snapshot = manager.getSnapshot(guildId);
+  const identity = manager.getIdentity(guildId);
   const intendedVoiceChannelId = overrides.intendedVoiceChannelId ?? "voice-1";
   return {
     guildId,
     intendedVoiceChannelId,
-    playerToken: snapshot?.playerToken ?? null,
+    playerToken: identity?.playerToken ?? null,
     validateCommit: () => true,
     ...overrides,
   };
@@ -303,6 +303,11 @@ describe("createMusicManager", () => {
       ["b", "c"],
     );
     assert.equal(manager.getSnapshot("guild-1")?.current?.requestedBy.label, "Requester");
+    assert.deepEqual(manager.getIdentity("guild-1"), {
+      guildId: "guild-1",
+      voiceChannelId: "voice-1",
+      playerToken: snapshot.playerToken,
+    });
 
     const fullResult = await manager.requestPlay(request("extra"));
     assert.deepEqual(fullResult, { kind: "queue-full" });
@@ -654,10 +659,10 @@ describe("createMusicManager", () => {
       intendedVoiceChannelId: "voice-2",
     });
 
-    assert.equal(manager.getSnapshots().length, 2);
+    assert.equal(manager.getIdentities().length, 2);
     assert.equal(await manager.handleLavalinkInvalidation("unavailable"), 2);
     assert.equal(await manager.handleLavalinkInvalidation("unavailable"), 0);
-    assert.equal(manager.getSnapshots().length, 0);
+    assert.equal(manager.getIdentities().length, 0);
     assert.deepEqual(
       transport.sessions.map((session) => session.destroyCount),
       [1, 1],

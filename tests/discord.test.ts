@@ -41,8 +41,9 @@ type TestMusicController = Parameters<typeof createDiscordService>[3];
 function musicController(overrides: Partial<TestMusicController> = {}): TestMusicController {
   return {
     requestPlay: async () => ({ kind: "closed" }),
+    getIdentity: () => undefined,
+    getIdentities: () => [],
     getSnapshot: () => undefined,
-    getSnapshots: () => [],
     cleanupUnexpected: async () => false,
     updateAloneStatus: async () => false,
     setPaused: async () => ({ kind: "rejected", reason: "no-session" }),
@@ -142,8 +143,9 @@ describe("createDiscordService", () => {
       createLogger("silent"),
       unavailableLavalink,
       musicController({
+        getIdentity: () => snapshot,
+        getIdentities: () => [snapshot],
         getSnapshot: () => snapshot,
-        getSnapshots: () => [snapshot],
         async updateAloneStatus(_guildId, _playerToken, alone) {
           updates.push(alone);
           return true;

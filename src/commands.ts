@@ -35,11 +35,17 @@ const commandAliases = new Map<string, CommandName>(COMMAND_ALIASES);
 export type ControlCommandName = Exclude<CommandName, "help" | "ping" | "play">;
 
 export type ControlCommandInvocation =
-  | { readonly name: "pause" | "resume" | "skip" | "stop" | "queue" | "nowplaying" }
+  | { readonly name: "queue" }
+  | { readonly name: "pause" | "resume" | "skip" | "stop" | "nowplaying" }
   | { readonly name: "shuffle" | "clear" | "leave" }
   | { readonly name: "volume"; readonly volume: number | null }
   | { readonly name: "loop"; readonly mode: "off" | "track" | "queue" }
   | { readonly name: "remove"; readonly displayedIndex: number };
+
+export type ExecutableControlCommandInvocation = Exclude<
+  ControlCommandInvocation,
+  { readonly name: "queue" }
+>;
 
 const HELP_MESSAGE = [
   "Raydio commands:",
@@ -71,8 +77,9 @@ export interface CommandContext {
   readonly discordReady: boolean;
   readonly lavalinkReady: boolean;
   play(input: string): Promise<string>;
-  control(invocation: ControlCommandInvocation): Promise<string>;
-  send(content: string, presentation?: "queue"): Promise<void>;
+  control(invocation: ExecutableControlCommandInvocation): Promise<string>;
+  presentQueue(): Promise<void>;
+  send(content: string): Promise<void>;
 }
 
 export type DispatchResult = "handled" | "unavailable" | "unknown";
@@ -221,9 +228,10 @@ export async function dispatchCommand(
     await context.send("Music service is temporarily unavailable.");
     return "unavailable";
   }
-  await context.send(
-    await context.control(invocation),
-    invocation.name === "queue" ? "queue" : undefined,
-  );
+  if (invocation.name === "queue") {
+    await context.presentQueue();
+    return "handled";
+  }
+  await context.send(await context.control(invocation));
   return "handled";
 }

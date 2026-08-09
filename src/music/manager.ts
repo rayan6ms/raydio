@@ -7,6 +7,7 @@ import type { ResolveResult, TrackResolver } from "./resolver.js";
 import { KeyedSerialExecutor } from "./serial.js";
 import {
   copyQueueTrack,
+  type GuildPlaybackIdentity,
   type GuildPlaybackSnapshot,
   type LoopMode,
   type PlayerToken,
@@ -103,8 +104,9 @@ export interface PlayerEventIdentity {
 }
 
 export interface MusicManager {
+  getIdentity(guildId: string): GuildPlaybackIdentity | undefined;
+  getIdentities(): readonly GuildPlaybackIdentity[];
   getSnapshot(guildId: string): GuildPlaybackSnapshot | undefined;
-  getSnapshots(): readonly GuildPlaybackSnapshot[];
   getPendingPlayRequestCount(guildId: string): number;
   requestPlay(request: PlayRequest): Promise<PlayRequestResult>;
   setPaused(
@@ -248,6 +250,14 @@ function copySnapshot(state: GuildPlaybackState): GuildPlaybackSnapshot {
     positionMs: state.current === null ? 0 : state.session.getPositionMs(),
     consecutiveFailures: state.consecutiveFailures,
     alone: state.alone,
+  };
+}
+
+function copyIdentity(state: GuildPlaybackState): GuildPlaybackIdentity {
+  return {
+    guildId: state.guildId,
+    voiceChannelId: state.voiceChannelId,
+    playerToken: state.playerToken,
   };
 }
 
@@ -730,13 +740,18 @@ export function createMusicManager(
   }
 
   return {
+    getIdentity(guildId) {
+      const state = states.get(guildId);
+      return state === undefined ? undefined : copyIdentity(state);
+    },
+
+    getIdentities() {
+      return [...states.values()].map(copyIdentity);
+    },
+
     getSnapshot(guildId) {
       const state = states.get(guildId);
       return state === undefined ? undefined : copySnapshot(state);
-    },
-
-    getSnapshots() {
-      return [...states.values()].map(copySnapshot);
     },
 
     getPendingPlayRequestCount(guildId) {
