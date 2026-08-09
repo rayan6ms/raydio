@@ -30,6 +30,7 @@ function context(
     discordReady: true,
     lavalinkReady: true,
     play: async (input) => `playing:${input}`,
+    control: async (invocation) => `control:${invocation.name}`,
     ...overrides,
     send: async (content) => {
       sent.push(content);
@@ -173,6 +174,115 @@ describe("dispatchCommand", () => {
     assert.equal(result, "handled");
     assert.equal(playCalls, 0);
     assert.deepEqual(sent, ["Usage: `\\play <song or YouTube URL>`."]);
+  });
+
+  it("parses and dispatches every control with typed strict arguments", async () => {
+    const sent: string[] = [];
+    const invocations: unknown[] = [];
+    const testContext = context(sent, {
+      control: async (invocation) => {
+        invocations.push(invocation);
+        return "ok";
+      },
+    });
+    const commands = [
+      { name: "pause", argument: "" },
+      { name: "resume", argument: "" },
+      { name: "s", argument: "" },
+      { name: "stop", argument: "" },
+      { name: "q", argument: "" },
+      { name: "np", argument: "" },
+      { name: "vol", argument: "" },
+      { name: "volume", argument: "0" },
+      { name: "volume", argument: "100" },
+      { name: "loop", argument: "QUEUE" },
+      { name: "shuffle", argument: "" },
+      { name: "remove", argument: "12" },
+      { name: "clear", argument: "" },
+      { name: "dc", argument: "" },
+    ];
+
+    for (const parsed of commands) {
+      assert.equal(await dispatchCommand(parsed, testContext), "handled");
+    }
+
+    assert.deepEqual(invocations, [
+      { name: "pause" },
+      { name: "resume" },
+      { name: "skip" },
+      { name: "stop" },
+      { name: "queue" },
+      { name: "nowplaying" },
+      { name: "volume", volume: null },
+      { name: "volume", volume: 0 },
+      { name: "volume", volume: 100 },
+      { name: "loop", mode: "queue" },
+      { name: "shuffle" },
+      { name: "remove", displayedIndex: 12 },
+      { name: "clear" },
+      { name: "leave" },
+    ]);
+    assert.deepEqual(
+      sent,
+      Array.from({ length: commands.length }, () => "ok"),
+    );
+  });
+
+  it("rejects malformed control arguments before invoking the adapter", async () => {
+    const sent: string[] = [];
+    let calls = 0;
+    const testContext = context(sent, {
+      control: async () => {
+        calls += 1;
+        return "unused";
+      },
+    });
+    for (const parsed of [
+      { name: "pause", argument: "now" },
+      { name: "volume", argument: "-1" },
+      { name: "volume", argument: "101" },
+      { name: "volume", argument: "1.5" },
+      { name: "loop", argument: "all" },
+      { name: "remove", argument: "0" },
+      { name: "remove", argument: "9007199254740992" },
+    ]) {
+      assert.equal(await dispatchCommand(parsed, testContext), "handled");
+    }
+    assert.equal(calls, 0);
+    assert.equal(
+      sent.every((message) => message.startsWith("Usage:")),
+      true,
+    );
+  });
+
+  it("gates remote player controls but keeps local views and cleanup available during outages", async () => {
+    const sent: string[] = [];
+    const invocations: string[] = [];
+    const testContext = context(sent, {
+      lavalinkReady: false,
+      control: async (invocation) => {
+        invocations.push(invocation.name);
+        return `local:${invocation.name}`;
+      },
+    });
+
+    assert.equal(
+      await dispatchCommand({ name: "pause", argument: "" }, testContext),
+      "unavailable",
+    );
+    assert.equal(
+      await dispatchCommand({ name: "volume", argument: "50" }, testContext),
+      "unavailable",
+    );
+    for (const parsed of [
+      { name: "volume", argument: "" },
+      { name: "queue", argument: "" },
+      { name: "stop", argument: "" },
+      { name: "leave", argument: "" },
+    ]) {
+      assert.equal(await dispatchCommand(parsed, testContext), "handled");
+    }
+    assert.deepEqual(invocations, ["volume", "queue", "stop", "leave"]);
   });
 
   it("responds concisely to unknown commands", async () => {

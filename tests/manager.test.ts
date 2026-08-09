@@ -4,8 +4,10 @@ import { setImmediate as waitForImmediate } from "node:timers/promises";
 
 import { createLogger } from "../src/logger.js";
 import {
+  type ControlResult,
   createMusicManager,
   type MusicManager,
+  type PlaybackControlRequest,
   type PlayRequest,
   type TimerHandle,
   type TimerScheduler,
@@ -126,9 +128,14 @@ class FakeScheduler implements TimerScheduler {
 
 class FakeSession implements PlaybackSession {
   readonly played: string[] = [];
+  readonly paused: boolean[] = [];
+  readonly volumes: number[] = [];
   stopCount = 0;
   destroyCount = 0;
+  positionMs = 0;
   playError: Error | undefined;
+  pauseError: Error | undefined;
+  volumeError: Error | undefined;
   readonly failingTracks = new Set<string>();
 
   async play(encodedTrack: string): Promise<void> {
@@ -138,8 +145,26 @@ class FakeSession implements PlaybackSession {
     }
   }
 
+  async setPaused(paused: boolean): Promise<void> {
+    if (this.pauseError !== undefined) {
+      throw this.pauseError;
+    }
+    this.paused.push(paused);
+  }
+
+  async setVolume(volume: number): Promise<void> {
+    if (this.volumeError !== undefined) {
+      throw this.volumeError;
+    }
+    this.volumes.push(volume);
+  }
+
   async stop(): Promise<void> {
     this.stopCount += 1;
+  }
+
+  getPositionMs(): number {
+    return this.positionMs;
   }
 
   async destroy(): Promise<void> {
@@ -222,6 +247,30 @@ function currentIdentity(manager: MusicManager, guildId = "guild-1") {
   };
 }
 
+function control(
+  manager: MusicManager,
+  overrides: Partial<PlaybackControlRequest> = {},
+): PlaybackControlRequest {
+  const guildId = overrides.guildId ?? "guild-1";
+  const snapshot = manager.getSnapshot(guildId);
+  const intendedVoiceChannelId = overrides.intendedVoiceChannelId ?? "voice-1";
+  return {
+    guildId,
+    intendedVoiceChannelId,
+    playerToken: snapshot?.playerToken ?? null,
+    validateCommit: () => true,
+    ...overrides,
+  };
+}
+
+function controlValue<Value>(result: ControlResult<Value>): Value {
+  assert.equal(result.kind, "ok");
+  if (result.kind !== "ok") {
+    throw new Error("Expected an accepted control result");
+  }
+  return result.value;
+}
+
 describe("createMusicManager", () => {
   it("owns bounded queue state and exposes detached snapshots", async () => {
     const resolver = new FakeResolver(async () => tracks(track("a"), track("b"), track("c")));
@@ -285,6 +334,100 @@ describe("createMusicManager", () => {
     );
     assert.deepEqual(transport.sessions[0]?.played, ["encoded-first"]);
     assert.equal(manager.getSnapshot("guild-1")?.upcoming[0]?.identifier, "second");
+  });
+
+  it("commits pause and volume only after transport succeeds and exposes player position", async () => {
+    const transport = new FakeTransport();
+    const manager = managerWith(new FakeResolver(), { transport });
+    await queue(manager, "current");
+    const session = transport.sessions[0];
+    assert.ok(session);
+    session.positionMs = 42_500;
+    assert.equal(manager.getSnapshot("guild-1")?.positionMs, 42_500);
+
+    assert.deepEqual(await manager.setPaused(control(manager), true), {
+      kind: "ok",
+      value: "updated",
+    });
+    assert.equal(manager.getSnapshot("guild-1")?.paused, true);
+    assert.deepEqual(session.paused, [true]);
+    assert.deepEqual(await manager.setPaused(control(manager), true), {
+      kind: "ok",
+      value: "unchanged",
+    });
+    assert.deepEqual(session.paused, [true]);
+    assert.deepEqual(await manager.setPaused(control(manager), false), {
+      kind: "ok",
+      value: "updated",
+    });
+
+    assert.deepEqual(await manager.setVolume(control(manager), 25), {
+      kind: "ok",
+      value: { volume: 25, changed: true },
+    });
+    assert.equal(manager.getSnapshot("guild-1")?.volume, 25);
+    assert.deepEqual(await manager.setVolume(control(manager), 25), {
+      kind: "ok",
+      value: { volume: 25, changed: false },
+    });
+    assert.deepEqual(session.volumes, [25]);
+
+    session.pauseError = new Error("pause unavailable");
+    assert.deepEqual(await manager.setPaused(control(manager), true), {
+      kind: "transport-failed",
+    });
+    assert.equal(manager.getSnapshot("guild-1")?.paused, false);
+    session.volumeError = new Error("volume unavailable");
+    assert.deepEqual(await manager.setVolume(control(manager), 80), {
+      kind: "transport-failed",
+    });
+    assert.equal(manager.getSnapshot("guild-1")?.volume, 25);
+    assert.throws(() => manager.setVolume(control(manager), 101), /volume/);
+  });
+
+  it("rechecks voice, channel, and exact session identity for every control", async () => {
+    const transport = new FakeTransport();
+    const manager = managerWith(new FakeResolver(), { transport });
+    await queue(manager, "current");
+    const active = control(manager);
+
+    assert.deepEqual(await manager.setPaused({ ...active, validateCommit: () => false }, true), {
+      kind: "rejected",
+      reason: "voice-changed",
+    });
+    assert.deepEqual(
+      await manager.setLoopMode({ ...active, intendedVoiceChannelId: "voice-2" }, "queue"),
+      { kind: "rejected", reason: "wrong-channel" },
+    );
+    assert.deepEqual(await manager.clearUpcoming({ ...active, playerToken: Symbol("stale") }), {
+      kind: "rejected",
+      reason: "stale-session",
+    });
+    assert.deepEqual(transport.sessions[0]?.paused, []);
+    assert.equal(manager.getSnapshot("guild-1")?.loopMode, "off");
+
+    const absent = managerWith(new FakeResolver());
+    assert.deepEqual(await absent.setPaused(control(absent), true), {
+      kind: "rejected",
+      reason: "no-session",
+    });
+  });
+
+  it("tears down cleanly while paused and makes repeated stop and leave idempotent", async () => {
+    const transport = new FakeTransport();
+    const manager = managerWith(new FakeResolver(), { transport });
+    await queue(manager, "current");
+    await manager.setPaused(control(manager), true);
+    assert.deepEqual(await manager.stop(control(manager)), { kind: "ok", value: "stopped" });
+    assert.deepEqual(await manager.stop(control(manager)), { kind: "ok", value: "unchanged" });
+    assert.equal(transport.sessions[0]?.stopCount, 1);
+    assert.deepEqual(await manager.setPaused(control(manager), false), {
+      kind: "ok",
+      value: "no-current",
+    });
+    assert.deepEqual(await manager.leave(control(manager)), { kind: "ok", value: true });
+    assert.equal(transport.sessions[0]?.destroyCount, 1);
+    assert.deepEqual(await manager.leave(control(manager)), { kind: "ok", value: false });
   });
 
   it("rolls back join and initial play failures without leaving a session", async () => {
@@ -381,15 +524,18 @@ describe("createMusicManager", () => {
     const manager = managerWith(resolver, { random: () => samples.shift() ?? 0 });
     await queue(manager, "playlist");
 
-    assert.equal((await manager.removeUpcoming("guild-1", 2))?.identifier, "c");
-    assert.equal(await manager.removeUpcoming("guild-1", 0), undefined);
-    assert.equal(await manager.shuffleUpcoming("guild-1"), true);
+    assert.equal(controlValue(await manager.removeUpcoming(control(manager), 2))?.identifier, "c");
+    assert.deepEqual(await manager.removeUpcoming(control(manager), 0), {
+      kind: "ok",
+      value: null,
+    });
+    assert.deepEqual(await manager.shuffleUpcoming(control(manager)), { kind: "ok", value: true });
     assert.equal(manager.getSnapshot("guild-1")?.current?.identifier, "a");
     assert.deepEqual(
       manager.getSnapshot("guild-1")?.upcoming.map((item) => item.identifier),
       ["d", "b"],
     );
-    assert.equal(await manager.clearUpcoming("guild-1"), 2);
+    assert.deepEqual(await manager.clearUpcoming(control(manager)), { kind: "ok", value: 2 });
     assert.deepEqual(manager.getSnapshot("guild-1")?.upcoming, []);
   });
 
@@ -459,7 +605,7 @@ describe("createMusicManager", () => {
       ["resolving"],
     );
 
-    assert.equal(await manager.stop("guild-1"), false);
+    assert.deepEqual(await manager.stop(control(manager)), { kind: "ok", value: "unchanged" });
     blocked.resolve(tracks(track("resolved-too-late")));
     assert.deepEqual(await resolving, { kind: "stale" });
     assert.deepEqual(await waiting, { kind: "stale" });
@@ -472,7 +618,7 @@ describe("createMusicManager", () => {
     const leaveManager = managerWith(new FakeResolver(async () => leaveResolution.promise));
     const leaving = leaveManager.requestPlay(request("leaving"));
     await waitForImmediate();
-    assert.equal(await leaveManager.leave("guild-1"), false);
+    assert.deepEqual(await leaveManager.leave(control(leaveManager)), { kind: "ok", value: false });
     leaveResolution.resolve(tracks(track("too-late")));
     assert.deepEqual(await leaving, { kind: "stale" });
 
@@ -540,7 +686,7 @@ describe("createMusicManager", () => {
 
     const pending = manager.requestPlay(request("pending"));
     await waitForImmediate();
-    assert.equal(await manager.clearUpcoming("guild-1"), 0);
+    assert.deepEqual(await manager.clearUpcoming(control(manager)), { kind: "ok", value: 0 });
     blocked.resolve(tracks(track("pending")));
     assert.equal((await pending).kind, "queued");
     assert.equal(manager.getSnapshot("guild-1")?.upcoming[0]?.identifier, "pending");
@@ -556,7 +702,7 @@ describe("createMusicManager", () => {
     });
     await queue(manager, "old");
     const oldIdentity = currentIdentity(manager);
-    await manager.leave("guild-1");
+    await manager.leave(control(manager));
     await queue(manager, "new");
 
     assert.deepEqual(await manager.handleTrackEnd({ ...oldIdentity, reason: "finished" }), {
@@ -578,9 +724,12 @@ describe("createMusicManager", () => {
     const identity = currentIdentity(manager);
 
     const finish = manager.handleTrackEnd({ ...identity, reason: "finished" });
-    const skip = manager.skip("guild-1");
+    const skip = manager.skip(control(manager));
     assert.equal((await finish).kind, "advanced");
-    assert.deepEqual(await skip, { kind: "ignored", reason: "stale-track" });
+    assert.deepEqual(await skip, {
+      kind: "ok",
+      value: { kind: "ignored", reason: "stale-track" },
+    });
     assert.equal(manager.getSnapshot("guild-1")?.current?.identifier, "a");
     assert.deepEqual(
       manager.getSnapshot("guild-1")?.upcoming.map((item) => item.identifier),
@@ -594,9 +743,9 @@ describe("createMusicManager", () => {
     await queue(manager, "playlist");
     const identity = currentIdentity(manager);
 
-    const stopping = manager.stop("guild-1");
+    const stopping = manager.stop(control(manager));
     const ending = manager.handleTrackEnd({ ...identity, reason: "finished" });
-    assert.equal(await stopping, true);
+    assert.deepEqual(await stopping, { kind: "ok", value: "stopped" });
     assert.deepEqual(await ending, { kind: "ignored", reason: "stale-track" });
     assert.equal(manager.getSnapshot("guild-1")?.current, null);
     assert.deepEqual(manager.getSnapshot("guild-1")?.upcoming, []);
@@ -607,19 +756,19 @@ describe("createMusicManager", () => {
 
     const trackLoop = managerWith(resolver);
     await queue(trackLoop, "track-loop");
-    await trackLoop.setLoopMode("guild-1", "track");
+    await trackLoop.setLoopMode(control(trackLoop), "track");
     const trackIdentity = currentIdentity(trackLoop);
     assert.equal(
       (await trackLoop.handleTrackEnd({ ...trackIdentity, reason: "finished" })).kind,
       "replayed",
     );
     assert.equal(trackLoop.getSnapshot("guild-1")?.current?.identifier, "a");
-    assert.equal((await trackLoop.skip("guild-1")).kind, "advanced");
+    assert.equal(controlValue(await trackLoop.skip(control(trackLoop))).kind, "advanced");
     assert.equal(trackLoop.getSnapshot("guild-1")?.current?.identifier, "b");
 
     const queueLoop = managerWith(resolver);
     await queue(queueLoop, "queue-loop");
-    await queueLoop.setLoopMode("guild-1", "queue");
+    await queueLoop.setLoopMode(control(queueLoop), "queue");
     const queueIdentity = currentIdentity(queueLoop);
     await queueLoop.handleTrackEnd({ ...queueIdentity, reason: "finished" });
     assert.equal(queueLoop.getSnapshot("guild-1")?.current?.identifier, "b");
@@ -711,7 +860,7 @@ describe("createMusicManager", () => {
     const firstToken = manager.getSnapshot("guild-1")?.playerToken;
     assert.ok(firstToken);
 
-    assert.equal(await manager.stop("guild-1"), true);
+    assert.deepEqual(await manager.stop(control(manager)), { kind: "ok", value: "stopped" });
     assert.equal(scheduler.timers[0]?.unrefCalled, true);
     await queue(manager, "replacement");
     assert.equal(scheduler.timers[0]?.cleared, true);
@@ -719,7 +868,7 @@ describe("createMusicManager", () => {
     await waitForImmediate();
     assert.equal(manager.getSnapshot("guild-1")?.current?.identifier, "replacement");
 
-    assert.equal(await manager.stop("guild-1"), true);
+    assert.deepEqual(await manager.stop(control(manager)), { kind: "ok", value: "stopped" });
     scheduler.fire(1);
     await waitForImmediate();
     assert.equal(manager.getSnapshot("guild-1"), undefined);
@@ -741,7 +890,7 @@ describe("createMusicManager", () => {
     await waitForImmediate();
     assert.equal(manager.getSnapshot("guild-1"), undefined);
     assert.equal(await manager.cleanupUnexpected("guild-1"), false);
-    assert.equal(await manager.leave("guild-1"), false);
+    assert.deepEqual(await manager.leave(control(manager)), { kind: "ok", value: false });
   });
 
   it("validates manager bounds and rejects invalid shuffle randomness without poisoning state work", async () => {
@@ -759,11 +908,14 @@ describe("createMusicManager", () => {
       },
     );
     await queue(manager, "playlist");
-    await assert.rejects(manager.shuffleUpcoming("guild-1"), /random must return/);
+    await assert.rejects(manager.shuffleUpcoming(control(manager)), /random must return/);
     assert.deepEqual(
       manager.getSnapshot("guild-1")?.upcoming.map((item) => item.identifier),
       ["b", "c", "d"],
     );
-    assert.equal(await manager.setLoopMode("guild-1", "queue"), true);
+    assert.deepEqual(await manager.setLoopMode(control(manager), "queue"), {
+      kind: "ok",
+      value: "queue",
+    });
   });
 });

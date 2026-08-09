@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-import { type VoiceAccessFacts, validateVoiceAccess } from "../src/music/voice.js";
+import {
+  type VoiceAccessFacts,
+  validateControlVoiceAccess,
+  validateVoiceAccess,
+} from "../src/music/voice.js";
 
 const readyFacts: VoiceAccessFacts = {
   channelId: "voice-1",
@@ -62,5 +66,35 @@ describe("validateVoiceAccess", () => {
       validateVoiceAccess({ ...readyFacts, channelFull: true, botInChannel: true }),
       { kind: "ready", voiceChannelId: "voice-1" },
     );
+  });
+});
+
+describe("validateControlVoiceAccess", () => {
+  it("requires a normal active same-channel caller", () => {
+    assert.deepEqual(validateControlVoiceAccess(readyFacts, "voice-1"), {
+      kind: "ready",
+      voiceChannelId: "voice-1",
+    });
+    assert.deepEqual(
+      validateControlVoiceAccess({ channelId: null, channelKind: null }, "voice-1"),
+      {
+        kind: "not-in-voice",
+      },
+    );
+    assert.deepEqual(
+      validateControlVoiceAccess({ channelId: "stage-1", channelKind: "stage" }, "stage-1"),
+      { kind: "unsupported-channel" },
+    );
+    assert.deepEqual(validateControlVoiceAccess(readyFacts, "voice-2"), {
+      kind: "wrong-channel",
+    });
+  });
+
+  it("allows stop/leave authorization without a session but rejects other missing sessions", () => {
+    assert.deepEqual(validateControlVoiceAccess(readyFacts, null), { kind: "no-session" });
+    assert.deepEqual(validateControlVoiceAccess(readyFacts, null, true), {
+      kind: "ready",
+      voiceChannelId: "voice-1",
+    });
   });
 });

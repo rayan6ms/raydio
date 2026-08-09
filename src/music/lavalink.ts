@@ -17,6 +17,10 @@ export const SHOUKAKU_OPTIONS = {
 } as const satisfies ShoukakuOptions;
 
 export type LavalinkStatus = "connecting" | "ready" | "reconnecting" | "unavailable" | "stopped";
+export type LavalinkSessionInvalidationReason = "session-lost" | "unavailable";
+export type LavalinkSessionInvalidationListener = (
+  reason: LavalinkSessionInvalidationReason,
+) => Promise<void> | void;
 
 export interface LavalinkReadiness {
   isReady(): boolean;
@@ -26,6 +30,7 @@ export interface LavalinkReadiness {
 export interface LavalinkService extends LavalinkReadiness {
   readonly manager: Shoukaku;
   getReadyNode(): Node | undefined;
+  onSessionInvalidated(listener: LavalinkSessionInvalidationListener): () => void;
   stop(): Promise<void>;
 }
 
@@ -53,22 +58,80 @@ export function createLavalinkService(
   });
   let status: LavalinkStatus = "connecting";
   let stopped = false;
+  let transitionSequence = 0;
+  const invalidationListeners = new Set<LavalinkSessionInvalidationListener>();
+
+  async function notifySessionInvalidated(
+    reason: LavalinkSessionInvalidationReason,
+  ): Promise<void> {
+    const results = await Promise.allSettled(
+      [...invalidationListeners].map(async (listener) => listener(reason)),
+    );
+    for (const result of results) {
+      if (result.status === "rejected") {
+        logger.error(
+          {
+            event: "lavalink_session_invalidation_handler_failed",
+            reason,
+            ...errorFields(result.reason),
+          },
+          "Lavalink session invalidation handling failed",
+        );
+      }
+    }
+  }
+
+  function markUnavailable(nodeName: string, movedPlayerCount?: number): void {
+    if (stopped || status === "unavailable") {
+      return;
+    }
+
+    transitionSequence += 1;
+    status = "unavailable";
+    logger.error(
+      {
+        event: "lavalink_unavailable",
+        nodeName,
+        ...(movedPlayerCount === undefined ? {} : { movedPlayerCount }),
+      },
+      "Lavalink reconnect attempts exhausted",
+    );
+    void notifySessionInvalidated("unavailable");
+  }
 
   manager.on("ready", (nodeName, lavalinkResumed, libraryResumed) => {
     if (stopped) {
       return;
     }
 
-    status = "ready";
-    logger.info(
-      {
-        event: "lavalink_ready",
-        nodeName,
-        lavalinkResumed,
-        libraryResumed,
-      },
-      "Lavalink node ready",
-    );
+    const previousStatus = status;
+    const readySequence = ++transitionSequence;
+    const publishReady = (): void => {
+      if (stopped || transitionSequence !== readySequence) {
+        return;
+      }
+      status = "ready";
+      logger.info(
+        {
+          event: "lavalink_ready",
+          nodeName,
+          lavalinkResumed,
+          libraryResumed,
+        },
+        "Lavalink node ready",
+      );
+    };
+
+    if (previousStatus === "reconnecting" && !lavalinkResumed) {
+      logger.warn(
+        { event: "lavalink_session_lost", nodeName },
+        "Lavalink reconnected without resuming its prior session",
+      );
+      void notifySessionInvalidated("session-lost").then(publishReady);
+      return;
+    }
+
+    publishReady();
   });
 
   manager.on("reconnecting", (nodeName, reconnectsLeft, reconnectIntervalSeconds) => {
@@ -76,6 +139,7 @@ export function createLavalinkService(
       return;
     }
 
+    transitionSequence += 1;
     status = "reconnecting";
     logger.warn(
       {
@@ -93,6 +157,7 @@ export function createLavalinkService(
       return;
     }
 
+    transitionSequence += 1;
     status = "reconnecting";
     logger.warn(
       {
@@ -110,15 +175,7 @@ export function createLavalinkService(
       return;
     }
 
-    status = "unavailable";
-    logger.error(
-      {
-        event: "lavalink_unavailable",
-        nodeName,
-        movedPlayerCount,
-      },
-      "Lavalink reconnect attempts exhausted",
-    );
+    markUnavailable(nodeName, movedPlayerCount);
   });
 
   manager.on("error", (nodeName, error) => {
@@ -128,16 +185,17 @@ export function createLavalinkService(
 
     const nodeRemoved = !manager.nodes.has(nodeName);
     if (nodeRemoved) {
-      status = "unavailable";
+      markUnavailable(nodeName);
+      return;
     }
 
     logger.error(
       {
-        event: nodeRemoved ? "lavalink_unavailable" : "lavalink_error",
+        event: "lavalink_error",
         nodeName,
         ...errorFields(error),
       },
-      nodeRemoved ? "Lavalink reconnect attempts exhausted" : "Lavalink node error",
+      "Lavalink node error",
     );
   });
 
@@ -152,13 +210,19 @@ export function createLavalinkService(
     getReadyNode(): Node | undefined {
       return status === "ready" ? manager.getIdealNode() : undefined;
     },
+    onSessionInvalidated(listener): () => void {
+      invalidationListeners.add(listener);
+      return () => invalidationListeners.delete(listener);
+    },
     async stop(): Promise<void> {
       if (stopped) {
         return;
       }
 
       stopped = true;
+      transitionSequence += 1;
       status = "stopped";
+      invalidationListeners.clear();
 
       const guildIds = new Set([...manager.connections.keys(), ...manager.players.keys()]);
       const guildIdList = [...guildIds];

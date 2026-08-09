@@ -30,16 +30,27 @@ const COMMAND_ALIASES = new Map<string, CommandName>([
   ["dc", "leave"],
 ]);
 
-const MUSIC_COMMANDS = new Set<CommandName>(
-  CANONICAL_COMMANDS.filter((name) => name !== "help" && name !== "ping" && name !== "play"),
-);
+export type ControlCommandName = Exclude<CommandName, "help" | "ping" | "play">;
+
+export type ControlCommandInvocation =
+  | { readonly name: "pause" | "resume" | "skip" | "stop" | "queue" | "nowplaying" }
+  | { readonly name: "shuffle" | "clear" | "leave" }
+  | { readonly name: "volume"; readonly volume: number | null }
+  | { readonly name: "loop"; readonly mode: "off" | "track" | "queue" }
+  | { readonly name: "remove"; readonly displayedIndex: number };
 
 const HELP_MESSAGE = [
-  "Raydio commands available now:",
+  "Raydio commands:",
   "`\\play <song or YouTube URL>` (`\\p`) — play or queue music",
+  "`\\pause` / `\\resume` — pause or resume",
+  "`\\skip` (`\\s`) / `\\stop` — skip or stop and clear",
+  "`\\queue` (`\\q`) / `\\nowplaying` (`\\np`) — playback details",
+  "`\\volume [0-100]` (`\\vol`) — show or set volume",
+  "`\\loop <off|track|queue>` — set looping",
+  "`\\shuffle` / `\\remove <index>` / `\\clear` — edit upcoming tracks",
+  "`\\leave` (`\\disconnect`, `\\dc`) — disconnect",
   "`\\help` — show this command list",
   "`\\ping` — show Discord latency and Lavalink readiness",
-  "Other music controls are recognized and will be enabled next.",
 ].join("\n");
 
 export interface CommandMessageInput {
@@ -58,6 +69,7 @@ export interface CommandContext {
   readonly discordReady: boolean;
   readonly lavalinkReady: boolean;
   play(input: string): Promise<string>;
+  control(invocation: ControlCommandInvocation): Promise<string>;
   send(content: string): Promise<void>;
 }
 
@@ -106,6 +118,62 @@ function formatDiscordLatency(ready: boolean, latencyMs: number): string {
   return `${Math.round(latencyMs)} ms`;
 }
 
+function parseControlInvocation(
+  commandName: ControlCommandName,
+  argument: string,
+): ControlCommandInvocation | string {
+  if (
+    commandName === "pause" ||
+    commandName === "resume" ||
+    commandName === "skip" ||
+    commandName === "stop" ||
+    commandName === "queue" ||
+    commandName === "nowplaying" ||
+    commandName === "shuffle" ||
+    commandName === "clear" ||
+    commandName === "leave"
+  ) {
+    return argument === "" ? { name: commandName } : `Usage: \`\\${commandName}\`.`;
+  }
+
+  if (commandName === "volume") {
+    if (argument === "") {
+      return { name: "volume", volume: null };
+    }
+    if (!/^\d+$/.test(argument)) {
+      return "Usage: `\\volume [0-100]`.";
+    }
+    const volume = Number(argument);
+    return Number.isSafeInteger(volume) && volume <= 100
+      ? { name: "volume", volume }
+      : "Usage: `\\volume [0-100]`.";
+  }
+
+  if (commandName === "loop") {
+    const mode = argument.toLowerCase();
+    return mode === "off" || mode === "track" || mode === "queue"
+      ? { name: "loop", mode }
+      : "Usage: `\\loop <off|track|queue>`.";
+  }
+
+  if (!/^[1-9]\d*$/.test(argument)) {
+    return "Usage: `\\remove <upcoming index>`.";
+  }
+  const displayedIndex = Number(argument);
+  return Number.isSafeInteger(displayedIndex)
+    ? { name: "remove", displayedIndex }
+    : "Usage: `\\remove <upcoming index>`.";
+}
+
+function requiresReadyPlayer(invocation: ControlCommandInvocation): boolean {
+  return (
+    invocation.name === "pause" ||
+    invocation.name === "resume" ||
+    invocation.name === "skip" ||
+    (invocation.name === "volume" && invocation.volume !== null)
+  );
+}
+
 export async function dispatchCommand(
   parsed: ParsedCommand,
   context: CommandContext,
@@ -142,14 +210,15 @@ export async function dispatchCommand(
     return "handled";
   }
 
-  if (MUSIC_COMMANDS.has(commandName)) {
-    await context.send(
-      context.lavalinkReady
-        ? "Music playback is not implemented yet."
-        : "Music service is temporarily unavailable.",
-    );
+  const invocation = parseControlInvocation(commandName, parsed.argument);
+  if (typeof invocation === "string") {
+    await context.send(invocation);
+    return "handled";
+  }
+  if (!context.lavalinkReady && requiresReadyPlayer(invocation)) {
+    await context.send("Music service is temporarily unavailable.");
     return "unavailable";
   }
-
-  return "unknown";
+  await context.send(await context.control(invocation));
+  return "handled";
 }

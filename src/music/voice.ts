@@ -23,6 +23,13 @@ export type VoiceAccessResult =
   | { readonly kind: "channel-full" }
   | { readonly kind: "voice-changed" };
 
+export type ControlVoiceAccessResult =
+  | { readonly kind: "ready"; readonly voiceChannelId: string }
+  | { readonly kind: "not-in-voice" }
+  | { readonly kind: "unsupported-channel" }
+  | { readonly kind: "no-session" }
+  | { readonly kind: "wrong-channel" };
+
 export function validateVoiceAccess(
   facts: VoiceAccessFacts,
   intendedVoiceChannelId?: string,
@@ -57,6 +64,28 @@ export function validateVoiceAccess(
   }
   if (facts.channelFull && !facts.botInChannel) {
     return { kind: "channel-full" };
+  }
+  return { kind: "ready", voiceChannelId: facts.channelId };
+}
+
+export function validateControlVoiceAccess(
+  facts: Pick<VoiceAccessFacts, "channelId" | "channelKind">,
+  activeVoiceChannelId: string | null,
+  allowMissingSession = false,
+): ControlVoiceAccessResult {
+  if (facts.channelId === null || facts.channelKind === null) {
+    return { kind: "not-in-voice" };
+  }
+  if (facts.channelKind !== "voice") {
+    return { kind: "unsupported-channel" };
+  }
+  if (activeVoiceChannelId === null) {
+    return allowMissingSession
+      ? { kind: "ready", voiceChannelId: facts.channelId }
+      : { kind: "no-session" };
+  }
+  if (facts.channelId !== activeVoiceChannelId) {
+    return { kind: "wrong-channel" };
   }
   return { kind: "ready", voiceChannelId: facts.channelId };
 }

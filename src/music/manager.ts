@@ -48,7 +48,7 @@ export interface PlayRequest {
 export interface PlaybackControlRequest {
   readonly guildId: string;
   readonly intendedVoiceChannelId: string;
-  readonly playerToken: PlayerToken;
+  readonly playerToken: PlayerToken | null;
   readonly validateCommit: () => boolean;
 }
 
@@ -109,8 +109,14 @@ export interface MusicManager {
     request: PlaybackControlRequest,
     paused: boolean,
   ): Promise<ControlResult<"updated" | "unchanged" | "no-current">>;
-  setVolume(request: PlaybackControlRequest, volume: number): Promise<ControlResult<number>>;
-  setLoopMode(request: PlaybackControlRequest, loopMode: LoopMode): Promise<ControlResult<LoopMode>>;
+  setVolume(
+    request: PlaybackControlRequest,
+    volume: number,
+  ): Promise<ControlResult<{ readonly volume: number; readonly changed: boolean }>>;
+  setLoopMode(
+    request: PlaybackControlRequest,
+    loopMode: LoopMode,
+  ): Promise<ControlResult<LoopMode>>;
   removeUpcoming(
     request: PlaybackControlRequest,
     displayedIndex: number,
@@ -119,7 +125,7 @@ export interface MusicManager {
   shuffleUpcoming(request: PlaybackControlRequest): Promise<ControlResult<boolean>>;
   skip(request: PlaybackControlRequest): Promise<ControlResult<TransitionResult>>;
   stop(request: PlaybackControlRequest): Promise<ControlResult<"stopped" | "unchanged">>;
-  leave(request: PlaybackControlRequest): Promise<ControlResult<true>>;
+  leave(request: PlaybackControlRequest): Promise<ControlResult<boolean>>;
   cleanupUnexpected(guildId: string): Promise<boolean>;
   handleTrackEnd(
     event: PlayerEventIdentity & { readonly reason: TrackEndReason },
@@ -188,9 +194,9 @@ function positiveSafeInteger(value: number, name: string): void {
   }
 }
 
-function validVolume(value: number): void {
+function validVolume(value: number, name = "volume"): void {
   if (!Number.isSafeInteger(value) || value < 0 || value > 100) {
-    throw new RangeError("defaultVolume must be a safe integer between 0 and 100");
+    throw new RangeError(`${name} must be a safe integer between 0 and 100`);
   }
 }
 
@@ -233,7 +239,7 @@ export function createMusicManager(
 ): MusicManager {
   positiveSafeInteger(config.maxQueueTracks, "maxQueueTracks");
   positiveSafeInteger(config.maxPendingPlayRequests, "maxPendingPlayRequests");
-  validVolume(config.defaultVolume);
+  validVolume(config.defaultVolume, "defaultVolume");
   const idleDelayMs = durationMs(config.idleDisconnectSeconds, "idleDisconnectSeconds");
   const aloneDelayMs = durationMs(config.aloneDisconnectSeconds, "aloneDisconnectSeconds");
 
@@ -434,9 +440,7 @@ export function createMusicManager(
 
   function validateControl(
     request: PlaybackControlRequest,
-  ):
-    | { readonly state: GuildPlaybackState }
-    | { readonly result: ControlResult<never> } {
+  ): { readonly state: GuildPlaybackState } | { readonly result: ControlResult<never> } {
     const state = states.get(request.guildId);
     if (state === undefined) {
       return { result: { kind: "rejected", reason: "no-session" } };
@@ -858,51 +862,118 @@ export function createMusicManager(
       }
     },
 
-    setLoopMode(guildId, loopMode) {
-      return stateExecutor.run(guildId, () => {
-        const state = states.get(guildId);
-        if (state === undefined) {
-          return false;
+    setPaused(request, paused) {
+      return stateExecutor.run(request.guildId, async () => {
+        const validation = validateControl(request);
+        if ("result" in validation) {
+          return validation.result;
         }
-        state.loopMode = loopMode;
-        return true;
+        const state = validation.state;
+        if (state.current === null) {
+          return { kind: "ok", value: "no-current" };
+        }
+        if (state.paused === paused) {
+          return { kind: "ok", value: "unchanged" };
+        }
+        try {
+          await state.session.setPaused(paused);
+        } catch (error: unknown) {
+          dependencies.logger.warn(
+            {
+              event: "player_pause_update_failed",
+              guildId: request.guildId,
+              paused,
+              ...errorFields(error),
+            },
+            "Could not update player pause state",
+          );
+          return { kind: "transport-failed" };
+        }
+        state.paused = paused;
+        return { kind: "ok", value: "updated" };
       });
     },
 
-    removeUpcoming(guildId, displayedIndex) {
-      if (!Number.isSafeInteger(displayedIndex) || displayedIndex < 1) {
-        return Promise.resolve(undefined);
-      }
-      return stateExecutor.run(guildId, () => {
-        const state = states.get(guildId);
-        if (state === undefined) {
-          return undefined;
+    setVolume(request, volume) {
+      validVolume(volume);
+      return stateExecutor.run(request.guildId, async () => {
+        const validation = validateControl(request);
+        if ("result" in validation) {
+          return validation.result;
         }
-        const removed = state.upcoming.splice(displayedIndex - 1, 1)[0];
-        return removed === undefined ? undefined : copyQueueTrack(removed);
+        const state = validation.state;
+        if (state.volume === volume) {
+          return { kind: "ok", value: { volume, changed: false } };
+        }
+        try {
+          await state.session.setVolume(volume);
+        } catch (error: unknown) {
+          dependencies.logger.warn(
+            {
+              event: "player_volume_update_failed",
+              guildId: request.guildId,
+              volume,
+              ...errorFields(error),
+            },
+            "Could not update player volume",
+          );
+          return { kind: "transport-failed" };
+        }
+        state.volume = volume;
+        return { kind: "ok", value: { volume, changed: true } };
       });
     },
 
-    clearUpcoming(guildId) {
-      return stateExecutor.run(guildId, () => {
-        const state = states.get(guildId);
-        if (state === undefined) {
-          return 0;
+    setLoopMode(request, loopMode) {
+      return stateExecutor.run(request.guildId, () => {
+        const validation = validateControl(request);
+        if ("result" in validation) {
+          return validation.result;
         }
+        validation.state.loopMode = loopMode;
+        return { kind: "ok", value: loopMode };
+      });
+    },
+
+    removeUpcoming(request, displayedIndex) {
+      return stateExecutor.run(request.guildId, () => {
+        const validation = validateControl(request);
+        if ("result" in validation) {
+          return validation.result;
+        }
+        if (!Number.isSafeInteger(displayedIndex) || displayedIndex < 1) {
+          return { kind: "ok", value: null };
+        }
+        const removed = validation.state.upcoming.splice(displayedIndex - 1, 1)[0];
+        return { kind: "ok", value: removed === undefined ? null : copyQueueTrack(removed) };
+      });
+    },
+
+    clearUpcoming(request) {
+      return stateExecutor.run(request.guildId, () => {
+        const validation = validateControl(request);
+        if ("result" in validation) {
+          return validation.result;
+        }
+        const state = validation.state;
         const removed = state.upcoming.length;
         state.upcoming = [];
         if (state.current === null) {
           scheduleIdleTimer(state);
         }
-        return removed;
+        return { kind: "ok", value: removed };
       });
     },
 
-    shuffleUpcoming(guildId) {
-      return stateExecutor.run(guildId, () => {
-        const state = states.get(guildId);
-        if (state === undefined || state.upcoming.length < 2) {
-          return false;
+    shuffleUpcoming(request) {
+      return stateExecutor.run(request.guildId, () => {
+        const validation = validateControl(request);
+        if ("result" in validation) {
+          return validation.result;
+        }
+        const state = validation.state;
+        if (state.upcoming.length < 2) {
+          return { kind: "ok", value: false };
         }
 
         const shuffled = [...state.upcoming];
@@ -922,62 +993,83 @@ export function createMusicManager(
           }
         }
         state.upcoming = shuffled;
-        return true;
+        return { kind: "ok", value: true };
       });
     },
 
-    skip(guildId) {
-      const captured = states.get(guildId);
-      const playerToken = captured?.playerToken;
+    skip(request) {
+      const captured = states.get(request.guildId);
       const current = captured?.current;
 
-      return stateExecutor.run(guildId, async () => {
-        const state = states.get(guildId);
-        if (state === undefined) {
-          return { kind: "ignored", reason: "no-state" };
+      return stateExecutor.run(request.guildId, async () => {
+        const validation = validateControl(request);
+        if ("result" in validation) {
+          return validation.result;
         }
-        if (state.playerToken !== playerToken) {
-          return { kind: "ignored", reason: "stale-session" };
-        }
+        const state = validation.state;
         if (current === undefined || current === null || state.current !== current) {
           return {
-            kind: "ignored",
-            reason: current === undefined || current === null ? "no-current" : "stale-track",
+            kind: "ok",
+            value: {
+              kind: "ignored",
+              reason: current === undefined || current === null ? "no-current" : "stale-track",
+            },
           };
         }
         await stopPlaybackBestEffort(state);
         const result = transitionCurrent(state, "manual-skip");
-        return applyPlaybackEffect(state, result);
+        return { kind: "ok", value: await applyPlaybackEffect(state, result) };
       });
     },
 
-    stop(guildId) {
-      return stateExecutor.run(guildId, async () => {
-        const coordinator = invalidate(guildId);
-        const state = states.get(guildId);
-        if (state === undefined) {
-          discardCoordinatorIfIdle(guildId, coordinator);
-          return false;
+    stop(request) {
+      return stateExecutor.run(request.guildId, async () => {
+        const missingState = states.get(request.guildId) === undefined;
+        if (missingState) {
+          if (!request.validateCommit()) {
+            return { kind: "rejected", reason: "voice-changed" };
+          }
+          const coordinator = invalidate(request.guildId);
+          discardCoordinatorIfIdle(request.guildId, coordinator);
+          return { kind: "ok", value: "unchanged" };
         }
-        await stopPlaybackBestEffort(state);
+        const validation = validateControl(request);
+        if ("result" in validation) {
+          return validation.result;
+        }
+        const state = validation.state;
+        const changed = state.current !== null || state.upcoming.length > 0;
+        const coordinator = invalidate(request.guildId);
+        if (changed) {
+          await stopPlaybackBestEffort(state);
+        }
         state.current = null;
         state.upcoming = [];
         state.paused = false;
         state.consecutiveFailures = 0;
         scheduleIdleTimer(state);
-        return true;
+        discardCoordinatorIfIdle(request.guildId, coordinator);
+        return { kind: "ok", value: changed ? "stopped" : "unchanged" };
       });
     },
 
-    leave(guildId) {
-      return stateExecutor.run(guildId, async () => {
-        const state = states.get(guildId);
-        if (state === undefined) {
-          const coordinator = invalidate(guildId);
-          discardCoordinatorIfIdle(guildId, coordinator);
-          return false;
+    leave(request) {
+      return stateExecutor.run(request.guildId, async () => {
+        const missingState = states.get(request.guildId) === undefined;
+        if (missingState) {
+          if (!request.validateCommit()) {
+            return { kind: "rejected", reason: "voice-changed" };
+          }
+          const coordinator = invalidate(request.guildId);
+          discardCoordinatorIfIdle(request.guildId, coordinator);
+          return { kind: "ok", value: false };
         }
-        return await deleteState(guildId, state);
+        const validation = validateControl(request);
+        if ("result" in validation) {
+          return validation.result;
+        }
+        await deleteState(request.guildId, validation.state);
+        return { kind: "ok", value: true };
       });
     },
 

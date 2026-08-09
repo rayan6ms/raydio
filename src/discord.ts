@@ -9,12 +9,19 @@ import {
 } from "discord.js";
 import type { Logger } from "pino";
 
-import { dispatchCommand, parseCommand } from "./commands.js";
+import { type ControlCommandInvocation, dispatchCommand, parseCommand } from "./commands.js";
 import type { LavalinkReadiness } from "./music/lavalink.js";
-import type { MusicManager, PlayRequestResult } from "./music/manager.js";
+import type {
+  ControlResult,
+  MusicManager,
+  PlaybackControlRequest,
+  PlayRequestResult,
+} from "./music/manager.js";
+import type { GuildPlaybackSnapshot, QueueTrack } from "./music/state.js";
 import {
   type VoiceAccessFacts,
   type VoiceAccessResult,
+  validateControlVoiceAccess,
   validateVoiceAccess,
 } from "./music/voice.js";
 import { errorFields, escapeExternalText, truncateMessage } from "./utils.js";
@@ -41,7 +48,21 @@ export interface DiscordMusicNotifier {
   send(channelId: string, content: string): Promise<void>;
 }
 
-type MusicController = Pick<MusicManager, "cleanupUnexpected" | "getSnapshot" | "requestPlay">;
+type MusicController = Pick<
+  MusicManager,
+  | "cleanupUnexpected"
+  | "getSnapshot"
+  | "requestPlay"
+  | "setPaused"
+  | "setVolume"
+  | "setLoopMode"
+  | "removeUpcoming"
+  | "clearUpcoming"
+  | "shuffleUpcoming"
+  | "skip"
+  | "stop"
+  | "leave"
+>;
 
 function logError(logger: Logger, event: string, error: unknown, message: string): void {
   logger.error({ event, ...errorFields(error) }, message);
@@ -83,6 +104,7 @@ async function handleMessage(
       discordReady: message.client.isReady(),
       lavalinkReady: lavalink.isReady(),
       play: async (input) => handlePlay(message, input, music),
+      control: async (invocation) => handleControl(message, invocation, music),
       send: async (content) => {
         await message.channel.send({ content: truncateMessage(content) });
       },
@@ -214,6 +236,289 @@ export function formatPlayRequestResult(result: PlayRequestResult): string {
     case "closed":
       return "Music service is shutting down.";
   }
+}
+
+const QUEUE_VIEW_LIMIT = 10;
+
+function safeSegment(value: string, maximumLength: number): string {
+  return truncateMessage(escapeExternalText(value).replaceAll(/\s+/g, " "), maximumLength);
+}
+
+export function formatDuration(durationMs: number, isStream = false): string {
+  if (isStream) {
+    return "LIVE";
+  }
+  const totalSeconds = Number.isFinite(durationMs)
+    ? Math.max(0, Math.floor(durationMs / 1_000))
+    : 0;
+  const seconds = totalSeconds % 60;
+  const totalMinutes = Math.floor(totalSeconds / 60);
+  const minutes = totalMinutes % 60;
+  const hours = Math.floor(totalMinutes / 60);
+  return hours > 0
+    ? `${hours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
+    : `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}
+
+function compactTrack(track: QueueTrack): string {
+  const title = safeSegment(track.title, 70);
+  const author = safeSegment(track.author, 40);
+  const requester = safeSegment(track.requestedBy.label, 32);
+  return `**${title}** — ${author} [${formatDuration(track.durationMs, track.isStream)}] • ${requester}`;
+}
+
+export function formatQueueSnapshot(snapshot: GuildPlaybackSnapshot | undefined): string {
+  if (snapshot?.current === null || snapshot === undefined) {
+    return "The queue is empty.";
+  }
+
+  const lines = [`Now: ${compactTrack(snapshot.current)}`];
+  const visible = snapshot.upcoming.slice(0, QUEUE_VIEW_LIMIT);
+  if (visible.length === 0) {
+    lines.push("Upcoming: empty");
+  } else {
+    lines.push(
+      "Upcoming:",
+      ...visible.map((track, index) => `${index + 1}. ${compactTrack(track)}`),
+    );
+    const hidden = snapshot.upcoming.length - visible.length;
+    if (hidden > 0) {
+      lines.push(`…and ${hidden} more track${hidden === 1 ? "" : "s"}.`);
+    }
+  }
+  lines.push(
+    `Status: ${snapshot.paused ? "paused" : "playing"} • Loop: ${snapshot.loopMode} • Volume: ${snapshot.volume}%`,
+  );
+  return truncateMessage(lines.join("\n"));
+}
+
+export function formatNowPlayingSnapshot(snapshot: GuildPlaybackSnapshot | undefined): string {
+  if (snapshot?.current === null || snapshot === undefined) {
+    return "Nothing is playing.";
+  }
+  const track = snapshot.current;
+  const title = safeSegment(track.title, 160);
+  const author = safeSegment(track.author, 100);
+  const requester = safeSegment(track.requestedBy.label, 64);
+  const progress = track.isStream
+    ? "LIVE"
+    : `${formatDuration(Math.min(snapshot.positionMs, track.durationMs))} / ${formatDuration(track.durationMs)}`;
+  return truncateMessage(
+    [
+      `Now playing: **${title}** — ${author}`,
+      `Requested by: ${requester}`,
+      `Progress: ${progress}`,
+      `Status: ${snapshot.paused ? "paused" : "playing"} • Loop: ${snapshot.loopMode} • Volume: ${snapshot.volume}%`,
+    ].join("\n"),
+  );
+}
+
+function supportedCallerVoice(message: Message<true>, intendedVoiceChannelId: string): boolean {
+  const channel = message.member?.voice.channel;
+  return channel?.type === ChannelType.GuildVoice && channel.id === intendedVoiceChannelId;
+}
+
+function prepareControl(
+  message: Message<true>,
+  music: MusicController,
+  allowMissingSession = false,
+): PlaybackControlRequest | { readonly message: string } {
+  const snapshot = music.getSnapshot(message.guildId);
+  const access = validateControlVoiceAccess(
+    voiceFacts(message),
+    snapshot?.voiceChannelId ?? null,
+    allowMissingSession,
+  );
+  if (access.kind !== "ready") {
+    switch (access.kind) {
+      case "not-in-voice":
+        return { message: "Join the bot's voice channel before using that control." };
+      case "unsupported-channel":
+        return { message: "Stage channels are not supported. Join a normal voice channel." };
+      case "no-session":
+        return { message: "There is no active music session." };
+      case "wrong-channel":
+        return { message: "Join the bot's current voice channel before using that control." };
+    }
+  }
+  return {
+    guildId: message.guildId,
+    intendedVoiceChannelId: access.voiceChannelId,
+    playerToken: snapshot?.playerToken ?? null,
+    validateCommit: () => supportedCallerVoice(message, access.voiceChannelId),
+  };
+}
+
+function controlFailure(result: ControlResult<unknown>): string | null {
+  if (result.kind === "transport-failed") {
+    return "Lavalink could not apply that playback change.";
+  }
+  if (result.kind === "ok") {
+    return null;
+  }
+  switch (result.reason) {
+    case "no-session":
+    case "stale-session":
+      return "The music session changed before that control could be applied.";
+    case "wrong-channel":
+      return "Join the bot's current voice channel before using that control.";
+    case "voice-changed":
+      return "Your voice channel changed before that control could be applied.";
+  }
+}
+
+async function handleControl(
+  message: Message<true>,
+  invocation: ControlCommandInvocation,
+  music: MusicController,
+): Promise<string> {
+  if (invocation.name === "queue") {
+    return formatQueueSnapshot(music.getSnapshot(message.guildId));
+  }
+  if (invocation.name === "nowplaying") {
+    return formatNowPlayingSnapshot(music.getSnapshot(message.guildId));
+  }
+  if (invocation.name === "volume" && invocation.volume === null) {
+    const snapshot = music.getSnapshot(message.guildId);
+    return snapshot === undefined
+      ? "There is no active music session."
+      : `Current volume: ${snapshot.volume}%.`;
+  }
+
+  const prepared = prepareControl(
+    message,
+    music,
+    invocation.name === "stop" || invocation.name === "leave",
+  );
+  if ("message" in prepared) {
+    return prepared.message;
+  }
+
+  if (invocation.name === "pause" || invocation.name === "resume") {
+    const paused = invocation.name === "pause";
+    const result = await music.setPaused(prepared, paused);
+    const failure = controlFailure(result);
+    if (failure !== null) {
+      return failure;
+    }
+    if (result.kind !== "ok") {
+      throw new Error("Unexpected pause control result");
+    }
+    if (result.value === "no-current") {
+      return "Nothing is playing.";
+    }
+    if (result.value === "unchanged") {
+      return paused ? "Playback is already paused." : "Playback is already running.";
+    }
+    return paused ? "Playback paused." : "Playback resumed.";
+  }
+
+  if (invocation.name === "volume") {
+    if (invocation.volume === null) {
+      throw new Error("Volume query unexpectedly reached the update path");
+    }
+    const result = await music.setVolume(prepared, invocation.volume);
+    const failure = controlFailure(result);
+    if (failure !== null) {
+      return failure;
+    }
+    if (result.kind !== "ok") {
+      throw new Error("Unexpected volume control result");
+    }
+    return result.value.changed
+      ? `Volume set to ${result.value.volume}%.`
+      : `Volume is already ${result.value.volume}%.`;
+  }
+
+  if (invocation.name === "loop") {
+    const result = await music.setLoopMode(prepared, invocation.mode);
+    return controlFailure(result) ?? `Loop mode set to ${invocation.mode}.`;
+  }
+
+  if (invocation.name === "remove") {
+    const result = await music.removeUpcoming(prepared, invocation.displayedIndex);
+    const failure = controlFailure(result);
+    if (failure !== null) {
+      return failure;
+    }
+    if (result.kind !== "ok") {
+      throw new Error("Unexpected remove control result");
+    }
+    return result.value === null
+      ? "There is no upcoming track at that index."
+      : `Removed **${safeSegment(result.value.title, 160)}**.`;
+  }
+
+  if (invocation.name === "clear") {
+    const result = await music.clearUpcoming(prepared);
+    const failure = controlFailure(result);
+    if (failure !== null) {
+      return failure;
+    }
+    if (result.kind !== "ok") {
+      throw new Error("Unexpected clear control result");
+    }
+    return result.value === 0
+      ? "The upcoming queue is already empty."
+      : `Cleared ${result.value} upcoming track${result.value === 1 ? "" : "s"}.`;
+  }
+
+  if (invocation.name === "shuffle") {
+    const result = await music.shuffleUpcoming(prepared);
+    const failure = controlFailure(result);
+    if (failure !== null) {
+      return failure;
+    }
+    if (result.kind !== "ok") {
+      throw new Error("Unexpected shuffle control result");
+    }
+    return result.value
+      ? "Shuffled the upcoming queue."
+      : "At least two upcoming tracks are needed.";
+  }
+
+  if (invocation.name === "skip") {
+    const result = await music.skip(prepared);
+    const failure = controlFailure(result);
+    if (failure !== null) {
+      return failure;
+    }
+    if (result.kind !== "ok") {
+      throw new Error("Unexpected skip control result");
+    }
+    const transition = result.value;
+    if (transition.kind === "ignored") {
+      return transition.reason === "no-current"
+        ? "Nothing is playing."
+        : "The current track changed before it could be skipped.";
+    }
+    if (transition.kind === "failure-guard") {
+      return "Playback stopped after repeated track failures.";
+    }
+    return transition.current === null
+      ? "Skipped. The queue is now empty."
+      : `Skipped. Now playing **${safeSegment(transition.current.title, 160)}**.`;
+  }
+
+  if (invocation.name === "stop") {
+    const result = await music.stop(prepared);
+    const failure = controlFailure(result);
+    if (failure !== null) {
+      return failure;
+    }
+    return result.kind === "ok" && result.value === "stopped"
+      ? "Playback stopped and the upcoming queue was cleared."
+      : "Playback is already stopped.";
+  }
+
+  const result = await music.leave(prepared);
+  const failure = controlFailure(result);
+  if (failure !== null) {
+    return failure;
+  }
+  return result.kind === "ok" && result.value
+    ? "Left the voice channel and cleared the session."
+    : "There is no active music session.";
 }
 
 async function handlePlay(

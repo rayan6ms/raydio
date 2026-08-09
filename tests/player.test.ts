@@ -12,8 +12,11 @@ interface FakePlayer extends EventEmitter {
   playCalls: unknown[];
   volumes: number[];
   stopCount: number;
+  pauseCalls: boolean[];
+  position: number;
   volumeError: Error | undefined;
   playTrack(options: unknown): Promise<void>;
+  setPaused(paused: boolean): Promise<void>;
   setGlobalVolume(volume: number): Promise<void>;
   stopTrack(): Promise<void>;
 }
@@ -24,9 +27,14 @@ function fakePlayer(): FakePlayer {
   player.playCalls = [];
   player.volumes = [];
   player.stopCount = 0;
+  player.pauseCalls = [];
+  player.position = 0;
   player.volumeError = undefined;
   player.playTrack = async (options) => {
     player.playCalls.push(options);
+  };
+  player.setPaused = async (paused) => {
+    player.pauseCalls.push(paused);
   };
   player.setGlobalVolume = async (volume) => {
     if (player.volumeError !== undefined) {
@@ -84,9 +92,17 @@ describe("createShoukakuPlaybackTransport", () => {
     ]);
     assert.deepEqual(player.volumes, [70]);
     await session.play("encoded-a");
+    await session.setPaused(true);
+    await session.setVolume(55);
     await session.stop();
     assert.deepEqual(player.playCalls, [{ track: { encoded: "encoded-a" } }]);
     assert.equal(player.stopCount, 1);
+    assert.deepEqual(player.pauseCalls, [true]);
+    assert.deepEqual(player.volumes, [70, 55]);
+    player.position = 12_345;
+    assert.equal(session.getPositionMs(), 12_345);
+    player.position = Number.NaN;
+    assert.equal(session.getPositionMs(), 0);
 
     player.emit("start", { type: "TrackStartEvent", track: { encoded: "encoded-a" } });
     player.emit("end", {
@@ -125,6 +141,8 @@ describe("createShoukakuPlaybackTransport", () => {
     player.emit("start", { type: "TrackStartEvent", track: { encoded: "ignored" } });
     assert.equal(events.includes("start:ignored"), false);
     await assert.rejects(session.play("after-destroy"), /destroyed/);
+    await assert.rejects(session.setPaused(false), /destroyed/);
+    await assert.rejects(session.setVolume(10), /destroyed/);
   });
 
   it("leaves the voice connection when initial volume setup fails", async () => {
