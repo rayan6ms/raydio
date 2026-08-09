@@ -621,6 +621,7 @@ export function createDiscordService(
   let stopped = false;
 
   function cleanupUnexpected(guildId: string): void {
+    queueViews.retire(guildId);
     void music.cleanupUnexpected(guildId).catch((error: unknown) => {
       logError(logger, "unexpected_voice_cleanup_failed", error, "Voice cleanup failed");
     });
@@ -693,6 +694,10 @@ export function createDiscordService(
         reconcileIdentity(identity);
       }
     }
+  });
+
+  client.on(Events.GuildDelete, (guild) => {
+    cleanupUnexpected(guild.id);
   });
 
   client.on(Events.MessageCreate, (message) => {

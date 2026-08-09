@@ -136,6 +136,7 @@ class FakeSession implements PlaybackSession {
   playError: Error | undefined;
   pauseError: Error | undefined;
   volumeError: Error | undefined;
+  destroyFailuresRemaining = 0;
   readonly failingTracks = new Set<string>();
 
   async play(encodedTrack: string): Promise<void> {
@@ -169,6 +170,10 @@ class FakeSession implements PlaybackSession {
 
   async destroy(): Promise<void> {
     this.destroyCount += 1;
+    if (this.destroyFailuresRemaining > 0) {
+      this.destroyFailuresRemaining -= 1;
+      throw new Error("destroy failed");
+    }
   }
 }
 
@@ -639,6 +644,20 @@ describe("createMusicManager", () => {
     cleanupResolution.resolve(tracks(track("too-late")));
     assert.deepEqual(await cleaning, { kind: "stale" });
     assert.equal(cleanupManager.getSnapshot("guild-1"), undefined);
+  });
+
+  it("retries failed transport cleanup once without restoring deleted playback state", async () => {
+    const transport = new FakeTransport();
+    const manager = managerWith(new FakeResolver(), { transport });
+    await queue(manager, "current");
+    const session = transport.sessions[0];
+    assert.ok(session);
+    session.destroyFailuresRemaining = 1;
+
+    assert.equal(await manager.cleanupUnexpected("guild-1"), true);
+    assert.equal(session.destroyCount, 2);
+    assert.equal(manager.getSnapshot("guild-1"), undefined);
+    assert.equal(await manager.cleanupUnexpected("guild-1"), false);
   });
 
   it("invalidates all Lavalink-backed state idempotently and explains recoverable outages", async () => {

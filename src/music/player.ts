@@ -53,6 +53,7 @@ function createSession(
   player.on("closed", onClosed);
 
   let destroyed = false;
+  let destroyPromise: Promise<void> | undefined;
   return {
     play(encodedTrack) {
       if (destroyed) {
@@ -81,17 +82,25 @@ function createSession(
     getPositionMs() {
       return Number.isFinite(player.position) && player.position >= 0 ? player.position : 0;
     },
-    async destroy() {
-      if (destroyed) {
-        return;
+    destroy() {
+      if (destroyPromise !== undefined) {
+        return destroyPromise;
       }
-      destroyed = true;
-      player.off("start", onStart);
-      player.off("end", onEnd);
-      player.off("stuck", onStuck);
-      player.off("exception", onException);
-      player.off("closed", onClosed);
-      await client.leaveVoiceChannel(options.guildId);
+
+      if (!destroyed) {
+        destroyed = true;
+        player.off("start", onStart);
+        player.off("end", onEnd);
+        player.off("stuck", onStuck);
+        player.off("exception", onException);
+        player.off("closed", onClosed);
+      }
+
+      destroyPromise = client.leaveVoiceChannel(options.guildId).catch((error: unknown) => {
+        destroyPromise = undefined;
+        throw error;
+      });
+      return destroyPromise;
     },
   };
 }

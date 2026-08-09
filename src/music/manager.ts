@@ -342,11 +342,19 @@ export function createMusicManager(
     discardCoordinatorIfIdle(guildId, coordinator);
     try {
       await state.session.destroy();
-    } catch (error: unknown) {
+    } catch (firstError: unknown) {
       dependencies.logger.warn(
-        { event: "player_destroy_failed", guildId, ...errorFields(error) },
-        "Could not destroy playback session cleanly",
+        { event: "player_destroy_retry", guildId, ...errorFields(firstError) },
+        "Retrying playback session cleanup",
       );
+      try {
+        await state.session.destroy();
+      } catch (error: unknown) {
+        dependencies.logger.warn(
+          { event: "player_destroy_failed", guildId, ...errorFields(error) },
+          "Could not destroy playback session cleanly",
+        );
+      }
     }
     dependencies.logger.info(
       {

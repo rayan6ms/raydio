@@ -187,6 +187,10 @@ describe("createDiscordService", () => {
     client.emit(Events.ShardResume, 0, 3);
     await waitForImmediate();
     assert.equal(cleanupCount, 2);
+
+    client.emit(Events.GuildDelete, guild as unknown as Guild);
+    await waitForImmediate();
+    assert.equal(cleanupCount, 3);
     client.guilds.cache.clear();
 
     await service.stop();
@@ -393,7 +397,9 @@ describe("playback presentation", () => {
     }
 
     for (let index = 0; index < 1_000; index += 1) {
-      controller.render(playbackSnapshot({ guildId: `guild-${index}` }));
+      controller.render(
+        playbackSnapshot({ guildId: `guild-${index}`, upcoming: original.upcoming }),
+      );
     }
     assert.deepEqual(controller.resolve(original.guildId, oldNext.custom_id, original), {
       kind: "stale",
@@ -439,6 +445,34 @@ describe("playback presentation", () => {
     assert.equal(resolution.view.pageCount, 1);
     assert.deepEqual(resolution.view.components, []);
     assert.match(resolution.view.content, /^1\. /m);
+    assert.deepEqual(controller.resolve(shrunk.guildId, next.custom_id, shrunk), {
+      kind: "stale",
+    });
+  });
+
+  it("does not allocate sessions for unpaginated queues and can retire active controls", () => {
+    let allocationCount = 0;
+    const controller = createQueueViewController(() => {
+      allocationCount += 1;
+      return `session-${allocationCount}`;
+    });
+    const singlePage = playbackSnapshot({ upcoming: [queueTrack("only")] });
+
+    assert.deepEqual(controller.render(singlePage).components, []);
+    assert.equal(allocationCount, 0);
+
+    const paginated = playbackSnapshot({
+      upcoming: Array.from({ length: 11 }, (_, index) => queueTrack(`${index + 1}`)),
+    });
+    const next = controller.render(paginated).components[0]?.toJSON().components[1];
+    assert.ok(next !== undefined && "custom_id" in next);
+    if (next === undefined || !("custom_id" in next)) {
+      throw new Error("Expected a custom-ID queue button");
+    }
+    controller.retire(paginated.guildId);
+    assert.deepEqual(controller.resolve(paginated.guildId, next.custom_id, paginated), {
+      kind: "stale",
+    });
   });
 
   it("updates current queue buttons and retires stale interaction messages", async () => {

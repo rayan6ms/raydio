@@ -116,7 +116,18 @@ describe("loadConfig", () => {
   });
 
   it("rejects malformed Lavalink hosts and multiline secrets before client construction", () => {
-    for (const value of ["https://lavalink.example", "lavalink:2333", "host/path", "[invalid]"]) {
+    for (const value of [
+      "https://lavalink.example",
+      "lavalink:2333",
+      "host/path",
+      "[invalid]",
+      ".",
+      "-invalid.example",
+      "invalid-.example",
+      "invalid..example",
+      "999.999.999.999",
+      `${"a".repeat(64)}.example`,
+    ]) {
       assert.throws(
         () => loadConfig(validEnv({ LAVALINK_HOST: value })),
         (error: unknown) => error instanceof ConfigError && error.variable === "LAVALINK_HOST",
@@ -125,9 +136,39 @@ describe("loadConfig", () => {
 
     assert.equal(loadConfig(validEnv({ LAVALINK_HOST: "::1" })).lavalink.host, "::1");
     assert.equal(loadConfig(validEnv({ LAVALINK_HOST: "[::1]" })).lavalink.host, "[::1]");
+    assert.equal(
+      loadConfig(validEnv({ LAVALINK_HOST: "lavalink.internal." })).lavalink.host,
+      "lavalink.internal.",
+    );
     assert.throws(
       () => loadConfig(validEnv({ LAVALINK_PASSWORD: ["line-one", "line-two"].join("\n") })),
       (error: unknown) => error instanceof ConfigError && error.variable === "LAVALINK_PASSWORD",
+    );
+  });
+
+  it("rejects surrounding whitespace and Unicode line controls instead of changing secrets", () => {
+    for (const value of [
+      ` ${discordCredentialFixture}`,
+      `${discordCredentialFixture} `,
+      `\t${discordCredentialFixture}`,
+      `${discordCredentialFixture}\n`,
+      `${discordCredentialFixture}\u0085suffix`,
+      `${discordCredentialFixture}\u2028suffix`,
+      `${discordCredentialFixture}\u2029suffix`,
+    ]) {
+      assert.throws(
+        () => loadConfig(validEnv({ DISCORD_TOKEN: value })),
+        (error: unknown) => error instanceof ConfigError && error.variable === "DISCORD_TOKEN",
+      );
+    }
+
+    assert.throws(
+      () => loadConfig(validEnv({ LAVALINK_PASSWORD: ` ${lavalinkCredentialFixture}` })),
+      (error: unknown) => error instanceof ConfigError && error.variable === "LAVALINK_PASSWORD",
+    );
+    assert.throws(
+      () => loadConfig(validEnv({ LOG_LEVEL: " info " })),
+      (error: unknown) => error instanceof ConfigError && error.variable === "LOG_LEVEL",
     );
   });
 });

@@ -64,6 +64,20 @@ describe("classifyPlayInput", () => {
     assert.equal(classifyPlayInput("https://youtube.com/watch").kind, "unsupported-url");
   });
 
+  it("rejects missing, blank, malformed, and non-identifier media IDs", () => {
+    for (const url of [
+      "https://youtube.com/watch?v=%20",
+      "https://youtube.com/watch?v=video%2Fid",
+      "https://youtube.com/watch?v=%",
+      "https://youtube.com/playlist?list=%09",
+      "https://youtu.be/%20",
+      "https://youtu.be/video%2Fid",
+      "https://youtube.com/shorts/%E2%80%A8",
+    ]) {
+      assert.equal(classifyPlayInput(url).kind, "unsupported-url");
+    }
+  });
+
   it("treats ordinary text and URL-like text without a scheme as searches", () => {
     assert.deepEqual(classifyPlayInput("  Daft Punk - Instant Crush  "), {
       kind: "search",

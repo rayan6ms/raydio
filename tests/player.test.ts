@@ -170,4 +170,42 @@ describe("createShoukakuPlaybackTransport", () => {
     );
     assert.deepEqual(leaves, ["guild-1"]);
   });
+
+  it("shares concurrent destruction and permits cleanup retry after a leave failure", async () => {
+    const player = fakePlayer();
+    let leaveCalls = 0;
+    let releaseFirstLeave: (() => void) | undefined;
+    const firstLeave = new Promise<void>((resolve) => {
+      releaseFirstLeave = resolve;
+    });
+    const client = {
+      async joinVoiceChannel() {
+        return player as unknown as Player;
+      },
+      async leaveVoiceChannel() {
+        leaveCalls += 1;
+        if (leaveCalls === 1) {
+          await firstLeave;
+          throw new Error("transient leave failure");
+        }
+      },
+    } as unknown as Shoukaku;
+    const session = await createShoukakuPlaybackTransport(client).join({
+      guildId: "guild-1",
+      voiceChannelId: "voice-1",
+      shardId: 0,
+      initialVolume: 70,
+      callbacks: callbacks([]),
+    });
+
+    const firstDestroy = session.destroy();
+    const concurrentDestroy = session.destroy();
+    assert.equal(leaveCalls, 1);
+    releaseFirstLeave?.();
+    await assert.rejects(Promise.all([firstDestroy, concurrentDestroy]), /transient leave failure/);
+
+    await session.destroy();
+    await session.destroy();
+    assert.equal(leaveCalls, 2);
+  });
 });

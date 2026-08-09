@@ -35,25 +35,23 @@ export class ConfigError extends Error {
   }
 }
 
-function hasAsciiControlCharacter(value: string): boolean {
-  for (const character of value) {
-    const codePoint = character.codePointAt(0);
-    if (codePoint !== undefined && (codePoint <= 31 || codePoint === 127)) {
-      return true;
-    }
-  }
-  return false;
+function hasControlOrLineSeparator(value: string): boolean {
+  return /[\p{Cc}\p{Zl}\p{Zp}]/u.test(value);
 }
 
 function requiredString(env: NodeJS.ProcessEnv, name: string): string {
-  const value = env[name]?.trim();
+  const value = env[name];
 
-  if (!value) {
+  if (value === undefined || value.length === 0) {
     throw new ConfigError(name, "a non-empty value is required");
   }
 
-  if (hasAsciiControlCharacter(value)) {
+  if (hasControlOrLineSeparator(value)) {
     throw new ConfigError(name, "must be a single-line value without control characters");
+  }
+
+  if (value !== value.trim()) {
+    throw new ConfigError(name, "must not have leading or trailing whitespace");
   }
 
   return value;
@@ -66,12 +64,15 @@ function stringWithDefault(env: NodeJS.ProcessEnv, name: string, defaultValue: s
     return defaultValue;
   }
 
-  const trimmed = value.trim();
-  if (!trimmed) {
+  if (value.length === 0 || value.trim().length === 0) {
     throw new ConfigError(name, "must not be empty");
   }
 
-  return trimmed;
+  if (value !== value.trim()) {
+    throw new ConfigError(name, "must not have leading or trailing whitespace");
+  }
+
+  return value;
 }
 
 interface IntegerOptions {
@@ -137,7 +138,7 @@ function logLevel(env: NodeJS.ProcessEnv): LogLevel {
 
 function lavalinkHost(env: NodeJS.ProcessEnv): string {
   const value = stringWithDefault(env, "LAVALINK_HOST", "lavalink");
-  if (hasAsciiControlCharacter(value) || /\s|[/?#@]/u.test(value)) {
+  if (hasControlOrLineSeparator(value) || /\s|[/?#@]/u.test(value)) {
     throw new ConfigError("LAVALINK_HOST", "must be a hostname or IP address without a port");
   }
 
@@ -151,6 +152,24 @@ function lavalinkHost(env: NodeJS.ProcessEnv): string {
   if (value.includes("[") || value.includes("]") || (value.includes(":") && isIP(value) !== 6)) {
     throw new ConfigError("LAVALINK_HOST", "must not include a scheme, path, or port");
   }
+
+  if (isIP(value) !== 0) {
+    return value;
+  }
+
+  const hostname = value.endsWith(".") ? value.slice(0, -1) : value;
+  const labels = hostname.split(".");
+  const isValidHostname =
+    hostname.length > 0 &&
+    hostname.length <= 253 &&
+    !/^[\d.]+$/u.test(value) &&
+    labels.every(
+      (label) => label.length <= 63 && /^[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$/u.test(label),
+    );
+  if (!isValidHostname) {
+    throw new ConfigError("LAVALINK_HOST", "must be a valid hostname or IP address");
+  }
+
   return value;
 }
 

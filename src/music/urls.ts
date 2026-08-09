@@ -21,9 +21,21 @@ export type PlayInput =
       readonly url: string;
     };
 
+function isYoutubeIdentifier(value: string | null): boolean {
+  if (value === null) {
+    return false;
+  }
+
+  try {
+    return /^[A-Za-z0-9_-]+$/u.test(decodeURIComponent(value));
+  } catch {
+    return false;
+  }
+}
+
 function hasPathIdentifier(url: URL, prefix: string): boolean {
-  const identifier = url.pathname.slice(prefix.length).split("/", 1)[0];
-  return identifier !== undefined && identifier.length > 0;
+  const identifier = url.pathname.slice(prefix.length).split("/", 1)[0] ?? null;
+  return isYoutubeIdentifier(identifier);
 }
 
 function youtubeMediaType(url: URL): "playlist" | "video" | null {
@@ -31,11 +43,11 @@ function youtubeMediaType(url: URL): "playlist" | "video" | null {
     return hasPathIdentifier(url, "/") ? "video" : null;
   }
 
-  if (url.pathname === "/watch" && url.searchParams.get("v")) {
+  if (url.pathname === "/watch" && isYoutubeIdentifier(url.searchParams.get("v"))) {
     return "video";
   }
 
-  if (url.pathname === "/playlist" && url.searchParams.get("list")) {
+  if (url.pathname === "/playlist" && isYoutubeIdentifier(url.searchParams.get("list"))) {
     return "playlist";
   }
 

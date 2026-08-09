@@ -24,6 +24,7 @@ export type QueueInteractionResolution =
 
 export interface QueueViewController {
   render(snapshot: GuildPlaybackSnapshot | undefined, requestedPage?: number): QueuePageView;
+  retire(guildId: string): void;
   resolve(
     guildId: string,
     customId: string,
@@ -178,7 +179,7 @@ export function createQueueViewController(
       ? Math.min(Math.max(0, requestedPage), pageCount - 1)
       : 0;
     if (pageCount === 1) {
-      sessionFor(snapshot);
+      sessions.delete(snapshot.guildId);
       return { content: formatQueueSnapshot(snapshot, page), components: [], page, pageCount };
     }
 
@@ -192,6 +193,9 @@ export function createQueueViewController(
 
   return {
     render,
+    retire(guildId) {
+      sessions.delete(guildId);
+    },
     resolve(guildId, customId, snapshot) {
       if (!isQueueViewCustomId(customId)) {
         return { kind: "unrelated" };
