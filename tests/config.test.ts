@@ -111,4 +111,20 @@ describe("loadConfig", () => {
       (error: unknown) => error instanceof ConfigError && error.variable === "LOG_LEVEL",
     );
   });
+
+  it("rejects malformed Lavalink hosts and multiline secrets before client construction", () => {
+    for (const value of ["https://lavalink.example", "lavalink:2333", "host/path", "[invalid]"]) {
+      assert.throws(
+        () => loadConfig(validEnv({ LAVALINK_HOST: value })),
+        (error: unknown) => error instanceof ConfigError && error.variable === "LAVALINK_HOST",
+      );
+    }
+
+    assert.equal(loadConfig(validEnv({ LAVALINK_HOST: "::1" })).lavalink.host, "::1");
+    assert.equal(loadConfig(validEnv({ LAVALINK_HOST: "[::1]" })).lavalink.host, "[::1]");
+    assert.throws(
+      () => loadConfig(validEnv({ LAVALINK_PASSWORD: "line-one\nline-two" })),
+      (error: unknown) => error instanceof ConfigError && error.variable === "LAVALINK_PASSWORD",
+    );
+  });
 });

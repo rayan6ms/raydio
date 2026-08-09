@@ -2,10 +2,18 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { setImmediate as waitForImmediate } from "node:timers/promises";
 
-import { Events, GatewayIntentBits, type Guild, type VoiceState } from "discord.js";
+import {
+  type Client,
+  Events,
+  GatewayIntentBits,
+  type Guild,
+  MessageFlags,
+  type VoiceState,
+} from "discord.js";
 
 import {
   createDiscordClient,
+  createDiscordMusicNotifier,
   createDiscordService,
   DISCORD_INTENTS,
   formatNowPlayingSnapshot,
@@ -110,6 +118,7 @@ describe("createDiscordService", () => {
 
     await service.stop();
     await service.stop();
+    await assert.rejects(service.start("unused-token"), /already been stopped/);
   });
 
   it("tracks human presence in the active voice channel and cleans bot displacement", async () => {
@@ -186,6 +195,30 @@ describe("hasHumanVoiceMember", () => {
   it("ignores bots and detects at least one human listener", () => {
     assert.equal(hasHumanVoiceMember([{ user: { bot: true } }]), false);
     assert.equal(hasHumanVoiceMember([{ user: { bot: true } }, { user: { bot: false } }]), true);
+  });
+});
+
+describe("createDiscordMusicNotifier", () => {
+  it("bounds cleanup notifications, suppresses mentions, and rejects unavailable channels", async () => {
+    const sends: unknown[] = [];
+    const channel = {
+      isSendable: () => true,
+      send: async (options: unknown) => {
+        sends.push(options);
+      },
+    };
+    const client = {
+      channels: { cache: new Map([["text-1", channel]]) },
+    } as unknown as Client;
+    const notifier = createDiscordMusicNotifier(client);
+
+    await notifier.send("text-1", `@everyone ${"x".repeat(2_100)}`);
+    assert.equal(sends.length, 1);
+    assert.deepEqual(sends[0], {
+      content: `@everyone ${"x".repeat(1_989)}…`,
+      allowedMentions: SAFE_ALLOWED_MENTIONS,
+    });
+    await assert.rejects(notifier.send("missing", "notice"), /channel is unavailable/);
   });
 });
 
@@ -341,6 +374,46 @@ describe("playback presentation", () => {
     );
   });
 
+  it("bounds retained queue sessions and retires stale session state", () => {
+    let sessionNumber = 0;
+    const controller = createQueueViewController(() => {
+      sessionNumber += 1;
+      return `session-${sessionNumber}`;
+    });
+    const original = playbackSnapshot({
+      guildId: "oldest-guild",
+      upcoming: Array.from({ length: 11 }, (_, index) => queueTrack(`${index + 1}`)),
+    });
+    const oldNext = controller.render(original).components[0]?.toJSON().components[1];
+    assert.ok(oldNext !== undefined && "custom_id" in oldNext);
+    if (oldNext === undefined || !("custom_id" in oldNext)) {
+      throw new Error("Expected a custom-ID queue button");
+    }
+
+    for (let index = 0; index < 1_000; index += 1) {
+      controller.render(playbackSnapshot({ guildId: `guild-${index}` }));
+    }
+    assert.deepEqual(controller.resolve(original.guildId, oldNext.custom_id, original), {
+      kind: "stale",
+    });
+
+    const current = playbackSnapshot({
+      guildId: "current-guild",
+      upcoming: original.upcoming,
+    });
+    const currentNext = controller.render(current).components[0]?.toJSON().components[1];
+    assert.ok(currentNext !== undefined && "custom_id" in currentNext);
+    if (currentNext === undefined || !("custom_id" in currentNext)) {
+      throw new Error("Expected a custom-ID queue button");
+    }
+    assert.deepEqual(controller.resolve(current.guildId, currentNext.custom_id, undefined), {
+      kind: "stale",
+    });
+    assert.deepEqual(controller.resolve(current.guildId, currentNext.custom_id, current), {
+      kind: "stale",
+    });
+  });
+
   it("clamps a page after queue shrink and omits buttons for one page", () => {
     const controller = createQueueViewController(() => "session-1");
     const token = Symbol("player");
@@ -406,6 +479,29 @@ describe("playback presentation", () => {
       {
         content: "This queue view is no longer active. Run `\\queue` again.",
         components: [],
+        allowedMentions: SAFE_ALLOWED_MENTIONS,
+      },
+    ]);
+  });
+
+  it("rejects queue controls outside a guild without exposing them publicly", async () => {
+    const replies: unknown[] = [];
+    const interaction = {
+      inGuild: () => false,
+      reply: async (options: unknown) => {
+        replies.push(options);
+      },
+    };
+
+    await handleQueueButtonInteraction(
+      interaction as unknown as Parameters<typeof handleQueueButtonInteraction>[0],
+      musicController(),
+      createQueueViewController(),
+    );
+    assert.deepEqual(replies, [
+      {
+        content: "Queue controls are available only in a server.",
+        flags: MessageFlags.Ephemeral,
         allowedMentions: SAFE_ALLOWED_MENTIONS,
       },
     ]);

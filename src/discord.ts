@@ -149,7 +149,10 @@ async function handleMessage(
     logError(logger, "command_failed", error, "Discord command failed");
 
     try {
-      await message.channel.send({ content: "The command could not be completed." });
+      await message.channel.send({
+        content: "The command could not be completed.",
+        allowedMentions: SAFE_ALLOWED_MENTIONS,
+      });
     } catch (sendError: unknown) {
       logger.warn(
         { event: "command_error_response_failed", ...errorFields(sendError) },
@@ -598,7 +601,10 @@ export function createDiscordMusicNotifier(client: Client): DiscordMusicNotifier
       if (channel === undefined || !channel.isSendable()) {
         throw new Error("The playback notification channel is unavailable");
       }
-      await channel.send({ content: truncateMessage(content) });
+      await channel.send({
+        content: truncateMessage(content),
+        allowedMentions: SAFE_ALLOWED_MENTIONS,
+      });
     },
   };
 }
@@ -765,6 +771,9 @@ export function createDiscordService(
   return {
     client,
     async start(token: string): Promise<void> {
+      if (stopped) {
+        throw new Error("Discord service has already been stopped");
+      }
       if (started) {
         throw new Error("Discord service has already been started");
       }

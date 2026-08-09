@@ -173,6 +173,7 @@ describe("Bot container image", () => {
       "tests/",
       "README.md",
       "OPERATIONS.md",
+      "LICENSE",
       ".env",
       ".env.*",
       "*.log",
@@ -281,6 +282,7 @@ describe("Lavalink configuration", () => {
       lowPass: false,
     });
     assert.equal(valueAt(application, ["logging", "request", "includeHeaders"]), false);
+    assert.equal(valueAt(application, ["logging", "request", "includeQueryString"]), false);
     assert.equal(valueAt(application, ["logging", "request", "includePayload"]), false);
   });
 });

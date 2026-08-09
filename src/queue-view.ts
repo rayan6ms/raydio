@@ -6,6 +6,7 @@ import type { GuildPlaybackSnapshot, QueueTrack } from "./music/state.js";
 import { escapeExternalText, truncateMessage } from "./utils.js";
 
 const QUEUE_VIEW_LIMIT = 10;
+const MAX_QUEUE_VIEW_SESSIONS = 1_000;
 const QUEUE_CUSTOM_ID_PREFIX = "raydio:queue:";
 const QUEUE_SESSION_ID_PATTERN = /^[A-Za-z0-9_-]{1,48}$/;
 
@@ -146,11 +147,19 @@ export function createQueueViewController(
   function sessionFor(snapshot: GuildPlaybackSnapshot): string {
     const existing = sessions.get(snapshot.guildId);
     if (existing?.playerToken === snapshot.playerToken) {
+      sessions.delete(snapshot.guildId);
+      sessions.set(snapshot.guildId, existing);
       return existing.id;
     }
     const id = createSessionId();
     if (!QUEUE_SESSION_ID_PATTERN.test(id)) {
       throw new Error("Queue view session ID must contain 1-48 URL-safe characters");
+    }
+    if (!sessions.has(snapshot.guildId) && sessions.size >= MAX_QUEUE_VIEW_SESSIONS) {
+      const oldestGuildId = sessions.keys().next().value;
+      if (oldestGuildId !== undefined) {
+        sessions.delete(oldestGuildId);
+      }
     }
     sessions.set(snapshot.guildId, { id, playerToken: snapshot.playerToken });
     return id;
@@ -193,6 +202,15 @@ export function createQueueViewController(
       }
       const requestedPage = Number(match[2]);
       const session = sessions.get(guildId);
+      if (
+        session?.id === match[1] &&
+        (snapshot?.current === null ||
+          snapshot === undefined ||
+          session.playerToken !== snapshot.playerToken)
+      ) {
+        sessions.delete(guildId);
+        return { kind: "stale" };
+      }
       if (
         snapshot?.current === null ||
         snapshot === undefined ||

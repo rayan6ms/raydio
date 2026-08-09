@@ -13,11 +13,11 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "check": "npm run typecheck && npm run lint && npm test && npm run build",
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch --env-file-if-exists=.env src/index.ts",
     "format": "biome check --write .",
     "lint": "biome ci .",
     "postinstall": "node scripts/patch-shoukaku-reconnect.mjs",
-    "start": "node dist/index.js",
+    "start": "node --env-file-if-exists=.env dist/index.js",
     "test": "tsx --test tests/*.test.ts",
     "typecheck": "tsc -p tsconfig.json"
   },

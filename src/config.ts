@@ -1,3 +1,5 @@
+import { isIP } from "node:net";
+
 const LOG_LEVELS = ["fatal", "error", "warn", "info", "debug", "trace", "silent"] as const;
 
 export type LogLevel = (typeof LOG_LEVELS)[number];
@@ -33,11 +35,25 @@ export class ConfigError extends Error {
   }
 }
 
+function hasAsciiControlCharacter(value: string): boolean {
+  for (const character of value) {
+    const codePoint = character.codePointAt(0);
+    if (codePoint !== undefined && (codePoint <= 31 || codePoint === 127)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function requiredString(env: NodeJS.ProcessEnv, name: string): string {
   const value = env[name]?.trim();
 
   if (!value) {
     throw new ConfigError(name, "a non-empty value is required");
+  }
+
+  if (hasAsciiControlCharacter(value)) {
+    throw new ConfigError(name, "must be a single-line value without control characters");
   }
 
   return value;
@@ -119,12 +135,31 @@ function logLevel(env: NodeJS.ProcessEnv): LogLevel {
   return value;
 }
 
+function lavalinkHost(env: NodeJS.ProcessEnv): string {
+  const value = stringWithDefault(env, "LAVALINK_HOST", "lavalink");
+  if (hasAsciiControlCharacter(value) || /\s|[/?#@]/u.test(value)) {
+    throw new ConfigError("LAVALINK_HOST", "must be a hostname or IP address without a port");
+  }
+
+  if (value.startsWith("[") || value.endsWith("]")) {
+    if (!(value.startsWith("[") && value.endsWith("]") && isIP(value.slice(1, -1)) === 6)) {
+      throw new ConfigError("LAVALINK_HOST", "contains invalid IPv6 brackets");
+    }
+    return value;
+  }
+
+  if (value.includes("[") || value.includes("]") || (value.includes(":") && isIP(value) !== 6)) {
+    throw new ConfigError("LAVALINK_HOST", "must not include a scheme, path, or port");
+  }
+  return value;
+}
+
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   return {
     discordToken: requiredString(env, "DISCORD_TOKEN"),
     logLevel: logLevel(env),
     lavalink: {
-      host: stringWithDefault(env, "LAVALINK_HOST", "lavalink"),
+      host: lavalinkHost(env),
       port: integer(env, "LAVALINK_PORT", {
         defaultValue: 2333,
         minimum: 1,

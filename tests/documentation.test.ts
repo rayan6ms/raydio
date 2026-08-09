@@ -6,6 +6,14 @@ import { parse } from "yaml";
 
 import { COMMAND_ALIASES, COMMAND_NAMES } from "../src/commands.js";
 
+interface PackageMetadata {
+  readonly license?: string;
+  readonly scripts?: {
+    readonly dev?: string;
+    readonly start?: string;
+  };
+}
+
 function readText(path: string): string {
   return readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 }
@@ -103,10 +111,30 @@ describe("public documentation", () => {
     assert.match(readme, /Do not grant Administrator\./);
     assert.match(readme, /no slash commands/i);
     assert.match(readme, /no database/i);
+    assert.match(readme, /regular server text channels/i);
     assert.match(operations, /Do not add ingress rules for 2333/);
     assert.match(operations, /first-deployment checks/i);
     assert.doesNotMatch(publicDocs, /(?:^|\/)docs\//i);
     assert.doesNotMatch(publicDocs, /DISCORD_TOKEN=[^\s`]+/);
     assert.doesNotMatch(publicDocs, /LAVALINK_PASSWORD=[^\s`]+/);
+  });
+
+  it("ships the MIT license consistently", () => {
+    const readme = readText("README.md");
+    const license = readText("LICENSE");
+    const packageMetadata = JSON.parse(readText("package.json")) as PackageMetadata;
+
+    assert.equal(packageMetadata.license, "MIT");
+    assert.match(license, /^MIT License\n/);
+    assert.match(license, /Copyright \(c\) 2026 rayan6ms/);
+    assert.match(license, /Permission is hereby granted, free of charge/);
+    assert.match(readme, /\[MIT License\]\(LICENSE\)/);
+  });
+
+  it("loads the ignored local environment in development scripts", () => {
+    const packageMetadata = JSON.parse(readText("package.json")) as PackageMetadata;
+
+    assert.match(packageMetadata.scripts?.dev ?? "", /--env-file-if-exists=\.env/);
+    assert.match(packageMetadata.scripts?.start ?? "", /--env-file-if-exists=\.env/);
   });
 });

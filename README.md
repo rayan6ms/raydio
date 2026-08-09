@@ -52,6 +52,9 @@ network, never to the host.
    - Speak
 
    Do not grant Administrator. Channel-specific permission overwrites must also allow these actions.
+   With this minimal permission set, use Raydio in regular server text channels; forum posts and
+   threads require Discord's additional Send Messages in Threads permission and are not part of the
+   supported setup.
    Discord documents the bot scope and least-privilege model in
    [OAuth2 and Permissions](https://docs.discord.com/developers/platform/oauth2-and-permissions).
 7. Open the generated install link and add the bot to a private test server.
@@ -155,7 +158,9 @@ The command prefix is not configurable in v1.
 
 ## Local development
 
-Local tooling requires Node 24.18.0 and npm 11. Install exactly from the lockfile:
+Local tooling requires Node 24.18.0 and npm 11. The `dev` and `start` scripts load an existing local
+`.env` automatically; environment variables already set by the shell take precedence. Install
+exactly from the lockfile:
 
 ```sh
 npm ci
@@ -207,9 +212,9 @@ authorization headers, or bot tokens. Rotate a Discord token immediately if it i
 ## v1 limitations
 
 Raydio is intended for personal/private servers. It has no slash commands, persistence, autoplay,
-Spotify/SoundCloud playback, arbitrary HTTP playback, Stage support, dashboard, metrics endpoint,
-multi-node failover, or horizontal scaling. YouTube behavior depends on upstream availability and
-may require future youtube-source/client updates.
+Spotify/SoundCloud playback, arbitrary HTTP playback, Stage support, supported forum/thread command
+surface, dashboard, metrics endpoint, multi-node failover, or horizontal scaling. YouTube behavior
+depends on upstream availability and may require future youtube-source/client updates.
 
 ## License
 

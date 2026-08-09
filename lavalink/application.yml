@@ -62,5 +62,5 @@ logging:
     enabled: true
     includeClientInfo: true
     includeHeaders: false
-    includeQueryString: true
+    includeQueryString: false
     includePayload: false
