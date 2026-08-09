@@ -159,11 +159,15 @@ describe("Bot container image", () => {
 
     for (const required of [
       ".git/",
+      ".github/",
+      ".gitattributes",
       "docs/",
       "node_modules/",
       "dist/",
       "coverage/",
       "tests/",
+      "README.md",
+      "OPERATIONS.md",
       ".env",
       ".env.*",
       "*.log",
@@ -185,6 +189,33 @@ describe("Bot container image", () => {
         `.dockerignore must retain ${requiredBuildInput}`,
       );
     }
+  });
+});
+
+describe("GitHub continuous integration", () => {
+  it("runs the complete release gate with read-only permissions and pinned actions", () => {
+    const workflow = readYaml(".github/workflows/ci.yml");
+    const steps = valueAt(workflow, ["jobs", "check", "steps"]);
+
+    assert.deepEqual(valueAt(workflow, ["permissions"]), { contents: "read" });
+    assert.equal(valueAt(workflow, ["jobs", "check", "runs-on"]), "ubuntu-24.04");
+    assert.equal(valueAt(workflow, ["jobs", "check", "timeout-minutes"]), 10);
+    assert.ok(Array.isArray(steps));
+
+    const actions = steps
+      .filter(isRecord)
+      .map((step) => step.uses)
+      .filter((uses): uses is string => typeof uses === "string");
+    assert.equal(actions.length, 2);
+    for (const action of actions) {
+      assert.match(action, /^actions\/(?:checkout|setup-node)@[a-f0-9]{40}$/);
+    }
+
+    const commands = steps
+      .filter(isRecord)
+      .map((step) => step.run)
+      .filter((run): run is string => typeof run === "string");
+    assert.deepEqual(commands, ["npm ci", "npm audit", "npm run check"]);
   });
 });
 

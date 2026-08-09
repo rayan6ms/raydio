@@ -1,11 +1,14 @@
 .git/
 .github/
+.gitattributes
 docs/
 node_modules/
 dist/
 coverage/
 tests/
 icons/
+README.md
+OPERATIONS.md
 
 .env
 .env.*
