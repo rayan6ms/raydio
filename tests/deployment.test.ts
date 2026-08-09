@@ -24,6 +24,11 @@ function readText(path: string): string {
   return readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 }
 
+function stringProperty(record: UnknownRecord, key: string): string | null {
+  const value = record[key];
+  return typeof value === "string" ? value : null;
+}
+
 function valueAt(root: unknown, path: readonly string[]): unknown {
   let current = root;
 
@@ -204,7 +209,7 @@ describe("GitHub continuous integration", () => {
 
     const actions = steps
       .filter(isRecord)
-      .map((step) => step.uses)
+      .map((step) => stringProperty(step, "uses"))
       .filter((uses): uses is string => typeof uses === "string");
     assert.equal(actions.length, 2);
     for (const action of actions) {
@@ -213,7 +218,7 @@ describe("GitHub continuous integration", () => {
 
     const commands = steps
       .filter(isRecord)
-      .map((step) => step.run)
+      .map((step) => stringProperty(step, "run"))
       .filter((run): run is string => typeof run === "string");
     assert.deepEqual(commands, ["npm ci", "npm audit", "npm run check"]);
   });

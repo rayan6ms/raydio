@@ -229,7 +229,8 @@ new host as production-ready, use a private voice/text channel and verify:
 
 1. `\help` and `\ping` work without mentioning users or roles.
 2. Text search, direct YouTube URL, and a small playlist produce audible playback.
-3. Queue advance, pause/resume, volume, skip, stop, loops, shuffle/remove/clear, and leave work.
+3. Queue pagination/stale buttons, queue advance, pause/resume, volume, skip, stop, loops,
+   shuffle/remove/clear, and leave work.
 4. Same-channel authorization and Stage rejection work.
 5. Idle and alone timers disconnect; a manual bot move/disconnect cleans state.
 6. An unavailable item does not crash the queue; repeated failures trigger the guard.

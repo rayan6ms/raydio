@@ -228,6 +228,20 @@ describe("dispatchCommand", () => {
     );
   });
 
+  it("marks a valid queue response for interactive presentation only", async () => {
+    const presentations: Array<"queue" | undefined> = [];
+    const testContext = context([]);
+    testContext.send = async (_content, presentation) => {
+      presentations.push(presentation);
+    };
+
+    await dispatchCommand({ name: "queue", argument: "" }, testContext);
+    await dispatchCommand({ name: "queue", argument: "unexpected" }, testContext);
+    await dispatchCommand({ name: "nowplaying", argument: "" }, testContext);
+
+    assert.deepEqual(presentations, ["queue", undefined, undefined]);
+  });
+
   it("rejects malformed control arguments before invoking the adapter", async () => {
     const sent: string[] = [];
     let calls = 0;

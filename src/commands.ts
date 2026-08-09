@@ -72,7 +72,7 @@ export interface CommandContext {
   readonly lavalinkReady: boolean;
   play(input: string): Promise<string>;
   control(invocation: ControlCommandInvocation): Promise<string>;
-  send(content: string): Promise<void>;
+  send(content: string, presentation?: "queue"): Promise<void>;
 }
 
 export type DispatchResult = "handled" | "unavailable" | "unknown";
@@ -221,6 +221,9 @@ export async function dispatchCommand(
     await context.send("Music service is temporarily unavailable.");
     return "unavailable";
   }
-  await context.send(await context.control(invocation));
+  await context.send(
+    await context.control(invocation),
+    invocation.name === "queue" ? "queue" : undefined,
+  );
   return "handled";
 }

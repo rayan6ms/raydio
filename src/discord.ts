@@ -1,9 +1,11 @@
 import {
+  type ButtonInteraction,
   ChannelType,
   Client,
   Events,
   GatewayIntentBits,
   type Message,
+  MessageFlags,
   type MessageMentionOptions,
   PermissionFlagsBits,
   type VoiceBasedChannel,
@@ -18,13 +20,20 @@ import type {
   PlaybackControlRequest,
   PlayRequestResult,
 } from "./music/manager.js";
-import type { GuildPlaybackSnapshot, QueueTrack } from "./music/state.js";
+import type { GuildPlaybackSnapshot } from "./music/state.js";
 import {
   type VoiceAccessFacts,
   type VoiceAccessResult,
   validateControlVoiceAccess,
   validateVoiceAccess,
 } from "./music/voice.js";
+import {
+  createQueueViewController,
+  formatDuration,
+  formatQueueSnapshot,
+  isQueueViewCustomId,
+  type QueueViewController,
+} from "./queue-view.js";
 import { errorFields, escapeExternalText, truncateMessage } from "./utils.js";
 
 export const DISCORD_INTENTS = [
@@ -87,6 +96,7 @@ async function handleMessage(
   logger: Logger,
   lavalink: LavalinkReadiness,
   music: MusicController,
+  queueViews: QueueViewController,
 ): Promise<void> {
   if (!message.inGuild()) {
     return;
@@ -119,8 +129,20 @@ async function handleMessage(
       lavalinkReady: lavalink.isReady(),
       play: async (input) => handlePlay(message, input, music),
       control: async (invocation) => handleControl(message, invocation, music),
-      send: async (content) => {
-        await message.channel.send({ content: truncateMessage(content) });
+      send: async (content, presentation) => {
+        if (presentation === "queue") {
+          const view = queueViews.render(music.getSnapshot(message.guildId));
+          await message.channel.send({
+            content: view.content,
+            components: view.components,
+            allowedMentions: SAFE_ALLOWED_MENTIONS,
+          });
+          return;
+        }
+        await message.channel.send({
+          content: truncateMessage(content),
+          allowedMentions: SAFE_ALLOWED_MENTIONS,
+        });
       },
     });
   } catch (error: unknown) {
@@ -135,6 +157,43 @@ async function handleMessage(
       );
     }
   }
+}
+
+export async function handleQueueButtonInteraction(
+  interaction: ButtonInteraction,
+  music: MusicController,
+  queueViews: QueueViewController,
+): Promise<void> {
+  if (!interaction.inGuild()) {
+    await interaction.reply({
+      content: "Queue controls are available only in a server.",
+      flags: MessageFlags.Ephemeral,
+      allowedMentions: SAFE_ALLOWED_MENTIONS,
+    });
+    return;
+  }
+
+  const resolution = queueViews.resolve(
+    interaction.guildId,
+    interaction.customId,
+    music.getSnapshot(interaction.guildId),
+  );
+  if (resolution.kind === "unrelated") {
+    return;
+  }
+  if (resolution.kind === "stale") {
+    await interaction.update({
+      content: "This queue view is no longer active. Run `\\queue` again.",
+      components: [],
+      allowedMentions: SAFE_ALLOWED_MENTIONS,
+    });
+    return;
+  }
+  await interaction.update({
+    content: resolution.view.content,
+    components: resolution.view.components,
+    allowedMentions: SAFE_ALLOWED_MENTIONS,
+  });
 }
 
 function voiceFacts(message: Message<true>): VoiceAccessFacts {
@@ -252,58 +311,8 @@ export function formatPlayRequestResult(result: PlayRequestResult): string {
   }
 }
 
-const QUEUE_VIEW_LIMIT = 10;
-
 function safeSegment(value: string, maximumLength: number): string {
   return truncateMessage(escapeExternalText(value).replaceAll(/\s+/g, " "), maximumLength);
-}
-
-export function formatDuration(durationMs: number, isStream = false): string {
-  if (isStream) {
-    return "LIVE";
-  }
-  const totalSeconds = Number.isFinite(durationMs)
-    ? Math.max(0, Math.floor(durationMs / 1_000))
-    : 0;
-  const seconds = totalSeconds % 60;
-  const totalMinutes = Math.floor(totalSeconds / 60);
-  const minutes = totalMinutes % 60;
-  const hours = Math.floor(totalMinutes / 60);
-  return hours > 0
-    ? `${hours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
-    : `${minutes}:${seconds.toString().padStart(2, "0")}`;
-}
-
-function compactTrack(track: QueueTrack): string {
-  const title = safeSegment(track.title, 70);
-  const author = safeSegment(track.author, 40);
-  const requester = safeSegment(track.requestedBy.label, 32);
-  return `**${title}** — ${author} [${formatDuration(track.durationMs, track.isStream)}] • ${requester}`;
-}
-
-export function formatQueueSnapshot(snapshot: GuildPlaybackSnapshot | undefined): string {
-  if (snapshot?.current === null || snapshot === undefined) {
-    return "The queue is empty.";
-  }
-
-  const lines = [`Now: ${compactTrack(snapshot.current)}`];
-  const visible = snapshot.upcoming.slice(0, QUEUE_VIEW_LIMIT);
-  if (visible.length === 0) {
-    lines.push("Upcoming: empty");
-  } else {
-    lines.push(
-      "Upcoming:",
-      ...visible.map((track, index) => `${index + 1}. ${compactTrack(track)}`),
-    );
-    const hidden = snapshot.upcoming.length - visible.length;
-    if (hidden > 0) {
-      lines.push(`…and ${hidden} more track${hidden === 1 ? "" : "s"}.`);
-    }
-  }
-  lines.push(
-    `Status: ${snapshot.paused ? "paused" : "playing"} • Loop: ${snapshot.loopMode} • Volume: ${snapshot.volume}%`,
-  );
-  return truncateMessage(lines.join("\n"));
 }
 
 export function formatNowPlayingSnapshot(snapshot: GuildPlaybackSnapshot | undefined): string {
@@ -600,6 +609,7 @@ export function createDiscordService(
   lavalink: LavalinkReadiness,
   music: MusicController,
 ): DiscordService {
+  const queueViews = createQueueViewController();
   let acceptingCommands = false;
   let started = false;
   let stopped = false;
@@ -681,8 +691,45 @@ export function createDiscordService(
 
   client.on(Events.MessageCreate, (message) => {
     if (acceptingCommands) {
-      void handleMessage(message, logger, lavalink, music);
+      void handleMessage(message, logger, lavalink, music, queueViews);
     }
+  });
+
+  client.on(Events.InteractionCreate, (interaction) => {
+    if (!interaction.isButton() || !isQueueViewCustomId(interaction.customId)) {
+      return;
+    }
+    if (!acceptingCommands) {
+      void interaction
+        .reply({
+          content: "Raydio is not accepting controls right now.",
+          flags: MessageFlags.Ephemeral,
+          allowedMentions: SAFE_ALLOWED_MENTIONS,
+        })
+        .catch((error: unknown) => {
+          logError(logger, "queue_interaction_reply_failed", error, "Queue interaction failed");
+        });
+      return;
+    }
+    void handleQueueButtonInteraction(interaction, music, queueViews).catch((error: unknown) => {
+      logError(logger, "queue_interaction_failed", error, "Queue interaction failed");
+      if (!interaction.replied && !interaction.deferred) {
+        void interaction
+          .reply({
+            content: "The queue view could not be updated.",
+            flags: MessageFlags.Ephemeral,
+            allowedMentions: SAFE_ALLOWED_MENTIONS,
+          })
+          .catch((replyError: unknown) => {
+            logError(
+              logger,
+              "queue_interaction_error_reply_failed",
+              replyError,
+              "Could not send queue interaction error response",
+            );
+          });
+      }
+    });
   });
 
   client.on(Events.VoiceStateUpdate, (oldState, newState) => {

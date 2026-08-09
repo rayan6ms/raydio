@@ -30,6 +30,15 @@ function documentedDefaults(readme: string): ReadonlyMap<string, string> {
 }
 
 describe("public documentation", () => {
+  it("uses the repository icon and retains a portal-compatible PNG", () => {
+    const readme = readText("README.md");
+    const png = readFileSync(new URL("../icons/raydio.png", import.meta.url));
+
+    assert.match(readme, /<img src="icons\/raydio\.png"/);
+    assert.match(readme, /upload `icons\/raydio\.png` as the application icon/);
+    assert.deepEqual(Array.from(png.subarray(0, 8)), [137, 80, 78, 71, 13, 10, 26, 10]);
+  });
+
   it("lists every executable command and alias using the literal prefix", () => {
     const readme = readText("README.md");
     const commandSection = readme.split("## Commands\n")[1]?.split("## Configuration reference")[0];

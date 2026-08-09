@@ -8,16 +8,20 @@ import {
   createDiscordClient,
   createDiscordService,
   DISCORD_INTENTS,
-  formatDuration,
   formatNowPlayingSnapshot,
   formatPlayRequestResult,
-  formatQueueSnapshot,
+  handleQueueButtonInteraction,
   hasHumanVoiceMember,
   SAFE_ALLOWED_MENTIONS,
 } from "../src/discord.js";
 import { createLogger } from "../src/logger.js";
 import type { LavalinkReadiness } from "../src/music/lavalink.js";
 import type { GuildPlaybackSnapshot, QueueTrack } from "../src/music/state.js";
+import {
+  createQueueViewController,
+  formatDuration,
+  formatQueueSnapshot,
+} from "../src/queue-view.js";
 
 const unavailableLavalink: LavalinkReadiness = {
   getStatus: () => "unavailable",
@@ -243,31 +247,168 @@ describe("playback presentation", () => {
     assert.equal(formatDuration(0, true), "LIVE");
   });
 
-  it("renders a bounded queue with stable upcoming indices and escaped flattened metadata", () => {
+  it("renders bounded queue pages with stable indices, progress, and finite remaining time", () => {
     const upcoming = Array.from({ length: 12 }, (_, index) =>
       queueTrack(`${index + 1}`, {
         title: `**song ${index + 1}**\n@everyone`,
         requestedBy: { id: `user-${index}`, label: "_*requester*_" },
       }),
     );
+    const snapshot = playbackSnapshot({
+      current: queueTrack("current", { title: "# current" }),
+      upcoming,
+      paused: true,
+      loopMode: "queue",
+      volume: 25,
+    });
+    const firstPage = formatQueueSnapshot(snapshot);
+    const secondPage = formatQueueSnapshot(snapshot, 1);
+
+    assert.ok(firstPage.length <= 2_000);
+    assert.ok(secondPage.length <= 2_000);
+    assert.match(firstPage, /^Now playing:/);
+    assert.match(firstPage, /Progress: 1:01 elapsed • 1:59 remaining/);
+    assert.match(firstPage, /Upcoming • Page 1\/2:/);
+    assert.equal(firstPage.includes("1. **\\*\\*song 1\\*\\* @everyone**"), true);
+    assert.equal(firstPage.includes("10. **\\*\\*song 10\\*\\* @everyone**"), true);
+    assert.doesNotMatch(firstPage, /^11\. /m);
+    assert.match(secondPage, /Upcoming • Page 2\/2:/);
+    assert.match(secondPage, /^11\. /m);
+    assert.match(secondPage, /^12\. /m);
+    assert.doesNotMatch(secondPage, /^1\. /m);
+    assert.match(firstPage, /Finite queue time remaining: 37:59/);
+    assert.match(firstPage, /Status: paused • Loop: queue • Volume: 25%/);
+    assert.equal(firstPage.includes("\n@everyone"), false);
+  });
+
+  it("excludes livestreams from finite queue time and labels the omission", () => {
     const output = formatQueueSnapshot(
       playbackSnapshot({
-        current: queueTrack("current", { title: "# current" }),
-        upcoming,
-        paused: true,
-        loopMode: "queue",
-        volume: 25,
+        current: queueTrack("live", { durationMs: 0, isStream: true }),
+        upcoming: [
+          queueTrack("finite"),
+          queueTrack("other-live", { durationMs: 0, isStream: true }),
+        ],
       }),
     );
 
-    assert.ok(output.length <= 2_000);
-    assert.match(output, /^Now:/);
-    assert.equal(output.includes("1. **\\*\\*song 1\\*\\* @everyone**"), true);
-    assert.equal(output.includes("10. **\\*\\*song 10\\*\\* @everyone**"), true);
-    assert.doesNotMatch(output, /11\. /);
-    assert.match(output, /…and 2 more tracks\./);
-    assert.match(output, /Status: paused • Loop: queue • Volume: 25%/);
-    assert.equal(output.includes("\n@everyone"), false);
+    assert.match(output, /Progress: LIVE/);
+    assert.match(output, /Finite queue time remaining: 3:00 • 2 live not included/);
+  });
+
+  it("paginates with bounded session IDs and rejects stale controls", () => {
+    const controller = createQueueViewController(() => "session-1");
+    const snapshot = playbackSnapshot({
+      upcoming: Array.from({ length: 12 }, (_, index) => queueTrack(`${index + 1}`)),
+    });
+    const first = controller.render(snapshot);
+    const row = first.components[0]?.toJSON();
+    const next = row?.components[1];
+
+    assert.equal(first.page, 0);
+    assert.equal(first.pageCount, 2);
+    assert.equal(row?.components.length, 2);
+    assert.ok(next !== undefined && "custom_id" in next);
+    if (next === undefined || !("custom_id" in next)) {
+      throw new Error("Expected a custom-ID queue button");
+    }
+
+    const nextPage = controller.resolve(snapshot.guildId, next.custom_id, snapshot);
+    assert.equal(nextPage.kind, "ready");
+    if (nextPage.kind !== "ready") {
+      throw new Error("Expected a current queue view");
+    }
+    assert.equal(nextPage.view.page, 1);
+    assert.match(nextPage.view.content, /^11\. /m);
+
+    assert.deepEqual(controller.resolve(snapshot.guildId, "another:button", snapshot), {
+      kind: "unrelated",
+    });
+    assert.deepEqual(controller.resolve("other-guild", next.custom_id, snapshot), {
+      kind: "stale",
+    });
+    assert.deepEqual(
+      controller.resolve(
+        snapshot.guildId,
+        next.custom_id,
+        playbackSnapshot({ playerToken: Symbol("replacement"), upcoming: snapshot.upcoming }),
+      ),
+      { kind: "stale" },
+    );
+    assert.deepEqual(
+      controller.resolve(snapshot.guildId, next.custom_id, playbackSnapshot({ current: null })),
+      { kind: "stale" },
+    );
+  });
+
+  it("clamps a page after queue shrink and omits buttons for one page", () => {
+    const controller = createQueueViewController(() => "session-1");
+    const token = Symbol("player");
+    const original = playbackSnapshot({
+      playerToken: token,
+      upcoming: Array.from({ length: 12 }, (_, index) => queueTrack(`${index + 1}`)),
+    });
+    const next = controller.render(original).components[0]?.toJSON().components[1];
+    assert.ok(next !== undefined && "custom_id" in next);
+    if (next === undefined || !("custom_id" in next)) {
+      throw new Error("Expected a custom-ID queue button");
+    }
+
+    const shrunk = playbackSnapshot({ playerToken: token, upcoming: [queueTrack("only")] });
+    const resolution = controller.resolve(shrunk.guildId, next.custom_id, shrunk);
+    assert.equal(resolution.kind, "ready");
+    if (resolution.kind !== "ready") {
+      throw new Error("Expected a current queue view");
+    }
+    assert.equal(resolution.view.page, 0);
+    assert.equal(resolution.view.pageCount, 1);
+    assert.deepEqual(resolution.view.components, []);
+    assert.match(resolution.view.content, /^1\. /m);
+  });
+
+  it("updates current queue buttons and retires stale interaction messages", async () => {
+    const controller = createQueueViewController(() => "session-1");
+    const snapshot = playbackSnapshot({
+      upcoming: Array.from({ length: 12 }, (_, index) => queueTrack(`${index + 1}`)),
+    });
+    const next = controller.render(snapshot).components[0]?.toJSON().components[1];
+    assert.ok(next !== undefined && "custom_id" in next);
+    if (next === undefined || !("custom_id" in next)) {
+      throw new Error("Expected a custom-ID queue button");
+    }
+
+    const updates: unknown[] = [];
+    const interaction = {
+      customId: next.custom_id,
+      guildId: snapshot.guildId,
+      inGuild: () => true,
+      update: async (options: unknown) => {
+        updates.push(options);
+      },
+    };
+    await handleQueueButtonInteraction(
+      interaction as unknown as Parameters<typeof handleQueueButtonInteraction>[0],
+      musicController({ getSnapshot: () => snapshot }),
+      controller,
+    );
+    assert.equal(updates.length, 1);
+    assert.match(JSON.stringify(updates[0]), /Upcoming • Page 2\/2/);
+
+    updates.length = 0;
+    await handleQueueButtonInteraction(
+      interaction as unknown as Parameters<typeof handleQueueButtonInteraction>[0],
+      musicController({
+        getSnapshot: () => playbackSnapshot({ playerToken: Symbol("replacement") }),
+      }),
+      controller,
+    );
+    assert.deepEqual(updates, [
+      {
+        content: "This queue view is no longer active. Run `\\queue` again.",
+        components: [],
+        allowedMentions: SAFE_ALLOWED_MENTIONS,
+      },
+    ]);
   });
 
   it("shows now-playing progress, live status, and empty states without internal identifiers", () => {

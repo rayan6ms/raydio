@@ -108,7 +108,7 @@ playlist shapes.
 | `\resume` | — | Resume the current track |
 | `\skip` | `\s` | Skip exactly one current track |
 | `\stop` | — | Stop and clear the queue; remain connected until the idle timeout |
-| `\queue` | `\q` | Show current and the first ten upcoming tracks |
+| `\queue` | `\q` | Show current playback and navigate stable upcoming-track pages |
 | `\nowplaying` | `\np` | Show current track, requester, progress, loop, and volume |
 | `\volume [0-100]` | `\vol` | Show the current volume or set it |
 | `\loop <off\|track\|queue>` | — | Set loop mode |
@@ -123,6 +123,10 @@ Playback-changing controls require the caller to be in the bot's active normal v
 Stage channels are not supported. `\help`, `\ping`, `\queue`, `\nowplaying`, and a `\volume` query
 without a value can be used outside voice. Read-only views and local cleanup remain available
 during a Lavalink outage, while commands requiring remote work fail fast.
+
+Queue pages show current progress, finite remaining queue time, requester details, and ten upcoming
+tracks at a time. Previous/Next buttons are bound to the current player session; controls from an
+older or ended session are retired without affecting a replacement queue.
 
 ## Configuration reference
 
