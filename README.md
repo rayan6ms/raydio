@@ -4,9 +4,10 @@
 
 # Raydio
 
-Raydio is a private, YouTube-first Discord music bot. It uses a literal `\` command prefix,
-discord.js for the Discord gateway, Shoukaku for the client boundary, and a separate Lavalink 4
-service with youtube-source for media resolution and Discord voice transport.
+Raydio is a self-hosted, YouTube-first Discord music bot for personal/private servers. It uses a
+literal `\` command prefix, discord.js for the Discord gateway, Shoukaku for the client boundary,
+and a separate Lavalink 4 service with youtube-source for media resolution and Discord voice
+transport.
 
 The v1 deployment is intentionally small: one stateless bot container and one private Lavalink
 container. There is no database, dashboard, slash-command surface, Spotify integration, or public
@@ -212,5 +213,4 @@ may require future youtube-source/client updates.
 
 ## License
 
-No license is granted; the package is marked `UNLICENSED`. If this repository is made public, its
-source is visible but is not open source unless the owner deliberately adds a license.
+Raydio is available under the [MIT License](LICENSE).

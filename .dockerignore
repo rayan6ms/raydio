@@ -9,6 +9,7 @@ tests/
 icons/
 README.md
 OPERATIONS.md
+LICENSE
 
 .env
 .env.*

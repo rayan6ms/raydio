@@ -2,8 +2,8 @@
   "name": "raydio",
   "version": "0.1.0",
   "private": true,
-  "description": "A private YouTube-first Discord music bot.",
-  "license": "UNLICENSED",
+  "description": "A self-hosted YouTube-first Discord music bot for personal servers.",
+  "license": "MIT",
   "type": "module",
   "engines": {
     "node": ">=24.18.0 <25",
