@@ -20,6 +20,10 @@ function readYaml(path: string): unknown {
   return parsed;
 }
 
+function readText(path: string): string {
+  return readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
+}
+
 function valueAt(root: unknown, path: readonly string[]): unknown {
   let current = root;
 
@@ -33,6 +37,50 @@ function valueAt(root: unknown, path: readonly string[]): unknown {
 }
 
 describe("Compose configuration", () => {
+  it("builds a hardened bot service with external secrets and health-based ordering", () => {
+    const compose = readYaml("compose.yaml");
+    const services = valueAt(compose, ["services"]);
+    const service = valueAt(compose, ["services", "bot"]);
+
+    assert.ok(isRecord(services));
+    assert.deepEqual(Object.keys(services).toSorted(), ["bot", "lavalink"]);
+    assert.ok(isRecord(service));
+    assert.deepEqual(valueAt(service, ["build"]), {
+      context: ".",
+      dockerfile: "Dockerfile",
+    });
+    assert.equal(valueAt(service, ["image"]), "raydio-bot:0.1.0");
+    assert.equal(valueAt(service, ["restart"]), "unless-stopped");
+    assert.equal(valueAt(service, ["stop_grace_period"]), "15s");
+    assert.deepEqual(valueAt(service, ["environment"]), {
+      NODE_ENV: "production",
+      DISCORD_TOKEN: `\${DISCORD_TOKEN:?Set DISCORD_TOKEN in .env}`,
+      LOG_LEVEL: `\${LOG_LEVEL:-info}`,
+      LAVALINK_HOST: "lavalink",
+      LAVALINK_PORT: "2333",
+      LAVALINK_PASSWORD: `\${LAVALINK_PASSWORD:?Set LAVALINK_PASSWORD in .env}`,
+      LAVALINK_SECURE: "false",
+      DEFAULT_VOLUME: `\${DEFAULT_VOLUME:-70}`,
+      IDLE_DISCONNECT_SECONDS: `\${IDLE_DISCONNECT_SECONDS:-120}`,
+      ALONE_DISCONNECT_SECONDS: `\${ALONE_DISCONNECT_SECONDS:-120}`,
+      MAX_PLAYLIST_TRACKS: `\${MAX_PLAYLIST_TRACKS:-250}`,
+      MAX_QUEUE_TRACKS: `\${MAX_QUEUE_TRACKS:-1000}`,
+      MAX_PENDING_PLAY_REQUESTS: `\${MAX_PENDING_PLAY_REQUESTS:-10}`,
+      MAX_TRACK_DURATION_HOURS: `\${MAX_TRACK_DURATION_HOURS:-3}`,
+      ALLOW_LIVESTREAMS: `\${ALLOW_LIVESTREAMS:-false}`,
+    });
+    assert.deepEqual(valueAt(service, ["depends_on"]), {
+      lavalink: { condition: "service_healthy" },
+    });
+    assert.equal(valueAt(service, ["read_only"]), true);
+    assert.deepEqual(valueAt(service, ["tmpfs"]), ["/tmp:size=16m,mode=1777,noexec,nosuid,nodev"]);
+    assert.deepEqual(valueAt(service, ["security_opt"]), ["no-new-privileges:true"]);
+    assert.deepEqual(valueAt(service, ["networks"]), ["raydio"]);
+    for (const forbidden of ["command", "entrypoint", "expose", "ports", "privileged", "volumes"]) {
+      assert.equal(Object.hasOwn(service, forbidden), false, `bot must not define ${forbidden}`);
+    }
+  });
+
   it("pins a private, authenticated Lavalink service without a host port", () => {
     const compose = readYaml("compose.yaml");
     const service = valueAt(compose, ["services", "lavalink"]);
@@ -64,6 +112,79 @@ describe("Compose configuration", () => {
       start_period: "15s",
     });
     assert.equal(valueAt(compose, ["networks", "raydio", "driver"]), "bridge");
+  });
+});
+
+describe("Bot container image", () => {
+  it("uses an exact multi-stage Node 24 Debian image and a non-root exec-form runtime", () => {
+    const dockerfile = readText("Dockerfile");
+    const packageJson = JSON.parse(readText("package.json")) as unknown;
+    const base =
+      "docker.io/library/node:24.18.0-bookworm-slim@sha256:6f7b03f7c2c8e2e784dcf9295400527b9b1270fd37b7e9a7285cf83b6951452d";
+    const fromLines = dockerfile.split("\n").filter((line) => line.startsWith("FROM "));
+
+    assert.deepEqual(fromLines, [`FROM ${base} AS build`, `FROM ${base} AS runtime`]);
+    assert.equal(readText(".nvmrc"), "24.18.0\n");
+    assert.equal(valueAt(packageJson, ["engines", "node"]), ">=24.18.0 <25");
+    assert.equal(valueAt(packageJson, ["scripts", "build"]), "node scripts/build.mjs");
+    assert.match(dockerfile, /RUN npm ci --ignore-scripts/);
+    assert.match(dockerfile, /node scripts\/patch-shoukaku-reconnect\.mjs/);
+    assert.match(dockerfile, /npm run build/);
+    assert.match(dockerfile, /npm prune --omit=dev --ignore-scripts/);
+    assert.match(dockerfile, /COPY --from=build --chown=node:node \/app\/dist \.\/dist/);
+    assert.match(dockerfile, /ENV NODE_ENV=production/);
+    assert.match(dockerfile, /\nUSER node\n/);
+    assert.match(dockerfile, /ENTRYPOINT \[\]\n/);
+    assert.match(dockerfile, /CMD \["node", "dist\/index\.js"\]\n$/);
+    assert.doesNotMatch(dockerfile, /\b(?:DISCORD_TOKEN|LAVALINK_PASSWORD)\b/);
+    assert.doesNotMatch(dockerfile, /^EXPOSE\b/m);
+
+    const runtimeStage = dockerfile.split(`FROM ${base} AS runtime`)[1];
+    assert.ok(runtimeStage);
+    assert.doesNotMatch(runtimeStage, /COPY .*\b(?:src|scripts|tests)\b/);
+
+    const buildConfig = JSON.parse(readText("tsconfig.build.json")) as unknown;
+    assert.equal(valueAt(buildConfig, ["compilerOptions", "declaration"]), false);
+    assert.equal(valueAt(buildConfig, ["compilerOptions", "declarationMap"]), false);
+    assert.equal(valueAt(buildConfig, ["compilerOptions", "sourceMap"]), false);
+  });
+
+  it("keeps secrets, agent context, dependencies, and build debris outside the context", () => {
+    const ignored = new Set(
+      readText(".dockerignore")
+        .split("\n")
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0),
+    );
+
+    for (const required of [
+      ".git/",
+      "docs/",
+      "node_modules/",
+      "dist/",
+      "coverage/",
+      "tests/",
+      ".env",
+      ".env.*",
+      "*.log",
+    ]) {
+      assert.equal(ignored.has(required), true, `.dockerignore must contain ${required}`);
+    }
+    for (const requiredBuildInput of [
+      "Dockerfile",
+      "package.json",
+      "package-lock.json",
+      "scripts/",
+      "src/",
+      "tsconfig.json",
+      "tsconfig.build.json",
+    ]) {
+      assert.equal(
+        ignored.has(requiredBuildInput),
+        false,
+        `.dockerignore must retain ${requiredBuildInput}`,
+      );
+    }
   });
 });
 

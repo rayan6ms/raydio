@@ -1,4 +1,4 @@
-FROM node:24.18.0-bookworm-slim@sha256:6f7b03f7c2c8e2e784dcf9295400527b9b1270fd37b7e9a7285cf83b6951452d AS build
+FROM docker.io/library/node:24.18.0-bookworm-slim@sha256:6f7b03f7c2c8e2e784dcf9295400527b9b1270fd37b7e9a7285cf83b6951452d AS build
 
 WORKDIR /app
 
@@ -10,10 +10,9 @@ RUN npm ci --ignore-scripts \
 COPY tsconfig.json tsconfig.build.json ./
 COPY src ./src
 RUN npm run build \
-  && npm prune --omit=dev --ignore-scripts \
-  && npm cache clean --force
+  && npm prune --omit=dev --ignore-scripts
 
-FROM node:24.18.0-bookworm-slim@sha256:6f7b03f7c2c8e2e784dcf9295400527b9b1270fd37b7e9a7285cf83b6951452d AS runtime
+FROM docker.io/library/node:24.18.0-bookworm-slim@sha256:6f7b03f7c2c8e2e784dcf9295400527b9b1270fd37b7e9a7285cf83b6951452d AS runtime
 
 ENV NODE_ENV=production
 WORKDIR /app
@@ -24,4 +23,5 @@ COPY --from=build --chown=node:node /app/dist ./dist
 
 USER node
 
+ENTRYPOINT []
 CMD ["node", "dist/index.js"]

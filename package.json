@@ -11,7 +11,7 @@
   },
   "packageManager": "npm@11.16.0",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "node scripts/build.mjs",
     "check": "npm run typecheck && npm run lint && npm test && npm run build",
     "dev": "tsx watch src/index.ts",
     "format": "biome check --write .",

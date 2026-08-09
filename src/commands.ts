@@ -1,6 +1,6 @@
 export const PREFIX = "\\" as const;
 
-const CANONICAL_COMMANDS = [
+export const COMMAND_NAMES = [
   "play",
   "pause",
   "resume",
@@ -18,9 +18,9 @@ const CANONICAL_COMMANDS = [
   "ping",
 ] as const;
 
-export type CommandName = (typeof CANONICAL_COMMANDS)[number];
+export type CommandName = (typeof COMMAND_NAMES)[number];
 
-const COMMAND_ALIASES = new Map<string, CommandName>([
+export const COMMAND_ALIASES = [
   ["p", "play"],
   ["s", "skip"],
   ["q", "queue"],
@@ -28,7 +28,9 @@ const COMMAND_ALIASES = new Map<string, CommandName>([
   ["vol", "volume"],
   ["disconnect", "leave"],
   ["dc", "leave"],
-]);
+] as const satisfies ReadonlyArray<readonly [string, CommandName]>;
+
+const commandAliases = new Map<string, CommandName>(COMMAND_ALIASES);
 
 export type ControlCommandName = Exclude<CommandName, "help" | "ping" | "play">;
 
@@ -97,7 +99,7 @@ export function parseCommand(input: CommandMessageInput): ParsedCommand | null {
 }
 
 function isCommandName(name: string): name is CommandName {
-  return CANONICAL_COMMANDS.some((commandName) => commandName === name);
+  return COMMAND_NAMES.some((commandName) => commandName === name);
 }
 
 export function resolveCommandName(name: string): CommandName | null {
@@ -107,7 +109,7 @@ export function resolveCommandName(name: string): CommandName | null {
     return normalizedName;
   }
 
-  return COMMAND_ALIASES.get(normalizedName) ?? null;
+  return commandAliases.get(normalizedName) ?? null;
 }
 
 function formatDiscordLatency(ready: boolean, latencyMs: number): string {
