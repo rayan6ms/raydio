@@ -2,6 +2,7 @@ import type { Logger } from "pino";
 
 import type { Config } from "../config.js";
 import { errorFields } from "../utils.js";
+import type { LavalinkSessionInvalidationReason } from "./lavalink.js";
 import type { ResolveResult, TrackResolver } from "./resolver.js";
 import { KeyedSerialExecutor } from "./serial.js";
 import {
@@ -103,6 +104,7 @@ export interface PlayerEventIdentity {
 
 export interface MusicManager {
   getSnapshot(guildId: string): GuildPlaybackSnapshot | undefined;
+  getSnapshots(): readonly GuildPlaybackSnapshot[];
   getPendingPlayRequestCount(guildId: string): number;
   requestPlay(request: PlayRequest): Promise<PlayRequestResult>;
   setPaused(
@@ -127,6 +129,7 @@ export interface MusicManager {
   stop(request: PlaybackControlRequest): Promise<ControlResult<"stopped" | "unchanged">>;
   leave(request: PlaybackControlRequest): Promise<ControlResult<boolean>>;
   cleanupUnexpected(guildId: string): Promise<boolean>;
+  handleLavalinkInvalidation(reason: LavalinkSessionInvalidationReason): Promise<number>;
   handleTrackEnd(
     event: PlayerEventIdentity & { readonly reason: TrackEndReason },
   ): Promise<TransitionResult>;
@@ -178,6 +181,28 @@ interface MusicManagerDependencies {
   readonly random?: () => number;
   readonly createPlayerToken?: () => PlayerToken;
 }
+
+type CleanupReason =
+  | "alone-timeout"
+  | "idle-timeout"
+  | "initial-play-failed"
+  | "lavalink-session-lost"
+  | "lavalink-unavailable"
+  | "leave"
+  | "shutdown"
+  | "unexpected-voice-change"
+  | "voice-closed";
+
+const CLEANUP_NOTIFICATIONS: Partial<Record<CleanupReason, string>> = {
+  "alone-timeout": "Left the voice channel because no listeners remained.",
+  "idle-timeout": "Left the voice channel after the queue stayed idle.",
+  "lavalink-session-lost":
+    "Playback ended because Lavalink restarted. Use `\\play` to start again.",
+  "lavalink-unavailable":
+    "Playback ended because Lavalink became unavailable. Use `\\play` after it recovers.",
+  "unexpected-voice-change": "Playback ended because the bot was moved or disconnected.",
+  "voice-closed": "Playback ended because Discord closed the voice connection.",
+};
 
 const defaultScheduler: TimerScheduler = {
   setTimeout(callback, delayMs) {
@@ -292,7 +317,11 @@ export function createMusicManager(
     return coordinator;
   }
 
-  async function deleteState(guildId: string, state: GuildPlaybackState): Promise<boolean> {
+  async function deleteState(
+    guildId: string,
+    state: GuildPlaybackState,
+    reason: CleanupReason,
+  ): Promise<boolean> {
     if (states.get(guildId) !== state) {
       return false;
     }
@@ -308,6 +337,31 @@ export function createMusicManager(
         { event: "player_destroy_failed", guildId, ...errorFields(error) },
         "Could not destroy playback session cleanly",
       );
+    }
+    dependencies.logger.info(
+      {
+        event: "playback_session_cleaned",
+        guildId,
+        voiceChannelId: state.voiceChannelId,
+        reason,
+      },
+      "Playback session cleaned up",
+    );
+    const notification = CLEANUP_NOTIFICATIONS[reason];
+    if (notification !== undefined && dependencies.notifier !== undefined) {
+      void dependencies.notifier
+        .send(state.notificationChannelId, notification)
+        .catch((error: unknown) => {
+          dependencies.logger.warn(
+            {
+              event: "playback_cleanup_notification_failed",
+              guildId,
+              reason,
+              ...errorFields(error),
+            },
+            "Could not send the playback cleanup notification",
+          );
+        });
     }
     return true;
   }
@@ -332,7 +386,7 @@ export function createMusicManager(
           }
 
           active.idleTimer = null;
-          await deleteState(state.guildId, active);
+          await deleteState(state.guildId, active, "idle-timeout");
         })
         .catch((error: unknown) => {
           dependencies.logger.error(
@@ -360,7 +414,7 @@ export function createMusicManager(
           }
 
           active.aloneTimer = null;
-          await deleteState(state.guildId, active);
+          await deleteState(state.guildId, active, "alone-timeout");
         })
         .catch((error: unknown) => {
           dependencies.logger.error(
@@ -630,7 +684,7 @@ export function createMusicManager(
         { event: "voice_websocket_closed", guildId, closeCode: code, byRemote },
         "Discord voice websocket closed",
       );
-      await deleteState(guildId, state);
+      await deleteState(guildId, state, "voice-closed");
     });
   }
 
@@ -679,6 +733,10 @@ export function createMusicManager(
     getSnapshot(guildId) {
       const state = states.get(guildId);
       return state === undefined ? undefined : copySnapshot(state);
+    },
+
+    getSnapshots() {
+      return [...states.values()].map(copySnapshot);
     },
 
     getPendingPlayRequestCount(guildId) {
@@ -833,7 +891,7 @@ export function createMusicManager(
                   "Could not start the initial track",
                 );
                 if (createdState) {
-                  await deleteState(request.guildId, state);
+                  await deleteState(request.guildId, state, "initial-play-failed");
                 } else {
                   state.current = previousCurrent;
                   state.upcoming = previousUpcoming;
@@ -1068,7 +1126,7 @@ export function createMusicManager(
         if ("result" in validation) {
           return validation.result;
         }
-        await deleteState(request.guildId, validation.state);
+        await deleteState(request.guildId, validation.state, "leave");
         return { kind: "ok", value: true };
       });
     },
@@ -1081,8 +1139,28 @@ export function createMusicManager(
           discardCoordinatorIfIdle(guildId, coordinator);
           return false;
         }
-        return await deleteState(guildId, state);
+        return await deleteState(guildId, state, "unexpected-voice-change");
       });
+    },
+
+    async handleLavalinkInvalidation(reason) {
+      const cleanupReason: CleanupReason =
+        reason === "session-lost" ? "lavalink-session-lost" : "lavalink-unavailable";
+      const guildIds = new Set([...states.keys(), ...coordinators.keys()]);
+      const results = await Promise.all(
+        [...guildIds].map((guildId) =>
+          stateExecutor.run(guildId, async () => {
+            const state = states.get(guildId);
+            if (state !== undefined) {
+              return await deleteState(guildId, state, cleanupReason);
+            }
+            const coordinator = invalidate(guildId);
+            discardCoordinatorIfIdle(guildId, coordinator);
+            return false;
+          }),
+        ),
+      );
+      return results.filter(Boolean).length;
     },
 
     handleTrackEnd(event) {
@@ -1122,7 +1200,7 @@ export function createMusicManager(
           stateExecutor.run(guildId, async () => {
             const state = states.get(guildId);
             if (state !== undefined) {
-              await deleteState(guildId, state);
+              await deleteState(guildId, state, "shutdown");
               return;
             }
             const coordinator = invalidate(guildId);

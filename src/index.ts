@@ -27,6 +27,13 @@ async function main(): Promise<void> {
     logger,
     notifier: createDiscordMusicNotifier(client),
   });
+  const stopListeningForLavalinkInvalidation = lavalink.onSessionInvalidated(async (reason) => {
+    const cleanedSessionCount = await music.handleLavalinkInvalidation(reason);
+    logger.warn(
+      { event: "lavalink_sessions_invalidated", reason, cleanedSessionCount },
+      "Playback sessions invalidated after Lavalink state loss",
+    );
+  });
   const discord = createDiscordService(client, logger, lavalink, music);
   let isShuttingDown = false;
 
@@ -45,7 +52,16 @@ async function main(): Promise<void> {
     forcedExit.unref();
 
     try {
-      await stopServicesInOrder([{ stop: () => music.stopService() }, lavalink, discord]);
+      await stopServicesInOrder([
+        {
+          stop: async () => {
+            stopListeningForLavalinkInvalidation();
+            await music.stopService();
+          },
+        },
+        lavalink,
+        discord,
+      ]);
       logger.info({ event: "shutdown_complete", reason }, "Raydio stopped");
     } catch (error: unknown) {
       logger.error(

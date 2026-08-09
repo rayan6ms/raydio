@@ -4,15 +4,16 @@ import { describe, it } from "node:test";
 import { stopServicesInOrder } from "../src/lifecycle.js";
 
 describe("stopServicesInOrder", () => {
-  it("stops Lavalink before Discord", async () => {
+  it("stops music before Lavalink before Discord", async () => {
     const stopped: string[] = [];
 
     await stopServicesInOrder([
+      { stop: async () => void stopped.push("music") },
       { stop: async () => void stopped.push("lavalink") },
       { stop: async () => void stopped.push("discord") },
     ]);
 
-    assert.deepEqual(stopped, ["lavalink", "discord"]);
+    assert.deepEqual(stopped, ["music", "lavalink", "discord"]);
   });
 
   it("continues shutdown after a failure and reports the aggregate", async () => {
@@ -22,15 +23,16 @@ describe("stopServicesInOrder", () => {
       stopServicesInOrder([
         {
           stop: async () => {
-            stopped.push("lavalink");
-            throw new Error("node close failed");
+            stopped.push("music");
+            throw new Error("music close failed");
           },
         },
+        { stop: async () => void stopped.push("lavalink") },
         { stop: async () => void stopped.push("discord") },
       ]),
       AggregateError,
     );
 
-    assert.deepEqual(stopped, ["lavalink", "discord"]);
+    assert.deepEqual(stopped, ["music", "lavalink", "discord"]);
   });
 });

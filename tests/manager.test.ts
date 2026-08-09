@@ -636,6 +636,83 @@ describe("createMusicManager", () => {
     assert.equal(cleanupManager.getSnapshot("guild-1"), undefined);
   });
 
+  it("invalidates all Lavalink-backed state idempotently and explains recoverable outages", async () => {
+    const transport = new FakeTransport();
+    const notifications: Array<{ readonly channelId: string; readonly content: string }> = [];
+    const manager = managerWith(new FakeResolver(), {
+      transport,
+      notifier: {
+        async send(channelId, content) {
+          notifications.push({ channelId, content });
+        },
+      },
+    });
+    await queue(manager, "one");
+    await queue(manager, "two", {
+      guildId: "guild-2",
+      notificationChannelId: "text-2",
+      intendedVoiceChannelId: "voice-2",
+    });
+
+    assert.equal(manager.getSnapshots().length, 2);
+    assert.equal(await manager.handleLavalinkInvalidation("unavailable"), 2);
+    assert.equal(await manager.handleLavalinkInvalidation("unavailable"), 0);
+    assert.equal(manager.getSnapshots().length, 0);
+    assert.deepEqual(
+      transport.sessions.map((session) => session.destroyCount),
+      [1, 1],
+    );
+    assert.deepEqual(notifications, [
+      {
+        channelId: "text-1",
+        content:
+          "Playback ended because Lavalink became unavailable. Use `\\play` after it recovers.",
+      },
+      {
+        channelId: "text-2",
+        content:
+          "Playback ended because Lavalink became unavailable. Use `\\play` after it recovers.",
+      },
+    ]);
+
+    await queue(manager, "after-restart");
+    assert.equal(await manager.handleLavalinkInvalidation("session-lost"), 1);
+    assert.deepEqual(notifications.at(-1), {
+      channelId: "text-1",
+      content: "Playback ended because Lavalink restarted. Use `\\play` to start again.",
+    });
+  });
+
+  it("invalidates in-flight resolution when Lavalink becomes unavailable", async () => {
+    const blocked = deferred<ResolveResult>();
+    const manager = managerWith(new FakeResolver(async () => blocked.promise));
+    const pending = manager.requestPlay(request("pending"));
+
+    assert.equal(manager.getPendingPlayRequestCount("guild-1"), 1);
+    assert.equal(await manager.handleLavalinkInvalidation("unavailable"), 0);
+    blocked.resolve(tracks(track("too-late")));
+
+    assert.deepEqual(await pending, { kind: "stale" });
+    assert.equal(manager.getSnapshot("guild-1"), undefined);
+  });
+
+  it("finishes outage cleanup when its user notification fails", async () => {
+    const transport = new FakeTransport();
+    const manager = managerWith(new FakeResolver(), {
+      transport,
+      notifier: {
+        async send() {
+          throw new Error("notification unavailable");
+        },
+      },
+    });
+    await queue(manager, "current");
+
+    assert.equal(await manager.handleLavalinkInvalidation("unavailable"), 1);
+    assert.equal(manager.getSnapshot("guild-1"), undefined);
+    assert.equal(transport.sessions[0]?.destroyCount, 1);
+  });
+
   it("rechecks requester voice and same-channel ownership at commit", async () => {
     const changed = deferred<ResolveResult>();
     const resolver = new FakeResolver(async (input) =>

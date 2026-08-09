@@ -6,6 +6,7 @@ import {
   type Message,
   type MessageMentionOptions,
   PermissionFlagsBits,
+  type VoiceBasedChannel,
 } from "discord.js";
 import type { Logger } from "pino";
 
@@ -52,6 +53,7 @@ type MusicController = Pick<
   MusicManager,
   | "cleanupUnexpected"
   | "getSnapshot"
+  | "getSnapshots"
   | "requestPlay"
   | "setPaused"
   | "setVolume"
@@ -62,7 +64,19 @@ type MusicController = Pick<
   | "skip"
   | "stop"
   | "leave"
+  | "updateAloneStatus"
 >;
+
+export function hasHumanVoiceMember(
+  members: Iterable<{ readonly user: { readonly bot: boolean } }>,
+): boolean {
+  for (const member of members) {
+    if (!member.user.bot) {
+      return true;
+    }
+  }
+  return false;
+}
 
 function logError(logger: Logger, event: string, error: unknown, message: string): void {
   logger.error({ event, ...errorFields(error) }, message);
@@ -543,6 +557,21 @@ async function handlePlay(
     },
     validateCommit: () => validateVoiceAccess(voiceFacts(message), initialAccess.voiceChannelId),
   });
+  if (result.kind === "queued") {
+    const snapshot = music.getSnapshot(message.guildId);
+    const channel = message.guild?.channels.cache.get(initialAccess.voiceChannelId);
+    if (
+      snapshot !== undefined &&
+      snapshot.voiceChannelId === initialAccess.voiceChannelId &&
+      channel?.isVoiceBased()
+    ) {
+      await music.updateAloneStatus(
+        snapshot.guildId,
+        snapshot.playerToken,
+        !hasHumanVoiceMember(channel.members.values()),
+      );
+    }
+  }
   return formatPlayRequestResult(result);
 }
 
@@ -574,6 +603,38 @@ export function createDiscordService(
   let acceptingCommands = false;
   let started = false;
   let stopped = false;
+
+  function cleanupUnexpected(guildId: string): void {
+    void music.cleanupUnexpected(guildId).catch((error: unknown) => {
+      logError(logger, "unexpected_voice_cleanup_failed", error, "Voice cleanup failed");
+    });
+  }
+
+  function updateAloneStatus(snapshot: GuildPlaybackSnapshot, channel: VoiceBasedChannel): void {
+    const alone = !hasHumanVoiceMember(channel.members.values());
+    void music
+      .updateAloneStatus(snapshot.guildId, snapshot.playerToken, alone)
+      .catch((error: unknown) => {
+        logError(logger, "alone_status_update_failed", error, "Alone status update failed");
+      });
+  }
+
+  function reconcileSnapshot(snapshot: GuildPlaybackSnapshot): void {
+    const guild = client.guilds.cache.get(snapshot.guildId);
+    if (guild === undefined) {
+      return;
+    }
+    if (guild.members.me?.voice.channelId !== snapshot.voiceChannelId) {
+      cleanupUnexpected(snapshot.guildId);
+      return;
+    }
+    const channel = guild.channels.cache.get(snapshot.voiceChannelId);
+    if (channel === undefined || !channel.isVoiceBased()) {
+      cleanupUnexpected(snapshot.guildId);
+      return;
+    }
+    updateAloneStatus(snapshot, channel);
+  }
 
   client.once(Events.ClientReady, (readyClient) => {
     logger.info(
@@ -610,6 +671,12 @@ export function createDiscordService(
       { event: "discord_shard_resumed", shardId, replayedEvents },
       "Discord shard resumed",
     );
+    for (const snapshot of music.getSnapshots()) {
+      const guild = client.guilds.cache.get(snapshot.guildId);
+      if (guild?.shardId === shardId) {
+        reconcileSnapshot(snapshot);
+      }
+    }
   });
 
   client.on(Events.MessageCreate, (message) => {
@@ -618,16 +685,34 @@ export function createDiscordService(
     }
   });
 
-  client.on(Events.VoiceStateUpdate, (_oldState, newState) => {
-    if (newState.id !== client.user?.id) {
+  client.on(Events.VoiceStateUpdate, (oldState, newState) => {
+    const snapshot = music.getSnapshot(newState.guild.id);
+    if (snapshot === undefined) {
       return;
     }
-    const snapshot = music.getSnapshot(newState.guild.id);
-    if (snapshot !== undefined && newState.channelId !== snapshot.voiceChannelId) {
-      void music.cleanupUnexpected(newState.guild.id).catch((error: unknown) => {
-        logError(logger, "unexpected_voice_cleanup_failed", error, "Voice cleanup failed");
-      });
+
+    const botUserId = newState.guild.members.me?.id ?? client.user?.id;
+    if (newState.id === botUserId) {
+      if (newState.channelId !== snapshot.voiceChannelId) {
+        cleanupUnexpected(newState.guild.id);
+      } else {
+        reconcileSnapshot(snapshot);
+      }
+      return;
     }
+
+    if (
+      oldState.channelId !== snapshot.voiceChannelId &&
+      newState.channelId !== snapshot.voiceChannelId
+    ) {
+      return;
+    }
+    const channel = newState.guild.channels.cache.get(snapshot.voiceChannelId);
+    if (channel === undefined || !channel.isVoiceBased()) {
+      cleanupUnexpected(newState.guild.id);
+      return;
+    }
+    updateAloneStatus(snapshot, channel);
   });
 
   return {

@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import { setImmediate as waitForImmediate } from "node:timers/promises";
 
 import { Constants, Node } from "shoukaku";
 
@@ -82,6 +83,76 @@ describe("createLavalinkService", () => {
     assert.equal(service.getStatus(), "stopped");
 
     service.manager.emit("ready", LAVALINK_NODE_NAME, false, false);
+    assert.equal(service.getStatus(), "stopped");
+
+    client.destroy();
+  });
+
+  it("gates readiness while a non-resumed reconnect invalidates stale sessions", async () => {
+    const client = createDiscordClient();
+    const service = createLavalinkService(client, config, createLogger("silent"));
+    let finishCleanup: (() => void) | undefined;
+    const cleanup = new Promise<void>((resolve) => {
+      finishCleanup = resolve;
+    });
+    const reasons: string[] = [];
+    service.onSessionInvalidated(async (reason) => {
+      reasons.push(reason);
+      await cleanup;
+    });
+
+    service.manager.emit("ready", LAVALINK_NODE_NAME, false, false);
+    service.manager.emit("close", LAVALINK_NODE_NAME, 1006, "connection lost");
+    service.manager.emit("ready", LAVALINK_NODE_NAME, false, false);
+
+    assert.equal(service.getStatus(), "reconnecting");
+    assert.equal(service.isReady(), false);
+    assert.deepEqual(reasons, ["session-lost"]);
+
+    finishCleanup?.();
+    await waitForImmediate();
+    assert.equal(service.getStatus(), "ready");
+
+    await service.stop();
+    client.destroy();
+  });
+
+  it("emits terminal invalidation once when Shoukaku reports duplicate exhaustion signals", async () => {
+    const client = createDiscordClient();
+    const service = createLavalinkService(client, config, createLogger("silent"));
+    const reasons: string[] = [];
+    service.onSessionInvalidated((reason) => {
+      reasons.push(reason);
+    });
+
+    service.manager.emit("disconnect", LAVALINK_NODE_NAME, 2);
+    service.manager.emit("error", LAVALINK_NODE_NAME, new Error("already exhausted"));
+    await waitForImmediate();
+
+    assert.deepEqual(reasons, ["unavailable"]);
+    assert.equal(service.getStatus(), "unavailable");
+
+    await service.stop();
+    client.destroy();
+  });
+
+  it("cannot publish ready after shutdown races a non-resumed recovery", async () => {
+    const client = createDiscordClient();
+    const service = createLavalinkService(client, config, createLogger("silent"));
+    let finishCleanup: (() => void) | undefined;
+    const cleanup = new Promise<void>((resolve) => {
+      finishCleanup = resolve;
+    });
+    service.onSessionInvalidated(async () => cleanup);
+
+    service.manager.emit("ready", LAVALINK_NODE_NAME, false, false);
+    service.manager.emit("close", LAVALINK_NODE_NAME, 1006, "connection lost");
+    service.manager.emit("ready", LAVALINK_NODE_NAME, false, false);
+    assert.equal(service.getStatus(), "reconnecting");
+
+    await service.stop();
+    finishCleanup?.();
+    await waitForImmediate();
     assert.equal(service.getStatus(), "stopped");
 
     client.destroy();

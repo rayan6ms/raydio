@@ -1,4 +1,30 @@
 services:
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: raydio-bot:0.1.0
+    restart: unless-stopped
+    stop_grace_period: 15s
+    environment:
+      NODE_ENV: production
+      DISCORD_TOKEN: "${DISCORD_TOKEN:?Set DISCORD_TOKEN in .env}"
+      LOG_LEVEL: "${LOG_LEVEL:-info}"
+      LAVALINK_HOST: lavalink
+      LAVALINK_PORT: "2333"
+      LAVALINK_PASSWORD: "${LAVALINK_PASSWORD:?Set LAVALINK_PASSWORD in .env}"
+      LAVALINK_SECURE: "false"
+    depends_on:
+      lavalink:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777,noexec,nosuid,nodev
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - raydio
+
   lavalink:
     image: ghcr.io/lavalink-devs/lavalink:4.2.2-alpine@sha256:96be2be7ee50d35a9bd42c8c7b99e2a4b741f09123066c1ebb9e014dd7db204d
     restart: unless-stopped

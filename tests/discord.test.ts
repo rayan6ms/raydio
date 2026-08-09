@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import { setImmediate as waitForImmediate } from "node:timers/promises";
 
-import { GatewayIntentBits } from "discord.js";
+import { Events, GatewayIntentBits, type Guild, type VoiceState } from "discord.js";
 
 import {
   createDiscordClient,
@@ -11,6 +12,7 @@ import {
   formatNowPlayingSnapshot,
   formatPlayRequestResult,
   formatQueueSnapshot,
+  hasHumanVoiceMember,
   SAFE_ALLOWED_MENTIONS,
 } from "../src/discord.js";
 import { createLogger } from "../src/logger.js";
@@ -21,6 +23,28 @@ const unavailableLavalink: LavalinkReadiness = {
   getStatus: () => "unavailable",
   isReady: () => false,
 };
+
+type TestMusicController = Parameters<typeof createDiscordService>[3];
+
+function musicController(overrides: Partial<TestMusicController> = {}): TestMusicController {
+  return {
+    requestPlay: async () => ({ kind: "closed" }),
+    getSnapshot: () => undefined,
+    getSnapshots: () => [],
+    cleanupUnexpected: async () => false,
+    updateAloneStatus: async () => false,
+    setPaused: async () => ({ kind: "rejected", reason: "no-session" }),
+    setVolume: async () => ({ kind: "rejected", reason: "no-session" }),
+    setLoopMode: async () => ({ kind: "rejected", reason: "no-session" }),
+    removeUpcoming: async () => ({ kind: "rejected", reason: "no-session" }),
+    clearUpcoming: async () => ({ kind: "rejected", reason: "no-session" }),
+    shuffleUpcoming: async () => ({ kind: "rejected", reason: "no-session" }),
+    skip: async () => ({ kind: "rejected", reason: "no-session" }),
+    stop: async () => ({ kind: "rejected", reason: "no-session" }),
+    leave: async () => ({ kind: "rejected", reason: "no-session" }),
+    ...overrides,
+  };
+}
 
 function queueTrack(identifier: string, overrides: Partial<QueueTrack> = {}): QueueTrack {
   return {
@@ -58,20 +82,12 @@ function playbackSnapshot(overrides: Partial<GuildPlaybackSnapshot> = {}): Guild
 describe("createDiscordService", () => {
   it("uses only the required intents and disables all automatic mentions", async () => {
     const client = createDiscordClient();
-    const service = createDiscordService(client, createLogger("silent"), unavailableLavalink, {
-      requestPlay: async () => ({ kind: "closed" }),
-      getSnapshot: () => undefined,
-      cleanupUnexpected: async () => false,
-      setPaused: async () => ({ kind: "rejected", reason: "no-session" }),
-      setVolume: async () => ({ kind: "rejected", reason: "no-session" }),
-      setLoopMode: async () => ({ kind: "rejected", reason: "no-session" }),
-      removeUpcoming: async () => ({ kind: "rejected", reason: "no-session" }),
-      clearUpcoming: async () => ({ kind: "rejected", reason: "no-session" }),
-      shuffleUpcoming: async () => ({ kind: "rejected", reason: "no-session" }),
-      skip: async () => ({ kind: "rejected", reason: "no-session" }),
-      stop: async () => ({ kind: "rejected", reason: "no-session" }),
-      leave: async () => ({ kind: "rejected", reason: "no-session" }),
-    });
+    const service = createDiscordService(
+      client,
+      createLogger("silent"),
+      unavailableLavalink,
+      musicController(),
+    );
 
     assert.deepEqual(DISCORD_INTENTS, [
       GatewayIntentBits.Guilds,
@@ -90,6 +106,82 @@ describe("createDiscordService", () => {
 
     await service.stop();
     await service.stop();
+  });
+
+  it("tracks human presence in the active voice channel and cleans bot displacement", async () => {
+    const client = createDiscordClient();
+    const snapshot = playbackSnapshot();
+    const updates: boolean[] = [];
+    let cleanupCount = 0;
+    const channel = {
+      isVoiceBased: () => true,
+      members: new Map([["bot", { user: { bot: true } }]]),
+    };
+    const botVoice: { channelId: string | null } = { channelId: "voice-1" };
+    const guild = {
+      id: "guild-1",
+      shardId: 0,
+      members: { me: { id: "bot", voice: botVoice } },
+      channels: { cache: new Map([["voice-1", channel]]) },
+    };
+    const service = createDiscordService(
+      client,
+      createLogger("silent"),
+      unavailableLavalink,
+      musicController({
+        getSnapshot: () => snapshot,
+        getSnapshots: () => [snapshot],
+        async updateAloneStatus(_guildId, _playerToken, alone) {
+          updates.push(alone);
+          return true;
+        },
+        async cleanupUnexpected() {
+          cleanupCount += 1;
+          return true;
+        },
+      }),
+    );
+
+    client.emit(
+      Events.VoiceStateUpdate,
+      { channelId: "voice-1" } as VoiceState,
+      { id: "human", channelId: null, guild } as unknown as VoiceState,
+    );
+    await waitForImmediate();
+    assert.deepEqual(updates, [true]);
+
+    channel.members.set("human", { user: { bot: false } });
+    client.emit(
+      Events.VoiceStateUpdate,
+      { channelId: null } as VoiceState,
+      { id: "human", channelId: "voice-1", guild } as unknown as VoiceState,
+    );
+    await waitForImmediate();
+    assert.deepEqual(updates, [true, false]);
+
+    client.emit(
+      Events.VoiceStateUpdate,
+      { channelId: "voice-1" } as VoiceState,
+      { id: "bot", channelId: null, guild } as unknown as VoiceState,
+    );
+    await waitForImmediate();
+    assert.equal(cleanupCount, 1);
+
+    client.guilds.cache.set("guild-1", guild as unknown as Guild);
+    botVoice.channelId = null;
+    client.emit(Events.ShardResume, 0, 3);
+    await waitForImmediate();
+    assert.equal(cleanupCount, 2);
+    client.guilds.cache.clear();
+
+    await service.stop();
+  });
+});
+
+describe("hasHumanVoiceMember", () => {
+  it("ignores bots and detects at least one human listener", () => {
+    assert.equal(hasHumanVoiceMember([{ user: { bot: true } }]), false);
+    assert.equal(hasHumanVoiceMember([{ user: { bot: true } }, { user: { bot: false } }]), true);
   });
 });
 
