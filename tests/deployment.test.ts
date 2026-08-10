@@ -79,6 +79,7 @@ describe("Compose configuration", () => {
     });
     assert.equal(valueAt(service, ["read_only"]), true);
     assert.deepEqual(valueAt(service, ["tmpfs"]), ["/tmp:size=16m,mode=1777,noexec,nosuid,nodev"]);
+    assert.deepEqual(valueAt(service, ["cap_drop"]), ["ALL"]);
     assert.deepEqual(valueAt(service, ["security_opt"]), ["no-new-privileges:true"]);
     assert.deepEqual(valueAt(service, ["networks"]), ["raydio"]);
     for (const forbidden of ["command", "entrypoint", "expose", "ports", "privileged", "volumes"]) {
@@ -104,8 +105,15 @@ describe("Compose configuration", () => {
       `\${LAVALINK_PASSWORD:?Set LAVALINK_PASSWORD in .env}`,
     );
     assert.deepEqual(valueAt(service, ["volumes"]), [
-      "./lavalink/application.yml:/opt/Lavalink/application.yml:ro",
+      "./lavalink/application.yml:/opt/Lavalink/application.yml:ro,Z",
     ]);
+    assert.equal(valueAt(service, ["read_only"]), true);
+    assert.deepEqual(valueAt(service, ["tmpfs"]), [
+      "/tmp:size=128m,mode=1777,nosuid,nodev",
+      "/opt/Lavalink/plugins:size=64m,mode=1777,noexec,nosuid,nodev",
+    ]);
+    assert.deepEqual(valueAt(service, ["cap_drop"]), ["ALL"]);
+    assert.deepEqual(valueAt(service, ["security_opt"]), ["no-new-privileges:true"]);
     assert.deepEqual(valueAt(service, ["healthcheck"]), {
       test: [
         "CMD-SHELL",
@@ -139,6 +147,8 @@ describe("Bot container image", () => {
     assert.match(dockerfile, /npm prune --omit=dev --ignore-scripts/);
     assert.match(dockerfile, /COPY --from=build --chown=node:node \/app\/dist \.\/dist/);
     assert.match(dockerfile, /ENV NODE_ENV=production/);
+    assert.match(dockerfile, /rm -rf \/usr\/local\/lib\/node_modules\/npm/);
+    assert.match(dockerfile, /rm -f \/usr\/local\/bin\/npm \/usr\/local\/bin\/npx/);
     assert.match(dockerfile, /\nUSER node\n/);
     assert.match(dockerfile, /ENTRYPOINT \[\]\n/);
     assert.match(dockerfile, /CMD \["node", "dist\/index\.js"\]\n$/);

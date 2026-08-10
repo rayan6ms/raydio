@@ -28,6 +28,8 @@ services:
     read_only: true
     tmpfs:
       - /tmp:size=16m,mode=1777,noexec,nosuid,nodev
+    cap_drop:
+      - ALL
     security_opt:
       - no-new-privileges:true
     networks:
@@ -39,7 +41,15 @@ services:
     environment:
       LAVALINK_SERVER_PASSWORD: "${LAVALINK_PASSWORD:?Set LAVALINK_PASSWORD in .env}"
     volumes:
-      - ./lavalink/application.yml:/opt/Lavalink/application.yml:ro
+      - ./lavalink/application.yml:/opt/Lavalink/application.yml:ro,Z
+    read_only: true
+    tmpfs:
+      - /tmp:size=128m,mode=1777,nosuid,nodev
+      - /opt/Lavalink/plugins:size=64m,mode=1777,noexec,nosuid,nodev
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
     expose:
       - "2333"
     healthcheck:
