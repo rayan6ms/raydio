@@ -12,7 +12,12 @@ import {
   type TimerHandle,
   type TimerScheduler,
 } from "../src/music/manager.js";
-import type { ResolvedTrack, ResolveResult, TrackResolver } from "../src/music/resolver.js";
+import type {
+  ResolvedTrack,
+  ResolveResult,
+  SearchResolveResult,
+  TrackResolver,
+} from "../src/music/resolver.js";
 import type { PlayerToken, QueueTrack } from "../src/music/state.js";
 import type {
   PlaybackJoinOptions,
@@ -90,6 +95,18 @@ class FakeResolver implements TrackResolver {
   async resolve(input: string, availableCapacity: number): Promise<ResolveResult> {
     this.calls.push({ input, availableCapacity });
     return this.handler(input, availableCapacity);
+  }
+
+  async search(input: string, resultLimit: number): Promise<SearchResolveResult> {
+    const result = await this.handler(input, resultLimit);
+    return result.kind === "tracks"
+      ? {
+          kind: "choices",
+          source: "youtube-music-search",
+          tracks: result.tracks.slice(0, resultLimit),
+          rejectedTrackCount: result.rejectedTrackCount,
+        }
+      : result;
   }
 }
 
@@ -549,6 +566,97 @@ describe("createMusicManager", () => {
     assert.deepEqual(manager.getSnapshot("guild-1")?.upcoming, []);
   });
 
+  it("bounds search preparation and rechecks guild voice and queue state", async () => {
+    const resolver = new FakeResolver(async () =>
+      tracks(track("one"), track("two"), track("three"), track("four"), track("five")),
+    );
+    const manager = managerWith(resolver, { config: { maxQueueTracks: 6 } });
+
+    const searchResult = await manager.searchTracks({
+      guildId: "guild-1",
+      intendedVoiceChannelId: "voice-1",
+      input: "choices",
+      resultLimit: 5,
+    });
+    assert.equal(searchResult.kind, "choices");
+    if (searchResult.kind === "choices") {
+      assert.deepEqual(
+        searchResult.tracks.map((item) => item.identifier),
+        ["one", "two", "three", "four", "five"],
+      );
+    }
+
+    await queue(manager, "first");
+    assert.deepEqual(
+      await manager.searchTracks({
+        guildId: "guild-1",
+        intendedVoiceChannelId: "voice-2",
+        input: "wrong voice",
+        resultLimit: 5,
+      }),
+      { kind: "wrong-channel" },
+    );
+    await queue(manager, "second");
+    assert.deepEqual(
+      await manager.searchTracks({
+        guildId: "guild-1",
+        intendedVoiceChannelId: "voice-1",
+        input: "full",
+        resultLimit: 5,
+      }),
+      { kind: "queue-full" },
+    );
+    await assert.rejects(
+      manager.searchTracks({
+        guildId: "guild-1",
+        intendedVoiceChannelId: "voice-1",
+        input: "invalid limit",
+        resultLimit: 0,
+      }),
+      RangeError,
+    );
+  });
+
+  it("keeps bounded history and returns to the prior track without losing current", async () => {
+    const allTracks = Array.from({ length: 22 }, (_, index) => track(String(index + 1)));
+    const resolver = new FakeResolver(async () => tracks(...allTracks));
+    const transport = new FakeTransport();
+    const manager = managerWith(resolver, {
+      config: { maxQueueTracks: 30 },
+      transport,
+    });
+    await queue(manager, "playlist");
+
+    await manager.handleTrackEnd({ ...currentIdentity(manager), reason: "finished" });
+    assert.equal(manager.getSnapshot("guild-1")?.current?.identifier, "2");
+    assert.equal(manager.getSnapshot("guild-1")?.historyCount, 1);
+
+    const previous = controlValue(await manager.previous(control(manager)));
+    assert.equal(previous?.identifier, "1");
+    assert.equal(manager.getSnapshot("guild-1")?.current?.identifier, "1");
+    assert.deepEqual(
+      manager
+        .getSnapshot("guild-1")
+        ?.upcoming.slice(0, 3)
+        .map((item) => item.identifier),
+      ["2", "3", "4"],
+    );
+    assert.equal(manager.getSnapshot("guild-1")?.historyCount, 0);
+    assert.deepEqual(transport.sessions[0]?.played.slice(0, 3), [
+      "encoded-1",
+      "encoded-2",
+      "encoded-1",
+    ]);
+    assert.equal(controlValue(await manager.previous(control(manager))), null);
+
+    for (let index = 0; index < 21; index += 1) {
+      await manager.handleTrackEnd({ ...currentIdentity(manager), reason: "finished" });
+    }
+    assert.equal(manager.getSnapshot("guild-1")?.historyCount, 20);
+    await manager.stop(control(manager));
+    assert.equal(manager.getSnapshot("guild-1")?.historyCount, 0);
+  });
+
   it("orders play requests, caps pending work, and releases capacity after rejection", async () => {
     const first = deferred<ResolveResult>();
     const resolver = new FakeResolver(async (input) => {
@@ -876,6 +984,12 @@ describe("createMusicManager", () => {
     assert.deepEqual(
       queueLoop.getSnapshot("guild-1")?.upcoming.map((item) => item.identifier),
       ["a"],
+    );
+    assert.equal(controlValue(await queueLoop.previous(control(queueLoop)))?.identifier, "a");
+    assert.equal(queueLoop.getSnapshot("guild-1")?.current?.identifier, "a");
+    assert.deepEqual(
+      queueLoop.getSnapshot("guild-1")?.upcoming.map((item) => item.identifier),
+      ["b"],
     );
   });
 

@@ -56,18 +56,20 @@ and troubleshooting, see [OPERATIONS.md](OPERATIONS.md).
 
 ## Commands
 
-Commands are case-insensitive. Searches prefer YouTube Music and fall back to YouTube; direct URLs
-are limited to recognized YouTube video, Music, and playlist forms.
+Commands are case-insensitive. Text searches present up to five suitable YouTube Music results and
+fall back to YouTube; only the requester may choose. Direct recognized YouTube video, Music, and
+playlist URLs play immediately. Send a bare `\` to open the ordered command menu.
 
 | Command | Aliases | Behavior |
 |---|---|---|
 | `\play <song or YouTube URL>` | `\p` | Join, resolve, enqueue, and play when idle |
 | `\pause` | — | Pause the current track |
 | `\resume` | — | Resume the current track |
+| `\previous` | `\prev` | Return to the most recent prior track in this session |
 | `\skip` | `\s` | Skip the current track |
 | `\stop` | — | Stop, clear the queue, and remain until the idle timeout |
 | `\queue` | `\q` | Show and navigate the queue |
-| `\nowplaying` | `\np` | Show current playback details |
+| `\nowplaying` | `\np` | Show the maintained player and control buttons |
 | `\volume [0-100]` | `\vol` | Show or set volume |
 | `\loop <off\|track\|queue>` | — | Set loop mode |
 | `\shuffle` | — | Shuffle upcoming tracks |
@@ -77,6 +79,8 @@ are limited to recognized YouTube video, Music, and playlist forms.
 | `\help` | — | Show the command list |
 | `\ping` | — | Show Discord latency and Lavalink readiness |
 
+The player offers Previous, Pause/Resume, Next, Stop, Queue, Loop, and Leave buttons. Search menus
+expire after 60 seconds; player controls become harmless when their playback session is stale.
 Playback-changing controls require the caller to share the bot's normal voice channel. Stage
 channels are unsupported. Read-only commands and cleanup remain available during a Lavalink outage;
 commands that need Lavalink fail fast.

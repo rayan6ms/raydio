@@ -31,6 +31,9 @@ function context(
     lavalinkReady: true,
     play: async (input) => `playing:${input}`,
     control: async (invocation) => `control:${invocation.name}`,
+    presentNowPlaying: async () => {
+      sent.push("nowplaying");
+    },
     presentQueue: async () => {
       sent.push("queue");
     },
@@ -75,10 +78,10 @@ describe("parseCommand", () => {
     });
   });
 
-  it("ignores non-prefixed, prefix-only, bot-authored, and DM input", () => {
+  it("opens help for a bare prefix and ignores non-prefixed, bot-authored, and DM input", () => {
     assert.equal(parseCommand(messageInput("hello")), null);
-    assert.equal(parseCommand(messageInput("\\")), null);
-    assert.equal(parseCommand(messageInput("\\   ")), null);
+    assert.deepEqual(parseCommand(messageInput("\\")), { name: "help", argument: "" });
+    assert.deepEqual(parseCommand(messageInput("\\   ")), { name: "help", argument: "" });
     assert.equal(parseCommand(messageInput("\\ping", { authorIsBot: true })), null);
     assert.equal(parseCommand(messageInput("\\ping", { guildId: null })), null);
   });
@@ -91,15 +94,10 @@ describe("resolveCommandName", () => {
   });
 
   it("resolves every v1 alias", () => {
-    assert.deepEqual(["p", "s", "q", "np", "vol", "disconnect", "dc"].map(resolveCommandName), [
-      "play",
-      "skip",
-      "queue",
-      "nowplaying",
-      "volume",
-      "leave",
-      "leave",
-    ]);
+    assert.deepEqual(
+      ["p", "prev", "s", "q", "np", "vol", "disconnect", "dc"].map(resolveCommandName),
+      ["play", "previous", "skip", "queue", "nowplaying", "volume", "leave", "leave"],
+    );
   });
 
   it("rejects unknown and double-prefixed names", () => {
@@ -117,6 +115,8 @@ describe("dispatchCommand", () => {
     assert.equal(sent.length, 1);
     assert.match(sent[0] ?? "", /\\help/);
     assert.match(sent[0] ?? "", /\\ping/);
+    assert.match(sent[0] ?? "", /\\previous.*\|.*\\prev/);
+    assert.doesNotMatch(sent[0] ?? "", /`\s*\/\s*`/);
   });
 
   it("reports rounded Discord latency", async () => {
@@ -191,6 +191,7 @@ describe("dispatchCommand", () => {
     const commands = [
       { name: "pause", argument: "" },
       { name: "resume", argument: "" },
+      { name: "prev", argument: "" },
       { name: "s", argument: "" },
       { name: "stop", argument: "" },
       { name: "q", argument: "" },
@@ -212,9 +213,9 @@ describe("dispatchCommand", () => {
     assert.deepEqual(invocations, [
       { name: "pause" },
       { name: "resume" },
+      { name: "previous" },
       { name: "skip" },
       { name: "stop" },
-      { name: "nowplaying" },
       { name: "volume", volume: null },
       { name: "volume", volume: 0 },
       { name: "volume", volume: 100 },
@@ -226,12 +227,15 @@ describe("dispatchCommand", () => {
     ]);
     assert.deepEqual(
       sent,
-      commands.map((command) => (command.name === "q" ? "queue" : "ok")),
+      commands.map((command) =>
+        command.name === "q" ? "queue" : command.name === "np" ? "nowplaying" : "ok",
+      ),
     );
   });
 
   it("presents a valid queue directly without computing a discarded text response", async () => {
     let queuePresentations = 0;
+    let playerPresentations = 0;
     let controlCalls = 0;
     const testContext = context([]);
     testContext.presentQueue = async () => {
@@ -241,13 +245,17 @@ describe("dispatchCommand", () => {
       controlCalls += 1;
       return `control:${invocation.name}`;
     };
+    testContext.presentNowPlaying = async () => {
+      playerPresentations += 1;
+    };
 
     await dispatchCommand({ name: "queue", argument: "" }, testContext);
     await dispatchCommand({ name: "queue", argument: "unexpected" }, testContext);
     await dispatchCommand({ name: "nowplaying", argument: "" }, testContext);
 
     assert.equal(queuePresentations, 1);
-    assert.equal(controlCalls, 1);
+    assert.equal(playerPresentations, 1);
+    assert.equal(controlCalls, 0);
   });
 
   it("rejects malformed control arguments before invoking the adapter", async () => {
@@ -261,6 +269,7 @@ describe("dispatchCommand", () => {
     });
     for (const parsed of [
       { name: "pause", argument: "now" },
+      { name: "previous", argument: "again" },
       { name: "volume", argument: "-1" },
       { name: "volume", argument: "101" },
       { name: "volume", argument: "1.5" },

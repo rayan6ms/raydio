@@ -3,7 +3,7 @@ import type { Logger } from "pino";
 import type { Config } from "../config.js";
 import { errorFields } from "../utils.js";
 import type { LavalinkSessionInvalidationReason } from "./lavalink.js";
-import type { ResolveResult, TrackResolver } from "./resolver.js";
+import type { ResolveResult, SearchResolveResult, TrackResolver } from "./resolver.js";
 import { KeyedSerialExecutor } from "./serial.js";
 import {
   copyQueueTrack,
@@ -25,6 +25,7 @@ import type { VoiceAccessResult } from "./voice.js";
 
 const MILLISECONDS_PER_SECOND = 1_000;
 const FAILURE_LIMIT = 3;
+const HISTORY_LIMIT = 20;
 
 export type TrackEndReason = PlaybackEndReason;
 
@@ -45,6 +46,13 @@ export interface PlayRequest {
   readonly input: string;
   readonly requestedBy: TrackRequester;
   readonly validateCommit: () => VoiceAccessResult;
+}
+
+export interface SearchTracksRequest {
+  readonly guildId: string;
+  readonly intendedVoiceChannelId: string;
+  readonly input: string;
+  readonly resultLimit: number;
 }
 
 export interface PlaybackControlRequest {
@@ -88,6 +96,14 @@ export type PlayRequestResult =
   | { readonly kind: "play-failed" }
   | { readonly kind: "closed" };
 
+export type SearchTracksResult =
+  | SearchResolveResult
+  | { readonly kind: "pending-limit" }
+  | { readonly kind: "queue-full" }
+  | { readonly kind: "stale" }
+  | { readonly kind: "wrong-channel" }
+  | { readonly kind: "closed" };
+
 export type TransitionResult =
   | { readonly kind: "advanced"; readonly current: QueueTrack | null }
   | { readonly kind: "replayed"; readonly current: QueueTrack }
@@ -108,6 +124,7 @@ export interface MusicManager {
   getIdentities(): readonly GuildPlaybackIdentity[];
   getSnapshot(guildId: string): GuildPlaybackSnapshot | undefined;
   getPendingPlayRequestCount(guildId: string): number;
+  searchTracks(request: SearchTracksRequest): Promise<SearchTracksResult>;
   requestPlay(request: PlayRequest): Promise<PlayRequestResult>;
   setPaused(
     request: PlaybackControlRequest,
@@ -127,6 +144,7 @@ export interface MusicManager {
   ): Promise<ControlResult<QueueTrack | null>>;
   clearUpcoming(request: PlaybackControlRequest): Promise<ControlResult<number>>;
   shuffleUpcoming(request: PlaybackControlRequest): Promise<ControlResult<boolean>>;
+  previous(request: PlaybackControlRequest): Promise<ControlResult<QueueTrack | null>>;
   skip(request: PlaybackControlRequest): Promise<ControlResult<TransitionResult>>;
   stop(request: PlaybackControlRequest): Promise<ControlResult<"stopped" | "unchanged">>;
   leave(request: PlaybackControlRequest): Promise<ControlResult<boolean>>;
@@ -162,6 +180,7 @@ interface GuildPlaybackState {
   readonly playerToken: PlayerToken;
   current: QueueTrack | null;
   upcoming: QueueTrack[];
+  history: QueueTrack[];
   loopMode: LoopMode;
   volume: number;
   paused: boolean;
@@ -244,6 +263,7 @@ function copySnapshot(state: GuildPlaybackState): GuildPlaybackSnapshot {
     playerToken: state.playerToken,
     current: state.current === null ? null : copyQueueTrack(state.current),
     upcoming: state.upcoming.map(copyQueueTrack),
+    historyCount: state.history.length,
     loopMode: state.loopMode,
     volume: state.volume,
     paused: state.paused,
@@ -456,6 +476,13 @@ export function createMusicManager(
     }
   }
 
+  function rememberTrack(state: GuildPlaybackState, track: QueueTrack): void {
+    state.history.push(copyQueueTrack(track));
+    if (state.history.length > HISTORY_LIMIT) {
+      state.history.splice(0, state.history.length - HISTORY_LIMIT);
+    }
+  }
+
   function transitionCurrent(
     state: GuildPlaybackState,
     cause: "finished" | "manual-skip" | "failure",
@@ -481,6 +508,10 @@ export function createMusicManager(
         setCurrentAfterTransition(state, null);
         return { kind: "failure-guard" };
       }
+    }
+
+    if (cause !== "failure") {
+      rememberTrack(state, finished);
     }
 
     const next = state.upcoming.shift() ?? null;
@@ -766,6 +797,61 @@ export function createMusicManager(
       return coordinators.get(guildId)?.pendingPlayRequests ?? 0;
     },
 
+    async searchTracks(request) {
+      if (!acceptingPlayRequests) {
+        return { kind: "closed" };
+      }
+      if (
+        !Number.isSafeInteger(request.resultLimit) ||
+        request.resultLimit < 1 ||
+        request.resultLimit > 10
+      ) {
+        throw new RangeError("resultLimit must be a safe integer between 1 and 10");
+      }
+      const coordinator = coordinatorFor(request.guildId);
+      if (coordinator.pendingPlayRequests >= config.maxPendingPlayRequests) {
+        return { kind: "pending-limit" };
+      }
+
+      const capturedEpoch = coordinator.epoch;
+      coordinator.pendingPlayRequests += 1;
+      try {
+        const preflight = await stateExecutor.run(request.guildId, () => {
+          if (coordinator.epoch !== capturedEpoch) {
+            return { kind: "stale" } as const;
+          }
+          const state = states.get(request.guildId);
+          if (state !== undefined && state.voiceChannelId !== request.intendedVoiceChannelId) {
+            return { kind: "wrong-channel" } as const;
+          }
+          return queueSize(state) >= config.maxQueueTracks
+            ? ({ kind: "queue-full" } as const)
+            : ({ kind: "ready" } as const);
+        });
+        if (preflight.kind !== "ready") {
+          return preflight;
+        }
+
+        const result = await dependencies.resolver.search(request.input, request.resultLimit);
+        return stateExecutor.run(request.guildId, () => {
+          if (coordinator.epoch !== capturedEpoch) {
+            return { kind: "stale" } as const;
+          }
+          const state = states.get(request.guildId);
+          if (state !== undefined && state.voiceChannelId !== request.intendedVoiceChannelId) {
+            return { kind: "wrong-channel" } as const;
+          }
+          if (queueSize(state) >= config.maxQueueTracks) {
+            return { kind: "queue-full" } as const;
+          }
+          return result;
+        });
+      } finally {
+        coordinator.pendingPlayRequests -= 1;
+        discardCoordinatorIfIdle(request.guildId, coordinator);
+      }
+    },
+
     async requestPlay(request) {
       if (!acceptingPlayRequests) {
         return { kind: "closed" };
@@ -867,6 +953,7 @@ export function createMusicManager(
                 playerToken,
                 current: null,
                 upcoming: [],
+                history: [],
                 loopMode: "off",
                 volume: config.defaultVolume,
                 paused: false,
@@ -1078,6 +1165,52 @@ export function createMusicManager(
       });
     },
 
+    previous(request) {
+      const captured = states.get(request.guildId);
+      const current = captured?.current;
+
+      return stateExecutor.run(request.guildId, async () => {
+        const validation = validateControl(request);
+        if ("result" in validation) {
+          return validation.result;
+        }
+        const state = validation.state;
+        if (current === undefined || current === null || state.current !== current) {
+          return { kind: "ok", value: null };
+        }
+        const prior = state.history.pop();
+        if (prior === undefined) {
+          return { kind: "ok", value: null };
+        }
+
+        await stopPlaybackBestEffort(state);
+        if (state.loopMode === "queue") {
+          const loopedIndex = state.upcoming.findLastIndex(
+            (track) =>
+              track.encoded === prior.encoded && track.requestedBy.id === prior.requestedBy.id,
+          );
+          if (loopedIndex >= 0) {
+            state.upcoming.splice(loopedIndex, 1);
+          }
+        }
+        state.upcoming.unshift(current);
+        setCurrentAfterTransition(state, prior);
+        const result = await applyPlaybackEffect(state, {
+          kind: "advanced",
+          current: copyQueueTrack(prior),
+        });
+        return {
+          kind: "ok",
+          value:
+            result.kind === "advanced" || result.kind === "replayed"
+              ? result.current === null
+                ? null
+                : copyQueueTrack(result.current)
+              : null,
+        };
+      });
+    },
+
     skip(request) {
       const captured = states.get(request.guildId);
       const current = captured?.current;
@@ -1126,6 +1259,7 @@ export function createMusicManager(
         }
         state.current = null;
         state.upcoming = [];
+        state.history = [];
         state.paused = false;
         state.consecutiveFailures = 0;
         scheduleIdleTimer(state);

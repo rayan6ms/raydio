@@ -19,6 +19,7 @@ export interface GuildPlaybackSnapshot {
   readonly playerToken: PlayerToken;
   readonly current: QueueTrack | null;
   readonly upcoming: readonly QueueTrack[];
+  readonly historyCount: number;
   readonly loopMode: LoopMode;
   readonly volume: number;
   readonly paused: boolean;

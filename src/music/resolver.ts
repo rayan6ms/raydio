@@ -53,8 +53,19 @@ export type ResolveResult =
   | { readonly kind: "unavailable" }
   | { readonly kind: "unsupported-url" };
 
+export type SearchResolveResult =
+  | {
+      readonly kind: "choices";
+      readonly source: Exclude<ResolutionSource, "direct">;
+      readonly tracks: readonly ResolvedTrack[];
+      readonly rejectedTrackCount: number;
+    }
+  | { readonly kind: "direct-input" }
+  | Exclude<ResolveResult, { readonly kind: "tracks" }>;
+
 export interface TrackResolver {
   resolve(input: string, availableCapacity: number): Promise<ResolveResult>;
+  search(input: string, resultLimit: number): Promise<SearchResolveResult>;
 }
 
 type ResolverConfig = Pick<
@@ -62,7 +73,7 @@ type ResolverConfig = Pick<
   "allowLivestreams" | "maxPlaylistTracks" | "maxQueueTracks" | "maxTrackDurationHours"
 >;
 
-type ResolutionMode = "playlist" | "single";
+type ResolutionMode = "playlist" | "search" | "single";
 
 interface ResolverLimits {
   readonly allowLivestreams: boolean;
@@ -132,7 +143,12 @@ function normalizeTracks(
   let suitableTrackCount = 0;
 
   for (const candidate of candidates) {
-    if (!isSuitableTrack(candidate, limits)) {
+    if (
+      !isSuitableTrack(candidate, limits) ||
+      (mode === "search" &&
+        (candidate.info.sourceName !== "youtube" ||
+          !/^[A-Za-z0-9_-]{1,128}$/.test(candidate.info.identifier)))
+    ) {
       rejectedTrackCount += 1;
       continue;
     }
@@ -195,7 +211,9 @@ function normalizeResponse(
   const resultLimit =
     mode === "playlist"
       ? Math.min(availableCapacity, limits.maxPlaylistTracks)
-      : Math.min(availableCapacity, 1);
+      : mode === "single"
+        ? Math.min(availableCapacity, 1)
+        : availableCapacity;
   const normalized = normalizeTracks(responseTracks(response), resultLimit, limits, mode);
 
   if (normalized.tracks.length === 0) {
@@ -314,6 +332,68 @@ export function createTrackResolver(
         limits,
         logger,
       );
+    },
+
+    async search(input: string, resultLimit: number): Promise<SearchResolveResult> {
+      if (!Number.isSafeInteger(resultLimit) || resultLimit < 1 || resultLimit > 10) {
+        throw new RangeError("resultLimit must be a safe integer between 1 and 10");
+      }
+
+      const playInput = classifyPlayInput(input);
+      if (playInput.kind === "unsupported-url") {
+        return { kind: "unsupported-url" };
+      }
+      if (playInput.kind === "youtube-url") {
+        return { kind: "direct-input" };
+      }
+      if (playInput.query.length === 0) {
+        return { kind: "no-match", reason: "empty" };
+      }
+
+      const node = nodeProvider.getReadyNode();
+      if (node === undefined) {
+        return { kind: "unavailable" };
+      }
+
+      const musicResult = await resolveIdentifier(
+        node.rest,
+        `ytmsearch:${playInput.query}`,
+        "youtube-music-search",
+        "search",
+        resultLimit,
+        limits,
+        logger,
+      );
+      if (musicResult.kind === "tracks") {
+        return {
+          kind: "choices",
+          source: "youtube-music-search",
+          tracks: musicResult.tracks,
+          rejectedTrackCount: musicResult.rejectedTrackCount,
+        };
+      }
+      if (musicResult.kind !== "no-match") {
+        return musicResult;
+      }
+
+      const youtubeResult = await resolveIdentifier(
+        node.rest,
+        `ytsearch:${playInput.query}`,
+        "youtube-search",
+        "search",
+        resultLimit,
+        limits,
+        logger,
+      );
+      if (youtubeResult.kind === "tracks") {
+        return {
+          kind: "choices",
+          source: "youtube-search",
+          tracks: youtubeResult.tracks,
+          rejectedTrackCount: youtubeResult.rejectedTrackCount,
+        };
+      }
+      return youtubeResult;
     },
   };
 }

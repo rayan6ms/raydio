@@ -4,6 +4,7 @@ export const COMMAND_NAMES = [
   "play",
   "pause",
   "resume",
+  "previous",
   "skip",
   "stop",
   "queue",
@@ -22,6 +23,7 @@ export type CommandName = (typeof COMMAND_NAMES)[number];
 
 export const COMMAND_ALIASES = [
   ["p", "play"],
+  ["prev", "previous"],
   ["s", "skip"],
   ["q", "queue"],
   ["np", "nowplaying"],
@@ -36,7 +38,7 @@ export type ControlCommandName = Exclude<CommandName, "help" | "ping" | "play">;
 
 export type ControlCommandInvocation =
   | { readonly name: "queue" }
-  | { readonly name: "pause" | "resume" | "skip" | "stop" | "nowplaying" }
+  | { readonly name: "pause" | "resume" | "previous" | "skip" | "stop" | "nowplaying" }
   | { readonly name: "shuffle" | "clear" | "leave" }
   | { readonly name: "volume"; readonly volume: number | null }
   | { readonly name: "loop"; readonly mode: "off" | "track" | "queue" }
@@ -44,21 +46,28 @@ export type ControlCommandInvocation =
 
 export type ExecutableControlCommandInvocation = Exclude<
   ControlCommandInvocation,
-  { readonly name: "queue" }
+  { readonly name: "nowplaying" | "queue" }
 >;
 
 const HELP_MESSAGE = [
-  "Raydio commands:",
-  "`\\play <song or YouTube URL>` (`\\p`) — play or queue music",
-  "`\\pause` / `\\resume` — pause or resume",
-  "`\\skip` (`\\s`) / `\\stop` — skip or stop and clear",
-  "`\\queue` (`\\q`) / `\\nowplaying` (`\\np`) — playback details",
-  "`\\volume [0-100]` (`\\vol`) — show or set volume",
+  "**Raydio commands**",
+  "**Start and view**",
+  "`\\play <song or YouTube URL>` | `\\p` — choose, play, or queue music",
+  "`\\nowplaying` | `\\np` — show the player and controls",
+  "`\\queue` | `\\q` — show the current and upcoming tracks",
+  "**Playback**",
+  "`\\pause` | `\\resume` — pause or resume",
+  "`\\previous` | `\\prev` — return to the previous track",
+  "`\\skip` | `\\s` — play the next track",
+  "`\\stop` — stop and clear the queue",
+  "**Queue and settings**",
+  "`\\shuffle` | `\\remove <index>` | `\\clear` — edit upcoming tracks",
+  "`\\volume [0-100]` | `\\vol` — show or set volume",
   "`\\loop <off|track|queue>` — set looping",
-  "`\\shuffle` / `\\remove <index>` / `\\clear` — edit upcoming tracks",
-  "`\\leave` (`\\disconnect`, `\\dc`) — disconnect",
-  "`\\help` — show this command list",
-  "`\\ping` — show Discord latency and Lavalink readiness",
+  "**Session and utility**",
+  "`\\leave` | `\\disconnect` | `\\dc` — disconnect and clear",
+  "`\\ping` — show Discord and Lavalink readiness",
+  "`\\help` | `\\` — show this menu",
 ].join("\n");
 
 export interface CommandMessageInput {
@@ -76,8 +85,9 @@ export interface CommandContext {
   readonly discordLatencyMs: number;
   readonly discordReady: boolean;
   readonly lavalinkReady: boolean;
-  play(input: string): Promise<string>;
+  play(input: string): Promise<string | null>;
   control(invocation: ExecutableControlCommandInvocation): Promise<string>;
+  presentNowPlaying(): Promise<void>;
   presentQueue(): Promise<void>;
   send(content: string): Promise<void>;
 }
@@ -91,7 +101,7 @@ export function parseCommand(input: CommandMessageInput): ParsedCommand | null {
 
   const body = input.content.slice(PREFIX.length).trim();
   if (!body) {
-    return null;
+    return { name: "help", argument: "" };
   }
 
   const match = /^(\S+)(?:\s+([\s\S]*))?$/.exec(body);
@@ -134,6 +144,7 @@ function parseControlInvocation(
   if (
     commandName === "pause" ||
     commandName === "resume" ||
+    commandName === "previous" ||
     commandName === "skip" ||
     commandName === "stop" ||
     commandName === "queue" ||
@@ -178,6 +189,7 @@ function requiresReadyPlayer(invocation: ControlCommandInvocation): boolean {
   return (
     invocation.name === "pause" ||
     invocation.name === "resume" ||
+    invocation.name === "previous" ||
     invocation.name === "skip" ||
     (invocation.name === "volume" && invocation.volume !== null)
   );
@@ -215,7 +227,10 @@ export async function dispatchCommand(
       await context.send("Music service is temporarily unavailable.");
       return "unavailable";
     }
-    await context.send(await context.play(parsed.argument));
+    const response = await context.play(parsed.argument);
+    if (response !== null) {
+      await context.send(response);
+    }
     return "handled";
   }
 
@@ -230,6 +245,10 @@ export async function dispatchCommand(
   }
   if (invocation.name === "queue") {
     await context.presentQueue();
+    return "handled";
+  }
+  if (invocation.name === "nowplaying") {
+    await context.presentNowPlaying();
     return "handled";
   }
   await context.send(await context.control(invocation));

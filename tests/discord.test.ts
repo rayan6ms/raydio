@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import { setImmediate as waitForImmediate } from "node:timers/promises";
 
 import {
+  ChannelType,
   type Client,
   Events,
   GatewayIntentBits,
@@ -18,18 +19,22 @@ import {
   DISCORD_INTENTS,
   formatNowPlayingSnapshot,
   formatPlayRequestResult,
+  handlePlayerButtonInteraction,
   handleQueueButtonInteraction,
+  handleSearchInteraction,
   hasHumanVoiceMember,
   SAFE_ALLOWED_MENTIONS,
 } from "../src/discord.js";
 import { createLogger } from "../src/logger.js";
 import type { LavalinkReadiness } from "../src/music/lavalink.js";
 import type { GuildPlaybackSnapshot, QueueTrack } from "../src/music/state.js";
+import { createNowPlayingViewController, isNowPlayingCustomId } from "../src/now-playing-view.js";
 import {
   createQueueViewController,
   formatDuration,
   formatQueueSnapshot,
 } from "../src/queue-view.js";
+import { createSearchViewController, isSearchViewCustomId } from "../src/search-view.js";
 
 const unavailableLavalink: LavalinkReadiness = {
   getStatus: () => "unavailable",
@@ -40,6 +45,7 @@ type TestMusicController = Parameters<typeof createDiscordService>[3];
 
 function musicController(overrides: Partial<TestMusicController> = {}): TestMusicController {
   return {
+    searchTracks: async () => ({ kind: "closed" }),
     requestPlay: async () => ({ kind: "closed" }),
     getIdentity: () => undefined,
     getIdentities: () => [],
@@ -52,6 +58,7 @@ function musicController(overrides: Partial<TestMusicController> = {}): TestMusi
     removeUpcoming: async () => ({ kind: "rejected", reason: "no-session" }),
     clearUpcoming: async () => ({ kind: "rejected", reason: "no-session" }),
     shuffleUpcoming: async () => ({ kind: "rejected", reason: "no-session" }),
+    previous: async () => ({ kind: "rejected", reason: "no-session" }),
     skip: async () => ({ kind: "rejected", reason: "no-session" }),
     stop: async () => ({ kind: "rejected", reason: "no-session" }),
     leave: async () => ({ kind: "rejected", reason: "no-session" }),
@@ -82,6 +89,7 @@ function playbackSnapshot(overrides: Partial<GuildPlaybackSnapshot> = {}): Guild
     playerToken: Symbol("player"),
     current: queueTrack("current"),
     upcoming: [],
+    historyCount: 0,
     loopMode: "off",
     volume: 70,
     paused: false,
@@ -554,5 +562,271 @@ describe("playback presentation", () => {
     assert.match(live, /Progress: LIVE/);
     assert.equal(formatNowPlayingSnapshot(undefined), "Nothing is playing.");
     assert.equal(formatQueueSnapshot(undefined), "The queue is empty.");
+  });
+
+  it("renders session-bound player controls with bounded Previous availability", () => {
+    const controller = createNowPlayingViewController(() => "player-session");
+    const snapshot = playbackSnapshot({ historyCount: 0 });
+    const view = controller.render(snapshot);
+    const components = view.components.flatMap((row) => row.toJSON().components);
+    const previous = components.find(
+      (component) => "label" in component && component.label === "Previous",
+    );
+    const pause = components.find(
+      (component) => "label" in component && component.label === "Pause",
+    );
+
+    assert.match(view.content, /^\*\*Now playing\*\*/);
+    assert.equal(previous !== undefined && "disabled" in previous && previous.disabled, true);
+    assert.ok(pause !== undefined && "custom_id" in pause);
+    if (pause === undefined || !("custom_id" in pause)) {
+      throw new Error("Expected a pause control custom ID");
+    }
+    assert.equal(isNowPlayingCustomId(pause.custom_id), true);
+    assert.deepEqual(controller.resolve(snapshot.guildId, pause.custom_id, snapshot), {
+      kind: "ready",
+      action: "pause",
+    });
+
+    const replacement = playbackSnapshot({ playerToken: Symbol("replacement"), historyCount: 1 });
+    assert.deepEqual(controller.resolve(snapshot.guildId, pause.custom_id, replacement), {
+      kind: "stale",
+    });
+    const resumed = controller.render({ ...replacement, paused: true });
+    assert.match(JSON.stringify(resumed.components.map((row) => row.toJSON())), /Resume/);
+    assert.match(JSON.stringify(resumed.components.map((row) => row.toJSON())), /Previous/);
+  });
+
+  it("bounds requester-only search selections and expires stale menus", () => {
+    let currentTime = 1_000;
+    let session = 0;
+    const controller = createSearchViewController(
+      () => {
+        session += 1;
+        return `search-${session}`;
+      },
+      () => currentTime,
+    );
+    const tracks = Array.from({ length: 7 }, (_, index) => queueTrack(`choice-${index + 1}`));
+    const view = controller.render({
+      guildId: "guild-1",
+      channelId: "text-1",
+      userId: "user-1",
+      voiceChannelId: "voice-1",
+      query: "**query** @everyone",
+      tracks,
+    });
+    const menu = view.components[0]?.toJSON().components[0];
+    assert.ok(menu !== undefined && "custom_id" in menu && "options" in menu);
+    if (menu === undefined || !("custom_id" in menu) || !("options" in menu)) {
+      throw new Error("Expected a search select menu");
+    }
+    assert.equal(isSearchViewCustomId(menu.custom_id), true);
+    assert.equal(menu.options.length, 5);
+    assert.match(view.content, /\\\*\\\*query\\\*\\\*/);
+
+    assert.deepEqual(
+      controller.resolve({
+        customId: menu.custom_id,
+        guildId: "guild-1",
+        channelId: "text-1",
+        userId: "other-user",
+        values: ["1"],
+      }),
+      { kind: "forbidden" },
+    );
+    const selected = controller.resolve({
+      customId: menu.custom_id,
+      guildId: "guild-1",
+      channelId: "text-1",
+      userId: "user-1",
+      values: ["1"],
+    });
+    assert.equal(selected.kind, "selected");
+    if (selected.kind === "selected") {
+      assert.equal(selected.track.identifier, "choice-2");
+      assert.equal(selected.voiceChannelId, "voice-1");
+    }
+    assert.deepEqual(
+      controller.resolve({
+        customId: menu.custom_id,
+        guildId: "guild-1",
+        channelId: "text-1",
+        userId: "user-1",
+        values: ["0"],
+      }),
+      { kind: "stale" },
+    );
+
+    const expiring = controller.render({
+      guildId: "guild-1",
+      channelId: "text-1",
+      userId: "user-1",
+      voiceChannelId: "voice-1",
+      query: "expires",
+      tracks: [tracks[0] as QueueTrack],
+    });
+    const expiringMenu = expiring.components[0]?.toJSON().components[0];
+    assert.ok(expiringMenu !== undefined && "custom_id" in expiringMenu);
+    if (expiringMenu === undefined || !("custom_id" in expiringMenu)) {
+      throw new Error("Expected an expiring search menu");
+    }
+    currentTime += 60_000;
+    assert.deepEqual(
+      controller.resolve({
+        customId: expiringMenu.custom_id,
+        guildId: "guild-1",
+        channelId: "text-1",
+        userId: "user-1",
+        values: ["0"],
+      }),
+      { kind: "stale" },
+    );
+  });
+
+  it("applies player buttons through the same voice-checked manager controls", async () => {
+    const playerViews = createNowPlayingViewController(() => "player-session");
+    let snapshot = playbackSnapshot();
+    const pause = playerViews
+      .render(snapshot)
+      .components.flatMap((row) => row.toJSON().components)
+      .find((component) => "label" in component && component.label === "Pause");
+    assert.ok(pause !== undefined && "custom_id" in pause);
+    if (pause === undefined || !("custom_id" in pause)) {
+      throw new Error("Expected a pause button");
+    }
+
+    const voiceChannel = {
+      id: "voice-1",
+      type: ChannelType.GuildVoice,
+      full: false,
+      permissionsFor: () => ({ has: () => true }),
+      isVoiceBased: () => true,
+      members: new Map([["user-1", { user: { bot: false } }]]),
+    };
+    const member = { voice: { channel: voiceChannel } };
+    const edits: unknown[] = [];
+    const interaction = {
+      customId: pause.custom_id,
+      guildId: "guild-1",
+      channelId: "text-1",
+      user: { id: "user-1" },
+      guild: {
+        members: { cache: new Map([["user-1", member]]), me: { voice: { channelId: "voice-1" } } },
+        channels: { cache: new Map([["voice-1", voiceChannel]]) },
+      },
+      inCachedGuild: () => true,
+      deferUpdate: async () => undefined,
+      editReply: async (options: unknown) => {
+        edits.push(options);
+      },
+      followUp: async () => undefined,
+      reply: async () => undefined,
+      update: async () => undefined,
+    };
+    let requestedPause: boolean | null = null;
+    await handlePlayerButtonInteraction(
+      interaction as unknown as Parameters<typeof handlePlayerButtonInteraction>[0],
+      musicController({
+        getIdentity: () => snapshot,
+        getSnapshot: () => snapshot,
+        async setPaused(_request, paused) {
+          requestedPause = paused;
+          snapshot = { ...snapshot, paused };
+          return { kind: "ok", value: "updated" };
+        },
+      }),
+      createQueueViewController(),
+      playerViews,
+      () => undefined,
+    );
+    assert.equal(requestedPause, true);
+    assert.match(JSON.stringify(edits), /Resume/);
+    assert.match(JSON.stringify(edits), /Paused/);
+  });
+
+  it("commits requester search selection as an exact YouTube result", async () => {
+    const searchViews = createSearchViewController(() => "search-session");
+    const playerViews = createNowPlayingViewController(() => "player-session");
+    const resultTrack = queueTrack("selected");
+    const search = searchViews.render({
+      guildId: "guild-1",
+      channelId: "text-1",
+      userId: "user-1",
+      voiceChannelId: "voice-1",
+      query: "selected song",
+      tracks: [resultTrack],
+    });
+    const menu = search.components[0]?.toJSON().components[0];
+    assert.ok(menu !== undefined && "custom_id" in menu);
+    if (menu === undefined || !("custom_id" in menu)) {
+      throw new Error("Expected a search menu");
+    }
+
+    const voiceChannel = {
+      id: "voice-1",
+      type: ChannelType.GuildVoice,
+      full: false,
+      permissionsFor: () => ({ has: () => true }),
+      isVoiceBased: () => true,
+      members: new Map([["user-1", { user: { bot: false } }]]),
+    };
+    const member = { displayName: "Requester", voice: { channel: voiceChannel } };
+    const snapshot = playbackSnapshot({ current: resultTrack });
+    const edits: unknown[] = [];
+    let requestedInput = "";
+    let registered = false;
+    const editedMessage = { id: "message-1", edit: async () => undefined };
+    const interaction = {
+      customId: menu.custom_id,
+      values: ["0"],
+      guildId: "guild-1",
+      channelId: "text-1",
+      user: { id: "user-1", username: "requester" },
+      guild: {
+        shardId: 0,
+        members: { cache: new Map([["user-1", member]]), me: { voice: { channelId: "voice-1" } } },
+        channels: { cache: new Map([["voice-1", voiceChannel]]) },
+      },
+      inCachedGuild: () => true,
+      isStringSelectMenu: () => true,
+      deferUpdate: async () => undefined,
+      editReply: async (options: unknown) => {
+        edits.push(options);
+        return editedMessage;
+      },
+      reply: async () => undefined,
+      update: async () => undefined,
+    };
+    await handleSearchInteraction(
+      interaction as unknown as Parameters<typeof handleSearchInteraction>[0],
+      musicController({
+        getIdentity: () => snapshot,
+        getSnapshot: () => snapshot,
+        async requestPlay(request) {
+          requestedInput = request.input;
+          return {
+            kind: "queued",
+            addedTrackCount: 1,
+            becameCurrent: true,
+            rejectedTrackCount: 0,
+            truncatedTrackCount: 0,
+            commitTruncatedTrackCount: 0,
+            playlistName: null,
+            firstTrack: resultTrack,
+          };
+        },
+        updateAloneStatus: async () => true,
+      }),
+      searchViews,
+      playerViews,
+      () => {
+        registered = true;
+      },
+    );
+    assert.equal(requestedInput, "https://www.youtube.com/watch?v=selected");
+    assert.equal(registered, true);
+    assert.match(JSON.stringify(edits), /Now playing/);
+    assert.match(JSON.stringify(edits), /Previous/);
   });
 });

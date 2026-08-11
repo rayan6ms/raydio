@@ -359,6 +359,63 @@ describe("createTrackResolver", () => {
     });
   });
 
+  it("returns a bounded suitable search choice list and preserves source order", async () => {
+    const rest = new FakeRest(
+      search(
+        track("one"),
+        track("bad id"),
+        track("stream", { isStream: true }),
+        track("two"),
+        track("three"),
+        track("four"),
+        track("five"),
+        track("six"),
+      ),
+    );
+    const resolver = createTrackResolver(
+      readyProvider(rest),
+      defaultConfig,
+      createLogger("silent"),
+    );
+
+    const result = await resolver.search("ordered choices", 5);
+
+    assert.equal(result.kind, "choices");
+    if (result.kind === "choices") {
+      assert.deepEqual(
+        result.tracks.map((item) => item.identifier),
+        ["one", "two", "three", "four", "five"],
+      );
+      assert.equal(result.rejectedTrackCount, 2);
+    }
+    assert.deepEqual(rest.calls, ["ytmsearch:ordered choices"]);
+  });
+
+  it("keeps direct URLs immediate and falls back for an empty Music choice search", async () => {
+    const directResolver = createTrackResolver(
+      readyProvider(new FakeRest()),
+      defaultConfig,
+      createLogger("silent"),
+    );
+    assert.deepEqual(await directResolver.search("https://youtube.com/watch?v=direct", 5), {
+      kind: "direct-input",
+    });
+
+    const rest = new FakeRest(empty, search(track("fallback")));
+    const resolver = createTrackResolver(
+      readyProvider(rest),
+      defaultConfig,
+      createLogger("silent"),
+    );
+    const result = await resolver.search("fallback choices", 5);
+    assert.equal(result.kind, "choices");
+    if (result.kind === "choices") {
+      assert.equal(result.source, "youtube-search");
+      assert.equal(result.tracks[0]?.identifier, "fallback");
+    }
+    assert.deepEqual(rest.calls, ["ytmsearch:fallback choices", "ytsearch:fallback choices"]);
+  });
+
   it("rejects invalid capacity and unsafe configuration as programmer errors", async () => {
     const rest = new FakeRest(search(track("unused")));
     const resolver = createTrackResolver(
@@ -369,6 +426,9 @@ describe("createTrackResolver", () => {
 
     for (const capacity of [-1, 11, 1.5, Number.POSITIVE_INFINITY]) {
       await assert.rejects(resolver.resolve("song", capacity), RangeError);
+    }
+    for (const limit of [0, 11, 1.5, Number.POSITIVE_INFINITY]) {
+      await assert.rejects(resolver.search("song", limit), RangeError);
     }
     assert.deepEqual(rest.calls, []);
 
