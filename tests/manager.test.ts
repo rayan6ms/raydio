@@ -566,6 +566,37 @@ describe("createMusicManager", () => {
     assert.deepEqual(manager.getSnapshot("guild-1")?.upcoming, []);
   });
 
+  it("moves upcoming tracks and jumps exactly once without discarding the others", async () => {
+    const resolver = new FakeResolver(async () =>
+      tracks(track("a"), track("b"), track("c"), track("d")),
+    );
+    const transport = new FakeTransport();
+    const manager = managerWith(resolver, { transport });
+    await queue(manager, "playlist");
+
+    const moved = controlValue(await manager.moveUpcoming(control(manager), 3, 1));
+    assert.equal(moved?.track.identifier, "d");
+    assert.equal(moved?.changed, true);
+    assert.deepEqual(
+      manager.getSnapshot("guild-1")?.upcoming.map((item) => item.identifier),
+      ["d", "b", "c"],
+    );
+    assert.equal(controlValue(await manager.moveUpcoming(control(manager), 1, 1))?.changed, false);
+    assert.equal(controlValue(await manager.moveUpcoming(control(manager), 9, 1)), null);
+
+    const jumped = controlValue(await manager.jump(control(manager), 3));
+    assert.equal(jumped?.kind, "advanced");
+    assert.equal(jumped?.kind === "advanced" ? jumped.current?.identifier : null, "c");
+    assert.equal(manager.getSnapshot("guild-1")?.current?.identifier, "c");
+    assert.deepEqual(
+      manager.getSnapshot("guild-1")?.upcoming.map((item) => item.identifier),
+      ["d", "b"],
+    );
+    assert.equal(manager.getSnapshot("guild-1")?.historyCount, 1);
+    assert.deepEqual(transport.sessions[0]?.played, ["encoded-a", "encoded-c"]);
+    assert.equal(controlValue(await manager.jump(control(manager), 9)), null);
+  });
+
   it("bounds search preparation and rechecks guild voice and queue state", async () => {
     const resolver = new FakeResolver(async () =>
       tracks(track("one"), track("two"), track("three"), track("four"), track("five")),
@@ -798,12 +829,12 @@ describe("createMusicManager", () => {
       {
         channelId: "text-1",
         content:
-          "Playback ended because Lavalink became unavailable. Use `\\play` after it recovers.",
+          "Playback ended because Lavalink became unavailable. Use `/play` after it recovers.",
       },
       {
         channelId: "text-2",
         content:
-          "Playback ended because Lavalink became unavailable. Use `\\play` after it recovers.",
+          "Playback ended because Lavalink became unavailable. Use `/play` after it recovers.",
       },
     ]);
 
@@ -811,7 +842,7 @@ describe("createMusicManager", () => {
     assert.equal(await manager.handleLavalinkInvalidation("session-lost"), 1);
     assert.deepEqual(notifications.at(-1), {
       channelId: "text-1",
-      content: "Playback ended because Lavalink restarted. Use `\\play` to start again.",
+      content: "Playback ended because Lavalink restarted. Use `/play` to start again.",
     });
   });
 

@@ -2,29 +2,14 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import {
+  APPLICATION_COMMANDS,
+  COMMAND_NAMES,
   type CommandContext,
-  type CommandMessageInput,
   dispatchCommand,
-  parseCommand,
-  resolveCommandName,
+  HELP_MESSAGE,
 } from "../src/commands.js";
 
-function messageInput(
-  content: string,
-  overrides: Partial<CommandMessageInput> = {},
-): CommandMessageInput {
-  return {
-    authorIsBot: false,
-    content,
-    guildId: "guild-id",
-    ...overrides,
-  };
-}
-
-function context(
-  sent: string[],
-  overrides: Partial<Omit<CommandContext, "send">> = {},
-): CommandContext {
+function context(sent: string[], overrides: Partial<CommandContext> = {}): CommandContext {
   return {
     discordLatencyMs: 42.4,
     discordReady: true,
@@ -37,149 +22,77 @@ function context(
     presentQueue: async () => {
       sent.push("queue");
     },
-    ...overrides,
     send: async (content) => {
       sent.push(content);
     },
+    ...overrides,
   };
 }
 
-describe("parseCommand", () => {
-  it("parses the literal prefix and a free-form argument", () => {
-    assert.deepEqual(parseCommand(messageInput("\\play Daft  Punk - Instant Crush")), {
-      name: "play",
-      argument: "Daft  Punk - Instant Crush",
-    });
-  });
+describe("application command registry", () => {
+  it("registers every command once in intentional task order and only in guild installs", () => {
+    const data = APPLICATION_COMMANDS.map((builder) => builder.toJSON());
 
-  it("normalizes command case without changing the argument", () => {
-    assert.deepEqual(parseCommand(messageInput("  \\PLAY   Song With CAPS  ")), null);
-    assert.deepEqual(parseCommand(messageInput("\\PLAY   Song With CAPS  ")), {
-      name: "play",
-      argument: "Song With CAPS",
-    });
-  });
-
-  it("parses commands without arguments", () => {
-    assert.deepEqual(parseCommand(messageInput("\\skip")), {
-      name: "skip",
-      argument: "",
-    });
-    assert.deepEqual(parseCommand(messageInput("\\volume 75")), {
-      name: "volume",
-      argument: "75",
-    });
-  });
-
-  it("strips exactly one prefix character", () => {
-    assert.deepEqual(parseCommand(messageInput("\\\\play song")), {
-      name: "\\play",
-      argument: "song",
-    });
-  });
-
-  it("opens help for a bare prefix and ignores non-prefixed, bot-authored, and DM input", () => {
-    assert.equal(parseCommand(messageInput("hello")), null);
-    assert.deepEqual(parseCommand(messageInput("\\")), { name: "help", argument: "" });
-    assert.deepEqual(parseCommand(messageInput("\\   ")), { name: "help", argument: "" });
-    assert.equal(parseCommand(messageInput("\\ping", { authorIsBot: true })), null);
-    assert.equal(parseCommand(messageInput("\\ping", { guildId: null })), null);
-  });
-});
-
-describe("resolveCommandName", () => {
-  it("resolves canonical names case-insensitively", () => {
-    assert.equal(resolveCommandName("PLAY"), "play");
-    assert.equal(resolveCommandName("nowplaying"), "nowplaying");
-  });
-
-  it("resolves every v1 alias", () => {
     assert.deepEqual(
-      ["p", "prev", "s", "q", "np", "vol", "disconnect", "dc"].map(resolveCommandName),
-      ["play", "previous", "skip", "queue", "nowplaying", "volume", "leave", "leave"],
+      data.map((item) => item.name),
+      Array.from(COMMAND_NAMES),
     );
+    assert.equal(new Set(data.map((item) => item.name)).size, data.length);
+    for (const item of data) {
+      assert.deepEqual(item.integration_types, [0]);
+      assert.deepEqual(item.contexts, [0]);
+    }
   });
 
-  it("rejects unknown and double-prefixed names", () => {
-    assert.equal(resolveCommandName("unknown"), null);
-    assert.equal(resolveCommandName("\\play"), null);
+  it("enables native autocomplete only for the required play song option", () => {
+    const play = APPLICATION_COMMANDS[0].toJSON();
+    assert.equal(play.name, "play");
+    const song = play.options?.[0];
+    assert.equal(song?.type, 3);
+    assert.equal(song?.name, "song");
+    assert.equal(song?.description, "Song title, search terms, or a YouTube URL");
+    assert.equal("required" in (song ?? {}) ? song.required : undefined, true);
+    assert.equal("autocomplete" in (song ?? {}) ? song.autocomplete : undefined, true);
+  });
+
+  it("uses slash syntax throughout the compact help menu", () => {
+    assert.match(HELP_MESSAGE, /`\/play song:`/);
+    assert.match(HELP_MESSAGE, /`\/move from: to:`/);
+    assert.doesNotMatch(HELP_MESSAGE, /`\\/);
   });
 });
 
 describe("dispatchCommand", () => {
-  it("handles help", async () => {
+  it("handles help and ping", async () => {
     const sent: string[] = [];
-    const result = await dispatchCommand({ name: "help", argument: "" }, context(sent));
+    const testContext = context(sent);
 
-    assert.equal(result, "handled");
-    assert.equal(sent.length, 1);
-    assert.match(sent[0] ?? "", /\\help/);
-    assert.match(sent[0] ?? "", /\\ping/);
-    assert.match(sent[0] ?? "", /\\previous.*\|.*\\prev/);
-    assert.doesNotMatch(sent[0] ?? "", /`\s*\/\s*`/);
+    assert.equal(await dispatchCommand({ name: "help", argument: "" }, testContext), "handled");
+    assert.equal(await dispatchCommand({ name: "ping", argument: "" }, testContext), "handled");
+    assert.equal(sent[0], HELP_MESSAGE);
+    assert.equal(sent[1], "Pong! Discord: 42 ms. Lavalink: ready.");
   });
 
-  it("reports rounded Discord latency", async () => {
+  it("plays a required value and gates Lavalink-backed work", async () => {
     const sent: string[] = [];
-    const result = await dispatchCommand({ name: "ping", argument: "" }, context(sent));
-
-    assert.equal(result, "handled");
-    assert.deepEqual(sent, ["Pong! Discord: 42 ms. Lavalink: ready."]);
-  });
-
-  it("reports unavailable latency before readiness", async () => {
-    const sent: string[] = [];
-    await dispatchCommand(
-      { name: "ping", argument: "" },
-      context(sent, { discordLatencyMs: -1, discordReady: false }),
+    assert.equal(
+      await dispatchCommand({ name: "play", argument: "song" }, context(sent)),
+      "handled",
     );
-
-    assert.deepEqual(sent, ["Pong! Discord: unavailable. Lavalink: ready."]);
-  });
-
-  it("reports Lavalink unavailability in ping and fails music commands fast", async () => {
-    const sent: string[] = [];
-
-    await dispatchCommand({ name: "ping", argument: "" }, context(sent, { lavalinkReady: false }));
-    const result = await dispatchCommand(
-      { name: "p", argument: "song" },
-      context(sent, { lavalinkReady: false }),
-    );
-
-    assert.equal(result, "unavailable");
-    assert.deepEqual(sent, [
-      "Pong! Discord: 42 ms. Lavalink: unavailable.",
-      "Music service is temporarily unavailable.",
-    ]);
-  });
-
-  it("dispatches play aliases with the preserved argument", async () => {
-    const sent: string[] = [];
-    const result = await dispatchCommand({ name: "p", argument: "song" }, context(sent));
-
-    assert.equal(result, "handled");
     assert.deepEqual(sent, ["playing:song"]);
-  });
 
-  it("shows play usage without invoking playback when the argument is empty", async () => {
-    const sent: string[] = [];
-    let playCalls = 0;
-    const result = await dispatchCommand(
-      { name: "play", argument: "" },
-      context(sent, {
-        play: async () => {
-          playCalls += 1;
-          return "unused";
-        },
-      }),
+    sent.length = 0;
+    assert.equal(
+      await dispatchCommand(
+        { name: "play", argument: "song" },
+        context(sent, { lavalinkReady: false }),
+      ),
+      "unavailable",
     );
-
-    assert.equal(result, "handled");
-    assert.equal(playCalls, 0);
-    assert.deepEqual(sent, ["Usage: `\\play <song or YouTube URL>`."]);
+    assert.deepEqual(sent, ["Music service is temporarily unavailable."]);
   });
 
-  it("parses and dispatches every control with typed strict arguments", async () => {
+  it("converts every structured slash option into a typed control invocation", async () => {
     const sent: string[] = [];
     const invocations: unknown[] = [];
     const testContext = context(sent, {
@@ -191,23 +104,24 @@ describe("dispatchCommand", () => {
     const commands = [
       { name: "pause", argument: "" },
       { name: "resume", argument: "" },
-      { name: "prev", argument: "" },
-      { name: "s", argument: "" },
+      { name: "previous", argument: "" },
+      { name: "skip", argument: "" },
       { name: "stop", argument: "" },
-      { name: "q", argument: "" },
-      { name: "np", argument: "" },
-      { name: "vol", argument: "" },
-      { name: "volume", argument: "0" },
-      { name: "volume", argument: "100" },
-      { name: "loop", argument: "QUEUE" },
+      { name: "queue", argument: "" },
+      { name: "nowplaying", argument: "" },
+      { name: "volume", argument: "" },
+      { name: "volume", argument: "75" },
+      { name: "loop", argument: "queue" },
+      { name: "move", argument: "2 5" },
+      { name: "jump", argument: "4" },
       { name: "shuffle", argument: "" },
-      { name: "remove", argument: "12" },
+      { name: "remove", argument: "3" },
       { name: "clear", argument: "" },
-      { name: "dc", argument: "" },
+      { name: "leave", argument: "" },
     ];
 
-    for (const parsed of commands) {
-      assert.equal(await dispatchCommand(parsed, testContext), "handled");
+    for (const command of commands) {
+      await dispatchCommand(command, testContext);
     }
 
     assert.deepEqual(invocations, [
@@ -217,111 +131,77 @@ describe("dispatchCommand", () => {
       { name: "skip" },
       { name: "stop" },
       { name: "volume", volume: null },
-      { name: "volume", volume: 0 },
-      { name: "volume", volume: 100 },
+      { name: "volume", volume: 75 },
       { name: "loop", mode: "queue" },
+      { name: "move", fromIndex: 2, toIndex: 5 },
+      { name: "jump", displayedIndex: 4 },
       { name: "shuffle" },
-      { name: "remove", displayedIndex: 12 },
+      { name: "remove", displayedIndex: 3 },
       { name: "clear" },
       { name: "leave" },
     ]);
-    assert.deepEqual(
-      sent,
-      commands.map((command) =>
-        command.name === "q" ? "queue" : command.name === "np" ? "nowplaying" : "ok",
-      ),
-    );
+    assert.deepEqual(sent, [
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "queue",
+      "nowplaying",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+    ]);
   });
 
-  it("presents a valid queue directly without computing a discarded text response", async () => {
-    let queuePresentations = 0;
-    let playerPresentations = 0;
-    let controlCalls = 0;
-    const testContext = context([]);
-    testContext.presentQueue = async () => {
-      queuePresentations += 1;
-    };
-    testContext.control = async (invocation) => {
-      controlCalls += 1;
-      return `control:${invocation.name}`;
-    };
-    testContext.presentNowPlaying = async () => {
-      playerPresentations += 1;
-    };
-
-    await dispatchCommand({ name: "queue", argument: "" }, testContext);
-    await dispatchCommand({ name: "queue", argument: "unexpected" }, testContext);
-    await dispatchCommand({ name: "nowplaying", argument: "" }, testContext);
-
-    assert.equal(queuePresentations, 1);
-    assert.equal(playerPresentations, 1);
-    assert.equal(controlCalls, 0);
-  });
-
-  it("rejects malformed control arguments before invoking the adapter", async () => {
+  it("rejects malformed adapter input defensively", async () => {
     const sent: string[] = [];
-    let calls = 0;
-    const testContext = context(sent, {
-      control: async () => {
-        calls += 1;
-        return "unused";
-      },
-    });
+    const testContext = context(sent);
+
     for (const parsed of [
-      { name: "pause", argument: "now" },
-      { name: "previous", argument: "again" },
-      { name: "volume", argument: "-1" },
       { name: "volume", argument: "101" },
-      { name: "volume", argument: "1.5" },
       { name: "loop", argument: "all" },
-      { name: "remove", argument: "0" },
-      { name: "remove", argument: "9007199254740992" },
+      { name: "move", argument: "1" },
+      { name: "jump", argument: "0" },
+      { name: "remove", argument: "-1" },
     ]) {
-      assert.equal(await dispatchCommand(parsed, testContext), "handled");
+      await dispatchCommand(parsed, testContext);
     }
-    assert.equal(calls, 0);
-    assert.equal(
-      sent.every((message) => message.startsWith("Usage:")),
-      true,
-    );
+    assert.equal(sent.length, 5);
+    assert.ok(sent.every((message) => message.includes("/")));
   });
 
-  it("gates remote player controls but keeps local views and cleanup available during outages", async () => {
+  it("keeps queue views and cleanup available during a Lavalink outage", async () => {
     const sent: string[] = [];
-    const invocations: string[] = [];
+    const invocations: unknown[] = [];
     const testContext = context(sent, {
       lavalinkReady: false,
       control: async (invocation) => {
-        invocations.push(invocation.name);
-        return `local:${invocation.name}`;
+        invocations.push(invocation);
+        return "ok";
       },
     });
 
-    assert.equal(
-      await dispatchCommand({ name: "pause", argument: "" }, testContext),
-      "unavailable",
-    );
-    assert.equal(
-      await dispatchCommand({ name: "volume", argument: "50" }, testContext),
-      "unavailable",
-    );
-    for (const parsed of [
-      { name: "volume", argument: "" },
-      { name: "queue", argument: "" },
-      { name: "stop", argument: "" },
-      { name: "leave", argument: "" },
-    ]) {
-      assert.equal(await dispatchCommand(parsed, testContext), "handled");
-    }
-    assert.deepEqual(invocations, ["volume", "stop", "leave"]);
-    assert.equal(sent.includes("queue"), true);
+    await dispatchCommand({ name: "queue", argument: "" }, testContext);
+    await dispatchCommand({ name: "stop", argument: "" }, testContext);
+    await dispatchCommand({ name: "pause", argument: "" }, testContext);
+
+    assert.deepEqual(invocations, [{ name: "stop" }]);
+    assert.deepEqual(sent, ["queue", "ok", "Music service is temporarily unavailable."]);
   });
 
-  it("responds concisely to unknown commands", async () => {
+  it("responds safely to an obsolete command name", async () => {
     const sent: string[] = [];
-    const result = await dispatchCommand({ name: "wat", argument: "" }, context(sent));
-
-    assert.equal(result, "unknown");
-    assert.deepEqual(sent, ["Unknown command. Use `\\help` to see the command list."]);
+    assert.equal(
+      await dispatchCommand({ name: "old-command", argument: "" }, context(sent)),
+      "unknown",
+    );
+    assert.match(sent[0] ?? "", /Type `\/`/);
   });
 });

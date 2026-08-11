@@ -1,7 +1,13 @@
 import {
+  type ActionRowBuilder,
+  ActivityType,
+  type AutocompleteInteraction,
+  type ButtonBuilder,
   type ButtonInteraction,
   ChannelType,
+  type ChatInputCommandInteraction,
   Client,
+  type EmbedBuilder,
   Events,
   GatewayIntentBits,
   type GuildMember,
@@ -9,15 +15,15 @@ import {
   MessageFlags,
   type MessageMentionOptions,
   PermissionFlagsBits,
-  type StringSelectMenuInteraction,
   type VoiceBasedChannel,
 } from "discord.js";
 import type { Logger } from "pino";
 
 import {
+  APPLICATION_COMMANDS,
+  type CommandName,
   dispatchCommand,
   type ExecutableControlCommandInvocation,
-  parseCommand,
 } from "./commands.js";
 import type { LavalinkReadiness } from "./music/lavalink.js";
 import type {
@@ -25,7 +31,6 @@ import type {
   MusicManager,
   PlaybackControlRequest,
   PlayRequestResult,
-  SearchTracksResult,
 } from "./music/manager.js";
 import type { GuildPlaybackIdentity, GuildPlaybackSnapshot } from "./music/state.js";
 import {
@@ -45,19 +50,11 @@ import {
   isQueueViewCustomId,
   type QueueViewController,
 } from "./queue-view.js";
-import {
-  createSearchViewController,
-  isSearchViewCustomId,
-  type SearchSelectionResolution,
-  type SearchViewController,
-} from "./search-view.js";
 import { errorFields, escapeExternalText, truncateMessage } from "./utils.js";
 
 export const DISCORD_INTENTS = [
   GatewayIntentBits.Guilds,
-  GatewayIntentBits.GuildMessages,
   GatewayIntentBits.GuildVoiceStates,
-  GatewayIntentBits.MessageContent,
 ] as const;
 
 export const SAFE_ALLOWED_MENTIONS = {
@@ -87,8 +84,10 @@ type MusicController = Pick<
   | "setVolume"
   | "setLoopMode"
   | "removeUpcoming"
+  | "moveUpcoming"
   | "clearUpcoming"
   | "shuffleUpcoming"
+  | "jump"
   | "previous"
   | "skip"
   | "stop"
@@ -96,9 +95,18 @@ type MusicController = Pick<
   | "updateAloneStatus"
 >;
 
-const SEARCH_RESULT_LIMIT = 5;
-const PLAYER_REFRESH_INTERVAL_MS = 15_000;
+const AUTOCOMPLETE_RESULT_LIMIT = 10;
+const AUTOCOMPLETE_CACHE_LIMIT = 500;
+const AUTOCOMPLETE_CACHE_TTL_MS = 30_000;
+const AUTOCOMPLETE_DEADLINE_MS = 2_250;
+const PLAYER_REFRESH_INTERVAL_MS = 5_000;
 const PLAYER_MESSAGE_LIMIT = 1_000;
+
+type SlashResponseSender = (options: {
+  readonly content?: string | null;
+  readonly embeds?: readonly EmbedBuilder[];
+  readonly components?: readonly ActionRowBuilder<ButtonBuilder>[];
+}) => Promise<Message>;
 
 export function hasHumanVoiceMember(
   members: Iterable<{ readonly user: { readonly bot: boolean } }>,
@@ -115,84 +123,219 @@ function logError(logger: Logger, event: string, error: unknown, message: string
   logger.error({ event, ...errorFields(error) }, message);
 }
 
-async function handleMessage(
-  message: Message,
+interface AutocompleteChoice {
+  readonly name: string;
+  readonly value: string;
+}
+
+function plainExternalText(value: string, maximumLength: number): string {
+  const plain = value
+    .replaceAll(/[\p{Cc}\p{Cf}\p{Zl}\p{Zp}]+/gu, " ")
+    .replaceAll(/\s+/g, " ")
+    .trim();
+  return truncateMessage(plain, maximumLength);
+}
+
+export function createPlayAutocompleteHandler(
+  music: MusicController,
+  now: () => number = Date.now,
+): (interaction: AutocompleteInteraction) => Promise<void> {
+  const cache = new Map<
+    string,
+    { readonly expiresAt: number; readonly choices: readonly AutocompleteChoice[] }
+  >();
+
+  function prune(): void {
+    const currentTime = now();
+    for (const [key, entry] of cache) {
+      if (entry.expiresAt <= currentTime) {
+        cache.delete(key);
+      }
+    }
+    while (cache.size > AUTOCOMPLETE_CACHE_LIMIT) {
+      const oldest = cache.keys().next().value;
+      if (oldest === undefined) {
+        break;
+      }
+      cache.delete(oldest);
+    }
+  }
+
+  return async (interaction) => {
+    if (!interaction.inCachedGuild() || interaction.commandName !== "play") {
+      await interaction.respond([]);
+      return;
+    }
+    const query = interaction.options.getFocused().trim();
+    const access = validateVoiceAccess(interactionVoiceFacts(interaction));
+    if (query.length < 2 || access.kind !== "ready") {
+      await interaction.respond([]);
+      return;
+    }
+
+    prune();
+    const key = `${interaction.guildId}:${access.voiceChannelId}:${query.toLocaleLowerCase("en-US")}`;
+    const cached = cache.get(key);
+    if (cached !== undefined) {
+      await interaction.respond(cached.choices);
+      return;
+    }
+
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    const deadline = new Promise<null>((resolve) => {
+      timeout = setTimeout(() => resolve(null), AUTOCOMPLETE_DEADLINE_MS);
+      timeout.unref();
+    });
+    const result = await Promise.race([
+      music.searchTracks({
+        guildId: interaction.guildId,
+        intendedVoiceChannelId: access.voiceChannelId,
+        input: query,
+        resultLimit: AUTOCOMPLETE_RESULT_LIMIT,
+      }),
+      deadline,
+    ]);
+    if (timeout !== undefined) {
+      clearTimeout(timeout);
+    }
+
+    if (result === null) {
+      await interaction.respond([]);
+      return;
+    }
+    const seenIdentifiers = new Set<string>();
+    const choices: AutocompleteChoice[] = [];
+    if (result.kind === "choices") {
+      for (const track of result.tracks) {
+        const value = `https://www.youtube.com/watch?v=${track.identifier}`;
+        if (value.length > 100 || seenIdentifiers.has(track.identifier)) {
+          continue;
+        }
+        seenIdentifiers.add(track.identifier);
+        choices.push({
+          name:
+            plainExternalText(`${track.title} — ${track.author}`, 100) || "Untitled YouTube track",
+          value,
+        });
+      }
+    }
+    cache.set(key, { choices, expiresAt: now() + AUTOCOMPLETE_CACHE_TTL_MS });
+    prune();
+    await interaction.respond(choices);
+  };
+}
+
+function commandArgument(interaction: ChatInputCommandInteraction<"cached">): string {
+  switch (interaction.commandName as CommandName) {
+    case "play":
+      return interaction.options.getString("song", true);
+    case "volume":
+      return interaction.options.getInteger("level")?.toString() ?? "";
+    case "loop":
+      return interaction.options.getString("mode", true);
+    case "remove":
+    case "jump":
+      return interaction.options.getInteger("position", true).toString();
+    case "move":
+      return `${interaction.options.getInteger("from", true)} ${interaction.options.getInteger("to", true)}`;
+    default:
+      return "";
+  }
+}
+
+async function handleChatInputCommand(
+  interaction: ChatInputCommandInteraction,
   logger: Logger,
   lavalink: LavalinkReadiness,
   music: MusicController,
   queueViews: QueueViewController,
-  searchViews: SearchViewController,
   playerViews: NowPlayingViewController,
   registerPlayerMessage: (guildId: string, message: Message) => void,
   refreshPlayerMessage: (guildId: string) => Promise<void>,
 ): Promise<void> {
-  if (!message.inGuild()) {
+  if (!interaction.inCachedGuild()) {
+    await interaction.reply({
+      content: "Raydio commands are available only in a loaded server.",
+      flags: MessageFlags.Ephemeral,
+      allowedMentions: SAFE_ALLOWED_MENTIONS,
+    });
     return;
   }
 
-  const parsed = parseCommand({
-    authorIsBot: message.author.bot,
-    content: message.content,
-    guildId: message.guildId,
-  });
-
-  if (parsed === null) {
-    return;
-  }
+  const parsed = { name: interaction.commandName, argument: commandArgument(interaction) };
 
   logger.debug(
     {
       event: "command_received",
       command: parsed.name,
-      guildId: message.guildId,
-      userId: message.author.id,
+      guildId: interaction.guildId,
+      userId: interaction.user.id,
     },
     "Discord command received",
   );
 
   try {
+    await interaction.deferReply();
+    let responded = false;
+    const send: SlashResponseSender = async (options) => {
+      const payload = {
+        ...(options.content === undefined || options.content === null
+          ? {}
+          : { content: options.content }),
+        ...(options.embeds === undefined ? {} : { embeds: options.embeds }),
+        ...(options.components === undefined ? {} : { components: options.components }),
+        allowedMentions: SAFE_ALLOWED_MENTIONS,
+      };
+      if (!responded) {
+        responded = true;
+        return interaction.editReply(payload);
+      }
+      return interaction.followUp(payload);
+    };
+
     await dispatchCommand(parsed, {
-      discordLatencyMs: message.client.ws.ping,
-      discordReady: message.client.isReady(),
+      discordLatencyMs: interaction.client.ws.ping,
+      discordReady: interaction.client.isReady(),
       lavalinkReady: lavalink.isReady(),
       play: async (input) =>
-        handlePlay(message, input, music, searchViews, playerViews, registerPlayerMessage),
-      control: async (invocation) => handleControl(message, invocation, music),
+        handlePlay(interaction, input, music, playerViews, registerPlayerMessage, send),
+      control: async (invocation) => handleControl(interaction, invocation, music),
       presentNowPlaying: async () => {
-        const view = playerViews.render(music.getSnapshot(message.guildId));
-        const sent = await message.channel.send({
+        const view = playerViews.render(music.getSnapshot(interaction.guildId));
+        const sent = await send({
           content: view.content,
+          embeds: view.embeds,
           components: view.components,
-          allowedMentions: SAFE_ALLOWED_MENTIONS,
         });
         if (view.components.length > 0) {
-          registerPlayerMessage(message.guildId, sent);
+          registerPlayerMessage(interaction.guildId, sent);
         }
       },
       presentQueue: async () => {
-        const view = queueViews.render(music.getSnapshot(message.guildId));
-        await message.channel.send({
+        const view = queueViews.render(music.getSnapshot(interaction.guildId));
+        await send({
           content: view.content,
           components: view.components,
-          allowedMentions: SAFE_ALLOWED_MENTIONS,
         });
       },
       send: async (content) => {
-        await message.channel.send({
-          content: truncateMessage(content),
-          allowedMentions: SAFE_ALLOWED_MENTIONS,
-        });
+        await send({ content: truncateMessage(content) });
       },
     });
-    await refreshPlayerMessage(message.guildId);
+    await refreshPlayerMessage(interaction.guildId);
   } catch (error: unknown) {
     logError(logger, "command_failed", error, "Discord command failed");
 
     try {
-      await message.channel.send({
-        content: "The command could not be completed.",
-        allowedMentions: SAFE_ALLOWED_MENTIONS,
-      });
+      if (interaction.deferred || interaction.replied) {
+        await interaction.editReply({ content: "The command could not be completed." });
+      } else {
+        await interaction.reply({
+          content: "The command could not be completed.",
+          flags: MessageFlags.Ephemeral,
+          allowedMentions: SAFE_ALLOWED_MENTIONS,
+        });
+      }
     } catch (sendError: unknown) {
       logger.warn(
         { event: "command_error_response_failed", ...errorFields(sendError) },
@@ -226,7 +369,7 @@ export async function handleQueueButtonInteraction(
   }
   if (resolution.kind === "stale") {
     await interaction.update({
-      content: "This queue view is no longer active. Run `\\queue` again.",
+      content: "This queue view is no longer active. Run `/queue` again.",
       components: [],
       allowedMentions: SAFE_ALLOWED_MENTIONS,
     });
@@ -239,148 +382,8 @@ export async function handleQueueButtonInteraction(
   });
 }
 
-async function updateInteractionAloneStatus(
-  interaction: StringSelectMenuInteraction<"cached">,
-  music: MusicController,
-  voiceChannelId: string,
-): Promise<void> {
-  const identity = music.getIdentity(interaction.guildId);
-  const channel = interaction.guild.channels.cache.get(voiceChannelId);
-  if (
-    identity !== undefined &&
-    identity.voiceChannelId === voiceChannelId &&
-    channel?.isVoiceBased()
-  ) {
-    await music.updateAloneStatus(
-      identity.guildId,
-      identity.playerToken,
-      !hasHumanVoiceMember(channel.members.values()),
-    );
-  }
-}
-
-export async function handleSearchInteraction(
-  interaction: ButtonInteraction | StringSelectMenuInteraction,
-  music: MusicController,
-  searchViews: SearchViewController,
-  playerViews: NowPlayingViewController,
-  registerPlayerMessage: (guildId: string, message: Message) => void,
-): Promise<void> {
-  if (!interaction.inCachedGuild()) {
-    await interaction.reply({
-      content: "Search choices are available only in a loaded server.",
-      flags: MessageFlags.Ephemeral,
-      allowedMentions: SAFE_ALLOWED_MENTIONS,
-    });
-    return;
-  }
-
-  const resolution: SearchSelectionResolution = searchViews.resolve({
-    customId: interaction.customId,
-    guildId: interaction.guildId,
-    channelId: interaction.channelId,
-    userId: interaction.user.id,
-    ...(interaction.isStringSelectMenu() ? { values: interaction.values } : {}),
-  });
-  if (resolution.kind === "unrelated") {
-    return;
-  }
-  if (resolution.kind === "forbidden") {
-    await interaction.reply({
-      content: "Only the person who started this search can choose its result.",
-      flags: MessageFlags.Ephemeral,
-      allowedMentions: SAFE_ALLOWED_MENTIONS,
-    });
-    return;
-  }
-  if (resolution.kind === "stale") {
-    await interaction.update({
-      content: "This search has expired. Run `\\play` again.",
-      components: [],
-      allowedMentions: SAFE_ALLOWED_MENTIONS,
-    });
-    return;
-  }
-  if (resolution.kind === "cancelled") {
-    await interaction.update({
-      content: "Search cancelled.",
-      components: [],
-      allowedMentions: SAFE_ALLOWED_MENTIONS,
-    });
-    return;
-  }
-  if (!interaction.isStringSelectMenu()) {
-    await interaction.update({
-      content: "This search selection is no longer valid. Run `\\play` again.",
-      components: [],
-      allowedMentions: SAFE_ALLOWED_MENTIONS,
-    });
-    return;
-  }
-
-  const access = validateVoiceAccess(interactionVoiceFacts(interaction));
-  if (access.kind !== "ready" || access.voiceChannelId !== resolution.voiceChannelId) {
-    await interaction.update({
-      content:
-        access.kind === "ready"
-          ? "Return to the voice channel where you started this search, then run `\\play` again."
-          : voiceAccessMessage(access),
-      components: [],
-      allowedMentions: SAFE_ALLOWED_MENTIONS,
-    });
-    return;
-  }
-  if (!/^[A-Za-z0-9_-]{1,128}$/.test(resolution.track.identifier)) {
-    await interaction.update({
-      content: "That search result has an invalid source identifier. Try another result.",
-      components: [],
-      allowedMentions: SAFE_ALLOWED_MENTIONS,
-    });
-    return;
-  }
-
-  await interaction.deferUpdate();
-  const result = await music.requestPlay({
-    guildId: interaction.guildId,
-    notificationChannelId: interaction.channelId,
-    intendedVoiceChannelId: resolution.voiceChannelId,
-    shardId: interaction.guild.shardId,
-    input: `https://www.youtube.com/watch?v=${resolution.track.identifier}`,
-    requestedBy: {
-      id: interaction.user.id,
-      label:
-        interaction.guild.members.cache.get(interaction.user.id)?.displayName ??
-        interaction.user.username,
-    },
-    validateCommit: () =>
-      validateVoiceAccess(interactionVoiceFacts(interaction), resolution.voiceChannelId),
-  });
-  if (result.kind === "queued") {
-    await updateInteractionAloneStatus(interaction, music, resolution.voiceChannelId);
-  }
-
-  const summary = formatPlayRequestResult(result);
-  if (result.kind === "queued" && result.becameCurrent) {
-    const view = playerViews.render(music.getSnapshot(interaction.guildId));
-    const edited = await interaction.editReply({
-      content: playerContent(view.content, result),
-      components: view.components,
-      allowedMentions: SAFE_ALLOWED_MENTIONS,
-    });
-    if (view.components.length > 0) {
-      registerPlayerMessage(interaction.guildId, edited);
-    }
-    return;
-  }
-  await interaction.editReply({
-    content: summary,
-    components: [],
-    allowedMentions: SAFE_ALLOWED_MENTIONS,
-  });
-}
-
 function prepareInteractionControl(
-  interaction: ButtonInteraction<"cached">,
+  interaction: ButtonInteraction<"cached"> | ChatInputCommandInteraction<"cached">,
   music: MusicController,
   allowMissingSession = false,
 ): PlaybackControlRequest | { readonly message: string } {
@@ -442,7 +445,8 @@ export async function handlePlayerButtonInteraction(
   }
   if (resolution.kind === "stale") {
     await interaction.update({
-      content: "These player controls are no longer active. Run `\\nowplaying` again.",
+      content: "These player controls are no longer active. Run `/nowplaying` again.",
+      embeds: [],
       components: [],
       allowedMentions: SAFE_ALLOWED_MENTIONS,
     });
@@ -518,6 +522,7 @@ export async function handlePlayerButtonInteraction(
     retirePlayerMessage(interaction.guildId);
     await interaction.editReply({
       content: terminalMessage,
+      embeds: [],
       components: [],
       allowedMentions: SAFE_ALLOWED_MENTIONS,
     });
@@ -527,6 +532,7 @@ export async function handlePlayerButtonInteraction(
   const view = playerViews.render(music.getSnapshot(interaction.guildId));
   await interaction.editReply({
     content: view.content,
+    embeds: view.embeds,
     components: view.components,
     allowedMentions: SAFE_ALLOWED_MENTIONS,
   });
@@ -559,12 +565,11 @@ function memberVoiceFacts(
   };
 }
 
-function voiceFacts(message: Message<true>): VoiceAccessFacts {
-  return memberVoiceFacts(message.member, message.guild.members.me);
-}
-
 function interactionVoiceFacts(
-  interaction: ButtonInteraction<"cached"> | StringSelectMenuInteraction<"cached">,
+  interaction:
+    | AutocompleteInteraction<"cached">
+    | ButtonInteraction<"cached">
+    | ChatInputCommandInteraction<"cached">,
 ): VoiceAccessFacts {
   return memberVoiceFacts(
     interaction.guild.members.cache.get(interaction.user.id) ?? null,
@@ -578,7 +583,7 @@ function voiceAccessMessage(result: VoiceAccessResult): string {
     case "voice-changed":
       return "Your voice channel changed before the song could be queued.";
     case "not-in-voice":
-      return "Join a voice channel before using `\\play`.";
+      return "Join a voice channel before using `/play`.";
     case "unsupported-channel":
       return "Stage channels are not supported. Join a normal voice channel.";
     case "bot-member-unavailable":
@@ -604,32 +609,6 @@ function resolutionFailureMessage(
       return "Only YouTube and YouTube Music URLs are supported.";
     case "failure":
       return "YouTube could not load that request. Try another song.";
-  }
-}
-
-function searchFailureMessage(result: Exclude<SearchTracksResult, { kind: "choices" }>): string {
-  switch (result.kind) {
-    case "direct-input":
-      throw new Error("Direct input unexpectedly reached search failure formatting");
-    case "no-match":
-      return "No suitable YouTube results were found.";
-    case "capacity-exhausted":
-    case "queue-full":
-      return "The queue is full.";
-    case "unavailable":
-      return "Music service is temporarily unavailable.";
-    case "unsupported-url":
-      return "Only YouTube and YouTube Music URLs are supported.";
-    case "failure":
-      return "YouTube could not search for that request. Try another song.";
-    case "pending-limit":
-      return "Too many play requests are already pending for this server.";
-    case "stale":
-      return "That search was canceled by a newer stop or disconnect.";
-    case "wrong-channel":
-      return "Join the bot's current voice channel before adding music.";
-    case "closed":
-      return "Music service is shutting down.";
   }
 }
 
@@ -713,42 +692,6 @@ export function formatNowPlayingSnapshot(snapshot: GuildPlaybackSnapshot | undef
   );
 }
 
-function supportedCallerVoice(message: Message<true>, intendedVoiceChannelId: string): boolean {
-  const channel = message.member?.voice.channel;
-  return channel?.type === ChannelType.GuildVoice && channel.id === intendedVoiceChannelId;
-}
-
-function prepareControl(
-  message: Message<true>,
-  music: MusicController,
-  allowMissingSession = false,
-): PlaybackControlRequest | { readonly message: string } {
-  const identity = music.getIdentity(message.guildId);
-  const access = validateControlVoiceAccess(
-    voiceFacts(message),
-    identity?.voiceChannelId ?? null,
-    allowMissingSession,
-  );
-  if (access.kind !== "ready") {
-    switch (access.kind) {
-      case "not-in-voice":
-        return { message: "Join the bot's voice channel before using that control." };
-      case "unsupported-channel":
-        return { message: "Stage channels are not supported. Join a normal voice channel." };
-      case "no-session":
-        return { message: "There is no active music session." };
-      case "wrong-channel":
-        return { message: "Join the bot's current voice channel before using that control." };
-    }
-  }
-  return {
-    guildId: message.guildId,
-    intendedVoiceChannelId: access.voiceChannelId,
-    playerToken: identity?.playerToken ?? null,
-    validateCommit: () => supportedCallerVoice(message, access.voiceChannelId),
-  };
-}
-
 function controlFailure(result: ControlResult<unknown>): string | null {
   if (result.kind === "transport-failed") {
     return "Lavalink could not apply that playback change.";
@@ -788,28 +731,25 @@ function formatStartedTrackNote(result: Extract<PlayRequestResult, { kind: "queu
   return notes.join(" ");
 }
 
-function playerContent(
-  viewContent: string,
-  result: Extract<PlayRequestResult, { kind: "queued" }>,
-): string {
+function playerContent(result: Extract<PlayRequestResult, { kind: "queued" }>): string | null {
   const note = formatStartedTrackNote(result);
-  return note.length === 0 ? viewContent : truncateMessage(`${viewContent}\n\n${note}`);
+  return note.length === 0 ? null : truncateMessage(note);
 }
 
 async function handleControl(
-  message: Message<true>,
+  interaction: ChatInputCommandInteraction<"cached">,
   invocation: ExecutableControlCommandInvocation,
   music: MusicController,
 ): Promise<string> {
   if (invocation.name === "volume" && invocation.volume === null) {
-    const snapshot = music.getSnapshot(message.guildId);
+    const snapshot = music.getSnapshot(interaction.guildId);
     return snapshot === undefined
       ? "There is no active music session."
       : `Current volume: ${snapshot.volume}%.`;
   }
 
-  const prepared = prepareControl(
-    message,
+  const prepared = prepareInteractionControl(
+    interaction,
     music,
     invocation.name === "stop" || invocation.name === "leave",
   );
@@ -872,6 +812,23 @@ async function handleControl(
       : `Removed **${safeSegment(result.value.title, 160)}**.`;
   }
 
+  if (invocation.name === "move") {
+    const result = await music.moveUpcoming(prepared, invocation.fromIndex, invocation.toIndex);
+    const failure = controlFailure(result);
+    if (failure !== null) {
+      return failure;
+    }
+    if (result.kind !== "ok") {
+      throw new Error("Unexpected move control result");
+    }
+    if (result.value === null) {
+      return "One of those upcoming queue positions does not exist.";
+    }
+    return result.value.changed
+      ? `Moved **${safeSegment(result.value.track.title, 160)}** from ${invocation.fromIndex} to ${invocation.toIndex}.`
+      : `**${safeSegment(result.value.track.title, 160)}** is already at position ${invocation.fromIndex}.`;
+  }
+
   if (invocation.name === "clear") {
     const result = await music.clearUpcoming(prepared);
     const failure = controlFailure(result);
@@ -912,6 +869,24 @@ async function handleControl(
     return result.value === null
       ? "There is no previous track in this session."
       : `Now playing **${safeSegment(result.value.title, 160)}**.`;
+  }
+
+  if (invocation.name === "jump") {
+    const result = await music.jump(prepared, invocation.displayedIndex);
+    const failure = controlFailure(result);
+    if (failure !== null) {
+      return failure;
+    }
+    if (result.kind !== "ok") {
+      throw new Error("Unexpected jump control result");
+    }
+    if (result.value === null) {
+      return "There is no upcoming song at that position.";
+    }
+    const transition = result.value;
+    return transition.kind === "advanced" && transition.current !== null
+      ? `Jumped to **${safeSegment(transition.current.title, 160)}**.`
+      : "The selected song could not be started.";
   }
 
   if (invocation.name === "skip") {
@@ -959,59 +934,34 @@ async function handleControl(
 }
 
 async function handlePlay(
-  message: Message<true>,
+  interaction: ChatInputCommandInteraction<"cached">,
   input: string,
   music: MusicController,
-  searchViews: SearchViewController,
   playerViews: NowPlayingViewController,
   registerPlayerMessage: (guildId: string, message: Message) => void,
+  send: SlashResponseSender,
 ): Promise<string | null> {
-  const initialAccess = validateVoiceAccess(voiceFacts(message));
+  const initialAccess = validateVoiceAccess(interactionVoiceFacts(interaction));
   if (initialAccess.kind !== "ready") {
     return voiceAccessMessage(initialAccess);
   }
 
-  const search = await music.searchTracks({
-    guildId: message.guildId,
-    intendedVoiceChannelId: initialAccess.voiceChannelId,
-    input,
-    resultLimit: SEARCH_RESULT_LIMIT,
-  });
-  if (search.kind === "choices") {
-    const view = searchViews.render({
-      guildId: message.guildId,
-      channelId: message.channelId,
-      userId: message.author.id,
-      voiceChannelId: initialAccess.voiceChannelId,
-      query: input,
-      tracks: search.tracks,
-    });
-    await message.channel.send({
-      content: view.content,
-      components: view.components,
-      allowedMentions: SAFE_ALLOWED_MENTIONS,
-    });
-    return null;
-  }
-  if (search.kind !== "direct-input") {
-    return searchFailureMessage(search);
-  }
-
   const result = await music.requestPlay({
-    guildId: message.guildId,
-    notificationChannelId: message.channelId,
+    guildId: interaction.guildId,
+    notificationChannelId: interaction.channelId,
     intendedVoiceChannelId: initialAccess.voiceChannelId,
-    shardId: message.guild?.shardId ?? 0,
+    shardId: interaction.guild.shardId,
     input,
     requestedBy: {
-      id: message.author.id,
-      label: message.member?.displayName ?? message.author.username,
+      id: interaction.user.id,
+      label: interaction.member.displayName,
     },
-    validateCommit: () => validateVoiceAccess(voiceFacts(message), initialAccess.voiceChannelId),
+    validateCommit: () =>
+      validateVoiceAccess(interactionVoiceFacts(interaction), initialAccess.voiceChannelId),
   });
   if (result.kind === "queued") {
-    const identity = music.getIdentity(message.guildId);
-    const channel = message.guild?.channels.cache.get(initialAccess.voiceChannelId);
+    const identity = music.getIdentity(interaction.guildId);
+    const channel = interaction.guild.channels.cache.get(initialAccess.voiceChannelId);
     if (
       identity !== undefined &&
       identity.voiceChannelId === initialAccess.voiceChannelId &&
@@ -1029,14 +979,14 @@ async function handlePlay(
     return summary;
   }
 
-  const view = playerViews.render(music.getSnapshot(message.guildId));
-  const sent = await message.channel.send({
-    content: playerContent(view.content, result),
+  const view = playerViews.render(music.getSnapshot(interaction.guildId));
+  const sent = await send({
+    content: playerContent(result),
+    embeds: view.embeds,
     components: view.components,
-    allowedMentions: SAFE_ALLOWED_MENTIONS,
   });
   if (view.components.length > 0) {
-    registerPlayerMessage(message.guildId, sent);
+    registerPlayerMessage(interaction.guildId, sent);
   }
   return null;
 }
@@ -1070,9 +1020,10 @@ export function createDiscordService(
   music: MusicController,
 ): DiscordService {
   const queueViews = createQueueViewController();
-  const searchViews = createSearchViewController();
   const playerViews = createNowPlayingViewController();
-  const playerMessages = new Map<string, Message>();
+  const handleAutocomplete = createPlayAutocompleteHandler(music);
+  const playerMessages = new Map<string, { readonly message: Message; fingerprint: string }>();
+  let presenceKey = "";
   let acceptingCommands = false;
   let started = false;
   let stopped = false;
@@ -1086,14 +1037,14 @@ export function createDiscordService(
     if (previous === undefined && playerMessages.size >= PLAYER_MESSAGE_LIMIT) {
       const oldestGuildId = playerMessages.keys().next().value;
       if (oldestGuildId !== undefined) {
-        const oldestMessage = playerMessages.get(oldestGuildId);
+        const oldestMessage = playerMessages.get(oldestGuildId)?.message;
         playerMessages.delete(oldestGuildId);
         void oldestMessage?.edit({ components: [] }).catch(() => undefined);
       }
     }
-    playerMessages.set(guildId, message);
-    if (previous !== undefined && previous.id !== message.id) {
-      void previous.edit({ components: [] }).catch((error: unknown) => {
+    playerMessages.set(guildId, { message, fingerprint: "" });
+    if (previous !== undefined && previous.message.id !== message.id) {
+      void previous.message.edit({ components: [] }).catch((error: unknown) => {
         logger.debug(
           { event: "player_previous_message_retire_failed", ...errorFields(error) },
           "Could not retire a superseded player message",
@@ -1103,17 +1054,27 @@ export function createDiscordService(
   }
 
   async function refreshPlayerMessage(guildId: string): Promise<void> {
-    const message = playerMessages.get(guildId);
-    if (message === undefined) {
+    const active = playerMessages.get(guildId);
+    if (active === undefined) {
       return;
     }
     const view = playerViews.render(music.getSnapshot(guildId));
+    const fingerprint = JSON.stringify({
+      content: view.content,
+      embeds: view.embeds.map((embed) => embed.toJSON()),
+      components: view.components.map((row) => row.toJSON()),
+    });
+    if (active.fingerprint === fingerprint) {
+      return;
+    }
     try {
-      await message.edit({
+      await active.message.edit({
         content: view.content,
+        embeds: view.embeds,
         components: view.components,
         allowedMentions: SAFE_ALLOWED_MENTIONS,
       });
+      active.fingerprint = fingerprint;
       if (view.components.length === 0) {
         retirePlayerMessage(guildId);
       }
@@ -1127,18 +1088,44 @@ export function createDiscordService(
     }
   }
 
+  function refreshPresence(): void {
+    const identities = music.getIdentities();
+    const snapshot =
+      identities.length === 1 ? music.getSnapshot(identities[0]?.guildId ?? "") : undefined;
+    const singleGuildTrack = client.guilds.cache.size === 1 ? snapshot?.current : undefined;
+    const nextPresence =
+      singleGuildTrack == null
+        ? identities.length === 0
+          ? { key: "idle", name: "/play", type: ActivityType.Watching }
+          : {
+              key: `active:${identities.length}`,
+              name: `${identities.length} active session${identities.length === 1 ? "" : "s"}`,
+              type: ActivityType.Listening,
+            }
+        : {
+            key: `track:${singleGuildTrack.identifier}`,
+            name: plainExternalText(singleGuildTrack.title, 100) || "music",
+            type: ActivityType.Listening,
+          };
+    if (client.user === null || presenceKey === nextPresence.key) {
+      return;
+    }
+    client.user.setActivity(nextPresence.name, { type: nextPresence.type });
+    presenceKey = nextPresence.key;
+  }
+
   const playerRefreshTimer = setInterval(() => {
     for (const guildId of playerMessages.keys()) {
       void refreshPlayerMessage(guildId);
     }
+    refreshPresence();
   }, PLAYER_REFRESH_INTERVAL_MS);
   playerRefreshTimer.unref();
 
   function cleanupUnexpected(guildId: string): void {
     queueViews.retire(guildId);
-    searchViews.retireGuild(guildId);
     playerViews.retire(guildId);
-    const playerMessage = playerMessages.get(guildId);
+    const playerMessage = playerMessages.get(guildId)?.message;
     retirePlayerMessage(guildId);
     if (playerMessage !== undefined) {
       void playerMessage.edit({ components: [] }).catch(() => undefined);
@@ -1221,30 +1208,52 @@ export function createDiscordService(
     cleanupUnexpected(guild.id);
   });
 
-  client.on(Events.MessageCreate, (message) => {
-    if (acceptingCommands) {
-      void handleMessage(
-        message,
+  client.on(Events.InteractionCreate, (interaction) => {
+    if (interaction.isAutocomplete()) {
+      if (!acceptingCommands) {
+        void interaction.respond([]).catch(() => undefined);
+        return;
+      }
+      void handleAutocomplete(interaction).catch((error: unknown) => {
+        logger.debug(
+          { event: "autocomplete_failed", ...errorFields(error) },
+          "Play autocomplete failed",
+        );
+        if (!interaction.responded) {
+          void interaction.respond([]).catch(() => undefined);
+        }
+      });
+      return;
+    }
+
+    if (interaction.isChatInputCommand()) {
+      if (!acceptingCommands) {
+        void interaction
+          .reply({
+            content: "Raydio is not accepting commands right now.",
+            flags: MessageFlags.Ephemeral,
+            allowedMentions: SAFE_ALLOWED_MENTIONS,
+          })
+          .catch(() => undefined);
+        return;
+      }
+      void handleChatInputCommand(
+        interaction,
         logger,
         lavalink,
         music,
         queueViews,
-        searchViews,
         playerViews,
         registerPlayerMessage,
         refreshPlayerMessage,
       );
+      return;
     }
-  });
 
-  client.on(Events.InteractionCreate, (interaction) => {
-    const isSearchInteraction =
-      (interaction.isButton() || interaction.isStringSelectMenu()) &&
-      isSearchViewCustomId(interaction.customId);
     const isQueueInteraction = interaction.isButton() && isQueueViewCustomId(interaction.customId);
     const isPlayerInteraction =
       interaction.isButton() && isNowPlayingCustomId(interaction.customId);
-    if (!isSearchInteraction && !isQueueInteraction && !isPlayerInteraction) {
+    if (!isQueueInteraction && !isPlayerInteraction) {
       return;
     }
     if (!acceptingCommands) {
@@ -1261,18 +1270,7 @@ export function createDiscordService(
     }
 
     let operation: Promise<void>;
-    if (
-      (interaction.isButton() || interaction.isStringSelectMenu()) &&
-      isSearchViewCustomId(interaction.customId)
-    ) {
-      operation = handleSearchInteraction(
-        interaction,
-        music,
-        searchViews,
-        playerViews,
-        registerPlayerMessage,
-      );
-    } else if (interaction.isButton() && isNowPlayingCustomId(interaction.customId)) {
+    if (interaction.isButton() && isNowPlayingCustomId(interaction.customId)) {
       operation = handlePlayerButtonInteraction(
         interaction,
         music,
@@ -1347,12 +1345,24 @@ export function createDiscordService(
       }
 
       started = true;
-      acceptingCommands = true;
 
       try {
         await client.login(token);
+        if (client.application === null) {
+          throw new Error("Discord application metadata is unavailable after login");
+        }
+        const registered = await client.application.commands.set(
+          APPLICATION_COMMANDS.map((applicationCommand) => applicationCommand.toJSON()),
+        );
+        logger.info(
+          { event: "application_commands_ready", commandCount: registered.size },
+          "Discord application commands synchronized",
+        );
+        acceptingCommands = true;
+        refreshPresence();
       } catch (error: unknown) {
         acceptingCommands = false;
+        client.destroy();
         throw error;
       }
     },

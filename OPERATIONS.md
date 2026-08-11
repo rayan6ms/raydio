@@ -193,7 +193,7 @@ openssl rand -hex 32
 sudo docker compose up -d --force-recreate lavalink bot
 ```
 
-The controlled Lavalink restart ends any session that cannot server-resume; users must `\play`
+The controlled Lavalink restart ends any session that cannot server-resume; users must `/play`
 again.
 
 ## Backup policy
@@ -227,10 +227,11 @@ and Compose plugin patched according to their vendor guidance.
 Automated tests and local image checks cannot prove Discord DAVE/audio acceptance. Before treating a
 new host as production-ready, use a private voice/text channel and verify:
 
-1. `\help` and `\ping` work without mentioning users or roles.
-2. Text search, direct YouTube URL, and a small playlist produce audible playback.
+1. `/help` and `/ping` work without mentioning users or roles.
+2. `/play` native autocomplete, a manually entered search, a direct YouTube URL, and a small
+   playlist produce audible playback.
 3. Queue pagination/stale buttons, queue advance, pause/resume, volume, skip, stop, loops,
-   shuffle/remove/clear, and leave work.
+   move/jump/shuffle/remove/clear, and leave work.
 4. Same-channel authorization and Stage rejection work.
 5. Idle and alone timers disconnect; a manual bot move/disconnect cleans state.
 6. An unavailable item does not crash the queue; repeated failures trigger the guard.
@@ -248,8 +249,8 @@ and Discord behavior can change independently of a healthy local container.
   `docker compose config --quiet`, not secret-printing output.
 - **Lavalink stays unhealthy:** check plugin repository/YouTube egress, DNS, memory, and Lavalink
   logs. Cold plugin download can take time.
-- **Bot repeatedly restarts:** inspect the first configuration/login error. Confirm Message Content
-  Intent and reset invalid tokens.
+- **Bot repeatedly restarts:** inspect the first configuration/login or application-command sync
+  error, confirm the Guild Install includes `applications.commands`, and reset invalid tokens.
 - **Bot cannot connect to Lavalink:** both services must be on the `raydio` network and use the same
   `LAVALINK_PASSWORD`; the bot host is `lavalink`, not `localhost`.
 - **Disk use grows:** inspect `docker system df`; remove obsolete images deliberately only after a

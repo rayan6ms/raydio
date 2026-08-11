@@ -4,8 +4,8 @@
 
 # Raydio
 
-Raydio is a self-hosted, YouTube-first Discord music bot for personal servers. It uses a literal
-`\` prefix, discord.js, Shoukaku, and a private Lavalink 4 service with youtube-source.
+Raydio is a self-hosted, YouTube-first Discord music bot for personal servers. It uses native slash
+commands, discord.js, Shoukaku, and a private Lavalink 4 service with youtube-source.
 
 The deployment is intentionally small: one stateless bot container and one Lavalink container.
 Queues live in memory, so a bot restart—or a Lavalink restart that cannot resume its session—clears
@@ -19,16 +19,17 @@ outbound HTTPS/DNS access.
 1. Create an application in the [Discord Developer Portal](https://discord.com/developers/applications).
    Under **General Information**, upload `icons/raydio.png` as the application icon. Upload it under
    **Bot** too if you want the bot avatar to match.
-2. Under **Bot**, create the bot user, copy its token, and enable only **Message Content Intent**.
-3. Under **Installation**, enable **Guild Install**, disable **User Install**, choose the `bot` scope,
-   and request only:
+2. Under **Bot**, create the bot user and copy its token. Raydio requires no privileged Gateway
+   intents.
+3. Under **Installation**, enable **Guild Install**, disable **User Install**, choose the `bot` and
+   `applications.commands` scopes, and request only:
 
    - View Channels
    - Send Messages
    - Connect
    - Speak
 
-   Do not grant Administrator. Raydio has no slash commands.
+   Do not grant Administrator. Raydio synchronizes its native slash commands when it starts.
    Use regular server text channels; forum posts and threads are outside the supported setup.
 4. Open the generated install link and add the bot to your private server.
 
@@ -56,31 +57,34 @@ and troubleshooting, see [OPERATIONS.md](OPERATIONS.md).
 
 ## Commands
 
-Commands are case-insensitive. Text searches present up to five suitable YouTube Music results and
-fall back to YouTube; only the requester may choose. Direct recognized YouTube video, Music, and
-playlist URLs play immediately. Send a bare `\` to open the ordered command menu.
+Typing `/play` provides native song suggestions from YouTube Music, falling back to YouTube. A
+manually entered title plays its best match; recognized YouTube video, Music, and playlist URLs are
+resolved directly.
 
-| Command | Aliases | Behavior |
-|---|---|---|
-| `\play <song or YouTube URL>` | `\p` | Join, resolve, enqueue, and play when idle |
-| `\pause` | — | Pause the current track |
-| `\resume` | — | Resume the current track |
-| `\previous` | `\prev` | Return to the most recent prior track in this session |
-| `\skip` | `\s` | Skip the current track |
-| `\stop` | — | Stop, clear the queue, and remain until the idle timeout |
-| `\queue` | `\q` | Show and navigate the queue |
-| `\nowplaying` | `\np` | Show the maintained player and control buttons |
-| `\volume [0-100]` | `\vol` | Show or set volume |
-| `\loop <off\|track\|queue>` | — | Set loop mode |
-| `\shuffle` | — | Shuffle upcoming tracks |
-| `\remove <index>` | — | Remove an upcoming track by its displayed index |
-| `\clear` | — | Clear upcoming tracks |
-| `\leave` | `\disconnect`, `\dc` | Disconnect and clear session state |
-| `\help` | — | Show the command list |
-| `\ping` | — | Show Discord latency and Lavalink readiness |
+| Command | Behavior |
+|---|---|
+| `/play song:` | Search, join, enqueue, and play when idle |
+| `/nowplaying` | Show the artwork, progress, and player controls |
+| `/queue` | Show and navigate the queue |
+| `/pause` | Pause the current song |
+| `/resume` | Resume the current song |
+| `/previous` | Return to the most recent prior song in this session |
+| `/skip` | Skip to the next song |
+| `/stop` | Stop, clear the queue, and remain until the idle timeout |
+| `/move from: to:` | Move an upcoming song between displayed queue positions |
+| `/jump position:` | Immediately play one upcoming song without discarding the others |
+| `/shuffle` | Shuffle upcoming songs |
+| `/remove position:` | Remove an upcoming song by its displayed position |
+| `/clear` | Clear upcoming songs |
+| `/volume [level:]` | Show or set volume from 0 to 100 |
+| `/loop mode:` | Set loop mode using Discord's choices |
+| `/leave` | Disconnect and clear session state |
+| `/help` | Show the command list |
+| `/ping` | Show Discord latency and Lavalink readiness |
 
-The player offers Previous, Pause/Resume, Next, Stop, Queue, Loop, and Leave buttons. Search menus
-expire after 60 seconds; player controls become harmless when their playback session is stale.
+The modern player offers Previous, Pause/Resume, Next, Stop, Queue, Loop, and Leave buttons, a
+YouTube thumbnail, and a progress display refreshed every five seconds. Player controls become
+harmless when their playback session is stale.
 Playback-changing controls require the caller to share the bot's normal voice channel. Stage
 channels are unsupported. Read-only commands and cleanup remain available during a Lavalink outage;
 commands that need Lavalink fail fast.
@@ -106,8 +110,6 @@ exactly `true` or `false`; numeric bounds use decimal integers.
 | `MAX_PENDING_PLAY_REQUESTS` | `10` | Positive unresolved-play cap per server |
 | `MAX_TRACK_DURATION_HOURS` | `3` | Positive accepted-track duration ceiling |
 | `ALLOW_LIVESTREAMS` | `false` | Whether livestream tracks are accepted |
-
-The command prefix is fixed in v1.
 
 ## Development
 

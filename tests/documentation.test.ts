@@ -4,7 +4,7 @@ import { describe, it } from "node:test";
 
 import { parse } from "yaml";
 
-import { COMMAND_ALIASES, COMMAND_NAMES } from "../src/commands.js";
+import { COMMAND_NAMES } from "../src/commands.js";
 
 interface PackageMetadata {
   readonly devDependencies?: {
@@ -50,28 +50,19 @@ describe("public documentation", () => {
     assert.deepEqual(Array.from(png.subarray(0, 8)), [137, 80, 78, 71, 13, 10, 26, 10]);
   });
 
-  it("lists every executable command and alias using the literal prefix", () => {
+  it("lists every registered slash command", () => {
     const readme = readText("README.md");
     const commandSection = readme.split("## Commands\n")[1]?.split("## Configuration reference")[0];
 
     assert.ok(commandSection, "README must contain a commands section");
-    const rows = commandSection.matchAll(/^\| `\\([a-z]+)(?: [^`]*)?` \| ([^|]+) \|/gm);
+    const rows = commandSection.matchAll(/^\| `\/([a-z]+)(?: [^`]*)?` \|/gm);
     const documentedCommands: string[] = [];
-    const documentedAliases: string[] = [];
 
     for (const row of rows) {
       documentedCommands.push(row[1] ?? "");
-      const aliasCell = row[2] ?? "";
-      documentedAliases.push(
-        ...Array.from(aliasCell.matchAll(/`\\([a-z]+)`/g), (match) => match[1] ?? ""),
-      );
     }
 
     assert.deepEqual(documentedCommands.toSorted(), Array.from(COMMAND_NAMES).toSorted());
-    assert.deepEqual(
-      documentedAliases.toSorted(),
-      COMMAND_ALIASES.map(([alias]) => alias).toSorted(),
-    );
   });
 
   it("documents every example environment value and keeps secrets empty", () => {
@@ -112,7 +103,7 @@ describe("public documentation", () => {
       assert.match(readme, new RegExp(`- ${permission}\\n`));
     }
     assert.match(readme, /Do not grant Administrator\./);
-    assert.match(readme, /no slash commands/i);
+    assert.match(readme, /native slash commands/i);
     assert.match(readme, /no database/i);
     assert.match(readme, /regular server text channels/i);
     assert.match(operations, /Do not add ingress rules for 2333/);

@@ -142,8 +142,17 @@ export interface MusicManager {
     request: PlaybackControlRequest,
     displayedIndex: number,
   ): Promise<ControlResult<QueueTrack | null>>;
+  moveUpcoming(
+    request: PlaybackControlRequest,
+    fromIndex: number,
+    toIndex: number,
+  ): Promise<ControlResult<{ readonly track: QueueTrack; readonly changed: boolean } | null>>;
   clearUpcoming(request: PlaybackControlRequest): Promise<ControlResult<number>>;
   shuffleUpcoming(request: PlaybackControlRequest): Promise<ControlResult<boolean>>;
+  jump(
+    request: PlaybackControlRequest,
+    displayedIndex: number,
+  ): Promise<ControlResult<TransitionResult | null>>;
   previous(request: PlaybackControlRequest): Promise<ControlResult<QueueTrack | null>>;
   skip(request: PlaybackControlRequest): Promise<ControlResult<TransitionResult>>;
   stop(request: PlaybackControlRequest): Promise<ControlResult<"stopped" | "unchanged">>;
@@ -217,10 +226,9 @@ type CleanupReason =
 const CLEANUP_NOTIFICATIONS: Partial<Record<CleanupReason, string>> = {
   "alone-timeout": "Left the voice channel because no listeners remained.",
   "idle-timeout": "Left the voice channel after the queue stayed idle.",
-  "lavalink-session-lost":
-    "Playback ended because Lavalink restarted. Use `\\play` to start again.",
+  "lavalink-session-lost": "Playback ended because Lavalink restarted. Use `/play` to start again.",
   "lavalink-unavailable":
-    "Playback ended because Lavalink became unavailable. Use `\\play` after it recovers.",
+    "Playback ended because Lavalink became unavailable. Use `/play` after it recovers.",
   "unexpected-voice-change": "Playback ended because the bot was moved or disconnected.",
   "voice-closed": "Playback ended because Discord closed the voice connection.",
 };
@@ -1117,6 +1125,42 @@ export function createMusicManager(
       });
     },
 
+    moveUpcoming(request, fromIndex, toIndex) {
+      return stateExecutor.run(request.guildId, () => {
+        const validation = validateControl(request);
+        if ("result" in validation) {
+          return validation.result;
+        }
+        const upcoming = validation.state.upcoming;
+        if (
+          !Number.isSafeInteger(fromIndex) ||
+          !Number.isSafeInteger(toIndex) ||
+          fromIndex < 1 ||
+          toIndex < 1 ||
+          fromIndex > upcoming.length ||
+          toIndex > upcoming.length
+        ) {
+          return { kind: "ok", value: null };
+        }
+        const track = upcoming[fromIndex - 1];
+        if (track === undefined) {
+          return { kind: "ok", value: null };
+        }
+        if (fromIndex === toIndex) {
+          return {
+            kind: "ok",
+            value: { track: copyQueueTrack(track), changed: false },
+          };
+        }
+        upcoming.splice(fromIndex - 1, 1);
+        upcoming.splice(toIndex - 1, 0, track);
+        return {
+          kind: "ok",
+          value: { track: copyQueueTrack(track), changed: true },
+        };
+      });
+    },
+
     clearUpcoming(request) {
       return stateExecutor.run(request.guildId, () => {
         const validation = validateControl(request);
@@ -1162,6 +1206,37 @@ export function createMusicManager(
         }
         state.upcoming = shuffled;
         return { kind: "ok", value: true };
+      });
+    },
+
+    jump(request, displayedIndex) {
+      const captured = states.get(request.guildId);
+      const current = captured?.current;
+
+      return stateExecutor.run(request.guildId, async () => {
+        const validation = validateControl(request);
+        if ("result" in validation) {
+          return validation.result;
+        }
+        const state = validation.state;
+        if (current === undefined || current === null || state.current !== current) {
+          return { kind: "ok", value: null };
+        }
+        if (
+          !Number.isSafeInteger(displayedIndex) ||
+          displayedIndex < 1 ||
+          displayedIndex > state.upcoming.length
+        ) {
+          return { kind: "ok", value: null };
+        }
+        const [target] = state.upcoming.splice(displayedIndex - 1, 1);
+        if (target === undefined) {
+          return { kind: "ok", value: null };
+        }
+        state.upcoming.unshift(target);
+        await stopPlaybackBestEffort(state);
+        const result = transitionCurrent(state, "manual-skip");
+        return { kind: "ok", value: await applyPlaybackEffect(state, result) };
       });
     },
 

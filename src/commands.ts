@@ -1,19 +1,25 @@
-export const PREFIX = "\\" as const;
+import {
+  ApplicationIntegrationType,
+  InteractionContextType,
+  SlashCommandBuilder,
+} from "discord.js";
 
 export const COMMAND_NAMES = [
   "play",
+  "nowplaying",
+  "queue",
   "pause",
   "resume",
   "previous",
   "skip",
   "stop",
-  "queue",
-  "nowplaying",
-  "volume",
-  "loop",
+  "move",
+  "jump",
   "shuffle",
   "remove",
   "clear",
+  "volume",
+  "loop",
   "leave",
   "help",
   "ping",
@@ -21,60 +27,120 @@ export const COMMAND_NAMES = [
 
 export type CommandName = (typeof COMMAND_NAMES)[number];
 
-export const COMMAND_ALIASES = [
-  ["p", "play"],
-  ["prev", "previous"],
-  ["s", "skip"],
-  ["q", "queue"],
-  ["np", "nowplaying"],
-  ["vol", "volume"],
-  ["disconnect", "leave"],
-  ["dc", "leave"],
-] as const satisfies ReadonlyArray<readonly [string, CommandName]>;
+function command(name: CommandName, description: string): SlashCommandBuilder {
+  return new SlashCommandBuilder()
+    .setName(name)
+    .setDescription(description)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild);
+}
 
-const commandAliases = new Map<string, CommandName>(COMMAND_ALIASES);
+export const APPLICATION_COMMANDS = [
+  command("play", "Play a YouTube song or add it to the queue").addStringOption((option) =>
+    option
+      .setName("song")
+      .setDescription("Song title, search terms, or a YouTube URL")
+      .setAutocomplete(true)
+      .setRequired(true),
+  ),
+  command("nowplaying", "Show the current song and player controls"),
+  command("queue", "Show the current song and upcoming queue"),
+  command("pause", "Pause the current song"),
+  command("resume", "Resume the current song"),
+  command("previous", "Return to the previous song in this session"),
+  command("skip", "Skip to the next song"),
+  command("stop", "Stop playback and clear the queue"),
+  command("move", "Move an upcoming song to another queue position")
+    .addIntegerOption((option) =>
+      option
+        .setName("from")
+        .setDescription("Current queue position")
+        .setMinValue(1)
+        .setRequired(true),
+    )
+    .addIntegerOption((option) =>
+      option.setName("to").setDescription("New queue position").setMinValue(1).setRequired(true),
+    ),
+  command("jump", "Immediately play a selected upcoming song").addIntegerOption((option) =>
+    option
+      .setName("position")
+      .setDescription("Upcoming queue position")
+      .setMinValue(1)
+      .setRequired(true),
+  ),
+  command("shuffle", "Shuffle the upcoming queue"),
+  command("remove", "Remove an upcoming song from the queue").addIntegerOption((option) =>
+    option
+      .setName("position")
+      .setDescription("Upcoming queue position")
+      .setMinValue(1)
+      .setRequired(true),
+  ),
+  command("clear", "Clear every upcoming song"),
+  command("volume", "Show or set the player volume").addIntegerOption((option) =>
+    option.setName("level").setDescription("Volume from 0 to 100").setMinValue(0).setMaxValue(100),
+  ),
+  command("loop", "Choose how playback should repeat").addStringOption((option) =>
+    option
+      .setName("mode")
+      .setDescription("Loop mode")
+      .setRequired(true)
+      .addChoices(
+        { name: "Off", value: "off" },
+        { name: "Current song", value: "track" },
+        { name: "Entire queue", value: "queue" },
+      ),
+  ),
+  command("leave", "Leave voice and clear the playback session"),
+  command("help", "Show Raydio's commands and usage"),
+  command("ping", "Check Discord latency and music service readiness"),
+] as const;
 
 export type ControlCommandName = Exclude<CommandName, "help" | "ping" | "play">;
 
 export type ControlCommandInvocation =
   | { readonly name: "queue" }
-  | { readonly name: "pause" | "resume" | "previous" | "skip" | "stop" | "nowplaying" }
-  | { readonly name: "shuffle" | "clear" | "leave" }
+  | { readonly name: "nowplaying" }
+  | {
+      readonly name:
+        | "pause"
+        | "resume"
+        | "previous"
+        | "skip"
+        | "stop"
+        | "shuffle"
+        | "clear"
+        | "leave";
+    }
   | { readonly name: "volume"; readonly volume: number | null }
   | { readonly name: "loop"; readonly mode: "off" | "track" | "queue" }
-  | { readonly name: "remove"; readonly displayedIndex: number };
+  | { readonly name: "remove" | "jump"; readonly displayedIndex: number }
+  | { readonly name: "move"; readonly fromIndex: number; readonly toIndex: number };
 
 export type ExecutableControlCommandInvocation = Exclude<
   ControlCommandInvocation,
   { readonly name: "nowplaying" | "queue" }
 >;
 
-const HELP_MESSAGE = [
+export const HELP_MESSAGE = [
   "**Raydio commands**",
   "**Start and view**",
-  "`\\play <song or YouTube URL>` | `\\p` — choose, play, or queue music",
-  "`\\nowplaying` | `\\np` — show the player and controls",
-  "`\\queue` | `\\q` — show the current and upcoming tracks",
+  "`/play song:` — search with native suggestions, play, or queue",
+  "`/nowplaying` — show the modern player and controls",
+  "`/queue` — show the current and upcoming songs",
   "**Playback**",
-  "`\\pause` | `\\resume` — pause or resume",
-  "`\\previous` | `\\prev` — return to the previous track",
-  "`\\skip` | `\\s` — play the next track",
-  "`\\stop` — stop and clear the queue",
+  "`/pause` | `/resume` — pause or resume",
+  "`/previous` | `/skip` — move through playback history and queue",
+  "`/stop` — stop and clear the queue",
   "**Queue and settings**",
-  "`\\shuffle` | `\\remove <index>` | `\\clear` — edit upcoming tracks",
-  "`\\volume [0-100]` | `\\vol` — show or set volume",
-  "`\\loop <off|track|queue>` — set looping",
+  "`/move from: to:` | `/jump position:` — reorder or jump within the queue",
+  "`/shuffle` | `/remove position:` | `/clear` — edit upcoming songs",
+  "`/volume [level:]` | `/loop mode:` — player settings",
   "**Session and utility**",
-  "`\\leave` | `\\disconnect` | `\\dc` — disconnect and clear",
-  "`\\ping` — show Discord and Lavalink readiness",
-  "`\\help` | `\\` — show this menu",
+  "`/leave` — disconnect and clear the session",
+  "`/ping` — show Discord and Lavalink readiness",
+  "`/help` — show this menu",
 ].join("\n");
-
-export interface CommandMessageInput {
-  readonly authorIsBot: boolean;
-  readonly content: string;
-  readonly guildId: string | null;
-}
 
 export interface ParsedCommand {
   readonly argument: string;
@@ -94,47 +160,23 @@ export interface CommandContext {
 
 export type DispatchResult = "handled" | "unavailable" | "unknown";
 
-export function parseCommand(input: CommandMessageInput): ParsedCommand | null {
-  if (input.authorIsBot || input.guildId === null || !input.content.startsWith(PREFIX)) {
-    return null;
-  }
-
-  const body = input.content.slice(PREFIX.length).trim();
-  if (!body) {
-    return { name: "help", argument: "" };
-  }
-
-  const match = /^(\S+)(?:\s+([\s\S]*))?$/.exec(body);
-  if (!match?.[1]) {
-    return null;
-  }
-
-  return {
-    name: match[1].toLowerCase(),
-    argument: match[2] ?? "",
-  };
-}
-
 function isCommandName(name: string): name is CommandName {
   return COMMAND_NAMES.some((commandName) => commandName === name);
-}
-
-export function resolveCommandName(name: string): CommandName | null {
-  const normalizedName = name.toLowerCase();
-
-  if (isCommandName(normalizedName)) {
-    return normalizedName;
-  }
-
-  return commandAliases.get(normalizedName) ?? null;
 }
 
 function formatDiscordLatency(ready: boolean, latencyMs: number): string {
   if (!ready || !Number.isFinite(latencyMs) || latencyMs < 0) {
     return "unavailable";
   }
-
   return `${Math.round(latencyMs)} ms`;
+}
+
+function positiveInteger(value: string): number | null {
+  if (!/^[1-9]\d*$/.test(value)) {
+    return null;
+  }
+  const parsed = Number(value);
+  return Number.isSafeInteger(parsed) ? parsed : null;
 }
 
 function parseControlInvocation(
@@ -153,36 +195,42 @@ function parseControlInvocation(
     commandName === "clear" ||
     commandName === "leave"
   ) {
-    return argument === "" ? { name: commandName } : `Usage: \`\\${commandName}\`.`;
+    return argument === "" ? { name: commandName } : `Use \`/${commandName}\` without options.`;
   }
 
   if (commandName === "volume") {
     if (argument === "") {
       return { name: "volume", volume: null };
     }
-    if (!/^\d+$/.test(argument)) {
-      return "Usage: `\\volume [0-100]`.";
-    }
-    const volume = Number(argument);
+    const volume = /^\d+$/.test(argument) ? Number(argument) : Number.NaN;
     return Number.isSafeInteger(volume) && volume <= 100
       ? { name: "volume", volume }
-      : "Usage: `\\volume [0-100]`.";
+      : "Use `/volume level:` with a value from 0 to 100.";
   }
 
   if (commandName === "loop") {
     const mode = argument.toLowerCase();
     return mode === "off" || mode === "track" || mode === "queue"
       ? { name: "loop", mode }
-      : "Usage: `\\loop <off|track|queue>`.";
+      : "Choose a mode offered by `/loop`.";
   }
 
-  if (!/^[1-9]\d*$/.test(argument)) {
-    return "Usage: `\\remove <upcoming index>`.";
+  if (commandName === "move") {
+    const [fromValue, toValue, extra] = argument.split(" ");
+    const fromIndex = positiveInteger(fromValue ?? "");
+    const toIndex = positiveInteger(toValue ?? "");
+    return fromIndex !== null && toIndex !== null && extra === undefined
+      ? { name: "move", fromIndex, toIndex }
+      : "Use `/move from: to:` with valid upcoming queue positions.";
   }
-  const displayedIndex = Number(argument);
-  return Number.isSafeInteger(displayedIndex)
-    ? { name: "remove", displayedIndex }
-    : "Usage: `\\remove <upcoming index>`.";
+
+  const displayedIndex = positiveInteger(argument);
+  if (displayedIndex === null) {
+    return commandName === "jump"
+      ? "Use `/jump position:` with a valid upcoming queue position."
+      : "Use `/remove position:` with a valid upcoming queue position.";
+  }
+  return { name: commandName, displayedIndex };
 }
 
 function requiresReadyPlayer(invocation: ControlCommandInvocation): boolean {
@@ -191,6 +239,7 @@ function requiresReadyPlayer(invocation: ControlCommandInvocation): boolean {
     invocation.name === "resume" ||
     invocation.name === "previous" ||
     invocation.name === "skip" ||
+    invocation.name === "jump" ||
     (invocation.name === "volume" && invocation.volume !== null)
   );
 }
@@ -199,28 +248,26 @@ export async function dispatchCommand(
   parsed: ParsedCommand,
   context: CommandContext,
 ): Promise<DispatchResult> {
-  const commandName = resolveCommandName(parsed.name);
-
-  if (commandName === null) {
-    await context.send("Unknown command. Use `\\help` to see the command list.");
+  if (!isCommandName(parsed.name)) {
+    await context.send("That command is no longer registered. Type `/` to see Raydio's commands.");
     return "unknown";
   }
 
-  if (commandName === "help") {
+  if (parsed.name === "help") {
     await context.send(HELP_MESSAGE);
     return "handled";
   }
 
-  if (commandName === "ping") {
+  if (parsed.name === "ping") {
     const latency = formatDiscordLatency(context.discordReady, context.discordLatencyMs);
     const lavalinkStatus = context.lavalinkReady ? "ready" : "unavailable";
     await context.send(`Pong! Discord: ${latency}. Lavalink: ${lavalinkStatus}.`);
     return "handled";
   }
 
-  if (commandName === "play") {
+  if (parsed.name === "play") {
     if (!parsed.argument) {
-      await context.send("Usage: `\\play <song or YouTube URL>`.");
+      await context.send("Use `/play song:` and enter a title or YouTube URL.");
       return "handled";
     }
     if (!context.lavalinkReady) {
@@ -234,7 +281,7 @@ export async function dispatchCommand(
     return "handled";
   }
 
-  const invocation = parseControlInvocation(commandName, parsed.argument);
+  const invocation = parseControlInvocation(parsed.name, parsed.argument);
   if (typeof invocation === "string") {
     await context.send(invocation);
     return "handled";
