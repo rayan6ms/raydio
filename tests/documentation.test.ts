@@ -132,18 +132,17 @@ describe("public documentation", () => {
     assert.match(packageMetadata.scripts?.start ?? "", /--env-file-if-exists=\.env/);
   });
 
-  it("documents a safe unattended Windows migration path", () => {
+  it("documents a safe manual Windows environment migration path", () => {
     const readme = readText("README.md");
     const installer = readText("scripts/windows/install-raydio.ps1");
     const manager = readText("scripts/windows/raydio.ps1");
 
-    assert.match(readme, /-EnvironmentFile/);
     assert.match(readme, /%LOCALAPPDATA%\\Raydio\\app/);
-    assert.match(installer, /\[string\]\$EnvironmentFile/);
-    assert.match(
-      installer,
-      /Copy-Item -LiteralPath \$EnvironmentFile -Destination \$environmentPath/,
-    );
+    assert.match(readme, /Manually copy the existing `\.env` there/);
+    assert.doesNotMatch(installer, /\$EnvironmentFile/);
+    assert.match(installer, /After the file is in place, press Enter to continue/);
+    assert.doesNotMatch(installer, /Copy-Item[^\n]+\.env/);
+    assert.doesNotMatch(installer, /New-RandomHex/);
     assert.ok(
       installer.indexOf("Confirm the Fedora deployment is stopped") <
         installer.lastIndexOf("Register-StartupTask"),

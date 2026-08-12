@@ -2,8 +2,7 @@
 param(
   [switch]$Resume,
   [switch]$NoRestart,
-  [switch]$SkipOtherHostConfirmation,
-  [string]$EnvironmentFile
+  [switch]$SkipOtherHostConfirmation
 )
 
 Set-StrictMode -Version Latest
@@ -57,12 +56,7 @@ function Save-Installer {
 
 function Set-ResumeAfterLogon {
   $confirmationArgument = if ($SkipOtherHostConfirmation) { " -SkipOtherHostConfirmation" } else { "" }
-  $environmentArgument = if ([string]::IsNullOrWhiteSpace($EnvironmentFile)) {
-    ""
-  } else {
-    " -EnvironmentFile `"$EnvironmentFile`""
-  }
-  $arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$SavedInstaller`" -Resume$confirmationArgument$environmentArgument"
+  $arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$SavedInstaller`" -Resume$confirmationArgument"
   New-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" -Force | Out-Null
   $runOnce = @{
     Path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce"
@@ -183,29 +177,6 @@ function Ensure-ComposeProvider {
   Move-Item -LiteralPath $temporaryFile -Destination $ComposeProvider -Force
 }
 
-function Read-SecretText {
-  param([Parameter(Mandatory = $true)][string]$Prompt)
-
-  $secure = Read-Host $Prompt -AsSecureString
-  $pointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
-  try {
-    return [Runtime.InteropServices.Marshal]::PtrToStringBSTR($pointer)
-  } finally {
-    [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($pointer)
-  }
-}
-
-function New-RandomHex {
-  $bytes = New-Object byte[] 32
-  $generator = [Security.Cryptography.RandomNumberGenerator]::Create()
-  try {
-    $generator.GetBytes($bytes)
-  } finally {
-    $generator.Dispose()
-  }
-  return (($bytes | ForEach-Object { $_.ToString("x2") }) -join "")
-}
-
 function Get-EnvironmentValue {
   param(
     [Parameter(Mandatory = $true)][string[]]$Lines,
@@ -221,65 +192,28 @@ function Get-EnvironmentValue {
   return ""
 }
 
-function Set-EnvironmentValue {
-  param(
-    [Parameter(Mandatory = $true)][System.Collections.Generic.List[string]]$Lines,
-    [Parameter(Mandatory = $true)][string]$Name,
-    [Parameter(Mandatory = $true)][string]$Value
-  )
-
-  $prefix = "${Name}="
-  for ($index = 0; $index -lt $Lines.Count; $index += 1) {
-    if ($Lines[$index].StartsWith($prefix, [StringComparison]::Ordinal)) {
-      $Lines[$index] = "$prefix$Value"
-      return
-    }
-  }
-  $Lines.Add("$prefix$Value")
-}
-
 function Ensure-EnvironmentFile {
   $environmentPath = Join-Path $RepositoryRoot ".env"
-  $examplePath = Join-Path $RepositoryRoot ".env.example"
 
   if (-not (Test-Path -LiteralPath $environmentPath -PathType Leaf)) {
-    if (-not [string]::IsNullOrWhiteSpace($EnvironmentFile)) {
-      if (-not (Test-Path -LiteralPath $EnvironmentFile -PathType Leaf)) {
-        throw "The requested environment file does not exist: $EnvironmentFile"
-      }
-      Copy-Item -LiteralPath $EnvironmentFile -Destination $environmentPath
-      Write-Host "Imported the existing Raydio environment file."
-    } else {
-      Write-Host "Migrating an existing Raydio installation? Copy its .env file to:" -ForegroundColor Cyan
-      Write-Host $environmentPath -ForegroundColor Cyan
-      Read-Host "After copying it, press Enter to continue; otherwise press Enter to enter the Discord token"
+    Write-Host "Copy the existing Raydio .env file to this exact path:" -ForegroundColor Cyan
+    Write-Host $environmentPath -ForegroundColor Cyan
+    Read-Host "After the file is in place, press Enter to continue"
+    if (-not (Test-Path -LiteralPath $environmentPath -PathType Leaf)) {
+      throw "Raydio's .env file is still missing. Put it at '$environmentPath', then rerun this installer."
     }
   }
 
-  $sourceLines = if (Test-Path -LiteralPath $environmentPath -PathType Leaf) {
-    @(Get-Content -LiteralPath $environmentPath)
-  } else {
-    @(Get-Content -LiteralPath $examplePath)
-  }
-  $lines = New-Object "System.Collections.Generic.List[string]"
-  $sourceLines | ForEach-Object { $lines.Add($_) }
-
+  $lines = @(Get-Content -LiteralPath $environmentPath)
   $discordToken = Get-EnvironmentValue $lines "DISCORD_TOKEN"
-  if ([string]::IsNullOrWhiteSpace($discordToken)) {
-    $discordToken = Read-SecretText "Paste the Discord bot token (input is hidden)"
-  }
   if ([string]::IsNullOrWhiteSpace($discordToken) -or $discordToken -match "[\r\n]") {
-    throw "The Discord token must be one non-empty line."
+    throw "The imported .env must contain a non-empty, one-line DISCORD_TOKEN."
   }
   $lavalinkPassword = Get-EnvironmentValue $lines "LAVALINK_PASSWORD"
-  if ([string]::IsNullOrWhiteSpace($lavalinkPassword)) {
-    $lavalinkPassword = New-RandomHex
+  if ([string]::IsNullOrWhiteSpace($lavalinkPassword) -or $lavalinkPassword -match "[\r\n]") {
+    throw "The imported .env must contain a non-empty, one-line LAVALINK_PASSWORD."
   }
-  Set-EnvironmentValue $lines "DISCORD_TOKEN" $discordToken
-  Set-EnvironmentValue $lines "LAVALINK_PASSWORD" $lavalinkPassword
 
-  $utf8WithoutBom = New-Object Text.UTF8Encoding($false)
-  [IO.File]::WriteAllLines($environmentPath, $lines, $utf8WithoutBom)
   $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent().Name
   Invoke-Checked "icacls.exe" @(
     $environmentPath, "/inheritance:r", "/grant:r", "${currentUser}:(F)"
@@ -314,23 +248,11 @@ function Register-StartupTask {
 
 Save-Installer
 
-if (-not [string]::IsNullOrWhiteSpace($EnvironmentFile)) {
-  if (-not (Test-Path -LiteralPath $EnvironmentFile -PathType Leaf)) {
-    throw "The requested environment file does not exist: $EnvironmentFile"
-  }
-  $EnvironmentFile = (Resolve-Path -LiteralPath $EnvironmentFile).Path
-}
-
 if (-not (Test-Administrator)) {
   $resumeArgument = if ($Resume) { " -Resume" } else { "" }
   $noRestartArgument = if ($NoRestart) { " -NoRestart" } else { "" }
   $confirmationArgument = if ($SkipOtherHostConfirmation) { " -SkipOtherHostConfirmation" } else { "" }
-  $environmentArgument = if ([string]::IsNullOrWhiteSpace($EnvironmentFile)) {
-    ""
-  } else {
-    " -EnvironmentFile `"$EnvironmentFile`""
-  }
-  $arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$SavedInstaller`"$resumeArgument$noRestartArgument$confirmationArgument$environmentArgument"
+  $arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$SavedInstaller`"$resumeArgument$noRestartArgument$confirmationArgument"
   $process = Start-Process powershell.exe -Verb RunAs -ArgumentList $arguments -Wait -PassThru
   if ($process.ExitCode -ne 0) {
     throw "The elevated Raydio installer failed with exit code $($process.ExitCode)."

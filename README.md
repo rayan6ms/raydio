@@ -59,17 +59,17 @@ and troubleshooting, see [OPERATIONS.md](OPERATIONS.md).
 
 On 64-bit Intel/AMD Windows 10 build 19043 or newer, download
 [`scripts/windows/install-raydio.ps1`](scripts/windows/install-raydio.ps1), then run it from
-PowerShell. To migrate all current secrets and tuning values, pass the existing `.env` file:
+PowerShell:
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\install-raydio.ps1 -EnvironmentFile "D:\secure-transfer\.env"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\install-raydio.ps1
 ```
 
 The installer elevates itself, enables WSL2 if needed, resumes after the required restart, installs
-Git and rootless Podman, clones Raydio into `%LOCALAPPDATA%\Raydio\app`, imports and locks down the
-environment file, registers startup at sign-in, and starts the stack. If `-EnvironmentFile` is
-omitted, it pauses after cloning and displays the exact `.env` destination; if no file is placed
-there, it securely prompts for the Discord token and generates a Lavalink password.
+Git and rootless Podman, and clones Raydio into `%LOCALAPPDATA%\Raydio\app`. It then pauses and shows
+the exact destination `%LOCALAPPDATA%\Raydio\app\.env`. Manually copy the existing `.env` there and
+press Enter. The installer validates both existing secrets without displaying or changing them,
+locks down the file, registers startup at sign-in, and starts the stack.
 
 Only one running Raydio instance may use a Discord bot token. The installer requires confirmation
 that the old host is stopped before it registers automatic startup or starts Windows. Afterward,
