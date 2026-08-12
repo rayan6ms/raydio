@@ -27,7 +27,7 @@ function isYoutubeIdentifier(value: string | null): boolean {
   }
 
   try {
-    return /^[A-Za-z0-9_-]+$/u.test(decodeURIComponent(value));
+    return /^[A-Za-z0-9_-]{1,128}$/u.test(decodeURIComponent(value));
   } catch {
     return false;
   }
@@ -39,6 +39,12 @@ function hasPathIdentifier(url: URL, prefix: string): boolean {
 }
 
 function youtubeMediaType(url: URL): "playlist" | "video" | null {
+  // Shared YouTube links often identify both a selected video and its playlist.
+  // The playlist is the broader explicit request and must not be reduced to one video.
+  if (isYoutubeIdentifier(url.searchParams.get("list"))) {
+    return "playlist";
+  }
+
   if (url.hostname === "youtu.be") {
     return hasPathIdentifier(url, "/") ? "video" : null;
   }
@@ -83,6 +89,16 @@ export function classifyPlayInput(input: string): PlayInput {
   const mediaType = youtubeMediaType(url);
   if (mediaType === null) {
     return { kind: "unsupported-url", url: url.href };
+  }
+
+  if (mediaType === "playlist") {
+    const playlistId = url.searchParams.get("list");
+    if (playlistId === null) {
+      return { kind: "unsupported-url", url: url.href };
+    }
+    const canonicalUrl = new URL("https://www.youtube.com/playlist");
+    canonicalUrl.searchParams.set("list", playlistId);
+    return { kind: "youtube-url", mediaType, url: canonicalUrl.href };
   }
 
   return {

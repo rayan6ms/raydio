@@ -55,15 +55,38 @@ Lavalink may need extra time on its first start to download youtube-source. Stop
 `docker compose down`. For Oracle Cloud deployment, updates, rollback, secret rotation, monitoring,
 and troubleshooting, see [OPERATIONS.md](OPERATIONS.md).
 
+### Automatic Windows installation and migration
+
+On 64-bit Intel/AMD Windows 10 build 19043 or newer, download
+[`scripts/windows/install-raydio.ps1`](scripts/windows/install-raydio.ps1), then run it from
+PowerShell. To migrate all current secrets and tuning values, pass the existing `.env` file:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\install-raydio.ps1 -EnvironmentFile "D:\secure-transfer\.env"
+```
+
+The installer elevates itself, enables WSL2 if needed, resumes after the required restart, installs
+Git and rootless Podman, clones Raydio into `%LOCALAPPDATA%\Raydio\app`, imports and locks down the
+environment file, registers startup at sign-in, and starts the stack. If `-EnvironmentFile` is
+omitted, it pauses after cloning and displays the exact `.env` destination; if no file is placed
+there, it securely prompts for the Discord token and generates a Lavalink password.
+
+Only one running Raydio instance may use a Discord bot token. The installer requires confirmation
+that the old host is stopped before it registers automatic startup or starts Windows. Afterward,
+manage it with:
+
+```powershell
+& "$env:LOCALAPPDATA\Raydio\app\scripts\windows\raydio.ps1" <status|logs|update|restart|stop|doctor>
+```
+
 ## Commands
 
-Typing `/play` provides native song suggestions from YouTube Music, falling back to YouTube. A
-manually entered title plays its best match; recognized YouTube video, Music, and playlist URLs are
-resolved directly.
+Enter search terms in `/play request:` to play the best YouTube match. Recognized YouTube video,
+Music, playlist, and video-with-playlist URLs are resolved directly.
 
 | Command | Behavior |
 |---|---|
-| `/play song:` | Search, join, enqueue, and play when idle |
+| `/play request:` | Search, join, enqueue, and play videos or playlists when idle |
 | `/nowplaying` | Show the artwork, progress, and player controls |
 | `/queue` | Show and navigate the queue |
 | `/pause` | Pause the current song |
@@ -83,7 +106,7 @@ resolved directly.
 | `/ping` | Show Discord latency and Lavalink readiness |
 
 The modern player offers Previous, Pause/Resume, Next, Stop, Queue, Loop, and Leave buttons, a
-YouTube thumbnail, and a progress display refreshed every five seconds. Player controls become
+YouTube thumbnail, and a progress display refreshed every second. Player controls become
 harmless when their playback session is stale.
 Playback-changing controls require the caller to share the bot's normal voice channel. Stage
 channels are unsupported. Read-only commands and cleanup remain available during a Lavalink outage;

@@ -32,8 +32,23 @@ describe("classifyPlayInput", () => {
     assert.deepEqual(classifyPlayInput("https://youtube.com/playlist?list=playlist-id"), {
       kind: "youtube-url",
       mediaType: "playlist",
-      url: "https://youtube.com/playlist?list=playlist-id",
+      url: "https://www.youtube.com/playlist?list=playlist-id",
     });
+  });
+
+  it("treats a selected video carrying a list as the full canonical playlist", () => {
+    for (const url of [
+      "https://www.youtube.com/watch?v=NrI-UBIB8Jk&list=PLEijU2q67K_twQnJ06-3DnrvsAdEii_MQ",
+      "https://youtu.be/NrI-UBIB8Jk?list=PLEijU2q67K_twQnJ06-3DnrvsAdEii_MQ&t=30",
+      "https://music.youtube.com/watch?v=NrI-UBIB8Jk&list=PLEijU2q67K_twQnJ06-3DnrvsAdEii_MQ",
+      "https://youtube.com/shorts/NrI-UBIB8Jk?list=PLEijU2q67K_twQnJ06-3DnrvsAdEii_MQ",
+    ]) {
+      assert.deepEqual(classifyPlayInput(url), {
+        kind: "youtube-url",
+        mediaType: "playlist",
+        url: "https://www.youtube.com/playlist?list=PLEijU2q67K_twQnJ06-3DnrvsAdEii_MQ",
+      });
+    }
   });
 
   it("accepts common direct video path forms", () => {

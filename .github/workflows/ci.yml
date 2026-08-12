@@ -31,3 +31,28 @@ jobs:
         run: npm audit
       - name: Run release gate
         run: npm run check
+
+  windows-scripts:
+    runs-on: windows-2025
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Parse PowerShell scripts
+        shell: pwsh
+        run: |
+          $parseFailures = @()
+          foreach ($script in Get-ChildItem scripts/windows -Filter *.ps1) {
+            $tokens = $null
+            $parseErrors = $null
+            [void][System.Management.Automation.Language.Parser]::ParseFile(
+              $script.FullName,
+              [ref]$tokens,
+              [ref]$parseErrors
+            )
+            $parseFailures += $parseErrors
+          }
+          if ($parseFailures.Count -gt 0) {
+            $parseFailures | Format-List
+            throw "PowerShell parsing failed."
+          }

@@ -132,6 +132,28 @@ describe("public documentation", () => {
     assert.match(packageMetadata.scripts?.start ?? "", /--env-file-if-exists=\.env/);
   });
 
+  it("documents a safe unattended Windows migration path", () => {
+    const readme = readText("README.md");
+    const installer = readText("scripts/windows/install-raydio.ps1");
+    const manager = readText("scripts/windows/raydio.ps1");
+
+    assert.match(readme, /-EnvironmentFile/);
+    assert.match(readme, /%LOCALAPPDATA%\\Raydio\\app/);
+    assert.match(installer, /\[string\]\$EnvironmentFile/);
+    assert.match(
+      installer,
+      /Copy-Item -LiteralPath \$EnvironmentFile -Destination \$environmentPath/,
+    );
+    assert.ok(
+      installer.indexOf("Confirm the Fedora deployment is stopped") <
+        installer.lastIndexOf("Register-StartupTask"),
+      "the old host confirmation must precede automatic Windows startup registration",
+    );
+    for (const action of ["start", "restart", "stop", "update", "status", "logs", "doctor"]) {
+      assert.match(manager, new RegExp(`"${action}"`));
+    }
+  });
+
   it("keeps the compiler on an exact TypeScript 7 release", () => {
     const packageMetadata = JSON.parse(readText("package.json")) as PackageMetadata;
 

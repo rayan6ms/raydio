@@ -38,9 +38,8 @@ function command(name: CommandName, description: string): SlashCommandBuilder {
 export const APPLICATION_COMMANDS = [
   command("play", "Play a YouTube song or add it to the queue").addStringOption((option) =>
     option
-      .setName("song")
-      .setDescription("Song title, search terms, or a YouTube URL")
-      .setAutocomplete(true)
+      .setName("request")
+      .setDescription("Search terms or a YouTube video or playlist URL")
       .setRequired(true),
   ),
   command("nowplaying", "Show the current song and player controls"),
@@ -125,7 +124,7 @@ export type ExecutableControlCommandInvocation = Exclude<
 export const HELP_MESSAGE = [
   "**Raydio commands**",
   "**Start and view**",
-  "`/play song:` — search with native suggestions, play, or queue",
+  "`/play request:` — search, play a YouTube video, or queue a playlist",
   "`/nowplaying` — show the modern player and controls",
   "`/queue` — show the current and upcoming songs",
   "**Playback**",
@@ -267,7 +266,7 @@ export async function dispatchCommand(
 
   if (parsed.name === "play") {
     if (!parsed.argument) {
-      await context.send("Use `/play song:` and enter a title or YouTube URL.");
+      await context.send("Use `/play request:` and enter search terms or a YouTube URL.");
       return "handled";
     }
     if (!context.lavalinkReady) {

@@ -1,7 +1,6 @@
 import {
   type ActionRowBuilder,
   ActivityType,
-  type AutocompleteInteraction,
   type ButtonBuilder,
   type ButtonInteraction,
   ChannelType,
@@ -78,7 +77,6 @@ type MusicController = Pick<
   | "getIdentities"
   | "getIdentity"
   | "getSnapshot"
-  | "searchTracks"
   | "requestPlay"
   | "setPaused"
   | "setVolume"
@@ -95,11 +93,7 @@ type MusicController = Pick<
   | "updateAloneStatus"
 >;
 
-const AUTOCOMPLETE_RESULT_LIMIT = 10;
-const AUTOCOMPLETE_CACHE_LIMIT = 500;
-const AUTOCOMPLETE_CACHE_TTL_MS = 30_000;
-const AUTOCOMPLETE_DEADLINE_MS = 2_250;
-const PLAYER_REFRESH_INTERVAL_MS = 5_000;
+const PLAYER_REFRESH_INTERVAL_MS = 1_000;
 const PLAYER_MESSAGE_LIMIT = 1_000;
 
 type SlashResponseSender = (options: {
@@ -107,6 +101,22 @@ type SlashResponseSender = (options: {
   readonly embeds?: readonly EmbedBuilder[];
   readonly components?: readonly ActionRowBuilder<ButtonBuilder>[];
 }) => Promise<Message>;
+
+interface DeletableMessage {
+  readonly id: string;
+  delete(): Promise<unknown>;
+}
+
+export async function deleteSupersededPlayerMessage(
+  previous: DeletableMessage | undefined,
+  current: DeletableMessage,
+): Promise<boolean> {
+  if (previous === undefined || previous.id === current.id) {
+    return false;
+  }
+  await previous.delete();
+  return true;
+}
 
 export function hasHumanVoiceMember(
   members: Iterable<{ readonly user: { readonly bot: boolean } }>,
@@ -123,11 +133,6 @@ function logError(logger: Logger, event: string, error: unknown, message: string
   logger.error({ event, ...errorFields(error) }, message);
 }
 
-interface AutocompleteChoice {
-  readonly name: string;
-  readonly value: string;
-}
-
 function plainExternalText(value: string, maximumLength: number): string {
   const plain = value
     .replaceAll(/[\p{Cc}\p{Cf}\p{Zl}\p{Zp}]+/gu, " ")
@@ -136,99 +141,10 @@ function plainExternalText(value: string, maximumLength: number): string {
   return truncateMessage(plain, maximumLength);
 }
 
-export function createPlayAutocompleteHandler(
-  music: MusicController,
-  now: () => number = Date.now,
-): (interaction: AutocompleteInteraction) => Promise<void> {
-  const cache = new Map<
-    string,
-    { readonly expiresAt: number; readonly choices: readonly AutocompleteChoice[] }
-  >();
-
-  function prune(): void {
-    const currentTime = now();
-    for (const [key, entry] of cache) {
-      if (entry.expiresAt <= currentTime) {
-        cache.delete(key);
-      }
-    }
-    while (cache.size > AUTOCOMPLETE_CACHE_LIMIT) {
-      const oldest = cache.keys().next().value;
-      if (oldest === undefined) {
-        break;
-      }
-      cache.delete(oldest);
-    }
-  }
-
-  return async (interaction) => {
-    if (!interaction.inCachedGuild() || interaction.commandName !== "play") {
-      await interaction.respond([]);
-      return;
-    }
-    const query = interaction.options.getFocused().trim();
-    const access = validateVoiceAccess(interactionVoiceFacts(interaction));
-    if (query.length < 2 || access.kind !== "ready") {
-      await interaction.respond([]);
-      return;
-    }
-
-    prune();
-    const key = `${interaction.guildId}:${access.voiceChannelId}:${query.toLocaleLowerCase("en-US")}`;
-    const cached = cache.get(key);
-    if (cached !== undefined) {
-      await interaction.respond(cached.choices);
-      return;
-    }
-
-    let timeout: ReturnType<typeof setTimeout> | undefined;
-    const deadline = new Promise<null>((resolve) => {
-      timeout = setTimeout(() => resolve(null), AUTOCOMPLETE_DEADLINE_MS);
-      timeout.unref();
-    });
-    const result = await Promise.race([
-      music.searchTracks({
-        guildId: interaction.guildId,
-        intendedVoiceChannelId: access.voiceChannelId,
-        input: query,
-        resultLimit: AUTOCOMPLETE_RESULT_LIMIT,
-      }),
-      deadline,
-    ]);
-    if (timeout !== undefined) {
-      clearTimeout(timeout);
-    }
-
-    if (result === null) {
-      await interaction.respond([]);
-      return;
-    }
-    const seenIdentifiers = new Set<string>();
-    const choices: AutocompleteChoice[] = [];
-    if (result.kind === "choices") {
-      for (const track of result.tracks) {
-        const value = `https://www.youtube.com/watch?v=${track.identifier}`;
-        if (value.length > 100 || seenIdentifiers.has(track.identifier)) {
-          continue;
-        }
-        seenIdentifiers.add(track.identifier);
-        choices.push({
-          name:
-            plainExternalText(`${track.title} — ${track.author}`, 100) || "Untitled YouTube track",
-          value,
-        });
-      }
-    }
-    cache.set(key, { choices, expiresAt: now() + AUTOCOMPLETE_CACHE_TTL_MS });
-    prune();
-    await interaction.respond(choices);
-  };
-}
-
 function commandArgument(interaction: ChatInputCommandInteraction<"cached">): string {
   switch (interaction.commandName as CommandName) {
     case "play":
-      return interaction.options.getString("song", true);
+      return interaction.options.getString("request", true);
     case "volume":
       return interaction.options.getInteger("level")?.toString() ?? "";
     case "loop":
@@ -250,7 +166,7 @@ async function handleChatInputCommand(
   music: MusicController,
   queueViews: QueueViewController,
   playerViews: NowPlayingViewController,
-  registerPlayerMessage: (guildId: string, message: Message) => void,
+  registerPlayerMessage: (guildId: string, message: Message) => Promise<void>,
   refreshPlayerMessage: (guildId: string) => Promise<void>,
 ): Promise<void> {
   if (!interaction.inCachedGuild()) {
@@ -308,7 +224,7 @@ async function handleChatInputCommand(
           components: view.components,
         });
         if (view.components.length > 0) {
-          registerPlayerMessage(interaction.guildId, sent);
+          await registerPlayerMessage(interaction.guildId, sent);
         }
       },
       presentQueue: async () => {
@@ -420,7 +336,7 @@ function prepareInteractionControl(
 }
 
 function nextLoopMode(mode: GuildPlaybackSnapshot["loopMode"]): GuildPlaybackSnapshot["loopMode"] {
-  return mode === "off" ? "track" : mode === "track" ? "queue" : "off";
+  return mode === "off" ? "track" : "off";
 }
 
 export async function handlePlayerButtonInteraction(
@@ -566,10 +482,7 @@ function memberVoiceFacts(
 }
 
 function interactionVoiceFacts(
-  interaction:
-    | AutocompleteInteraction<"cached">
-    | ButtonInteraction<"cached">
-    | ChatInputCommandInteraction<"cached">,
+  interaction: ButtonInteraction<"cached"> | ChatInputCommandInteraction<"cached">,
 ): VoiceAccessFacts {
   return memberVoiceFacts(
     interaction.guild.members.cache.get(interaction.user.id) ?? null,
@@ -938,7 +851,7 @@ async function handlePlay(
   input: string,
   music: MusicController,
   playerViews: NowPlayingViewController,
-  registerPlayerMessage: (guildId: string, message: Message) => void,
+  registerPlayerMessage: (guildId: string, message: Message) => Promise<void>,
   send: SlashResponseSender,
 ): Promise<string | null> {
   const initialAccess = validateVoiceAccess(interactionVoiceFacts(interaction));
@@ -986,7 +899,7 @@ async function handlePlay(
     components: view.components,
   });
   if (view.components.length > 0) {
-    registerPlayerMessage(interaction.guildId, sent);
+    await registerPlayerMessage(interaction.guildId, sent);
   }
   return null;
 }
@@ -1021,7 +934,6 @@ export function createDiscordService(
 ): DiscordService {
   const queueViews = createQueueViewController();
   const playerViews = createNowPlayingViewController();
-  const handleAutocomplete = createPlayAutocompleteHandler(music);
   const playerMessages = new Map<string, { readonly message: Message; fingerprint: string }>();
   let presenceKey = "";
   let acceptingCommands = false;
@@ -1032,7 +944,7 @@ export function createDiscordService(
     playerMessages.delete(guildId);
   }
 
-  function registerPlayerMessage(guildId: string, message: Message): void {
+  async function registerPlayerMessage(guildId: string, message: Message): Promise<void> {
     const previous = playerMessages.get(guildId);
     if (previous === undefined && playerMessages.size >= PLAYER_MESSAGE_LIMIT) {
       const oldestGuildId = playerMessages.keys().next().value;
@@ -1044,10 +956,10 @@ export function createDiscordService(
     }
     playerMessages.set(guildId, { message, fingerprint: "" });
     if (previous !== undefined && previous.message.id !== message.id) {
-      void previous.message.edit({ components: [] }).catch((error: unknown) => {
+      await deleteSupersededPlayerMessage(previous.message, message).catch((error: unknown) => {
         logger.debug(
-          { event: "player_previous_message_retire_failed", ...errorFields(error) },
-          "Could not retire a superseded player message",
+          { event: "player_previous_message_delete_failed", ...errorFields(error) },
+          "Could not delete a superseded player message",
         );
       });
     }
@@ -1210,19 +1122,9 @@ export function createDiscordService(
 
   client.on(Events.InteractionCreate, (interaction) => {
     if (interaction.isAutocomplete()) {
-      if (!acceptingCommands) {
-        void interaction.respond([]).catch(() => undefined);
-        return;
-      }
-      void handleAutocomplete(interaction).catch((error: unknown) => {
-        logger.debug(
-          { event: "autocomplete_failed", ...errorFields(error) },
-          "Play autocomplete failed",
-        );
-        if (!interaction.responded) {
-          void interaction.respond([]).catch(() => undefined);
-        }
-      });
+      // Discord may briefly send interactions for the old registration while
+      // the new non-autocomplete command schema propagates.
+      void interaction.respond([]).catch(() => undefined);
       return;
     }
 

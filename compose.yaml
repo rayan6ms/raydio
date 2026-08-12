@@ -44,7 +44,8 @@ services:
       - ./lavalink/application.yml:/opt/Lavalink/application.yml:ro,Z
     read_only: true
     tmpfs:
-      - /tmp:size=128m,mode=1777,nosuid,nodev
+      # Lavalink extracts Discord's DAVE native library here and must be able to load it.
+      - /tmp:size=128m,mode=1777,exec,nosuid,nodev
       - /opt/Lavalink/plugins:size=64m,mode=1777,noexec,nosuid,nodev
     cap_drop:
       - ALL

@@ -101,7 +101,7 @@ function button(
 }
 
 function loopLabel(mode: GuildPlaybackSnapshot["loopMode"]): string {
-  return mode === "off" ? "Loop Off" : mode === "track" ? "Loop Song" : "Loop Queue";
+  return mode === "off" ? "Loop: OFF" : "Loop: ON";
 }
 
 export function createNowPlayingViewController(
@@ -143,8 +143,12 @@ export function createNowPlayingViewController(
       const sessionId = sessionFor(snapshot);
       const track = snapshot.current;
       const title = safeSegment(track.title, 200).trim() || "Untitled track";
-      const author = safeSegment(track.author, 100).trim() || "Unknown artist";
       const requester = safeSegment(track.requestedBy.label, 64).trim() || "Unknown user";
+      const nextTrack = snapshot.upcoming[0];
+      const upNext =
+        nextTrack === undefined
+          ? "Nothing queued"
+          : safeSegment(nextTrack.title, 200).trim() || "Untitled track";
       const positionMs = Math.min(snapshot.positionMs, track.durationMs);
       const progress = track.isStream
         ? "🔴 **LIVE**"
@@ -155,14 +159,14 @@ export function createNowPlayingViewController(
         .setColor(PLAYER_COLOR)
         .setAuthor({ name: "Raydio • Now Playing" })
         .setTitle(title)
-        .setDescription(`${progress}\n\n**${author}**`)
+        .setDescription(progress)
         .addFields(
           { name: "Requested by", value: requester, inline: true },
-          { name: "Up next", value: String(snapshot.upcoming.length), inline: true },
+          { name: "Up next", value: upNext, inline: true },
           { name: "Volume", value: `${snapshot.volume}%`, inline: true },
         )
         .setFooter({
-          text: `${snapshot.paused ? "Paused" : "Playing"} • ${loopLabel(snapshot.loopMode)} • refreshes every 5 seconds`,
+          text: `${snapshot.paused ? "Paused" : "Playing"} • ${loopLabel(snapshot.loopMode)} • refreshes every second`,
         });
       if (url !== null) {
         embed.setURL(url);

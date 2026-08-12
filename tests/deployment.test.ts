@@ -109,7 +109,7 @@ describe("Compose configuration", () => {
     ]);
     assert.equal(valueAt(service, ["read_only"]), true);
     assert.deepEqual(valueAt(service, ["tmpfs"]), [
-      "/tmp:size=128m,mode=1777,nosuid,nodev",
+      "/tmp:size=128m,mode=1777,exec,nosuid,nodev",
       "/opt/Lavalink/plugins:size=64m,mode=1777,noexec,nosuid,nodev",
     ]);
     assert.deepEqual(valueAt(service, ["cap_drop"]), ["ALL"]);
@@ -234,6 +234,26 @@ describe("GitHub continuous integration", () => {
       .map((step) => stringProperty(step, "run"))
       .filter((run): run is string => typeof run === "string");
     assert.deepEqual(commands, ["npm ci", "npm audit", "npm run check"]);
+  });
+
+  it("parses every Windows PowerShell script on a Windows runner", () => {
+    const workflow = readYaml(".github/workflows/ci.yml");
+    const job = valueAt(workflow, ["jobs", "windows-scripts"]);
+
+    assert.ok(isRecord(job));
+    assert.equal(valueAt(job, ["runs-on"]), "windows-2025");
+    assert.equal(valueAt(job, ["timeout-minutes"]), 5);
+    const steps = valueAt(job, ["steps"]);
+    assert.ok(Array.isArray(steps));
+    assert.equal(
+      steps.some(
+        (step) =>
+          isRecord(step) &&
+          stringProperty(step, "shell") === "pwsh" &&
+          (stringProperty(step, "run") ?? "").includes("Parser]::ParseFile"),
+      ),
+      true,
+    );
   });
 });
 

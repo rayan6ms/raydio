@@ -16,8 +16,8 @@ import {
   createDiscordClient,
   createDiscordMusicNotifier,
   createDiscordService,
-  createPlayAutocompleteHandler,
   DISCORD_INTENTS,
+  deleteSupersededPlayerMessage,
   formatNowPlayingSnapshot,
   formatPlayRequestResult,
   handlePlayerButtonInteraction,
@@ -44,7 +44,6 @@ type TestMusicController = Parameters<typeof createDiscordService>[3];
 
 function musicController(overrides: Partial<TestMusicController> = {}): TestMusicController {
   return {
-    searchTracks: async () => ({ kind: "closed" }),
     requestPlay: async () => ({ kind: "closed" }),
     getIdentity: () => undefined,
     getIdentities: () => [],
@@ -230,6 +229,25 @@ describe("createDiscordMusicNotifier", () => {
       allowedMentions: SAFE_ALLOWED_MENTIONS,
     });
     await assert.rejects(notifier.send("missing", "notice"), /channel is unavailable/);
+  });
+});
+
+describe("player message lifecycle", () => {
+  it("deletes a superseded controls message but never the current one", async () => {
+    let deleteCount = 0;
+    const previous = {
+      id: "old",
+      async delete() {
+        deleteCount += 1;
+        return this;
+      },
+    };
+    const current = { id: "current", delete: previous.delete };
+
+    assert.equal(await deleteSupersededPlayerMessage(previous, current), true);
+    assert.equal(await deleteSupersededPlayerMessage(current, current), false);
+    assert.equal(await deleteSupersededPlayerMessage(undefined, current), false);
+    assert.equal(deleteCount, 1);
   });
 });
 
@@ -561,9 +579,9 @@ describe("playback presentation", () => {
     assert.equal(formatQueueSnapshot(undefined), "The queue is empty.");
   });
 
-  it("renders session-bound player controls with bounded Previous availability", () => {
+  it("renders the next title without the channel and labels loop state explicitly", () => {
     const controller = createNowPlayingViewController(() => "player-session");
-    const snapshot = playbackSnapshot({ historyCount: 0 });
+    const snapshot = playbackSnapshot({ historyCount: 0, upcoming: [queueTrack("next")] });
     const view = controller.render(snapshot);
     const components = view.components.flatMap((row) => row.toJSON().components);
     const previous = components.find(
@@ -578,7 +596,10 @@ describe("playback presentation", () => {
     assert.equal(embed?.author?.name, "Raydio • Now Playing");
     assert.match(embed?.thumbnail?.url ?? "", /i\.ytimg\.com\/vi\/current\/hqdefault\.jpg/);
     assert.match(embed?.description ?? "", /●/);
-    assert.match(embed?.footer?.text ?? "", /refreshes every 5 seconds/);
+    assert.doesNotMatch(embed?.description ?? "", /author-current/);
+    assert.equal(embed?.fields?.find((field) => field.name === "Up next")?.value, "title-next");
+    assert.match(embed?.footer?.text ?? "", /refreshes every second/);
+    assert.match(JSON.stringify(components), /Loop: OFF/);
     assert.equal(previous !== undefined && "disabled" in previous && previous.disabled, true);
     assert.ok(pause !== undefined && "custom_id" in pause);
     if (pause === undefined || !("custom_id" in pause)) {
@@ -597,55 +618,10 @@ describe("playback presentation", () => {
     const resumed = controller.render({ ...replacement, paused: true });
     assert.match(JSON.stringify(resumed.components.map((row) => row.toJSON())), /Resume/);
     assert.match(JSON.stringify(resumed.components.map((row) => row.toJSON())), /Previous/);
-  });
-
-  it("returns bounded native play autocomplete choices and caches identical queries", async () => {
-    const voiceChannel = {
-      id: "voice-1",
-      type: ChannelType.GuildVoice,
-      full: false,
-      permissionsFor: () => ({ has: () => true }),
-    };
-    const member = { voice: { channel: voiceChannel } };
-    const responses: unknown[] = [];
-    const interaction = {
-      commandName: "play",
-      guildId: "guild-1",
-      user: { id: "user-1" },
-      options: { getFocused: () => "selected song" },
-      guild: {
-        members: { cache: new Map([["user-1", member]]), me: { voice: { channelId: null } } },
-      },
-      inCachedGuild: () => true,
-      respond: async (choices: unknown) => {
-        responses.push(choices);
-      },
-    };
-    let searchCalls = 0;
-    const handler = createPlayAutocompleteHandler(
-      musicController({
-        async searchTracks() {
-          searchCalls += 1;
-          return {
-            kind: "choices",
-            source: "youtube-search",
-            tracks: Array.from({ length: 10 }, (_, index) => queueTrack(`choice-${index + 1}`)),
-            rejectedTrackCount: 0,
-          };
-        },
-      }),
-      () => 1_000,
+    assert.match(
+      JSON.stringify(controller.render({ ...replacement, loopMode: "track" }).components),
+      /Loop: ON/,
     );
-
-    await handler(interaction as unknown as Parameters<typeof handler>[0]);
-    await handler(interaction as unknown as Parameters<typeof handler>[0]);
-
-    assert.equal(searchCalls, 1);
-    assert.equal(responses.length, 2);
-    const first = responses[0] as readonly { readonly name: string; readonly value: string }[];
-    assert.equal(first.length, 10);
-    assert.ok(first.every((choice) => choice.name.length <= 100));
-    assert.equal(first[0]?.value, "https://www.youtube.com/watch?v=choice-1");
   });
 
   it("applies player buttons through the same voice-checked manager controls", async () => {

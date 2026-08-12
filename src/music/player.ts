@@ -19,15 +19,42 @@ function createSession(
   client: ShoukakuVoiceClient,
   player: Player,
   options: PlaybackJoinOptions,
+  now: () => number,
 ): PlaybackSession {
+  let basePositionMs = 0;
+  let positionUpdatedAtMs = now();
+  let playing = false;
+  let paused = false;
+
+  function estimatedPositionMs(): number {
+    const elapsedMs = playing && !paused ? Math.max(0, now() - positionUpdatedAtMs) : 0;
+    return Math.max(0, basePositionMs + elapsedMs);
+  }
+
   const onStart = (event: Parameters<Player["onPlayerEvent"]>[0]): void => {
     if (event.type === "TrackStartEvent") {
+      basePositionMs = 0;
+      positionUpdatedAtMs = now();
+      playing = true;
+      paused = false;
       options.callbacks.onStart(event.track.encoded);
     }
   };
   const onEnd = (event: Parameters<Player["onPlayerEvent"]>[0]): void => {
     if (event.type === "TrackEndEvent") {
+      basePositionMs = estimatedPositionMs();
+      positionUpdatedAtMs = now();
+      playing = false;
       options.callbacks.onEnd(event.track.encoded, event.reason);
+    }
+  };
+  const onUpdate = (event: Parameters<Player["onPlayerUpdate"]>[0]): void => {
+    const position = event.state.position;
+    if (Number.isFinite(position) && position >= 0) {
+      basePositionMs = position;
+      positionUpdatedAtMs = now();
+      playing = player.track !== null;
+      paused = player.paused;
     }
   };
   const onStuck = (event: Parameters<Player["onPlayerEvent"]>[0]): void => {
@@ -48,6 +75,7 @@ function createSession(
 
   player.on("start", onStart);
   player.on("end", onEnd);
+  player.on("update", onUpdate);
   player.on("stuck", onStuck);
   player.on("exception", onException);
   player.on("closed", onClosed);
@@ -55,17 +83,25 @@ function createSession(
   let destroyed = false;
   let destroyPromise: Promise<void> | undefined;
   return {
-    play(encodedTrack) {
+    async play(encodedTrack) {
       if (destroyed) {
-        return Promise.reject(new Error("Playback session has been destroyed"));
+        throw new Error("Playback session has been destroyed");
       }
-      return player.playTrack({ track: { encoded: encodedTrack } });
+      await player.playTrack({ track: { encoded: encodedTrack } });
+      basePositionMs = 0;
+      positionUpdatedAtMs = now();
+      playing = false;
+      paused = false;
     },
-    setPaused(paused) {
+    async setPaused(nextPaused) {
       if (destroyed) {
-        return Promise.reject(new Error("Playback session has been destroyed"));
+        throw new Error("Playback session has been destroyed");
       }
-      return player.setPaused(paused);
+      const position = estimatedPositionMs();
+      await player.setPaused(nextPaused);
+      basePositionMs = position;
+      positionUpdatedAtMs = now();
+      paused = nextPaused;
     },
     setVolume(volume) {
       if (destroyed) {
@@ -80,7 +116,7 @@ function createSession(
       return player.stopTrack();
     },
     getPositionMs() {
-      return Number.isFinite(player.position) && player.position >= 0 ? player.position : 0;
+      return estimatedPositionMs();
     },
     destroy() {
       if (destroyPromise !== undefined) {
@@ -91,6 +127,7 @@ function createSession(
         destroyed = true;
         player.off("start", onStart);
         player.off("end", onEnd);
+        player.off("update", onUpdate);
         player.off("stuck", onStuck);
         player.off("exception", onException);
         player.off("closed", onClosed);
@@ -105,7 +142,10 @@ function createSession(
   };
 }
 
-export function createShoukakuPlaybackTransport(client: Shoukaku): PlaybackTransport {
+export function createShoukakuPlaybackTransport(
+  client: Shoukaku,
+  now: () => number = Date.now,
+): PlaybackTransport {
   return {
     async join(options) {
       const player = await client.joinVoiceChannel({
@@ -118,7 +158,7 @@ export function createShoukakuPlaybackTransport(client: Shoukaku): PlaybackTrans
 
       try {
         await player.setGlobalVolume(options.initialVolume);
-        return createSession(client, player, options);
+        return createSession(client, player, options, now);
       } catch (error: unknown) {
         await client.leaveVoiceChannel(options.guildId).catch(() => undefined);
         throw error;

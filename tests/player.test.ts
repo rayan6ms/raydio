@@ -13,6 +13,7 @@ interface FakePlayer extends EventEmitter {
   volumes: number[];
   stopCount: number;
   pauseCalls: boolean[];
+  paused: boolean;
   position: number;
   volumeError: Error | undefined;
   playTrack(options: unknown): Promise<void>;
@@ -28,6 +29,7 @@ function fakePlayer(): FakePlayer {
   player.volumes = [];
   player.stopCount = 0;
   player.pauseCalls = [];
+  player.paused = false;
   player.position = 0;
   player.volumeError = undefined;
   player.playTrack = async (options) => {
@@ -35,6 +37,7 @@ function fakePlayer(): FakePlayer {
   };
   player.setPaused = async (paused) => {
     player.pauseCalls.push(paused);
+    player.paused = paused;
   };
   player.setGlobalVolume = async (volume) => {
     if (player.volumeError !== undefined) {
@@ -73,7 +76,8 @@ describe("createShoukakuPlaybackTransport", () => {
       },
     } as unknown as Shoukaku;
     const events: string[] = [];
-    const session = await createShoukakuPlaybackTransport(client).join({
+    let nowMs = 1_000;
+    const session = await createShoukakuPlaybackTransport(client, () => nowMs).join({
       guildId: "guild-1",
       voiceChannelId: "voice-1",
       shardId: 2,
@@ -100,8 +104,16 @@ describe("createShoukakuPlaybackTransport", () => {
     assert.deepEqual(player.pauseCalls, [true]);
     assert.deepEqual(player.volumes, [70, 55]);
     player.position = 12_345;
+    player.track = "encoded-a";
+    player.emit("update", { state: { position: 12_345, connected: true, ping: 1 } });
     assert.equal(session.getPositionMs(), 12_345);
-    player.position = Number.NaN;
+    await session.setPaused(false);
+    nowMs += 500;
+    assert.equal(session.getPositionMs(), 12_845);
+    await session.setPaused(true);
+    nowMs += 500;
+    assert.equal(session.getPositionMs(), 12_845);
+    await session.play("encoded-b");
     assert.equal(session.getPositionMs(), 0);
 
     player.emit("start", { type: "TrackStartEvent", track: { encoded: "encoded-a" } });

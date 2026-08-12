@@ -44,19 +44,19 @@ describe("application command registry", () => {
     }
   });
 
-  it("enables native autocomplete only for the required play song option", () => {
+  it("registers a required plain request option without opening autocomplete", () => {
     const play = APPLICATION_COMMANDS[0].toJSON();
     assert.equal(play.name, "play");
-    const song = play.options?.[0];
-    assert.equal(song?.type, 3);
-    assert.equal(song?.name, "song");
-    assert.equal(song?.description, "Song title, search terms, or a YouTube URL");
-    assert.equal("required" in (song ?? {}) ? song.required : undefined, true);
-    assert.equal("autocomplete" in (song ?? {}) ? song.autocomplete : undefined, true);
+    const request = play.options?.[0];
+    assert.equal(request?.type, 3);
+    assert.equal(request?.name, "request");
+    assert.equal(request?.description, "Search terms or a YouTube video or playlist URL");
+    assert.equal("required" in (request ?? {}) ? request.required : undefined, true);
+    assert.equal("autocomplete" in (request ?? {}) ? request.autocomplete : undefined, undefined);
   });
 
   it("uses slash syntax throughout the compact help menu", () => {
-    assert.match(HELP_MESSAGE, /`\/play song:`/);
+    assert.match(HELP_MESSAGE, /`\/play request:`/);
     assert.match(HELP_MESSAGE, /`\/move from: to:`/);
     assert.doesNotMatch(HELP_MESSAGE, /`\\/);
   });

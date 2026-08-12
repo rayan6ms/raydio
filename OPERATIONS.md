@@ -228,8 +228,8 @@ Automated tests and local image checks cannot prove Discord DAVE/audio acceptanc
 new host as production-ready, use a private voice/text channel and verify:
 
 1. `/help` and `/ping` work without mentioning users or roles.
-2. `/play` native autocomplete, a manually entered search, a direct YouTube URL, and a small
-   playlist produce audible playback.
+2. `/play request:` with a manual search, direct YouTube URL, video-with-playlist URL, and standalone
+   playlist produces audible playback without opening an autocomplete search panel.
 3. Queue pagination/stale buttons, queue advance, pause/resume, volume, skip, stop, loops,
    move/jump/shuffle/remove/clear, and leave work.
 4. Same-channel authorization and Stage rejection work.
