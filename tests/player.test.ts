@@ -96,6 +96,8 @@ describe("createShoukakuPlaybackTransport", () => {
     ]);
     assert.deepEqual(player.volumes, [70]);
     await session.play("encoded-a");
+    nowMs += 500;
+    assert.equal(session.getPositionMs(), 500);
     await session.setPaused(true);
     await session.setVolume(55);
     await session.stop();

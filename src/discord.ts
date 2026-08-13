@@ -1,6 +1,7 @@
 import {
   type ActionRowBuilder,
   ActivityType,
+  type AutocompleteInteraction,
   type ButtonBuilder,
   type ButtonInteraction,
   ChannelType,
@@ -77,6 +78,7 @@ type MusicController = Pick<
   | "getIdentities"
   | "getIdentity"
   | "getSnapshot"
+  | "searchTracks"
   | "requestPlay"
   | "setPaused"
   | "setVolume"
@@ -93,6 +95,10 @@ type MusicController = Pick<
   | "updateAloneStatus"
 >;
 
+const AUTOCOMPLETE_RESULT_LIMIT = 10;
+const AUTOCOMPLETE_CACHE_LIMIT = 500;
+const AUTOCOMPLETE_CACHE_TTL_MS = 30_000;
+const AUTOCOMPLETE_DEADLINE_MS = 2_250;
 const PLAYER_REFRESH_INTERVAL_MS = 1_000;
 const PLAYER_MESSAGE_LIMIT = 1_000;
 
@@ -107,6 +113,11 @@ interface DeletableMessage {
   delete(): Promise<unknown>;
 }
 
+interface AutocompleteChoice {
+  readonly name: string;
+  readonly value: string;
+}
+
 export async function deleteSupersededPlayerMessage(
   previous: DeletableMessage | undefined,
   current: DeletableMessage,
@@ -116,6 +127,14 @@ export async function deleteSupersededPlayerMessage(
   }
   await previous.delete();
   return true;
+}
+
+export function isTerminalPlayerMessageError(error: unknown): boolean {
+  if (typeof error !== "object" || error === null || !("code" in error)) {
+    return false;
+  }
+  const code = (error as { readonly code?: unknown }).code;
+  return code === 10_003 || code === 10_008 || code === 50_001 || code === 50_013;
 }
 
 export function hasHumanVoiceMember(
@@ -139,6 +158,112 @@ function plainExternalText(value: string, maximumLength: number): string {
     .replaceAll(/\s+/g, " ")
     .trim();
   return truncateMessage(plain, maximumLength);
+}
+
+function isSearchableAutocompleteInput(input: string): boolean {
+  const query = input.trim();
+  if (query.length < 2) {
+    return false;
+  }
+  try {
+    new URL(query);
+    return false;
+  } catch {
+    return true;
+  }
+}
+
+export function createPlayAutocompleteHandler(
+  music: MusicController,
+  now: () => number = Date.now,
+): (interaction: AutocompleteInteraction) => Promise<void> {
+  const cache = new Map<
+    string,
+    { readonly expiresAt: number; readonly choices: readonly AutocompleteChoice[] }
+  >();
+
+  function prune(): void {
+    const currentTime = now();
+    for (const [key, entry] of cache) {
+      if (entry.expiresAt <= currentTime) {
+        cache.delete(key);
+      }
+    }
+    while (cache.size > AUTOCOMPLETE_CACHE_LIMIT) {
+      const oldest = cache.keys().next().value;
+      if (oldest === undefined) {
+        break;
+      }
+      cache.delete(oldest);
+    }
+  }
+
+  return async (interaction) => {
+    if (!interaction.inCachedGuild() || interaction.commandName !== "play") {
+      await interaction.respond([]);
+      return;
+    }
+    const query = interaction.options.getFocused().trim();
+    if (!isSearchableAutocompleteInput(query)) {
+      await interaction.respond([]);
+      return;
+    }
+    const access = validateVoiceAccess(interactionVoiceFacts(interaction));
+    if (access.kind !== "ready") {
+      await interaction.respond([]);
+      return;
+    }
+
+    prune();
+    const key = `${interaction.guildId}:${access.voiceChannelId}:${query.toLocaleLowerCase("en-US")}`;
+    const cached = cache.get(key);
+    if (cached !== undefined) {
+      await interaction.respond(cached.choices);
+      return;
+    }
+
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    const deadline = new Promise<null>((resolve) => {
+      timeout = setTimeout(() => resolve(null), AUTOCOMPLETE_DEADLINE_MS);
+      timeout.unref();
+    });
+    const result = await Promise.race([
+      music.searchTracks({
+        guildId: interaction.guildId,
+        intendedVoiceChannelId: access.voiceChannelId,
+        input: query,
+        resultLimit: AUTOCOMPLETE_RESULT_LIMIT,
+      }),
+      deadline,
+    ]);
+    if (timeout !== undefined) {
+      clearTimeout(timeout);
+    }
+
+    if (result === null) {
+      await interaction.respond([]);
+      return;
+    }
+    const seenIdentifiers = new Set<string>();
+    const choices: AutocompleteChoice[] = [];
+    if (result.kind === "choices") {
+      for (const track of result.tracks) {
+        const value = `https://www.youtube.com/watch?v=${track.identifier}`;
+        if (value.length > 100 || seenIdentifiers.has(track.identifier)) {
+          continue;
+        }
+        seenIdentifiers.add(track.identifier);
+        choices.push({
+          name:
+            plainExternalText(`${track.title} — ${track.author}`, 100) || "Untitled YouTube track",
+          value,
+        });
+      }
+    }
+    cache.set(key, { choices, expiresAt: now() + AUTOCOMPLETE_CACHE_TTL_MS });
+    prune();
+    await interaction.respond(choices);
+  };
 }
 
 function commandArgument(interaction: ChatInputCommandInteraction<"cached">): string {
@@ -482,7 +607,10 @@ function memberVoiceFacts(
 }
 
 function interactionVoiceFacts(
-  interaction: ButtonInteraction<"cached"> | ChatInputCommandInteraction<"cached">,
+  interaction:
+    | AutocompleteInteraction<"cached">
+    | ButtonInteraction<"cached">
+    | ChatInputCommandInteraction<"cached">,
 ): VoiceAccessFacts {
   return memberVoiceFacts(
     interaction.guild.members.cache.get(interaction.user.id) ?? null,
@@ -529,18 +657,22 @@ export function formatPlayRequestResult(result: PlayRequestResult): string {
   switch (result.kind) {
     case "queued": {
       const title = truncateMessage(escapeExternalText(result.firstTrack.title), 160);
+      const author = truncateMessage(escapeExternalText(result.firstTrack.author), 100);
+      const duration = result.firstTrack.isStream
+        ? "LIVE"
+        : formatDuration(result.firstTrack.durationMs);
       const playlistName =
         result.playlistName === null
           ? null
           : truncateMessage(escapeExternalText(result.playlistName), 120);
       let message: string;
       if (result.becameCurrent) {
-        message = `Playing **${title}**`;
+        message = `Playing **${title}** by **${author}** (\`${duration}\`)`;
         if (result.addedTrackCount > 1) {
           message += ` and queued ${result.addedTrackCount - 1} more`;
         }
       } else if (result.addedTrackCount === 1) {
-        message = `Queued **${title}**`;
+        message = `Queued **${title}** by **${author}** (\`${duration}\`)`;
       } else {
         message = `Queued ${result.addedTrackCount} tracks`;
       }
@@ -934,7 +1066,9 @@ export function createDiscordService(
 ): DiscordService {
   const queueViews = createQueueViewController();
   const playerViews = createNowPlayingViewController();
+  const handleAutocomplete = createPlayAutocompleteHandler(music);
   const playerMessages = new Map<string, { readonly message: Message; fingerprint: string }>();
+  const playerMessageRefreshes = new Set<string>();
   let presenceKey = "";
   let acceptingCommands = false;
   let started = false;
@@ -966,37 +1100,54 @@ export function createDiscordService(
   }
 
   async function refreshPlayerMessage(guildId: string): Promise<void> {
+    if (playerMessageRefreshes.has(guildId)) {
+      return;
+    }
     const active = playerMessages.get(guildId);
     if (active === undefined) {
       return;
     }
-    const view = playerViews.render(music.getSnapshot(guildId));
-    const fingerprint = JSON.stringify({
-      content: view.content,
-      embeds: view.embeds.map((embed) => embed.toJSON()),
-      components: view.components.map((row) => row.toJSON()),
-    });
-    if (active.fingerprint === fingerprint) {
-      return;
-    }
+    playerMessageRefreshes.add(guildId);
     try {
+      const view = playerViews.render(music.getSnapshot(guildId));
+      const fingerprint = JSON.stringify({
+        content: view.content,
+        embeds: view.embeds.map((embed) => embed.toJSON()),
+        components: view.components.map((row) => row.toJSON()),
+      });
+      if (active.fingerprint === fingerprint) {
+        return;
+      }
       await active.message.edit({
         content: view.content,
         embeds: view.embeds,
         components: view.components,
         allowedMentions: SAFE_ALLOWED_MENTIONS,
       });
+      if (playerMessages.get(guildId) !== active) {
+        return;
+      }
       active.fingerprint = fingerprint;
       if (view.components.length === 0) {
         retirePlayerMessage(guildId);
       }
     } catch (error: unknown) {
-      retirePlayerMessage(guildId);
-      playerViews.retire(guildId);
+      const terminal = isTerminalPlayerMessageError(error);
+      if (terminal && playerMessages.get(guildId) === active) {
+        retirePlayerMessage(guildId);
+        playerViews.retire(guildId);
+      }
       logger.debug(
-        { event: "player_message_refresh_failed", guildId, ...errorFields(error) },
+        {
+          event: "player_message_refresh_failed",
+          guildId,
+          terminal,
+          ...errorFields(error),
+        },
         "Could not refresh the active player message",
       );
+    } finally {
+      playerMessageRefreshes.delete(guildId);
     }
   }
 
@@ -1122,9 +1273,12 @@ export function createDiscordService(
 
   client.on(Events.InteractionCreate, (interaction) => {
     if (interaction.isAutocomplete()) {
-      // Discord may briefly send interactions for the old registration while
-      // the new non-autocomplete command schema propagates.
-      void interaction.respond([]).catch(() => undefined);
+      void handleAutocomplete(interaction).catch((error: unknown) => {
+        logger.debug(
+          { event: "autocomplete_failed", ...errorFields(error) },
+          "Could not provide play suggestions",
+        );
+      });
       return;
     }
 
@@ -1277,6 +1431,7 @@ export function createDiscordService(
       acceptingCommands = false;
       clearInterval(playerRefreshTimer);
       playerMessages.clear();
+      playerMessageRefreshes.clear();
       await client.destroy();
     },
   };

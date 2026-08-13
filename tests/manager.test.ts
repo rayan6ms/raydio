@@ -1099,6 +1099,28 @@ describe("createMusicManager", () => {
     assert.equal(manager.getSnapshot("guild-1")?.consecutiveFailures, 0);
   });
 
+  it("advances finite tracks if Lavalink misses the natural end event", async () => {
+    const scheduler = new FakeScheduler();
+    const transport = new FakeTransport();
+    const resolver = new FakeResolver(async () => tracks(track("a"), track("b")));
+    const manager = managerWith(resolver, { scheduler, transport });
+    await queue(manager, "playlist");
+
+    const watchdog = scheduler.timers.find((timer) => timer.delayMs === 195_000);
+    assert.ok(watchdog);
+    assert.equal(watchdog.unrefCalled, true);
+    watchdog.callback();
+    await waitForImmediate();
+    await waitForImmediate();
+
+    assert.equal(manager.getSnapshot("guild-1")?.current?.identifier, "b");
+    assert.deepEqual(transport.sessions[0]?.played, ["encoded-a", "encoded-b"]);
+    assert.notEqual(
+      scheduler.timers.findLast((timer) => !timer.cleared),
+      watchdog,
+    );
+  });
+
   it("rechecks stale timer callbacks and cleans idle/alone sessions idempotently", async () => {
     const scheduler = new FakeScheduler();
     const manager = managerWith(new FakeResolver(), { scheduler });
@@ -1107,15 +1129,21 @@ describe("createMusicManager", () => {
     assert.ok(firstToken);
 
     assert.deepEqual(await manager.stop(control(manager)), { kind: "ok", value: "stopped" });
-    assert.equal(scheduler.timers[0]?.unrefCalled, true);
+    const firstIdle = scheduler.timers.find((timer) => timer.delayMs === 120_000 && !timer.cleared);
+    assert.ok(firstIdle);
+    assert.equal(firstIdle.unrefCalled, true);
     await queue(manager, "replacement");
-    assert.equal(scheduler.timers[0]?.cleared, true);
-    scheduler.fire(0);
+    assert.equal(firstIdle.cleared, true);
+    firstIdle.callback();
     await waitForImmediate();
     assert.equal(manager.getSnapshot("guild-1")?.current?.identifier, "replacement");
 
     assert.deepEqual(await manager.stop(control(manager)), { kind: "ok", value: "stopped" });
-    scheduler.fire(1);
+    const secondIdle = scheduler.timers.find(
+      (timer) => timer.delayMs === 120_000 && !timer.cleared,
+    );
+    assert.ok(secondIdle);
+    secondIdle.callback();
     await waitForImmediate();
     assert.equal(manager.getSnapshot("guild-1"), undefined);
 
@@ -1125,14 +1153,21 @@ describe("createMusicManager", () => {
     assert.notEqual(token, firstToken);
     assert.equal(await manager.updateAloneStatus("guild-1", firstToken, true), false);
     assert.equal(await manager.updateAloneStatus("guild-1", token, true), true);
-    assert.equal(scheduler.timers[2]?.delayMs, 120_000);
+    const firstAlone = scheduler.timers.findLast(
+      (timer) => timer.delayMs === 120_000 && !timer.cleared,
+    );
+    assert.ok(firstAlone);
     assert.equal(await manager.updateAloneStatus("guild-1", token, false), true);
-    scheduler.fire(2);
+    firstAlone.callback();
     await waitForImmediate();
     assert.ok(manager.getSnapshot("guild-1"));
 
     await manager.updateAloneStatus("guild-1", token, true);
-    scheduler.fire(3);
+    const secondAlone = scheduler.timers.findLast(
+      (timer) => timer.delayMs === 120_000 && !timer.cleared,
+    );
+    assert.ok(secondAlone);
+    secondAlone.callback();
     await waitForImmediate();
     assert.equal(manager.getSnapshot("guild-1"), undefined);
     assert.equal(await manager.cleanupUnexpected("guild-1"), false);

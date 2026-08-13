@@ -14,5 +14,6 @@ coverage/
 .vscode/
 .DS_Store
 
-# Agent-only planning and project memory. Never commit this directory.
-/docs/
+# Agent-only planning and project memory. Publish only the curated enhancement backlog.
+/docs/*
+!/docs/enhancement-backlog.md

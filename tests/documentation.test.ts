@@ -158,4 +158,14 @@ describe("public documentation", () => {
 
     assert.match(packageMetadata.devDependencies?.typescript ?? "", /^7\.\d+\.\d+$/);
   });
+
+  it("ships a curated, secret-free enhancement backlog", () => {
+    const backlog = readText("docs/enhancement-backlog.md");
+
+    assert.match(backlog, /Reliability first/);
+    assert.match(backlog, /Interaction and playback experience/);
+    assert.match(backlog, /Operations and maintenance/);
+    assert.doesNotMatch(backlog, /DISCORD_TOKEN\s*=/);
+    assert.doesNotMatch(backlog, /LAVALINK_PASSWORD\s*=/);
+  });
 });

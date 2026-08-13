@@ -26,6 +26,7 @@ import type { VoiceAccessResult } from "./voice.js";
 const MILLISECONDS_PER_SECOND = 1_000;
 const FAILURE_LIMIT = 3;
 const HISTORY_LIMIT = 20;
+const TRACK_END_GRACE_MS = 15_000;
 
 export type TrackEndReason = PlaybackEndReason;
 
@@ -197,6 +198,7 @@ interface GuildPlaybackState {
   alone: boolean;
   idleTimer: TimerHandle | null;
   aloneTimer: TimerHandle | null;
+  trackEndTimer: TimerHandle | null;
   readonly session: PlaybackSession;
 }
 
@@ -345,8 +347,10 @@ export function createMusicManager(
   function cancelStateTimers(state: GuildPlaybackState): void {
     cancelTimer(state.idleTimer);
     cancelTimer(state.aloneTimer);
+    cancelTimer(state.trackEndTimer);
     state.idleTimer = null;
     state.aloneTimer = null;
+    state.trackEndTimer = null;
   }
 
   function invalidate(guildId: string): GuildCoordinator {
@@ -473,7 +477,53 @@ export function createMusicManager(
     handle.unref?.();
   }
 
+  function scheduleTrackEndTimer(state: GuildPlaybackState): void {
+    cancelTimer(state.trackEndTimer);
+    state.trackEndTimer = null;
+    const track = state.current;
+    if (track === null || track.isStream || state.paused) {
+      return;
+    }
+
+    const positionMs = Math.max(0, state.session.getPositionMs());
+    const remainingMs = Math.max(0, track.durationMs - positionMs);
+    let handle: TimerHandle;
+    handle = scheduler.setTimeout(() => {
+      void stateExecutor
+        .run(state.guildId, async () => {
+          const active = states.get(state.guildId);
+          if (
+            active !== state ||
+            active.trackEndTimer !== handle ||
+            active.current !== track ||
+            active.paused
+          ) {
+            return;
+          }
+
+          active.trackEndTimer = null;
+          dependencies.logger.warn(
+            {
+              event: "track_end_watchdog",
+              guildId: state.guildId,
+              trackIdentifier: track.identifier,
+            },
+            "Advancing because Lavalink did not report the track ending",
+          );
+          const result = transitionCurrent(active, "finished");
+          await applyPlaybackEffect(active, result);
+        })
+        .catch((error: unknown) =>
+          reportEventFailure(state.guildId, "track_end_watchdog_failed", error),
+        );
+    }, remainingMs + TRACK_END_GRACE_MS);
+    state.trackEndTimer = handle;
+    handle.unref?.();
+  }
+
   function setCurrentAfterTransition(state: GuildPlaybackState, next: QueueTrack | null): void {
+    cancelTimer(state.trackEndTimer);
+    state.trackEndTimer = null;
     state.current = next;
     state.paused = false;
     if (next === null) {
@@ -580,6 +630,7 @@ export function createMusicManager(
 
       try {
         await state.session.play(result.current.encoded);
+        scheduleTrackEndTimer(state);
         return result;
       } catch (error: unknown) {
         dependencies.logger.warn(
@@ -619,6 +670,8 @@ export function createMusicManager(
   }
 
   async function stopPlaybackBestEffort(state: GuildPlaybackState): Promise<void> {
+    cancelTimer(state.trackEndTimer);
+    state.trackEndTimer = null;
     try {
       await state.session.stop();
     } catch (error: unknown) {
@@ -644,6 +697,7 @@ export function createMusicManager(
       if ("result" in validation) {
         return;
       }
+      scheduleTrackEndTimer(validation.state);
       dependencies.logger.info(
         {
           event: "track_started",
@@ -969,6 +1023,7 @@ export function createMusicManager(
                 alone: false,
                 idleTimer: null,
                 aloneTimer: null,
+                trackEndTimer: null,
                 session,
               };
               states.set(request.guildId, state);
@@ -998,6 +1053,7 @@ export function createMusicManager(
             if (becameCurrent) {
               try {
                 await state.session.play(firstTrack.encoded);
+                scheduleTrackEndTimer(state);
               } catch (error: unknown) {
                 dependencies.logger.warn(
                   {
@@ -1066,6 +1122,12 @@ export function createMusicManager(
           return { kind: "transport-failed" };
         }
         state.paused = paused;
+        if (paused) {
+          cancelTimer(state.trackEndTimer);
+          state.trackEndTimer = null;
+        } else {
+          scheduleTrackEndTimer(state);
+        }
         return { kind: "ok", value: "updated" };
       });
     },

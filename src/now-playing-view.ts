@@ -143,6 +143,7 @@ export function createNowPlayingViewController(
       const sessionId = sessionFor(snapshot);
       const track = snapshot.current;
       const title = safeSegment(track.title, 200).trim() || "Untitled track";
+      const channel = safeSegment(track.author, 100).trim() || "Unknown channel";
       const requester = safeSegment(track.requestedBy.label, 64).trim() || "Unknown user";
       const nextTrack = snapshot.upcoming[0];
       const upNext =
@@ -161,6 +162,7 @@ export function createNowPlayingViewController(
         .setTitle(title)
         .setDescription(progress)
         .addFields(
+          { name: "Channel", value: channel, inline: true },
           { name: "Requested by", value: requester, inline: true },
           { name: "Up next", value: upNext, inline: true },
           { name: "Volume", value: `${snapshot.volume}%`, inline: true },

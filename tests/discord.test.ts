@@ -16,6 +16,7 @@ import {
   createDiscordClient,
   createDiscordMusicNotifier,
   createDiscordService,
+  createPlayAutocompleteHandler,
   DISCORD_INTENTS,
   deleteSupersededPlayerMessage,
   formatNowPlayingSnapshot,
@@ -23,6 +24,7 @@ import {
   handlePlayerButtonInteraction,
   handleQueueButtonInteraction,
   hasHumanVoiceMember,
+  isTerminalPlayerMessageError,
   SAFE_ALLOWED_MENTIONS,
 } from "../src/discord.js";
 import { createLogger } from "../src/logger.js";
@@ -44,6 +46,7 @@ type TestMusicController = Parameters<typeof createDiscordService>[3];
 
 function musicController(overrides: Partial<TestMusicController> = {}): TestMusicController {
   return {
+    searchTracks: async () => ({ kind: "no-match", reason: "no-suitable-tracks" }),
     requestPlay: async () => ({ kind: "closed" }),
     getIdentity: () => undefined,
     getIdentities: () => [],
@@ -249,6 +252,98 @@ describe("player message lifecycle", () => {
     assert.equal(await deleteSupersededPlayerMessage(undefined, current), false);
     assert.equal(deleteCount, 1);
   });
+
+  it("retires only permanently unavailable Discord messages", () => {
+    assert.equal(isTerminalPlayerMessageError({ code: 10_008 }), true);
+    assert.equal(isTerminalPlayerMessageError({ code: 50_013 }), true);
+    assert.equal(isTerminalPlayerMessageError({ code: 50_000 }), false);
+    assert.equal(isTerminalPlayerMessageError(new Error("temporary outage")), false);
+  });
+});
+
+describe("play autocomplete", () => {
+  function autocompleteInteraction(query: () => string, responses: unknown[]) {
+    const voiceChannel = {
+      id: "voice-1",
+      type: ChannelType.GuildVoice,
+      full: false,
+      permissionsFor: () => ({ has: () => true }),
+    };
+    return {
+      commandName: "play",
+      guildId: "guild-1",
+      user: { id: "user-1" },
+      options: { getFocused: query },
+      guild: {
+        members: {
+          cache: new Map([["user-1", { voice: { channel: voiceChannel } }]]),
+          me: { voice: { channelId: null } },
+        },
+      },
+      inCachedGuild: () => true,
+      respond: async (choices: unknown) => {
+        responses.push(choices);
+      },
+    };
+  }
+
+  it("returns bounded search choices and caches identical queries", async () => {
+    const responses: unknown[] = [];
+    let searchCalls = 0;
+    const handler = createPlayAutocompleteHandler(
+      musicController({
+        async searchTracks() {
+          searchCalls += 1;
+          return {
+            kind: "choices",
+            source: "youtube-search",
+            tracks: Array.from({ length: 10 }, (_, index) => queueTrack(`choice-${index + 1}`)),
+            rejectedTrackCount: 0,
+          };
+        },
+      }),
+      () => 1_000,
+    );
+    const interaction = autocompleteInteraction(() => "selected song", responses);
+
+    await handler(interaction as unknown as Parameters<typeof handler>[0]);
+    await handler(interaction as unknown as Parameters<typeof handler>[0]);
+
+    assert.equal(searchCalls, 1);
+    const first = responses[0] as readonly { readonly name: string; readonly value: string }[];
+    assert.equal(first.length, 10);
+    assert.ok(first.every((choice) => choice.name.length <= 100));
+    assert.equal(first[0]?.value, "https://www.youtube.com/watch?v=choice-1");
+  });
+
+  it("does not search before meaningful text or for a direct URL", async () => {
+    const responses: unknown[] = [];
+    let query = "";
+    let searchCalls = 0;
+    const handler = createPlayAutocompleteHandler(
+      musicController({
+        async searchTracks() {
+          searchCalls += 1;
+          return { kind: "no-match", reason: "no-suitable-tracks" };
+        },
+      }),
+    );
+    const interaction = autocompleteInteraction(() => query, responses);
+
+    for (const value of [
+      "",
+      "a",
+      "https://youtu.be/example",
+      "https://example.com/video",
+      "ftp://example.com/video",
+    ]) {
+      query = value;
+      await handler(interaction as unknown as Parameters<typeof handler>[0]);
+    }
+
+    assert.equal(searchCalls, 0);
+    assert.deepEqual(responses, [[], [], [], [], []]);
+  });
 });
 
 describe("formatPlayRequestResult", () => {
@@ -274,7 +369,7 @@ describe("formatPlayRequestResult", () => {
           requestedBy: { id: "user", label: "label" },
         },
       }),
-      "Playing **\\*\\*song\\*\\* @everyone** and queued 2 more from **@everyone \\*mix\\***. 6 omitted by queue limits; 1 unsuitable.",
+      "Playing **\\*\\*song\\*\\* @everyone** by **author** (`0:00`) and queued 2 more from **@everyone \\*mix\\***. 6 omitted by queue limits; 1 unsuitable.",
     );
   });
 
@@ -579,7 +674,7 @@ describe("playback presentation", () => {
     assert.equal(formatQueueSnapshot(undefined), "The queue is empty.");
   });
 
-  it("renders the next title without the channel and labels loop state explicitly", () => {
+  it("renders channel metadata, the next title, and explicit loop state", () => {
     const controller = createNowPlayingViewController(() => "player-session");
     const snapshot = playbackSnapshot({ historyCount: 0, upcoming: [queueTrack("next")] });
     const view = controller.render(snapshot);
@@ -597,6 +692,7 @@ describe("playback presentation", () => {
     assert.match(embed?.thumbnail?.url ?? "", /i\.ytimg\.com\/vi\/current\/hqdefault\.jpg/);
     assert.match(embed?.description ?? "", /●/);
     assert.doesNotMatch(embed?.description ?? "", /author-current/);
+    assert.equal(embed?.fields?.find((field) => field.name === "Channel")?.value, "author-current");
     assert.equal(embed?.fields?.find((field) => field.name === "Up next")?.value, "title-next");
     assert.match(embed?.footer?.text ?? "", /refreshes every second/);
     assert.match(JSON.stringify(components), /Loop: OFF/);

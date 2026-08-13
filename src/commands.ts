@@ -40,7 +40,8 @@ export const APPLICATION_COMMANDS = [
     option
       .setName("request")
       .setDescription("Search terms or a YouTube video or playlist URL")
-      .setRequired(true),
+      .setRequired(true)
+      .setAutocomplete(true),
   ),
   command("nowplaying", "Show the current song and player controls"),
   command("queue", "Show the current song and upcoming queue"),

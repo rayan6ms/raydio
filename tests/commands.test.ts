@@ -44,7 +44,7 @@ describe("application command registry", () => {
     }
   });
 
-  it("registers a required plain request option without opening autocomplete", () => {
+  it("registers a required request option with native autocomplete", () => {
     const play = APPLICATION_COMMANDS[0].toJSON();
     assert.equal(play.name, "play");
     const request = play.options?.[0];
@@ -52,7 +52,7 @@ describe("application command registry", () => {
     assert.equal(request?.name, "request");
     assert.equal(request?.description, "Search terms or a YouTube video or playlist URL");
     assert.equal("required" in (request ?? {}) ? request.required : undefined, true);
-    assert.equal("autocomplete" in (request ?? {}) ? request.autocomplete : undefined, undefined);
+    assert.equal("autocomplete" in (request ?? {}) ? request.autocomplete : undefined, true);
   });
 
   it("uses slash syntax throughout the compact help menu", () => {

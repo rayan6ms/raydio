@@ -90,7 +90,7 @@ function createSession(
       await player.playTrack({ track: { encoded: encodedTrack } });
       basePositionMs = 0;
       positionUpdatedAtMs = now();
-      playing = false;
+      playing = true;
       paused = false;
     },
     async setPaused(nextPaused) {
