@@ -25,6 +25,19 @@ export type LavalinkSessionInvalidationListener = (
 export interface LavalinkReadiness {
   isReady(): boolean;
   getStatus(): LavalinkStatus;
+  getDiagnostics(): LavalinkDiagnostics;
+}
+
+export interface LavalinkDiagnostics {
+  readonly status: LavalinkStatus;
+  readonly readyCount: number;
+  readonly reconnectCount: number;
+  readonly closeCount: number;
+  readonly errorCount: number;
+  readonly unavailableCount: number;
+  readonly sessionLossCount: number;
+  readonly lastEvent: string | null;
+  readonly lastEventAtMs: number | null;
 }
 
 export interface LavalinkService extends LavalinkReadiness {
@@ -59,7 +72,22 @@ export function createLavalinkService(
   let status: LavalinkStatus = "connecting";
   let stopped = false;
   let transitionSequence = 0;
+  const diagnostics = {
+    readyCount: 0,
+    reconnectCount: 0,
+    closeCount: 0,
+    errorCount: 0,
+    unavailableCount: 0,
+    sessionLossCount: 0,
+    lastEvent: null as string | null,
+    lastEventAtMs: null as number | null,
+  };
   const invalidationListeners = new Set<LavalinkSessionInvalidationListener>();
+
+  function recordEvent(event: string): void {
+    diagnostics.lastEvent = event;
+    diagnostics.lastEventAtMs = Date.now();
+  }
 
   async function notifySessionInvalidated(
     reason: LavalinkSessionInvalidationReason,
@@ -88,6 +116,8 @@ export function createLavalinkService(
 
     transitionSequence += 1;
     status = "unavailable";
+    diagnostics.unavailableCount += 1;
+    recordEvent("unavailable");
     logger.error(
       {
         event: "lavalink_unavailable",
@@ -111,6 +141,8 @@ export function createLavalinkService(
         return;
       }
       status = "ready";
+      diagnostics.readyCount += 1;
+      recordEvent("ready");
       logger.info(
         {
           event: "lavalink_ready",
@@ -123,6 +155,8 @@ export function createLavalinkService(
     };
 
     if (previousStatus === "reconnecting" && !lavalinkResumed) {
+      diagnostics.sessionLossCount += 1;
+      recordEvent("session-lost");
       logger.warn(
         { event: "lavalink_session_lost", nodeName },
         "Lavalink reconnected without resuming its prior session",
@@ -141,6 +175,8 @@ export function createLavalinkService(
 
     transitionSequence += 1;
     status = "reconnecting";
+    diagnostics.reconnectCount += 1;
+    recordEvent("reconnecting");
     logger.warn(
       {
         event: "lavalink_reconnecting",
@@ -159,6 +195,8 @@ export function createLavalinkService(
 
     transitionSequence += 1;
     status = "reconnecting";
+    diagnostics.closeCount += 1;
+    recordEvent("closed");
     logger.warn(
       {
         event: "lavalink_closed",
@@ -183,6 +221,8 @@ export function createLavalinkService(
       return;
     }
 
+    diagnostics.errorCount += 1;
+    recordEvent("error");
     const nodeRemoved = !manager.nodes.has(nodeName);
     if (nodeRemoved) {
       markUnavailable(nodeName);
@@ -204,6 +244,9 @@ export function createLavalinkService(
     getStatus(): LavalinkStatus {
       return status;
     },
+    getDiagnostics(): LavalinkDiagnostics {
+      return { status, ...diagnostics };
+    },
     isReady(): boolean {
       return status === "ready";
     },
@@ -222,6 +265,7 @@ export function createLavalinkService(
       stopped = true;
       transitionSequence += 1;
       status = "stopped";
+      recordEvent("stopped");
       invalidationListeners.clear();
 
       const guildIds = new Set([...manager.connections.keys(), ...manager.players.keys()]);
@@ -260,6 +304,12 @@ export function createLavalinkService(
       }
 
       manager.removeAllListeners();
+      manager.on("error", (nodeName, error) => {
+        logger.debug(
+          { event: "lavalink_late_error_after_stop", nodeName, ...errorFields(error) },
+          "Ignored a late Lavalink error after shutdown",
+        );
+      });
       logger.info({ event: "lavalink_stopped" }, "Lavalink client stopped");
     },
   };

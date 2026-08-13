@@ -88,7 +88,7 @@ Expected state:
 - Lavalink becomes healthy after Java and youtube-source initialize;
 - the bot starts afterward and logs `discord_ready`;
 - neither service has a host-published port;
-- `\ping` reports Discord latency and Lavalink ready.
+- `/ping` reports Discord latency and Lavalink ready.
 
 The exact base images support both target architectures, but perform the first-deployment checks on
 the selected VM; this repository's build validation ran on amd64 only.

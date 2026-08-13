@@ -25,11 +25,12 @@ import {
   dispatchCommand,
   type ExecutableControlCommandInvocation,
 } from "./commands.js";
-import type { LavalinkReadiness } from "./music/lavalink.js";
+import type { LavalinkDiagnostics, LavalinkReadiness } from "./music/lavalink.js";
 import type {
   ControlResult,
   MusicManager,
   PlaybackControlRequest,
+  PlaybackDiagnostics,
   PlayRequestResult,
 } from "./music/manager.js";
 import type { GuildPlaybackIdentity, GuildPlaybackSnapshot } from "./music/state.js";
@@ -78,6 +79,9 @@ type MusicController = Pick<
   | "getIdentities"
   | "getIdentity"
   | "getSnapshot"
+  | "getDiagnostics"
+  | "getPendingPlayRequestCount"
+  | "onPlaybackChanged"
   | "searchTracks"
   | "requestPlay"
   | "setPaused"
@@ -116,6 +120,61 @@ interface DeletableMessage {
 interface AutocompleteChoice {
   readonly name: string;
   readonly value: string;
+}
+
+export interface PlayerRefreshDiagnostics {
+  readonly successfulEdits: number;
+  readonly transientFailures: number;
+  readonly terminalFailures: number;
+  readonly lastFailureAtMs: number | null;
+}
+
+function diagnosticAge(timestampMs: number | null, nowMs: number): string {
+  if (timestampMs === null) {
+    return "never";
+  }
+  const ageSeconds = Math.max(0, Math.floor((nowMs - timestampMs) / 1_000));
+  return ageSeconds === 0 ? "now" : `${ageSeconds}s ago`;
+}
+
+function diagnosticConnection(connected: boolean | null): string {
+  return connected === null ? "unknown" : connected ? "connected" : "disconnected";
+}
+
+export function formatRuntimeDiagnostics(
+  playback: PlaybackDiagnostics,
+  lavalink: LavalinkDiagnostics,
+  refresh: PlayerRefreshDiagnostics,
+  pendingPlayRequests: number,
+  discordReady: boolean,
+  discordLatencyMs: number,
+  nowMs: number = Date.now(),
+): string {
+  const state = playback.sessionActive
+    ? playback.hasCurrentTrack
+      ? playback.paused
+        ? "paused"
+        : "playing"
+      : "idle"
+    : "no session";
+  const health = playback.transport;
+  const eventCounts = playback.eventCounts;
+  const discordLatency =
+    discordReady && Number.isFinite(discordLatencyMs) && discordLatencyMs >= 0
+      ? `${Math.round(discordLatencyMs)} ms`
+      : "unavailable";
+  return truncateMessage(
+    [
+      "**Raydio diagnostics — private**",
+      `Discord: ${discordReady ? "ready" : "unavailable"} • ${discordLatency}`,
+      `Lavalink: ${lavalink.status} • ready ${lavalink.readyCount} • reconnects ${lavalink.reconnectCount} • errors ${lavalink.errorCount} • last ${diagnosticAge(lavalink.lastEventAtMs, nowMs)}`,
+      `Playback: ${state} • upcoming ${playback.upcomingTrackCount} • history ${playback.historyCount} • pending ${pendingPlayRequests}`,
+      `Transport: ${health === null ? "none" : diagnosticConnection(health.connected)} • player update ${diagnosticAge(health?.lastPlayerUpdateAtMs ?? null, nowMs)} • player event ${diagnosticAge(health?.lastEventAtMs ?? null, nowMs)}`,
+      `Events: starts ${eventCounts["track-started"]} • natural ends ${eventCounts["track-end-finished"]} • failed ends ${eventCounts["track-end-failed"]} • watchdog ${eventCounts["track-end-watchdog"]} • stuck ${eventCounts["track-stuck"]} • exceptions ${eventCounts["track-exception"]} • transport failures ${eventCounts["transport-failed"]}`,
+      `Controls panel: edits ${refresh.successfulEdits} • transient failures ${refresh.transientFailures} • terminal failures ${refresh.terminalFailures} • last failure ${diagnosticAge(refresh.lastFailureAtMs, nowMs)}`,
+      `Last playback event: ${playback.lastEvent ?? "none"} • ${diagnosticAge(playback.lastEventAtMs, nowMs)}`,
+    ].join("\n"),
+  );
 }
 
 export async function deleteSupersededPlayerMessage(
@@ -293,10 +352,23 @@ async function handleChatInputCommand(
   playerViews: NowPlayingViewController,
   registerPlayerMessage: (guildId: string, message: Message) => Promise<void>,
   refreshPlayerMessage: (guildId: string) => Promise<void>,
+  diagnosticsForGuild: (guildId: string) => string,
 ): Promise<void> {
   if (!interaction.inCachedGuild()) {
     await interaction.reply({
       content: "Raydio commands are available only in a loaded server.",
+      flags: MessageFlags.Ephemeral,
+      allowedMentions: SAFE_ALLOWED_MENTIONS,
+    });
+    return;
+  }
+
+  if (
+    interaction.commandName === "diagnostics" &&
+    !interaction.memberPermissions.has(PermissionFlagsBits.ManageGuild)
+  ) {
+    await interaction.reply({
+      content: "`/diagnostics` requires the Manage Server permission.",
       flags: MessageFlags.Ephemeral,
       allowedMentions: SAFE_ALLOWED_MENTIONS,
     });
@@ -316,7 +388,9 @@ async function handleChatInputCommand(
   );
 
   try {
-    await interaction.deferReply();
+    await interaction.deferReply(
+      interaction.commandName === "diagnostics" ? { flags: MessageFlags.Ephemeral } : undefined,
+    );
     let responded = false;
     const send: SlashResponseSender = async (options) => {
       const payload = {
@@ -358,6 +432,9 @@ async function handleChatInputCommand(
           content: view.content,
           components: view.components,
         });
+      },
+      presentDiagnostics: async () => {
+        await send({ content: diagnosticsForGuild(interaction.guildId) });
       },
       send: async (content) => {
         await send({ content: truncateMessage(content) });
@@ -1069,10 +1146,51 @@ export function createDiscordService(
   const handleAutocomplete = createPlayAutocompleteHandler(music);
   const playerMessages = new Map<string, { readonly message: Message; fingerprint: string }>();
   const playerMessageRefreshes = new Set<string>();
+  const playerRefreshDiagnostics = new Map<
+    string,
+    {
+      successfulEdits: number;
+      transientFailures: number;
+      terminalFailures: number;
+      lastFailureAtMs: number | null;
+    }
+  >();
   let presenceKey = "";
   let acceptingCommands = false;
   let started = false;
   let stopped = false;
+
+  function refreshDiagnosticsFor(guildId: string) {
+    const existing = playerRefreshDiagnostics.get(guildId);
+    if (existing !== undefined) {
+      return existing;
+    }
+    if (playerRefreshDiagnostics.size >= PLAYER_MESSAGE_LIMIT) {
+      const oldestGuildId = playerRefreshDiagnostics.keys().next().value;
+      if (oldestGuildId !== undefined) {
+        playerRefreshDiagnostics.delete(oldestGuildId);
+      }
+    }
+    const created = {
+      successfulEdits: 0,
+      transientFailures: 0,
+      terminalFailures: 0,
+      lastFailureAtMs: null,
+    };
+    playerRefreshDiagnostics.set(guildId, created);
+    return created;
+  }
+
+  function diagnosticsForGuild(guildId: string): string {
+    return formatRuntimeDiagnostics(
+      music.getDiagnostics(guildId),
+      lavalink.getDiagnostics(),
+      refreshDiagnosticsFor(guildId),
+      music.getPendingPlayRequestCount(guildId),
+      client.isReady(),
+      client.ws.ping,
+    );
+  }
 
   function retirePlayerMessage(guildId: string): void {
     playerMessages.delete(guildId);
@@ -1127,12 +1245,20 @@ export function createDiscordService(
       if (playerMessages.get(guildId) !== active) {
         return;
       }
+      refreshDiagnosticsFor(guildId).successfulEdits += 1;
       active.fingerprint = fingerprint;
       if (view.components.length === 0) {
         retirePlayerMessage(guildId);
       }
     } catch (error: unknown) {
       const terminal = isTerminalPlayerMessageError(error);
+      const diagnostics = refreshDiagnosticsFor(guildId);
+      diagnostics.lastFailureAtMs = Date.now();
+      if (terminal) {
+        diagnostics.terminalFailures += 1;
+      } else {
+        diagnostics.transientFailures += 1;
+      }
       if (terminal && playerMessages.get(guildId) === active) {
         retirePlayerMessage(guildId);
         playerViews.retire(guildId);
@@ -1176,6 +1302,11 @@ export function createDiscordService(
     client.user.setActivity(nextPresence.name, { type: nextPresence.type });
     presenceKey = nextPresence.key;
   }
+
+  const stopListeningForPlaybackChanges = music.onPlaybackChanged(({ guildId }) => {
+    void refreshPlayerMessage(guildId);
+    refreshPresence();
+  });
 
   const playerRefreshTimer = setInterval(() => {
     for (const guildId of playerMessages.keys()) {
@@ -1302,6 +1433,7 @@ export function createDiscordService(
         playerViews,
         registerPlayerMessage,
         refreshPlayerMessage,
+        diagnosticsForGuild,
       );
       return;
     }
@@ -1430,8 +1562,10 @@ export function createDiscordService(
       stopped = true;
       acceptingCommands = false;
       clearInterval(playerRefreshTimer);
+      stopListeningForPlaybackChanges();
       playerMessages.clear();
       playerMessageRefreshes.clear();
+      playerRefreshDiagnostics.clear();
       await client.destroy();
     },
   };

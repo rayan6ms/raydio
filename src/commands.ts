@@ -1,6 +1,7 @@
 import {
   ApplicationIntegrationType,
   InteractionContextType,
+  PermissionFlagsBits,
   SlashCommandBuilder,
 } from "discord.js";
 
@@ -21,6 +22,7 @@ export const COMMAND_NAMES = [
   "volume",
   "loop",
   "leave",
+  "diagnostics",
   "help",
   "ping",
 ] as const;
@@ -92,11 +94,14 @@ export const APPLICATION_COMMANDS = [
       ),
   ),
   command("leave", "Leave voice and clear the playback session"),
+  command("diagnostics", "Show private playback and connection health").setDefaultMemberPermissions(
+    PermissionFlagsBits.ManageGuild,
+  ),
   command("help", "Show Raydio's commands and usage"),
   command("ping", "Check Discord latency and music service readiness"),
 ] as const;
 
-export type ControlCommandName = Exclude<CommandName, "help" | "ping" | "play">;
+export type ControlCommandName = Exclude<CommandName, "diagnostics" | "help" | "ping" | "play">;
 
 export type ControlCommandInvocation =
   | { readonly name: "queue" }
@@ -138,6 +143,7 @@ export const HELP_MESSAGE = [
   "`/volume [level:]` | `/loop mode:` — player settings",
   "**Session and utility**",
   "`/leave` — disconnect and clear the session",
+  "`/diagnostics` — private connection and playback health for server managers",
   "`/ping` — show Discord and Lavalink readiness",
   "`/help` — show this menu",
 ].join("\n");
@@ -155,6 +161,7 @@ export interface CommandContext {
   control(invocation: ExecutableControlCommandInvocation): Promise<string>;
   presentNowPlaying(): Promise<void>;
   presentQueue(): Promise<void>;
+  presentDiagnostics(): Promise<void>;
   send(content: string): Promise<void>;
 }
 
@@ -262,6 +269,11 @@ export async function dispatchCommand(
     const latency = formatDiscordLatency(context.discordReady, context.discordLatencyMs);
     const lavalinkStatus = context.lavalinkReady ? "ready" : "unavailable";
     await context.send(`Pong! Discord: ${latency}. Lavalink: ${lavalinkStatus}.`);
+    return "handled";
+  }
+
+  if (parsed.name === "diagnostics") {
+    await context.presentDiagnostics();
     return "handled";
   }
 

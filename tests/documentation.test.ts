@@ -148,9 +148,23 @@ describe("public documentation", () => {
         installer.lastIndexOf("Register-StartupTask"),
       "the old host confirmation must precede automatic Windows startup registration",
     );
-    for (const action of ["start", "restart", "stop", "update", "status", "logs", "doctor"]) {
+    for (const action of [
+      "start",
+      "restart",
+      "stop",
+      "update",
+      "rollback",
+      "status",
+      "logs",
+      "doctor",
+    ]) {
       assert.match(manager, new RegExp(`"${action}"`));
     }
+    assert.match(manager, /rollback-revision\.txt/);
+    assert.match(manager, /update failed readiness checks/i);
+    assert.match(manager, /rollback readiness checks failed/i);
+    assert.match(manager, /"reset", "--hard", \$previousRevision/);
+    assert.match(manager, /"reset", "--hard", \$currentRevision/);
   });
 
   it("keeps the compiler on an exact TypeScript 7 release", () => {

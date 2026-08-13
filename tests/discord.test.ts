@@ -21,6 +21,7 @@ import {
   deleteSupersededPlayerMessage,
   formatNowPlayingSnapshot,
   formatPlayRequestResult,
+  formatRuntimeDiagnostics,
   handlePlayerButtonInteraction,
   handleQueueButtonInteraction,
   hasHumanVoiceMember,
@@ -29,6 +30,7 @@ import {
 } from "../src/discord.js";
 import { createLogger } from "../src/logger.js";
 import type { LavalinkReadiness } from "../src/music/lavalink.js";
+import type { PlaybackDiagnostics } from "../src/music/manager.js";
 import type { GuildPlaybackSnapshot, QueueTrack } from "../src/music/state.js";
 import { createNowPlayingViewController, isNowPlayingCustomId } from "../src/now-playing-view.js";
 import {
@@ -40,7 +42,49 @@ import {
 const unavailableLavalink: LavalinkReadiness = {
   getStatus: () => "unavailable",
   isReady: () => false,
+  getDiagnostics: () => ({
+    status: "unavailable",
+    readyCount: 0,
+    reconnectCount: 0,
+    closeCount: 0,
+    errorCount: 0,
+    unavailableCount: 1,
+    sessionLossCount: 0,
+    lastEvent: "unavailable",
+    lastEventAtMs: 1_000,
+  }),
 };
+
+function emptyPlaybackDiagnostics(): PlaybackDiagnostics {
+  return {
+    guildId: "guild-1",
+    sessionActive: false,
+    hasCurrentTrack: false,
+    paused: false,
+    upcomingTrackCount: 0,
+    historyCount: 0,
+    loopMode: null,
+    volume: null,
+    positionMs: 0,
+    durationMs: null,
+    isStream: false,
+    lastEvent: null,
+    lastEventAtMs: null,
+    eventCounts: {
+      "queue-updated": 0,
+      "playback-transition": 0,
+      "track-started": 0,
+      "track-end-finished": 0,
+      "track-end-failed": 0,
+      "track-end-watchdog": 0,
+      "track-exception": 0,
+      "track-stuck": 0,
+      "transport-failed": 0,
+      "session-cleaned": 0,
+    },
+    transport: null,
+  };
+}
 
 type TestMusicController = Parameters<typeof createDiscordService>[3];
 
@@ -51,6 +95,9 @@ function musicController(overrides: Partial<TestMusicController> = {}): TestMusi
     getIdentity: () => undefined,
     getIdentities: () => [],
     getSnapshot: () => undefined,
+    getDiagnostics: () => emptyPlaybackDiagnostics(),
+    getPendingPlayRequestCount: () => 0,
+    onPlaybackChanged: () => () => undefined,
     cleanupUnexpected: async () => false,
     updateAloneStatus: async () => false,
     setPaused: async () => ({ kind: "rejected", reason: "no-session" }),
@@ -106,11 +153,20 @@ function playbackSnapshot(overrides: Partial<GuildPlaybackSnapshot> = {}): Guild
 describe("createDiscordService", () => {
   it("uses only the required intents and disables all automatic mentions", async () => {
     const client = createDiscordClient();
+    let playbackListenerRegistered = false;
+    let playbackListenerRemoved = false;
     const service = createDiscordService(
       client,
       createLogger("silent"),
       unavailableLavalink,
-      musicController(),
+      musicController({
+        onPlaybackChanged() {
+          playbackListenerRegistered = true;
+          return () => {
+            playbackListenerRemoved = true;
+          };
+        },
+      }),
     );
 
     assert.deepEqual(DISCORD_INTENTS, [
@@ -123,8 +179,10 @@ describe("createDiscordService", () => {
     ]);
     assert.deepEqual(service.client.options.allowedMentions, SAFE_ALLOWED_MENTIONS);
     assert.equal(service.client, client);
+    assert.equal(playbackListenerRegistered, true);
 
     await service.stop();
+    assert.equal(playbackListenerRemoved, true);
     await service.stop();
     await assert.rejects(service.start("unused-token"), /already been stopped/);
   });
@@ -258,6 +316,64 @@ describe("player message lifecycle", () => {
     assert.equal(isTerminalPlayerMessageError({ code: 50_013 }), true);
     assert.equal(isTerminalPlayerMessageError({ code: 50_000 }), false);
     assert.equal(isTerminalPlayerMessageError(new Error("temporary outage")), false);
+  });
+});
+
+describe("runtime diagnostics", () => {
+  it("summarizes bounded health counters without exposing track or requester data", () => {
+    const playback = emptyPlaybackDiagnostics();
+    const output = formatRuntimeDiagnostics(
+      {
+        ...playback,
+        sessionActive: true,
+        hasCurrentTrack: true,
+        upcomingTrackCount: 2,
+        historyCount: 1,
+        lastEvent: "track-end-watchdog",
+        lastEventAtMs: 9_000,
+        eventCounts: {
+          ...playback.eventCounts,
+          "track-started": 3,
+          "track-end-finished": 1,
+          "track-end-watchdog": 1,
+        },
+        transport: {
+          connected: true,
+          playing: true,
+          paused: false,
+          lastPlayerUpdateAtMs: 8_000,
+          lastEventAtMs: 9_000,
+        },
+      },
+      {
+        status: "ready",
+        readyCount: 2,
+        reconnectCount: 1,
+        closeCount: 1,
+        errorCount: 0,
+        unavailableCount: 0,
+        sessionLossCount: 0,
+        lastEvent: "ready",
+        lastEventAtMs: 7_000,
+      },
+      {
+        successfulEdits: 4,
+        transientFailures: 1,
+        terminalFailures: 0,
+        lastFailureAtMs: 6_000,
+      },
+      1,
+      true,
+      42.4,
+      10_000,
+    );
+
+    assert.match(output, /Raydio diagnostics — private/);
+    assert.match(output, /Lavalink: ready • ready 2 • reconnects 1/);
+    assert.match(output, /Playback: playing • upcoming 2 • history 1 • pending 1/);
+    assert.match(output, /natural ends 1 • failed ends 0 • watchdog 1/);
+    assert.match(output, /transient failures 1/);
+    assert.doesNotMatch(output, /guild-1|title-|requester-|encoded-/);
   });
 });
 

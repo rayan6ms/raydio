@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-  [ValidateSet("start", "restart", "stop", "update", "status", "logs", "doctor")]
+  [ValidateSet("start", "restart", "stop", "update", "rollback", "status", "logs", "doctor")]
   [string]$Action = "status"
 )
 
@@ -12,6 +12,7 @@ $RepositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $InstallRoot = Split-Path $RepositoryRoot -Parent
 $ComposeProvider = Join-Path $InstallRoot "tools\docker-compose.exe"
 $ProjectName = "raydio"
+$RollbackRevisionFile = Join-Path $InstallRoot "rollback-revision.txt"
 
 function Invoke-Checked {
   param(
@@ -29,6 +30,38 @@ function Refresh-Path {
   $machinePath = [Environment]::GetEnvironmentVariable("Path", "Machine")
   $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
   $env:Path = "$machinePath;$userPath"
+}
+
+function Get-CurrentRevision {
+  $revision = ((& git.exe -C $RepositoryRoot rev-parse HEAD) -join "").Trim()
+  if ($LASTEXITCODE -ne 0 -or $revision -notmatch "^[0-9a-f]{40}$") {
+    throw "Could not determine Raydio's current Git revision."
+  }
+  return $revision
+}
+
+function Save-RollbackRevision {
+  param([Parameter(Mandatory = $true)][string]$Revision)
+
+  if ($Revision -notmatch "^[0-9a-f]{40}$") {
+    throw "Refusing to save an invalid rollback revision."
+  }
+  [IO.File]::WriteAllText(
+    $RollbackRevisionFile,
+    "$Revision`n",
+    [Text.UTF8Encoding]::new($false)
+  )
+}
+
+function Assert-CleanMainBranch {
+  $dirty = (& git.exe -C $RepositoryRoot status --porcelain) -join "`n"
+  if (-not [string]::IsNullOrWhiteSpace($dirty)) {
+    throw "The Raydio checkout has local changes. Preserve or discard them deliberately first."
+  }
+  $branch = ((& git.exe -C $RepositoryRoot branch --show-current) -join "").Trim()
+  if ($LASTEXITCODE -ne 0 -or $branch -ne "main") {
+    throw "Raydio must be on the main branch for automatic update or rollback."
+  }
 }
 
 function Assert-Dependencies {
@@ -179,17 +212,50 @@ switch ($Action) {
   }
   "update" {
     Refresh-Path
-    $dirty = (& git.exe -C $RepositoryRoot status --porcelain) -join "`n"
-    if (-not [string]::IsNullOrWhiteSpace($dirty)) {
-      throw "The Raydio checkout has local changes. Preserve or discard them deliberately before updating."
-    }
-    $branch = ((& git.exe -C $RepositoryRoot branch --show-current) -join "").Trim()
-    if ($LASTEXITCODE -ne 0 -or $branch -ne "main") {
-      throw "Raydio must be on the main branch before an automatic update."
-    }
+    Assert-CleanMainBranch
+    $previousRevision = Get-CurrentRevision
     Invoke-Checked "git.exe" @("-C", $RepositoryRoot, "fetch", "origin", "main", "--prune")
     Invoke-Checked "git.exe" @("-C", $RepositoryRoot, "merge", "--ff-only", "origin/main")
-    Start-Raydio -Rebuild
+    $updatedRevision = Get-CurrentRevision
+    try {
+      Start-Raydio -Rebuild
+    } catch {
+      Write-Warning "The update failed readiness checks. Restoring the prior revision."
+      Invoke-Checked "git.exe" @("-C", $RepositoryRoot, "reset", "--hard", $previousRevision)
+      Start-Raydio -Rebuild
+      throw "Raydio update failed; the prior revision was restored and restarted."
+    }
+    if ($updatedRevision -ne $previousRevision) {
+      Save-RollbackRevision $previousRevision
+      Write-Host "Rollback target saved: $previousRevision" -ForegroundColor Green
+    }
+  }
+  "rollback" {
+    Refresh-Path
+    Assert-CleanMainBranch
+    if (-not (Test-Path -LiteralPath $RollbackRevisionFile -PathType Leaf)) {
+      throw "No rollback target is recorded. Complete at least one successful update first."
+    }
+    $targetRevision = (Get-Content -LiteralPath $RollbackRevisionFile -Raw).Trim()
+    if ($targetRevision -notmatch "^[0-9a-f]{40}$") {
+      throw "The recorded rollback revision is invalid."
+    }
+    & git.exe -C $RepositoryRoot cat-file -e "$targetRevision^{commit}"
+    if ($LASTEXITCODE -ne 0) {
+      throw "The recorded rollback revision is not available locally. Run update to fetch history."
+    }
+    $currentRevision = Get-CurrentRevision
+    Invoke-Checked "git.exe" @("-C", $RepositoryRoot, "reset", "--hard", $targetRevision)
+    try {
+      Start-Raydio -Rebuild
+    } catch {
+      Write-Warning "Rollback readiness checks failed. Restoring the revision that was running before rollback."
+      Invoke-Checked "git.exe" @("-C", $RepositoryRoot, "reset", "--hard", $currentRevision)
+      Start-Raydio -Rebuild
+      throw "Raydio rollback failed; the previous revision was restored and restarted."
+    }
+    Save-RollbackRevision $currentRevision
+    Write-Host "Raydio rolled back to $targetRevision." -ForegroundColor Green
   }
   "status" {
     Ensure-PodmanMachine

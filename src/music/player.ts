@@ -25,6 +25,9 @@ function createSession(
   let positionUpdatedAtMs = now();
   let playing = false;
   let paused = false;
+  let connected: boolean | null = null;
+  let lastPlayerUpdateAtMs: number | null = null;
+  let lastEventAtMs: number | null = null;
 
   function estimatedPositionMs(): number {
     const elapsedMs = playing && !paused ? Math.max(0, now() - positionUpdatedAtMs) : 0;
@@ -33,6 +36,7 @@ function createSession(
 
   const onStart = (event: Parameters<Player["onPlayerEvent"]>[0]): void => {
     if (event.type === "TrackStartEvent") {
+      lastEventAtMs = now();
       basePositionMs = 0;
       positionUpdatedAtMs = now();
       playing = true;
@@ -42,6 +46,7 @@ function createSession(
   };
   const onEnd = (event: Parameters<Player["onPlayerEvent"]>[0]): void => {
     if (event.type === "TrackEndEvent") {
+      lastEventAtMs = now();
       basePositionMs = estimatedPositionMs();
       positionUpdatedAtMs = now();
       playing = false;
@@ -49,6 +54,8 @@ function createSession(
     }
   };
   const onUpdate = (event: Parameters<Player["onPlayerUpdate"]>[0]): void => {
+    lastPlayerUpdateAtMs = now();
+    connected = event.state.connected;
     const position = event.state.position;
     if (Number.isFinite(position) && position >= 0) {
       basePositionMs = position;
@@ -59,10 +66,12 @@ function createSession(
   };
   const onStuck = (event: Parameters<Player["onPlayerEvent"]>[0]): void => {
     if (event.type === "TrackStuckEvent") {
+      lastEventAtMs = now();
       options.callbacks.onStuck(event.track.encoded, event.thresholdMs);
     }
   };
   const onException = (event: TrackExceptionEvent): void => {
+    lastEventAtMs = now();
     const compatibleEvent = event as ExceptionEventWithTrack;
     options.callbacks.onException(
       compatibleEvent.track?.encoded ?? player.track,
@@ -70,6 +79,8 @@ function createSession(
     );
   };
   const onClosed = (event: { readonly code: number; readonly byRemote: boolean }): void => {
+    lastEventAtMs = now();
+    connected = false;
     options.callbacks.onClosed(event.code, event.byRemote);
   };
 
@@ -109,14 +120,26 @@ function createSession(
       }
       return player.setGlobalVolume(volume);
     },
-    stop() {
+    async stop() {
       if (destroyed) {
-        return Promise.resolve();
+        return;
       }
-      return player.stopTrack();
+      await player.stopTrack();
+      basePositionMs = estimatedPositionMs();
+      positionUpdatedAtMs = now();
+      playing = false;
     },
     getPositionMs() {
       return estimatedPositionMs();
+    },
+    getHealth() {
+      return {
+        connected,
+        playing,
+        paused,
+        lastPlayerUpdateAtMs,
+        lastEventAtMs,
+      };
     },
     destroy() {
       if (destroyPromise !== undefined) {

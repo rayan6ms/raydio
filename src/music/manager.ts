@@ -19,6 +19,7 @@ import type {
   PlaybackEndReason,
   PlaybackSession,
   PlaybackSessionCallbacks,
+  PlaybackSessionHealth,
   PlaybackTransport,
 } from "./transport.js";
 import type { VoiceAccessResult } from "./voice.js";
@@ -27,6 +28,46 @@ const MILLISECONDS_PER_SECOND = 1_000;
 const FAILURE_LIMIT = 3;
 const HISTORY_LIMIT = 20;
 const TRACK_END_GRACE_MS = 15_000;
+const DIAGNOSTIC_GUILD_LIMIT = 1_000;
+
+export const PLAYBACK_DIAGNOSTIC_EVENTS = [
+  "queue-updated",
+  "playback-transition",
+  "track-started",
+  "track-end-finished",
+  "track-end-failed",
+  "track-end-watchdog",
+  "track-exception",
+  "track-stuck",
+  "transport-failed",
+  "session-cleaned",
+] as const;
+
+export type PlaybackDiagnosticEvent = (typeof PLAYBACK_DIAGNOSTIC_EVENTS)[number];
+
+export interface PlaybackChange {
+  readonly guildId: string;
+  readonly reason: PlaybackDiagnosticEvent;
+  readonly sequence: number;
+}
+
+export interface PlaybackDiagnostics {
+  readonly guildId: string;
+  readonly sessionActive: boolean;
+  readonly hasCurrentTrack: boolean;
+  readonly paused: boolean;
+  readonly upcomingTrackCount: number;
+  readonly historyCount: number;
+  readonly loopMode: LoopMode | null;
+  readonly volume: number | null;
+  readonly positionMs: number;
+  readonly durationMs: number | null;
+  readonly isStream: boolean;
+  readonly lastEvent: PlaybackDiagnosticEvent | null;
+  readonly lastEventAtMs: number | null;
+  readonly eventCounts: Readonly<Record<PlaybackDiagnosticEvent, number>>;
+  readonly transport: PlaybackSessionHealth | null;
+}
 
 export type TrackEndReason = PlaybackEndReason;
 
@@ -124,7 +165,9 @@ export interface MusicManager {
   getIdentity(guildId: string): GuildPlaybackIdentity | undefined;
   getIdentities(): readonly GuildPlaybackIdentity[];
   getSnapshot(guildId: string): GuildPlaybackSnapshot | undefined;
+  getDiagnostics(guildId: string): PlaybackDiagnostics;
   getPendingPlayRequestCount(guildId: string): number;
+  onPlaybackChanged(listener: (change: PlaybackChange) => void): () => void;
   searchTracks(request: SearchTracksRequest): Promise<SearchTracksResult>;
   requestPlay(request: PlayRequest): Promise<PlayRequestResult>;
   setPaused(
@@ -212,6 +255,14 @@ interface MusicManagerDependencies {
   readonly scheduler?: TimerScheduler;
   readonly random?: () => number;
   readonly createPlayerToken?: () => PlayerToken;
+  readonly now?: () => number;
+}
+
+interface DiagnosticRecord {
+  lastEvent: PlaybackDiagnosticEvent | null;
+  lastEventAtMs: number | null;
+  sequence: number;
+  readonly eventCounts: Record<PlaybackDiagnosticEvent, number>;
 }
 
 type CleanupReason =
@@ -298,6 +349,13 @@ function queueSize(state: GuildPlaybackState | undefined): number {
   return state.upcoming.length + (state.current === null ? 0 : 1);
 }
 
+function emptyEventCounts(): Record<PlaybackDiagnosticEvent, number> {
+  return Object.fromEntries(PLAYBACK_DIAGNOSTIC_EVENTS.map((event) => [event, 0])) as Record<
+    PlaybackDiagnosticEvent,
+    number
+  >;
+}
+
 export function createMusicManager(
   config: ManagerConfig,
   dependencies: MusicManagerDependencies,
@@ -315,7 +373,58 @@ export function createMusicManager(
   const scheduler = dependencies.scheduler ?? defaultScheduler;
   const random = dependencies.random ?? Math.random;
   const createPlayerToken = dependencies.createPlayerToken ?? (() => Symbol("player"));
+  const now = dependencies.now ?? Date.now;
+  const diagnosticRecords = new Map<string, DiagnosticRecord>();
+  const playbackChangeListeners = new Set<(change: PlaybackChange) => void>();
   let acceptingPlayRequests = true;
+
+  function diagnosticRecord(guildId: string): DiagnosticRecord {
+    const existing = diagnosticRecords.get(guildId);
+    if (existing !== undefined) {
+      diagnosticRecords.delete(guildId);
+      diagnosticRecords.set(guildId, existing);
+      return existing;
+    }
+    if (diagnosticRecords.size >= DIAGNOSTIC_GUILD_LIMIT) {
+      const oldestGuildId = diagnosticRecords.keys().next().value;
+      if (oldestGuildId !== undefined) {
+        diagnosticRecords.delete(oldestGuildId);
+      }
+    }
+    const created: DiagnosticRecord = {
+      lastEvent: null,
+      lastEventAtMs: null,
+      sequence: 0,
+      eventCounts: emptyEventCounts(),
+    };
+    diagnosticRecords.set(guildId, created);
+    return created;
+  }
+
+  function recordPlaybackEvent(guildId: string, event: PlaybackDiagnosticEvent): number {
+    const record = diagnosticRecord(guildId);
+    record.eventCounts[event] += 1;
+    if (event !== "playback-transition") {
+      record.lastEvent = event;
+      record.lastEventAtMs = now();
+    }
+    record.sequence += 1;
+    return record.sequence;
+  }
+
+  function publishPlaybackChange(guildId: string, reason: PlaybackDiagnosticEvent): void {
+    const sequence = recordPlaybackEvent(guildId, reason);
+    for (const listener of playbackChangeListeners) {
+      try {
+        listener({ guildId, reason, sequence });
+      } catch (error: unknown) {
+        dependencies.logger.warn(
+          { event: "playback_change_listener_failed", guildId, ...errorFields(error) },
+          "A playback change listener failed",
+        );
+      }
+    }
+  }
 
   function coordinatorFor(guildId: string): GuildCoordinator {
     const existing = coordinators.get(guildId);
@@ -372,6 +481,7 @@ export function createMusicManager(
     cancelStateTimers(state);
     states.delete(guildId);
     discardCoordinatorIfIdle(guildId, coordinator);
+    publishPlaybackChange(guildId, "session-cleaned");
     try {
       await state.session.destroy();
     } catch (firstError: unknown) {
@@ -510,6 +620,7 @@ export function createMusicManager(
             },
             "Advancing because Lavalink did not report the track ending",
           );
+          recordPlaybackEvent(state.guildId, "track-end-watchdog");
           const result = transitionCurrent(active, "finished");
           await applyPlaybackEffect(active, result);
         })
@@ -625,14 +736,17 @@ export function createMusicManager(
     let result = initialResult;
     while (result.kind === "advanced" || result.kind === "replayed") {
       if (result.current === null) {
+        publishPlaybackChange(state.guildId, "playback-transition");
         return result;
       }
 
       try {
         await state.session.play(result.current.encoded);
         scheduleTrackEndTimer(state);
+        publishPlaybackChange(state.guildId, "playback-transition");
         return result;
       } catch (error: unknown) {
+        recordPlaybackEvent(state.guildId, "transport-failed");
         dependencies.logger.warn(
           {
             event: "track_play_failed",
@@ -646,6 +760,7 @@ export function createMusicManager(
       }
     }
     if (result.kind === "failure-guard") {
+      publishPlaybackChange(state.guildId, "playback-transition");
       dependencies.logger.warn(
         { event: "playback_failure_guard", guildId: state.guildId },
         "Automatic playback stopped after consecutive failures",
@@ -675,6 +790,7 @@ export function createMusicManager(
     try {
       await state.session.stop();
     } catch (error: unknown) {
+      recordPlaybackEvent(state.guildId, "transport-failed");
       dependencies.logger.warn(
         { event: "player_stop_failed", guildId: state.guildId, ...errorFields(error) },
         "Could not stop the current transport track cleanly",
@@ -698,6 +814,7 @@ export function createMusicManager(
         return;
       }
       scheduleTrackEndTimer(validation.state);
+      publishPlaybackChange(event.guildId, "track-started");
       dependencies.logger.info(
         {
           event: "track_started",
@@ -730,6 +847,10 @@ export function createMusicManager(
       if ("result" in validation) {
         return validation.result;
       }
+      recordPlaybackEvent(
+        event.guildId,
+        event.reason === "finished" ? "track-end-finished" : "track-end-failed",
+      );
       const result = transitionCurrent(
         validation.state,
         event.reason === "finished" ? "finished" : "failure",
@@ -746,6 +867,7 @@ export function createMusicManager(
       if ("result" in validation) {
         return validation.result;
       }
+      recordPlaybackEvent(event.guildId, "track-exception");
       dependencies.logger.warn(
         {
           event: "track_exception",
@@ -766,6 +888,7 @@ export function createMusicManager(
       if ("result" in validation) {
         return validation.result;
       }
+      recordPlaybackEvent(event.guildId, "track-stuck");
       dependencies.logger.warn(
         {
           event: "track_stuck",
@@ -855,8 +978,36 @@ export function createMusicManager(
       return state === undefined ? undefined : copySnapshot(state);
     },
 
+    getDiagnostics(guildId) {
+      const state = states.get(guildId);
+      const record = diagnosticRecords.get(guildId);
+      return {
+        guildId,
+        sessionActive: state !== undefined,
+        hasCurrentTrack: state?.current !== null && state?.current !== undefined,
+        paused: state?.paused ?? false,
+        upcomingTrackCount: state?.upcoming.length ?? 0,
+        historyCount: state?.history.length ?? 0,
+        loopMode: state?.loopMode ?? null,
+        volume: state?.volume ?? null,
+        positionMs:
+          state?.current === null || state === undefined ? 0 : state.session.getPositionMs(),
+        durationMs: state?.current?.durationMs ?? null,
+        isStream: state?.current?.isStream ?? false,
+        lastEvent: record?.lastEvent ?? null,
+        lastEventAtMs: record?.lastEventAtMs ?? null,
+        eventCounts: { ...(record?.eventCounts ?? emptyEventCounts()) },
+        transport: state?.session.getHealth() ?? null,
+      };
+    },
+
     getPendingPlayRequestCount(guildId) {
       return coordinators.get(guildId)?.pendingPlayRequests ?? 0;
+    },
+
+    onPlaybackChanged(listener) {
+      playbackChangeListeners.add(listener);
+      return () => playbackChangeListeners.delete(listener);
     },
 
     async searchTracks(request) {
@@ -997,6 +1148,7 @@ export function createMusicManager(
                   callbacks: sessionCallbacks(request.guildId, playerToken),
                 });
               } catch (error: unknown) {
+                recordPlaybackEvent(request.guildId, "transport-failed");
                 dependencies.logger.warn(
                   {
                     event: "player_join_failed",
@@ -1055,6 +1207,7 @@ export function createMusicManager(
                 await state.session.play(firstTrack.encoded);
                 scheduleTrackEndTimer(state);
               } catch (error: unknown) {
+                recordPlaybackEvent(request.guildId, "transport-failed");
                 dependencies.logger.warn(
                   {
                     event: "initial_track_play_failed",
@@ -1075,6 +1228,8 @@ export function createMusicManager(
                 return { kind: "play-failed" };
               }
             }
+
+            publishPlaybackChange(request.guildId, "queue-updated");
 
             return {
               kind: "queued",
@@ -1110,6 +1265,7 @@ export function createMusicManager(
         try {
           await state.session.setPaused(paused);
         } catch (error: unknown) {
+          recordPlaybackEvent(request.guildId, "transport-failed");
           dependencies.logger.warn(
             {
               event: "player_pause_update_failed",
@@ -1128,6 +1284,7 @@ export function createMusicManager(
         } else {
           scheduleTrackEndTimer(state);
         }
+        publishPlaybackChange(request.guildId, "playback-transition");
         return { kind: "ok", value: "updated" };
       });
     },
@@ -1146,6 +1303,7 @@ export function createMusicManager(
         try {
           await state.session.setVolume(volume);
         } catch (error: unknown) {
+          recordPlaybackEvent(request.guildId, "transport-failed");
           dependencies.logger.warn(
             {
               event: "player_volume_update_failed",
@@ -1158,6 +1316,7 @@ export function createMusicManager(
           return { kind: "transport-failed" };
         }
         state.volume = volume;
+        publishPlaybackChange(request.guildId, "playback-transition");
         return { kind: "ok", value: { volume, changed: true } };
       });
     },
@@ -1168,7 +1327,10 @@ export function createMusicManager(
         if ("result" in validation) {
           return validation.result;
         }
-        validation.state.loopMode = loopMode;
+        if (validation.state.loopMode !== loopMode) {
+          validation.state.loopMode = loopMode;
+          publishPlaybackChange(request.guildId, "playback-transition");
+        }
         return { kind: "ok", value: loopMode };
       });
     },
@@ -1183,6 +1345,9 @@ export function createMusicManager(
           return { kind: "ok", value: null };
         }
         const removed = validation.state.upcoming.splice(displayedIndex - 1, 1)[0];
+        if (removed !== undefined) {
+          publishPlaybackChange(request.guildId, "queue-updated");
+        }
         return { kind: "ok", value: removed === undefined ? null : copyQueueTrack(removed) };
       });
     },
@@ -1216,6 +1381,7 @@ export function createMusicManager(
         }
         upcoming.splice(fromIndex - 1, 1);
         upcoming.splice(toIndex - 1, 0, track);
+        publishPlaybackChange(request.guildId, "queue-updated");
         return {
           kind: "ok",
           value: { track: copyQueueTrack(track), changed: true },
@@ -1234,6 +1400,9 @@ export function createMusicManager(
         state.upcoming = [];
         if (state.current === null) {
           scheduleIdleTimer(state);
+        }
+        if (removed > 0) {
+          publishPlaybackChange(request.guildId, "queue-updated");
         }
         return { kind: "ok", value: removed };
       });
@@ -1267,6 +1436,7 @@ export function createMusicManager(
           }
         }
         state.upcoming = shuffled;
+        publishPlaybackChange(request.guildId, "queue-updated");
         return { kind: "ok", value: true };
       });
     },
@@ -1401,6 +1571,9 @@ export function createMusicManager(
         state.consecutiveFailures = 0;
         scheduleIdleTimer(state);
         discardCoordinatorIfIdle(request.guildId, coordinator);
+        if (changed) {
+          publishPlaybackChange(request.guildId, "playback-transition");
+        }
         return { kind: "ok", value: changed ? "stopped" : "unchanged" };
       });
     },
@@ -1502,6 +1675,7 @@ export function createMusicManager(
           }),
         ),
       );
+      playbackChangeListeners.clear();
     },
   };
 }

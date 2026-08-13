@@ -76,8 +76,12 @@ that the old host is stopped before it registers automatic startup or starts Win
 manage it with:
 
 ```powershell
-& "$env:LOCALAPPDATA\Raydio\app\scripts\windows\raydio.ps1" <status|logs|update|restart|stop|doctor>
+& "$env:LOCALAPPDATA\Raydio\app\scripts\windows\raydio.ps1" <status|logs|update|rollback|restart|stop|doctor>
 ```
+
+`update` records the prior revision and restores it automatically if readiness checks fail.
+`rollback` switches to that known-good revision, rebuilds, verifies readiness, and records the
+revision it replaced so the operation can be reversed.
 
 ## Commands
 
@@ -102,12 +106,14 @@ Music, playlist, and video-with-playlist URLs are resolved directly.
 | `/volume [level:]` | Show or set volume from 0 to 100 |
 | `/loop mode:` | Set loop mode using Discord's choices |
 | `/leave` | Disconnect and clear session state |
+| `/diagnostics` | Privately show playback, controls-panel, Discord, and Lavalink health to server managers |
 | `/help` | Show the command list |
 | `/ping` | Show Discord latency and Lavalink readiness |
 
 The modern player offers Previous, Pause/Resume, Next, Stop, Queue, Loop, and Leave buttons, a
 YouTube thumbnail, and a progress display refreshed every second. Player controls become
-harmless when their playback session is stale.
+harmless when their playback session is stale. Queue and playback transitions also trigger an
+immediate panel refresh instead of waiting for the progress interval.
 Playback-changing controls require the caller to share the bot's normal voice channel. Stage
 channels are unsupported. Read-only commands and cleanup remain available during a Lavalink outage;
 commands that need Lavalink fail fast.
@@ -151,8 +157,10 @@ The complete two-service stack is supported through Compose.
 ## Boundaries and recovery
 
 Raydio has no database, persistence, autoplay, Spotify/SoundCloud or arbitrary-HTTP playback,
-dashboard, metrics endpoint, multi-node failover, horizontal scaling, Stage support, or supported
-forum/thread command surface. It is built for personal/private servers, not public multi-tenant use.
+dashboard, public metrics endpoint, multi-node failover, horizontal scaling, Stage support, or
+supported forum/thread command surface. It is built for personal/private servers, not public
+multi-tenant use. `/diagnostics` is ephemeral, restricted to server managers, and reports bounded
+counters and connection timestamps without track, requester, search, URL, or secret data.
 
 Idle or listener-empty sessions disconnect on their configured timers. Manual bot moves clear that
 server's state. Brief Lavalink WebSocket interruptions can resume for up to 60 seconds; a Lavalink

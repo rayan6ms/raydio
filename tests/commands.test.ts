@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
+import { PermissionFlagsBits } from "discord.js";
+
 import {
   APPLICATION_COMMANDS,
   COMMAND_NAMES,
@@ -21,6 +23,9 @@ function context(sent: string[], overrides: Partial<CommandContext> = {}): Comma
     },
     presentQueue: async () => {
       sent.push("queue");
+    },
+    presentDiagnostics: async () => {
+      sent.push("diagnostics");
     },
     send: async (content) => {
       sent.push(content);
@@ -55,6 +60,17 @@ describe("application command registry", () => {
     assert.equal("autocomplete" in (request ?? {}) ? request.autocomplete : undefined, true);
   });
 
+  it("limits diagnostics to server managers by default", () => {
+    const diagnostics = APPLICATION_COMMANDS.map((builder) => builder.toJSON()).find(
+      (item) => item.name === "diagnostics",
+    );
+
+    assert.equal(
+      diagnostics?.default_member_permissions,
+      PermissionFlagsBits.ManageGuild.toString(),
+    );
+  });
+
   it("uses slash syntax throughout the compact help menu", () => {
     assert.match(HELP_MESSAGE, /`\/play request:`/);
     assert.match(HELP_MESSAGE, /`\/move from: to:`/);
@@ -71,6 +87,16 @@ describe("dispatchCommand", () => {
     assert.equal(await dispatchCommand({ name: "ping", argument: "" }, testContext), "handled");
     assert.equal(sent[0], HELP_MESSAGE);
     assert.equal(sent[1], "Pong! Discord: 42 ms. Lavalink: ready.");
+  });
+
+  it("presents private diagnostics without treating them as a playback control", async () => {
+    const sent: string[] = [];
+
+    assert.equal(
+      await dispatchCommand({ name: "diagnostics", argument: "" }, context(sent)),
+      "handled",
+    );
+    assert.deepEqual(sent, ["diagnostics"]);
   });
 
   it("plays a required value and gates Lavalink-backed work", async () => {

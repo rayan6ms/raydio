@@ -16,12 +16,21 @@ export interface PlaybackJoinOptions {
   readonly callbacks: PlaybackSessionCallbacks;
 }
 
+export interface PlaybackSessionHealth {
+  readonly connected: boolean | null;
+  readonly playing: boolean;
+  readonly paused: boolean;
+  readonly lastPlayerUpdateAtMs: number | null;
+  readonly lastEventAtMs: number | null;
+}
+
 export interface PlaybackSession {
   play(encodedTrack: string): Promise<void>;
   setPaused(paused: boolean): Promise<void>;
   setVolume(volume: number): Promise<void>;
   stop(): Promise<void>;
   getPositionMs(): number;
+  getHealth(): PlaybackSessionHealth;
   destroy(): Promise<void>;
 }
 

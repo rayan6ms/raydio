@@ -24,6 +24,7 @@ import type {
   PlaybackSession,
   PlaybackTransport,
 } from "../src/music/transport.js";
+import { createNowPlayingViewController } from "../src/now-playing-view.js";
 
 const defaultConfig = {
   aloneDisconnectSeconds: 120,
@@ -185,6 +186,16 @@ class FakeSession implements PlaybackSession {
     return this.positionMs;
   }
 
+  getHealth() {
+    return {
+      connected: true,
+      playing: this.played.length > 0 && this.stopCount === 0,
+      paused: this.paused.at(-1) ?? false,
+      lastPlayerUpdateAtMs: null,
+      lastEventAtMs: null,
+    };
+  }
+
   async destroy(): Promise<void> {
     this.destroyCount += 1;
     if (this.destroyFailuresRemaining > 0) {
@@ -233,6 +244,7 @@ function managerWith(
     readonly scheduler?: TimerScheduler;
     readonly random?: () => number;
     readonly createPlayerToken?: () => PlayerToken;
+    readonly now?: () => number;
     readonly transport?: PlaybackTransport;
     readonly notifier?: { send(channelId: string, content: string): Promise<void> };
   } = {},
@@ -249,6 +261,7 @@ function managerWith(
       ...(options.createPlayerToken === undefined
         ? {}
         : { createPlayerToken: options.createPlayerToken }),
+      ...(options.now === undefined ? {} : { now: options.now }),
     },
   );
 }
@@ -294,6 +307,74 @@ function controlValue<Value>(result: ControlResult<Value>): Value {
 }
 
 describe("createMusicManager", () => {
+  it("publishes state changes and retains bounded private playback diagnostics", async () => {
+    let nowMs = 1_000;
+    const transport = new FakeTransport();
+    const manager = managerWith(new FakeResolver(async () => tracks(track("a"), track("b"))), {
+      transport,
+      now: () => nowMs,
+    });
+    const changes: string[] = [];
+    const unsubscribe = manager.onPlaybackChanged((change) => changes.push(change.reason));
+
+    await queue(manager, "playlist");
+    assert.deepEqual(changes, ["queue-updated"]);
+    assert.deepEqual(
+      {
+        sessionActive: manager.getDiagnostics("guild-1").sessionActive,
+        upcomingTrackCount: manager.getDiagnostics("guild-1").upcomingTrackCount,
+        queueUpdates: manager.getDiagnostics("guild-1").eventCounts["queue-updated"],
+        connected: manager.getDiagnostics("guild-1").transport?.connected,
+      },
+      { sessionActive: true, upcomingTrackCount: 1, queueUpdates: 1, connected: true },
+    );
+
+    nowMs = 2_000;
+    await manager.handleTrackEnd({ ...currentIdentity(manager), reason: "finished" });
+    const diagnostics = manager.getDiagnostics("guild-1");
+    assert.equal(diagnostics.eventCounts["track-end-finished"], 1);
+    assert.equal(diagnostics.eventCounts["playback-transition"], 1);
+    assert.equal(diagnostics.lastEvent, "track-end-finished");
+    assert.equal(diagnostics.lastEventAtMs, 2_000);
+    assert.deepEqual(changes, ["queue-updated", "playback-transition"]);
+
+    unsubscribe();
+    await manager.leave(control(manager));
+    assert.equal(manager.getDiagnostics("guild-1").sessionActive, false);
+    assert.equal(manager.getDiagnostics("guild-1").eventCounts["session-cleaned"], 1);
+    assert.deepEqual(changes, ["queue-updated", "playback-transition"]);
+  });
+
+  it("passes the deterministic two-track transition and controls-state release smoke test", async () => {
+    const manager = managerWith(new FakeResolver(async () => tracks(track("a"), track("b"))));
+    const playerViews = createNowPlayingViewController(() => "release-smoke");
+    await queue(manager, "two tracks");
+    const firstSnapshot = manager.getSnapshot("guild-1");
+    assert.ok(firstSnapshot);
+    const firstView = playerViews.render(firstSnapshot);
+    const pause = firstView.components
+      .flatMap((row) => row.toJSON().components)
+      .find((component) => "label" in component && component.label === "Pause");
+    assert.ok(pause !== undefined && "custom_id" in pause);
+    if (pause === undefined || !("custom_id" in pause)) {
+      throw new Error("Expected release-smoke pause controls");
+    }
+
+    await manager.handleTrackEnd({ ...currentIdentity(manager), reason: "finished" });
+    const secondSnapshot = manager.getSnapshot("guild-1");
+    assert.equal(secondSnapshot?.current?.identifier, "b");
+    assert.equal(playerViews.render(secondSnapshot).embeds[0]?.toJSON().title, "title-b");
+    assert.deepEqual(playerViews.resolve("guild-1", pause.custom_id, secondSnapshot), {
+      kind: "ready",
+      action: "pause",
+    });
+
+    await manager.leave(control(manager));
+    assert.deepEqual(playerViews.resolve("guild-1", pause.custom_id, undefined), {
+      kind: "stale",
+    });
+  });
+
   it("owns bounded queue state and exposes detached snapshots", async () => {
     const resolver = new FakeResolver(async () => tracks(track("a"), track("b"), track("c")));
     const manager = managerWith(resolver, { config: { maxQueueTracks: 3 } });
@@ -1115,6 +1196,7 @@ describe("createMusicManager", () => {
 
     assert.equal(manager.getSnapshot("guild-1")?.current?.identifier, "b");
     assert.deepEqual(transport.sessions[0]?.played, ["encoded-a", "encoded-b"]);
+    assert.equal(manager.getDiagnostics("guild-1").eventCounts["track-end-watchdog"], 1);
     assert.notEqual(
       scheduler.timers.findLast((timer) => !timer.cleared),
       watchdog,

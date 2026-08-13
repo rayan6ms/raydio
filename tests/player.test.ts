@@ -109,6 +109,13 @@ describe("createShoukakuPlaybackTransport", () => {
     player.track = "encoded-a";
     player.emit("update", { state: { position: 12_345, connected: true, ping: 1 } });
     assert.equal(session.getPositionMs(), 12_345);
+    assert.deepEqual(session.getHealth(), {
+      connected: true,
+      playing: true,
+      paused: true,
+      lastPlayerUpdateAtMs: nowMs,
+      lastEventAtMs: null,
+    });
     await session.setPaused(false);
     nowMs += 500;
     assert.equal(session.getPositionMs(), 12_845);
@@ -124,6 +131,8 @@ describe("createShoukakuPlaybackTransport", () => {
       track: { encoded: "encoded-a" },
       reason: "finished",
     });
+    assert.equal(session.getHealth().playing, false);
+    assert.equal(session.getHealth().lastEventAtMs, nowMs);
     player.emit("stuck", {
       type: "TrackStuckEvent",
       track: { encoded: "encoded-b" },

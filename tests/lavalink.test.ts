@@ -62,6 +62,7 @@ describe("createLavalinkService", () => {
     service.manager.emit("ready", LAVALINK_NODE_NAME, false, false);
     assert.equal(service.getStatus(), "ready");
     assert.equal(service.isReady(), true);
+    assert.equal(service.getDiagnostics().readyCount, 1);
 
     const node = new Node(service.manager, createLavalinkNode(config));
     node.state = Constants.State.CONNECTED;
@@ -72,6 +73,7 @@ describe("createLavalinkService", () => {
     service.manager.emit("close", LAVALINK_NODE_NAME, 1006, "connection lost");
     assert.equal(service.getStatus(), "reconnecting");
     assert.equal(service.isReady(), false);
+    assert.equal(service.getDiagnostics().closeCount, 1);
 
     service.manager.emit("ready", LAVALINK_NODE_NAME, true, false);
     assert.equal(service.isReady(), true);
@@ -86,6 +88,10 @@ describe("createLavalinkService", () => {
 
     service.manager.emit("ready", LAVALINK_NODE_NAME, false, false);
     assert.equal(service.getStatus(), "stopped");
+    assert.doesNotThrow(() =>
+      service.manager.emit("error", LAVALINK_NODE_NAME, new Error("late shutdown error")),
+    );
+    assert.equal(service.getDiagnostics().lastEvent, "stopped");
 
     client.destroy();
   });
