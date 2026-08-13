@@ -154,6 +154,14 @@ npm run check
 build. The development and start scripts load an existing `.env`; shell variables take precedence.
 The complete two-service stack is supported through Compose.
 
+## Roadmaps
+
+The [current-system improvement plan](docs/current-system-improvements.md) records the latest full
+diagnostic and prioritizes security, reliability, maintainability, testing, operations, and existing
+UX work. New user-facing ideas are kept separately in the [feature roadmap](docs/feature-roadmap.md)
+so maintenance needs and product expansion are not mixed together. The historical
+[enhancement backlog](docs/enhancement-backlog.md) retains completed passes and earlier decisions.
+
 ## Boundaries and recovery
 
 Raydio has no database, persistence, autoplay, Spotify/SoundCloud or arbitrary-HTTP playback,

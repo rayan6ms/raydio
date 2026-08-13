@@ -3,6 +3,13 @@
 **Reviewed:** 2026-08-12
 **Purpose:** keep future improvements evidence-led without expanding the bot accidentally
 
+This file records the completed reliability passes and earlier decisions. The current detailed
+plans are split by scope:
+
+- [Current-system improvement plan](current-system-improvements.md) covers reliability, security,
+  maintainability, operations, testing, and existing UX.
+- [Feature roadmap](feature-roadmap.md) covers new user-facing capabilities and their prerequisites.
+
 ## Reliability first
 
 1. **Playback event observability (completed):** correlate track start, end, exception, stuck, fallback,

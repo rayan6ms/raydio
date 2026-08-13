@@ -108,7 +108,6 @@ describe("public documentation", () => {
     assert.match(readme, /regular server text channels/i);
     assert.match(operations, /Do not add ingress rules for 2333/);
     assert.match(operations, /first-deployment checks/i);
-    assert.doesNotMatch(publicDocs, /(?:^|\/)docs\//i);
     assert.doesNotMatch(publicDocs, /DISCORD_TOKEN=[^\s`]+/);
     assert.doesNotMatch(publicDocs, /LAVALINK_PASSWORD=[^\s`]+/);
   });
@@ -175,11 +174,27 @@ describe("public documentation", () => {
 
   it("ships a curated, secret-free enhancement backlog", () => {
     const backlog = readText("docs/enhancement-backlog.md");
+    const improvements = readText("docs/current-system-improvements.md");
+    const features = readText("docs/feature-roadmap.md");
+    const readme = readText("README.md");
 
     assert.match(backlog, /Reliability first/);
     assert.match(backlog, /Interaction and playback experience/);
     assert.match(backlog, /Operations and maintenance/);
-    assert.doesNotMatch(backlog, /DISCORD_TOKEN\s*=/);
-    assert.doesNotMatch(backlog, /LAVALINK_PASSWORD\s*=/);
+    assert.match(improvements, /Diagnostic evidence/);
+    assert.match(improvements, /P0 — security and operational signal/);
+    assert.match(improvements, /Suggested execution order/);
+    assert.match(features, /Recommended next features/);
+    assert.match(features, /Features not recommended/);
+    assert.match(features, /Definition of ready/);
+    assert.match(readme, /current-system improvement plan/);
+    assert.match(readme, /feature roadmap/);
+    assert.match(readText(".gitignore"), /!\/docs\/current-system-improvements\.md/);
+    assert.match(readText(".gitignore"), /!\/docs\/feature-roadmap\.md/);
+
+    for (const document of [backlog, improvements, features]) {
+      assert.doesNotMatch(document, /DISCORD_TOKEN\s*=/);
+      assert.doesNotMatch(document, /LAVALINK_PASSWORD\s*=/);
+    }
   });
 });
