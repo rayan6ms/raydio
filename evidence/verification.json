@@ -1,9 +1,9 @@
 {
   "date": "2026-09-05",
   "rustTests": {
-    "passed": 38,
+    "passed": 39,
     "failed": 0,
-    "unit": 36,
+    "unit": 37,
     "realBackendIntegration": 1,
     "reconnectIntegration": 1
   },
@@ -21,14 +21,14 @@
     "login": true,
     "commandsRegistered": 19,
     "voiceTransportJoined": true,
-    "encryptedAudioDelivered": false,
-    "slashCommandsAndButtonsInDiscordUI": false
+    "encryptedAudioDelivered": "Encrypted voice connected and playback position advanced in both channels; human audibility not yet confirmed",
+    "slashCommandsAndButtonsInDiscordUI": true
   },
   "endToEndRewriteComplete": false,
   "performanceComparison": {
-    "idle": "9 complete authenticated runs; see idle-performance.json",
-    "playback": "pending receiving-participant verification",
-    "interactionLatency": "pending live command verification"
+    "idle": "9 authenticated trials",
+    "playback": "Three 20-second windows each for Rust, tuned original, ordinary original",
+    "interactionLatency": "Six measured pause/resume clicks each for Rust and tuned original; Rust slower in this sample"
   },
-  "blocker": "Live testbot transport joins General but waits in EstablishingDave without a receiving participant. No browser execution tool is available in this session to operate the authenticated Discord client. Receiver-backed General/private-vc playback, controls, and performance remain unverified."
+  "blocker": "Waiting for human confirmation of clear audible playback; technical live voice, command, and performance checks completed"
 }

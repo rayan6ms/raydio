@@ -1,0 +1,40 @@
+{
+  "date": "2026-09-05T12:30:44.301241+00:00",
+  "stack": "rust",
+  "workload": "One live Discord voice session, dQw4w9WgXcQ, volume 70, track loop, panel refresh enabled",
+  "limitations": [
+    "Shared host",
+    "Three consecutive windows in one warmed process; not independent process restarts",
+    "Human listening confirmation recorded separately"
+  ],
+  "processCount": 1,
+  "trials": [
+    {
+      "trial": 1,
+      "observationSeconds": 20.024,
+      "medianRssKiB": 25400.0,
+      "medianPssKiB": 22484.0,
+      "cpuSeconds": 0.61,
+      "cpuPercentOneCore": 3.046,
+      "maxThreads": 5
+    },
+    {
+      "trial": 2,
+      "observationSeconds": 20.024,
+      "medianRssKiB": 25400.0,
+      "medianPssKiB": 22484.0,
+      "cpuSeconds": 0.62,
+      "cpuPercentOneCore": 3.096,
+      "maxThreads": 5
+    },
+    {
+      "trial": 3,
+      "observationSeconds": 20.024,
+      "medianRssKiB": 25404.0,
+      "medianPssKiB": 22488.0,
+      "cpuSeconds": 0.62,
+      "cpuPercentOneCore": 3.096,
+      "maxThreads": 5
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "date": "2026-09-05",
+  "runtimeCommit": "0664ba8",
+  "browser": "Controlled collaborative browser, explicitly requested by user",
+  "privateVoice": {
+    "command": "/play https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "connected": true,
+    "positionMs": 39156,
+    "volume": 70,
+    "errors": 0
+  },
+  "checks": [
+    "live /play creates panel and updates presence",
+    "live /diagnostics is ephemeral and reports voice connected",
+    "Pause and Resume buttons update state",
+    "/volume changes 70 to 37 and back to 70",
+    "Queue button replies ephemerally",
+    "Loop button enables track loop",
+    "Natural end advances to queued track and enables Previous",
+    "General playback joins with a preconnected listener",
+    "Track loop completes a natural end without failure",
+    "Leave button disconnects and clears the old panel",
+    "Live move, shuffle, remove, jump, previous, skip, pause, resume, clear, help, ping, nowplaying, loop queue, stop and leave slash commands",
+    "All seven panel buttons exercised",
+    "Public General voice verified connected with a prejoined listener",
+    "Autocomplete returned ten choices for rick",
+    "Corrected release preserves Stop confirmation after periodic refresh"
+  ],
+  "generalVoice": {
+    "connected": true,
+    "positionMs": 29705,
+    "volume": 70,
+    "failed": 0,
+    "watchdog": 0,
+    "connectionErrors": 0
+  },
+  "humanAudibilityConfirmed": null,
+  "limits": [
+    "Human listening response pending",
+    "Direct source control video used for playback checks; universal YouTube availability is not claimed"
+  ],
+  "runtime": "Initial live checks at 0664ba8, followed by the Stop panel correction and its regression test"
+}

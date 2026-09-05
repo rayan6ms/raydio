@@ -1,13 +1,13 @@
 # Raydio — Rust rewrite
 
-Work in progress on branch `rewrite/rust-raydio`, in a separate Git worktree at
+Rust implementation on branch `rewrite/rust-raydio`, in a separate Git worktree at
 `/home/rayan/Documents/Projects/raydio-rust`. The original TypeScript bot remains on `main` in
 `/home/rayan/Documents/Projects/raydio`. Legacy deployment scripts, TypeScript source/tests, and
 historical roadmaps are excluded from this branch; Git history and the original checkout preserve them.
 
 The Discord runtime now authenticates and registers all 19 commands. Mantle's direct-video metadata
-regression is fixed, and Crust player volume now reaches the audio path. Live voice playback and
-performance under playback are still unverified; this is not yet declared a complete replacement.
+regression is fixed, and Crust player volume now reaches the audio path. All 19 slash commands and all seven player buttons have been exercised through Discord.
+Encrypted playback connects in General and private-vc. Human listening confirmation remains pending.
 
 The runtime is one Rust process: Twilight for Discord; private, embedded Crust for player
 orchestration; Mantle for YouTube/media; Oto for Discord voice and DAVE. Crust binds an ephemeral
@@ -34,8 +34,9 @@ The runtime includes serialized guild commands, FIFO source requests with stop/l
 voice state and permission checks, autocomplete, stale panel protection, presence, diagnostics,
 watchdogs, and idle/alone cleanup. Deterministic tests exercise controls through real Crust with
 its media/voice test fixtures; a separate integration test starts all real backends. Live testbot
-login and command registration passed. The current live audio probe joins voice but waits for
-DAVE group establishment; receiving-participant verification remains pending.
+login and command registration passed. Live receiver-backed tests establish DAVE and advance playback in both public and private voice
+channels. Autocomplete returns ten choices; pause/resume, volume, loops, queue edits, panel replacement,
+natural advancement, stop, and leave were exercised through the controlled browser.
 
 ## Build and verification
 
@@ -111,24 +112,38 @@ The tuned JVM uses `-Xms64m -Xmx192m -XX:ActiveProcessorCount=2`. The ordinary p
 processor defaults with a 512 MiB Java heap safety cap. This is a shared host with warm OS caches;
 startup includes Discord network requests. Idle CPU differences are near the measurement resolution.
 
-These results establish an idle-memory improvement, not playback or command-latency parity.
-Matched playback/interaction measurements remain pending live verification. Earlier failed-startup
-figures have been withdrawn and are not used here. Full observations, revisions, binary hash, and
-limitations are in [evidence/idle-performance.json](evidence/idle-performance.json). Reproduce with:
+Earlier failed-startup figures have been withdrawn and are not used here. Full idle observations,
+revisions, binary hash, and limitations are in [evidence/idle-performance.json](evidence/idle-performance.json). Reproduce with:
 
 ```sh
 uv run --no-project python benchmarks/compare_idle.py --env-file ../raydio/.env --node /path/to/node
 ```
 
-The original suite passed 149 tests before isolation. The Rust suite now passes 38 tests (36 unit
-and guild-control tests, one real-backend lifecycle test, and one reconnect test); formatting and
-Clippy pass. Dependency corrections are committed locally as Mantle `8be808b` and Crust `df19a6d`.
-Rust verification results and source compatibility evidence are recorded under [evidence](evidence/).
+Live playback measurements use the same control video, volume 70, track loop, and active panel.
+Three consecutive 20-second windows per stack produced these medians:
 
-Remaining live checks are receiving-participant playback in General and private-vc, slash commands
-and buttons through Discord, and matched playback/interaction performance. The available testbot
-credentials authenticate correctly. The current empty-channel probe reaches voice transport
-readiness but waits in Oto’s `EstablishingDave` state. It does not prove an Oto defect: group
-establishment with a listener still needs verification. The browser execution tool required to
-operate the authenticated Discord client is unavailable in this session. No encryption bypass or
-production cutover has been introduced.
+| Stack | Playback PSS | CPU (% of one core) | Threads |
+| --- | ---: | ---: | ---: |
+| Rust | 21.9 MiB | 3.05% | 4 |
+| Node + Lavalink, tuned | 391.6 MiB | 4.17% | 46 |
+| Node + Lavalink, ordinary | 659.1 MiB | 3.56% | 172 |
+
+Rust used **94.4% less playback PSS** than the tuned original.
+Its CPU median was lower in these windows, but this small shared-host sample is not a throughput
+or scaling guarantee. Browser pause/resume click-to-panel latency did **not** improve: medians were
+1.23s for Rust and 0.98s for the tuned original (six actions each).
+See [playback evidence](evidence/playback-performance.json) and [control timings](evidence/control-latency.json).
+The driver [sample_playback.py](benchmarks/sample_playback.py) reads only the explicitly selected
+processes; [start_reference.py](benchmarks/start_reference.py) owns and cleans up the original test stack.
+
+The original suite passed 149 tests before isolation. The Rust suite passes 39 tests (37 unit and
+guild-control tests, one real-backend lifecycle test, and one reconnect test); formatting and Clippy
+pass. Dependency corrections are committed locally as Mantle `8be808b` and Crust `df19a6d`.
+The final UI correction preserves Stop's confirmation instead of overwriting it on periodic refresh.
+
+[Live evidence](evidence/live-discord.json) distinguishes connected/advancing encrypted playback from
+human listening confirmation, which is still pending. The earlier browser access blocker was resolved
+by the user's explicit instruction to use the controlled collaborative browser. No Oto source change
+was necessary to establish DAVE with a prejoined listener in these runs. General and private-vc both
+worked. Availability of every YouTube video is not guaranteed; the two shared source failures remain
+recorded in [source evidence](evidence/youtube-parity.json).

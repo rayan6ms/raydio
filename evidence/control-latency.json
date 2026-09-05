@@ -1,0 +1,73 @@
+{
+  "date": "2026-09-05",
+  "method": "DOM MutationObserver measures actual button click to panel status update, six sequential alternating Pause/Resume actions per stack, same browser and General voice",
+  "rust": [
+    {
+      "action": "Pause",
+      "done": true,
+      "ms": 1242.9000000059605
+    },
+    {
+      "action": "Resume",
+      "done": true,
+      "ms": 1089.9000000059605
+    },
+    {
+      "action": "Pause",
+      "done": true,
+      "ms": 1518.2999999821186
+    },
+    {
+      "action": "Resume",
+      "done": true,
+      "ms": 3230.5999999940395
+    },
+    {
+      "action": "Pause",
+      "done": true,
+      "ms": 1225.5
+    },
+    {
+      "action": "Resume",
+      "done": true,
+      "ms": 1047.5
+    }
+  ],
+  "originalTuned": [
+    {
+      "action": "Pause",
+      "done": true,
+      "ms": 1396.9000000059605
+    },
+    {
+      "action": "Resume",
+      "done": true,
+      "ms": 984
+    },
+    {
+      "action": "Pause",
+      "done": true,
+      "ms": 960.3999999761581
+    },
+    {
+      "action": "Resume",
+      "done": true,
+      "ms": 923.7000000178814
+    },
+    {
+      "action": "Pause",
+      "done": true,
+      "ms": 966.2000000178814
+    },
+    {
+      "action": "Resume",
+      "done": true,
+      "ms": 2033.699999988079
+    }
+  ],
+  "limitations": [
+    "Small sequential network-dependent sample, not throughput or a statistical latency guarantee",
+    "A preliminary instrument run had incomplete observations and was discarded; ordinary profile run did not complete and has no latency claim",
+    "No claim that Rust improves interaction latency"
+  ]
+}

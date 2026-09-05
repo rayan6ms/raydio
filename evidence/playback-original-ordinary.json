@@ -1,0 +1,50 @@
+{
+  "date": "2026-09-05T12:48:13.668888+00:00",
+  "stack": "original-ordinary",
+  "workload": "One live Discord voice session, dQw4w9WgXcQ, volume 70, track loop, panel refresh enabled",
+  "limitations": [
+    "Shared host",
+    "Three consecutive windows in one warmed process; not independent process restarts",
+    "Human listening confirmation recorded separately"
+  ],
+  "processCount": 2,
+  "executables": [
+    {
+      "name": "java",
+      "sha256": "ac3505f0c58282f00a6585591324a86b038c89cd171105fe42a1a0cf2f13b517"
+    },
+    {
+      "name": "node",
+      "sha256": "bc17c508ffeed0ec622934f9b7fa72f8e78da65350e63c3eceb56fa688aa5e12"
+    }
+  ],
+  "trials": [
+    {
+      "trial": 1,
+      "observationSeconds": 20.267,
+      "medianRssKiB": 684596.0,
+      "medianPssKiB": 674881.0,
+      "cpuSeconds": 0.71,
+      "cpuPercentOneCore": 3.503,
+      "maxThreads": 173
+    },
+    {
+      "trial": 2,
+      "observationSeconds": 20.243,
+      "medianRssKiB": 685144.0,
+      "medianPssKiB": 675429.0,
+      "cpuSeconds": 0.72,
+      "cpuPercentOneCore": 3.557,
+      "maxThreads": 172
+    },
+    {
+      "trial": 3,
+      "observationSeconds": 20.233,
+      "medianRssKiB": 684458.0,
+      "medianPssKiB": 674743.0,
+      "cpuSeconds": 0.93,
+      "cpuPercentOneCore": 4.597,
+      "maxThreads": 172
+    }
+  ]
+}

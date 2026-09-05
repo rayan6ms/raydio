@@ -1,0 +1,35 @@
+{
+  "date": "2026-09-05",
+  "medians": {
+    "rust-final": {
+      "medianPssKiB": 22450.0,
+      "medianRssKiB": 25596.0,
+      "cpuPercentOneCore": 3.046,
+      "maxThreads": 4
+    },
+    "original-tuned": {
+      "medianPssKiB": 400996.0,
+      "medianRssKiB": 410602.0,
+      "cpuPercentOneCore": 4.17,
+      "maxThreads": 46
+    },
+    "original-ordinary": {
+      "medianPssKiB": 674881.0,
+      "medianRssKiB": 684596.0,
+      "cpuPercentOneCore": 3.557,
+      "maxThreads": 172
+    }
+  },
+  "controlLatencyMedianMs": {
+    "rust": 1234.2000000029802,
+    "originalTuned": 975.1000000089407
+  },
+  "binarySha256": "9aee4b1b88fa6aa14801097b745e65706b464afeb1673867c25debb16084be34",
+  "limits": [
+    "One track and one guild; no many-guild scaling claim",
+    "Sequential 20-second windows on a shared host, three per stack",
+    "Playback profiles all use volume 70 and track loop; Node and Java costs summed",
+    "Small browser control latency sample is network dependent; Rust was slower in this sample",
+    "Human listening confirmation still pending"
+  ]
+}

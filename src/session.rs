@@ -227,6 +227,11 @@ impl GuildSession {
                     let _ = request.respond(&self.shared.http, self.player_view()).await;
                 } else {
                     let _ = request.respond(&self.shared.http, View::text(text)).await;
+                    if request.updates_message() {
+                        // A terminal button response owns the final panel text.
+                        // Retire it before the periodic refresh can replace it.
+                        self.panel = None;
+                    }
                 }
             }
             Err(error) => request.error(&self.shared.http, &error).await,
@@ -1283,6 +1288,38 @@ mod tests {
             ]),
             ..Default::default()
         }
+    }
+    #[tokio::test]
+    async fn stop_button_retires_panel_before_periodic_refresh() {
+        let (shared, backend, owner, _events) = Shared::fixture().await;
+        shared.cache.write().unwrap().guilds.insert(1, guild());
+        let mut session = GuildSession::new(1, shared);
+        session.channel = Some(3);
+        session.queue.enqueue(vec![track("one")], 1000);
+        session.start_current().await.unwrap();
+        let mut button = request("stop", &[]);
+        button.custom_id = Some("raydio:player:panel:stop".into());
+        let interaction = Arc::make_mut(&mut button.interaction);
+        interaction.message = Some(serde_json::from_value(json!({
+            "id":"5","channel_id":"3","author":{"id":"9","username":"fixture","discriminator":"0001","avatar":null},
+            "content":"panel","timestamp":"2026-09-05T00:00:00+00:00","edited_timestamp":null,
+            "tts":false,"mention_everyone":false,"mentions":[],"mention_roles":[],"attachments":[],"embeds":[],"pinned":false,"type":0
+        })).unwrap());
+        session.panel = Some(Panel {
+            channel: 3,
+            message: 5,
+            token: "panel".into(),
+            last_view: None,
+        });
+        session.interaction(button).await;
+        assert!(session.panel.is_none());
+        assert!(session.queue.is_empty());
+        assert_eq!(
+            session.edit_errors, 0,
+            "periodic edit must not overwrite terminal button text"
+        );
+        owner.shutdown().await;
+        backend.shutdown().await.unwrap();
     }
     #[tokio::test]
     async fn unchanged_panels_skip_http_and_single_page_queue_retires_buttons() {
