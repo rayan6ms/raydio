@@ -1,0 +1,154 @@
+{
+  "date": "2026-09-05T17:41:41.119073+00:00",
+  "stack": "rust-baseline-loop-soak",
+  "workload": "One live Discord voice session, dQw4w9WgXcQ, volume 70, track loop, panel refresh enabled",
+  "limitations": [
+    "Shared host",
+    "Three consecutive windows in one warmed process; not independent process restarts",
+    "Human listening confirmation recorded separately"
+  ],
+  "processCount": 1,
+  "executables": [
+    {
+      "name": "raydio-size-control",
+      "sha256": "fc6ea1b4f3d23647ab9d59db122e0efd37f328c3a980fb8bd3de6532e807ff3e"
+    }
+  ],
+  "trials": [
+    {
+      "trial": 1,
+      "observationSeconds": 20.019,
+      "medianRssKiB": 20960.0,
+      "medianPssKiB": 17921.0,
+      "cpuSeconds": 0.6,
+      "cpuPercentOneCore": 2.997,
+      "maxThreads": 4
+    },
+    {
+      "trial": 2,
+      "observationSeconds": 20.018,
+      "medianRssKiB": 20980.0,
+      "medianPssKiB": 17939.0,
+      "cpuSeconds": 0.58,
+      "cpuPercentOneCore": 2.897,
+      "maxThreads": 4
+    },
+    {
+      "trial": 3,
+      "observationSeconds": 20.018,
+      "medianRssKiB": 20982.0,
+      "medianPssKiB": 17943.0,
+      "cpuSeconds": 0.57,
+      "cpuPercentOneCore": 2.847,
+      "maxThreads": 4
+    },
+    {
+      "trial": 4,
+      "observationSeconds": 20.018,
+      "medianRssKiB": 20988.0,
+      "medianPssKiB": 17949.0,
+      "cpuSeconds": 0.58,
+      "cpuPercentOneCore": 2.897,
+      "maxThreads": 4
+    },
+    {
+      "trial": 5,
+      "observationSeconds": 20.018,
+      "medianRssKiB": 20992.0,
+      "medianPssKiB": 17952.0,
+      "cpuSeconds": 0.57,
+      "cpuPercentOneCore": 2.847,
+      "maxThreads": 4
+    },
+    {
+      "trial": 6,
+      "observationSeconds": 20.018,
+      "medianRssKiB": 20992.0,
+      "medianPssKiB": 17952.0,
+      "cpuSeconds": 0.58,
+      "cpuPercentOneCore": 2.897,
+      "maxThreads": 4
+    },
+    {
+      "trial": 7,
+      "observationSeconds": 20.019,
+      "medianRssKiB": 21000.0,
+      "medianPssKiB": 17960.0,
+      "cpuSeconds": 0.57,
+      "cpuPercentOneCore": 2.847,
+      "maxThreads": 4
+    },
+    {
+      "trial": 8,
+      "observationSeconds": 20.019,
+      "medianRssKiB": 21000.0,
+      "medianPssKiB": 17960.0,
+      "cpuSeconds": 0.58,
+      "cpuPercentOneCore": 2.897,
+      "maxThreads": 4
+    },
+    {
+      "trial": 9,
+      "observationSeconds": 20.018,
+      "medianRssKiB": 21000.0,
+      "medianPssKiB": 17960.0,
+      "cpuSeconds": 0.57,
+      "cpuPercentOneCore": 2.847,
+      "maxThreads": 4
+    },
+    {
+      "trial": 10,
+      "observationSeconds": 20.018,
+      "medianRssKiB": 21000.0,
+      "medianPssKiB": 17960.0,
+      "cpuSeconds": 0.57,
+      "cpuPercentOneCore": 2.847,
+      "maxThreads": 4
+    },
+    {
+      "trial": 11,
+      "observationSeconds": 20.019,
+      "medianRssKiB": 21000.0,
+      "medianPssKiB": 17961.0,
+      "cpuSeconds": 0.56,
+      "cpuPercentOneCore": 2.797,
+      "maxThreads": 4
+    },
+    {
+      "trial": 12,
+      "observationSeconds": 20.018,
+      "medianRssKiB": 20828.0,
+      "medianPssKiB": 17787.0,
+      "cpuSeconds": 0.57,
+      "cpuPercentOneCore": 2.847,
+      "maxThreads": 4
+    },
+    {
+      "trial": 13,
+      "observationSeconds": 20.018,
+      "medianRssKiB": 20832.0,
+      "medianPssKiB": 17792.0,
+      "cpuSeconds": 0.56,
+      "cpuPercentOneCore": 2.797,
+      "maxThreads": 4
+    },
+    {
+      "trial": 14,
+      "observationSeconds": 20.019,
+      "medianRssKiB": 20832.0,
+      "medianPssKiB": 17792.0,
+      "cpuSeconds": 0.57,
+      "cpuPercentOneCore": 2.847,
+      "maxThreads": 4
+    },
+    {
+      "trial": 15,
+      "observationSeconds": 20.019,
+      "medianRssKiB": 20832.0,
+      "medianPssKiB": 17792.0,
+      "cpuSeconds": 0.57,
+      "cpuPercentOneCore": 2.847,
+      "maxThreads": 4
+    }
+  ]
+}
