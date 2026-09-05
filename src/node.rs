@@ -26,6 +26,7 @@ pub struct Health {
 }
 #[derive(Debug)]
 pub enum Event {
+    Connected,
     Invalidated,
     Payload(Value),
 }
@@ -220,10 +221,11 @@ async fn run(
                 };
                 match message {
                     Message::Ping(bytes) => {
-                        if timeout(Duration::from_secs(3), socket.send(Message::Pong(bytes)))
-                            .await
-                            .is_err()
-                        {
+                        if !matches!(
+                            timeout(Duration::from_secs(3), socket.send(Message::Pong(bytes)))
+                                .await,
+                            Ok(Ok(()))
+                        ) {
                             break;
                         }
                     }
@@ -261,6 +263,7 @@ async fn run(
                             state.connections += 1;
                             outage = None;
                             health_tx.send_replace(state.clone());
+                            tokio::select! { _ = cancel.cancelled() => return, result = events.send(Event::Connected) => { if result.is_err() { return; } } }
                         } else if matches!(value["op"].as_str(), Some("event" | "playerUpdate")) {
                             tokio::select! { _ = cancel.cancelled() => return, result = events.send(Event::Payload(value)) => { if result.is_err() { return; } } }
                         }

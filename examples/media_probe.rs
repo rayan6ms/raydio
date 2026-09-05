@@ -40,6 +40,15 @@ async fn main() -> Result<()> {
             anyhow::bail!("expected track");
         };
         let player = adapter.create_player(cancel.clone()).await?;
+        player
+            .set_filters(
+                crust::filters::FilterConfiguration {
+                    player_volume: Some(70),
+                    ..Default::default()
+                },
+                cancel.clone(),
+            )
+            .await?;
         let result = tokio::time::timeout(Duration::from_secs(45), async {
             player.play(track, cancel.clone()).await?;
             let mut frame_count = 0;

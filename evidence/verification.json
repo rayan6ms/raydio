@@ -1,10 +1,11 @@
 {
   "date": "2026-09-05",
   "rustTests": {
-    "passed": 27,
+    "passed": 38,
     "failed": 0,
-    "unit": 26,
-    "realBackendIntegration": 1
+    "unit": 36,
+    "realBackendIntegration": 1,
+    "reconnectIntegration": 1
   },
   "checks": [
     "cargo fmt --check",
@@ -12,8 +13,22 @@
     "cargo clippy --all-targets -- -D warnings",
     "git diff --check"
   ],
-  "liveDiscordTested": false,
+  "dependencies": {
+    "mantle": "38 phase12 tests passed; 3 pre-existing opt-in tests ignored; Clippy passed",
+    "crust": "12 adapter tests passed, 2 existing opt-in tests ignored; 11 P07/P10 tests passed; Clippy all targets passed for changed packages"
+  },
+  "liveDiscord": {
+    "login": true,
+    "commandsRegistered": 19,
+    "voiceTransportJoined": true,
+    "encryptedAudioDelivered": false,
+    "slashCommandsAndButtonsInDiscordUI": false
+  },
   "endToEndRewriteComplete": false,
-  "performanceComparison": "pending parity and completion; previous failed-startup comparison withdrawn",
-  "blocker": "Mantle default YouTube loader rejects 5NV6Rdv1a3I and kJQP7kiw5Fk, both loadable by frozen original Lavalink stack on same host"
+  "performanceComparison": {
+    "idle": "9 complete authenticated runs; see idle-performance.json",
+    "playback": "pending receiving-participant verification",
+    "interactionLatency": "pending live command verification"
+  },
+  "blocker": "Live testbot transport joins General but waits in EstablishingDave without a receiving participant. No browser execution tool is available in this session to operate the authenticated Discord client. Receiver-backed General/private-vc playback, controls, and performance remain unverified."
 }

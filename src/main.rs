@@ -1,14 +1,80 @@
-use anyhow::Result;
-use raydio::backend::Backend;
+use anyhow::{Context, Result};
+use raydio::{backend::Backend, config::Config};
+use std::{collections::HashMap, path::PathBuf, time::Duration};
+use tokio_util::sync::CancellationToken;
 
 #[tokio::main(worker_threads = 2)]
 async fn main() -> Result<()> {
-    if std::env::args().skip(1).collect::<Vec<_>>() != ["--probe-backend"] {
-        anyhow::bail!(
-            "Rust rewrite is in progress; use --probe-backend for a read-only backend check. See MANTLE_HANDOFF.md for the current blocker."
-        );
+    let mut testbot = false;
+    let mut probe = false;
+    let mut env_file = PathBuf::from(".env");
+    let mut args = std::env::args().skip(1);
+    while let Some(arg) = args.next() {
+        match arg.as_str() {
+            "--testbot" => testbot = true,
+            "--probe-backend" => probe = true,
+            "--env-file" => {
+                env_file = PathBuf::from(args.next().context("--env-file needs a path")?)
+            }
+            "--help" | "-h" => {
+                println!(
+                    "raydio [--testbot] [--env-file PATH] [--probe-backend]\n--testbot selects DISCORD_TOKEN_TESTBOT explicitly."
+                );
+                return Ok(());
+            }
+            _ => anyhow::bail!("Unknown argument; use --help"),
+        }
     }
-    tracing_subscriber::fmt().with_env_filter("warn").init();
+    if probe {
+        tracing_subscriber::fmt().with_env_filter("warn").init();
+        return probe_backend().await;
+    }
+    let mut values = HashMap::new();
+    if env_file.exists() {
+        for item in dotenvy::from_path_iter(&env_file)
+            .map_err(|_| anyhow::anyhow!("Could not read the environment file"))?
+        {
+            let (key, value) =
+                item.map_err(|_| anyhow::anyhow!("Invalid environment file syntax"))?;
+            values.insert(key, value);
+        }
+    }
+    values.extend(std::env::vars());
+    let config = Config::from_env(&values, testbot)?;
+    let level = match config.log_level.as_str() {
+        "silent" => "off",
+        "fatal" => "error",
+        level => level,
+    };
+    // Third-party HTTP/media debug logs may contain signed URLs. Keep those quiet.
+    tracing_subscriber::fmt()
+        .with_env_filter(format!("warn,raydio={level}"))
+        .init();
+    let cancel = CancellationToken::new();
+    let run = raydio::runtime::run(config, cancel.clone());
+    tokio::pin!(run);
+    tokio::select! {
+        result = &mut run => result,
+        _ = shutdown_signal() => {
+            cancel.cancel();
+            tokio::time::timeout(Duration::from_secs(10), &mut run).await.context("Shutdown exceeded ten seconds")?
+        }
+    }
+}
+async fn shutdown_signal() {
+    #[cfg(unix)]
+    {
+        let mut terminate =
+            tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate())
+                .expect("install terminate handler");
+        tokio::select! { _ = tokio::signal::ctrl_c() => {}, _ = terminate.recv() => {} }
+    }
+    #[cfg(not(unix))]
+    {
+        let _ = tokio::signal::ctrl_c().await;
+    }
+}
+async fn probe_backend() -> Result<()> {
     let backend = Backend::start().await?;
     let http = reqwest::Client::builder()
         .timeout(std::time::Duration::from_secs(45))
@@ -29,7 +95,7 @@ async fn main() -> Result<()> {
         let body: serde_json::Value = response.json().await?;
         println!(
             "{}",
-            serde_json::json!({"input":input,"status":status.as_u16(),"elapsedMs":start.elapsed().as_millis(),"loadType":body["loadType"],"trackCount":body["data"].as_array().map(Vec::len),"error":if body["loadType"]=="error" {body["data"].clone()} else {serde_json::Value::Null}})
+            serde_json::json!({"input":input,"status":status.as_u16(),"elapsedMs":start.elapsed().as_millis(),"loadType":body["loadType"],"trackCount":body["data"].as_array().map(Vec::len),"failed":body["loadType"]=="error"})
         );
     }
     backend.shutdown().await

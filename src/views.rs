@@ -6,7 +6,7 @@ use serde::Deserialize;
 use serde_json::{Value, json};
 use twilight_model::channel::message::{Component, Embed};
 
-#[derive(Clone, Debug, Default, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 pub struct View {
     pub content: Option<String>,
     #[serde(default)]

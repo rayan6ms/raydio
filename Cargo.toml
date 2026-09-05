@@ -43,5 +43,8 @@ debug = 0
 strip = "debuginfo"
 
 [dev-dependencies]
+crust-testkit = { path = "../crust/crates/crust-testkit" }
+axum = { version = "0.8.4", features = ["ws"] }
+oto = { path = "../oto/crates/oto" }
 mantle-core = { path = "../mantle/crates/mantle-core" }
 mantle-media = { path = "../mantle/crates/mantle-media" }

@@ -1,8 +1,12 @@
 pub mod backend;
 pub mod commands;
 pub mod config;
+pub mod discord;
 pub mod node;
 pub mod playback;
 pub mod resolver;
+pub mod runtime;
+mod session;
 pub mod urls;
 pub mod views;
+pub mod voice;

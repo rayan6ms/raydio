@@ -622,6 +622,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "crust-testkit"
+version = "0.0.0"
+dependencies = [
+ "crust",
+ "serde_json",
+ "tokio",
+ "tokio-util",
+]
+
+[[package]]
 name = "crypto-bigint"
 version = "0.5.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2541,14 +2551,17 @@ name = "raydio"
 version = "0.2.0"
 dependencies = [
  "anyhow",
+ "axum",
  "crust",
  "crust-mantle-adapter",
  "crust-oto-adapter",
  "crust-server",
+ "crust-testkit",
  "dotenvy",
  "futures-util",
  "mantle-core",
  "mantle-media",
+ "oto",
  "rand 0.9.5",
  "reqwest",
  "serde",

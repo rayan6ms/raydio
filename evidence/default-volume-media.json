@@ -1,0 +1,26 @@
+{
+  "date": "2026-09-05",
+  "playerVolume": 70,
+  "probe": "cargo run --example media_probe",
+  "results": [
+    {
+      "id": "dQw4w9WgXcQ",
+      "frames": 10,
+      "bytes": 2627,
+      "elapsedMs": 1208
+    },
+    {
+      "id": "5NV6Rdv1a3I",
+      "frames": 0,
+      "elapsedMs": 2470,
+      "error": "Mantle source or playback failed"
+    },
+    {
+      "id": "kJQP7kiw5Fk",
+      "frames": 0,
+      "elapsedMs": 1280,
+      "error": "Mantle source or playback failed"
+    }
+  ],
+  "limits": "Default bot volume exercises PCM filtering and Opus encoding. No Discord delivery or decoded audio-quality claim; the other two videos also failed the original frame check recorded in youtube-parity.json."
+}

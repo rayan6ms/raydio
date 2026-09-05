@@ -21,6 +21,22 @@ pub struct Backend {
 
 impl Backend {
     pub async fn start() -> Result<Self> {
+        let media = Arc::new(RealMantleAdapter::with_defaults(RoutePlanner::disabled())?);
+        let voice = Arc::new(OtoVoiceBackend::with_defaults(100, 4)?);
+        Self::start_with(media, voice).await
+    }
+    #[cfg(test)]
+    pub(crate) async fn start_fixture() -> Result<Self> {
+        Self::start_with(
+            Arc::new(crust_testkit::FakeMantle::default()),
+            Arc::new(crust_testkit::FakeVoiceBackend::new(128, 4)),
+        )
+        .await
+    }
+    async fn start_with(
+        media: Arc<dyn crust::media::MantleAdapter>,
+        voice: Arc<dyn crust::voice::VoiceBackend>,
+    ) -> Result<Self> {
         let password = format!(
             "{:032x}{:032x}",
             rand::random::<u128>(),
@@ -37,8 +53,6 @@ impl Backend {
         config.max_concurrent_source_requests = 8;
         config.max_concurrent_voice_connects = 4;
         config.player_update_interval = Duration::from_secs(1);
-        let media = Arc::new(RealMantleAdapter::with_defaults(RoutePlanner::disabled())?);
-        let voice = Arc::new(OtoVoiceBackend::with_defaults(100, 4)?);
         let server = CrustServer::bind_with_backends(config, media, voice).await?;
         let address = server.local_address()?;
         let cancel = CancellationToken::new();

@@ -1,0 +1,148 @@
+{
+  "date": "2026-09-05T05:16:20.306366+00:00",
+  "workload": "Authenticated idle, no voice session or commands",
+  "trials": [
+    {
+      "stack": "rust",
+      "startupMs": 2558.25,
+      "observationSeconds": 15.012,
+      "medianRssKiB": 17952,
+      "medianPssKiB": 15027,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "trial": 1
+    },
+    {
+      "stack": "original-tuned",
+      "startupMs": 9230.44,
+      "observationSeconds": 15.099,
+      "medianRssKiB": 351172,
+      "medianPssKiB": 343050,
+      "maxThreads": 42,
+      "cpuSeconds": 0.02,
+      "cpuPercentOneCore": 0.132,
+      "trial": 1
+    },
+    {
+      "stack": "original-default",
+      "startupMs": 8072.23,
+      "observationSeconds": 15.146,
+      "medianRssKiB": 528832,
+      "medianPssKiB": 520753,
+      "maxThreads": 117,
+      "cpuSeconds": 0.02,
+      "cpuPercentOneCore": 0.132,
+      "trial": 1
+    },
+    {
+      "stack": "original-tuned",
+      "startupMs": 8824.77,
+      "observationSeconds": 15.118,
+      "medianRssKiB": 370840,
+      "medianPssKiB": 362751,
+      "maxThreads": 42,
+      "cpuSeconds": 0.02,
+      "cpuPercentOneCore": 0.132,
+      "trial": 2
+    },
+    {
+      "stack": "original-default",
+      "startupMs": 8173.02,
+      "observationSeconds": 15.155,
+      "medianRssKiB": 516516,
+      "medianPssKiB": 508441,
+      "maxThreads": 118,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.066,
+      "trial": 2
+    },
+    {
+      "stack": "rust",
+      "startupMs": 3559.43,
+      "observationSeconds": 15.012,
+      "medianRssKiB": 18100,
+      "medianPssKiB": 15169,
+      "maxThreads": 4,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.067,
+      "trial": 2
+    },
+    {
+      "stack": "original-default",
+      "startupMs": 8272.69,
+      "observationSeconds": 15.153,
+      "medianRssKiB": 510736,
+      "medianPssKiB": 502656,
+      "maxThreads": 117,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.066,
+      "trial": 3
+    },
+    {
+      "stack": "rust",
+      "startupMs": 2457.58,
+      "observationSeconds": 15.013,
+      "medianRssKiB": 18024,
+      "medianPssKiB": 15236,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "trial": 3
+    },
+    {
+      "stack": "original-tuned",
+      "startupMs": 8624.14,
+      "observationSeconds": 15.099,
+      "medianRssKiB": 354920,
+      "medianPssKiB": 346798,
+      "maxThreads": 42,
+      "cpuSeconds": 0.02,
+      "cpuPercentOneCore": 0.132,
+      "trial": 3
+    }
+  ],
+  "limitations": [
+    "Idle only; no playback or interaction latency claim",
+    "Shared host, warm OS caches",
+    "Original default profile has a 512 MiB Java heap safety cap; tuned profile uses 64\u2013192 MiB and two active processors",
+    "Idle CPU differences are close to Linux CPU-time tick resolution; no CPU speedup claim"
+  ],
+  "node": "v24.19.0",
+  "binaryBytes": 34846088,
+  "binarySha256": "53605a894bd1192510617c4366a6d26494e0de7274ecf4263d97ecba11f90bb5",
+  "revisions": {
+    "crust": "df19a6daeded090f004b669ec69ee5d078a34066",
+    "mantle": "8be808baf31b667af42da0246d8f1cfaf4d2105d",
+    "oto": "8d7a0cbd4e74fa796e0e99cd8634901ce1917bd4",
+    "originalRaydio": "de690b88256b54e2a4f6cff24db6a826563db815"
+  },
+  "warmupSeconds": 5,
+  "mediansAcrossTrials": {
+    "rust": {
+      "startupMs": 2558.25,
+      "medianRssKiB": 18024,
+      "medianPssKiB": 15169,
+      "cpuPercentOneCore": 0.0,
+      "maxThreads": 4
+    },
+    "original-tuned": {
+      "startupMs": 8824.77,
+      "medianRssKiB": 354920,
+      "medianPssKiB": 346798,
+      "cpuPercentOneCore": 0.132,
+      "maxThreads": 42
+    },
+    "original-default": {
+      "startupMs": 8173.02,
+      "medianRssKiB": 516516,
+      "medianPssKiB": 508441,
+      "cpuPercentOneCore": 0.066,
+      "maxThreads": 117
+    }
+  },
+  "reference": {
+    "lavalink": "4.2.2",
+    "youtubePlugin": "1.18.2"
+  }
+}

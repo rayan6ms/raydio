@@ -55,5 +55,6 @@
       "identifier": "kJQP7kiw5Fk",
       "outcome": "SourceFailure"
     }
-  ]
+  ],
+  "status": "Historical observation before Mantle metadata fix; superseded by youtube-parity.json"
 }

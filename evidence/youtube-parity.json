@@ -1,0 +1,17 @@
+{
+  "date": "2026-09-05",
+  "mantleFix": "8be808baf31b667af42da0246d8f1cfaf4d2105d",
+  "oracle": "youtube-source 1.18.2 NonMusicClient.loadVideo skips playability validation when videoDetails exists",
+  "metadata": [
+    {"id":"dQw4w9WgXcQ","original":"track","rust":"track"},
+    {"id":"5NV6Rdv1a3I","original":"track","rust":"track"},
+    {"id":"kJQP7kiw5Fk","original":"track","rust":"track"}
+  ],
+  "audioFrames": [
+    {"id":"dQw4w9WgXcQ","originalFrames":10,"rustFrames":10},
+    {"id":"5NV6Rdv1a3I","originalFrames":0,"rustFrames":0},
+    {"id":"kJQP7kiw5Fk","originalFrames":0,"rustFrames":0}
+  ],
+  "method": "Same host/network, no YouTube credentials; cached Lavalink 4.2.2 dependencies and youtube-source 1.18.2, matching client order. Original AudioPlayer polled until ten frames, stopped player, or twenty-second deadline; Rust media_probe pulls ten frames with a forty-five-second deadline.",
+  "limitation": "The two failing videos remain unplayable on both stacks under the observed YouTube responses. Metadata parity does not establish universal playback support. Frame counts do not prove Discord delivery or audible playback."
+}

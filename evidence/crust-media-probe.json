@@ -19,5 +19,6 @@
       "identifier": "https://www.youtube.com/watch?v=kJQP7kiw5Fk",
       "stage": "load"
     }
-  ]
+  ],
+  "status": "Historical observation before Mantle metadata fix; superseded by youtube-parity.json"
 }
