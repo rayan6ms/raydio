@@ -19,3 +19,5 @@ coverage/
 !/docs/enhancement-backlog.md
 !/docs/current-system-improvements.md
 !/docs/feature-roadmap.md
+# Rust build output
+target/
