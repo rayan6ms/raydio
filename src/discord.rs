@@ -155,7 +155,7 @@ impl Request {
         Ok(response.model().await?)
     }
     /// Update an interaction response when the returned message is not needed.
-    /// Avoids downloading and deserializing the complete Discord message.
+    /// Avoids deserializing the complete Discord message.
     pub async fn respond_no_model(&self, http: &Client, view: &View) -> Result<()> {
         timeout(
             Duration::from_secs(8),

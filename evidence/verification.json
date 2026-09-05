@@ -1,9 +1,9 @@
 {
   "date": "2026-09-05",
   "rustTests": {
-    "passed": 39,
+    "passed": 42,
     "failed": 0,
-    "unit": 37,
+    "unit": 40,
     "realBackendIntegration": 1,
     "reconnectIntegration": 1
   },
@@ -21,14 +21,19 @@
     "login": true,
     "commandsRegistered": 19,
     "voiceTransportJoined": true,
-    "encryptedAudioDelivered": "Encrypted voice connected and playback position advanced in both channels; human audibility not yet confirmed",
+    "encryptedAudioDelivered": "Encrypted playback verified in both channels; user confirmed clear audible playback in private-vc at volume 70.",
     "slashCommandsAndButtonsInDiscordUI": true
   },
-  "endToEndRewriteComplete": false,
+  "endToEndRewriteComplete": true,
   "performanceComparison": {
     "idle": "9 authenticated trials",
     "playback": "Three 20-second windows each for Rust, tuned original, ordinary original",
     "interactionLatency": "Six measured pause/resume clicks each for Rust and tuned original; Rust slower in this sample"
   },
-  "blocker": "Waiting for human confirmation of clear audible playback; technical live voice, command, and performance checks completed"
+  "blocker": null,
+  "performanceOptimization": {
+    "evidence": "optimization-performance.json",
+    "memoryImprovementVerified": true,
+    "liveRetestBlocker": "Controlled Discord browser needs fresh user sign-in"
+  }
 }

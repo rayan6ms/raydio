@@ -225,7 +225,10 @@ impl GuildSession {
             Ok(text) => {
                 if request.updates_message() && !matches!(request.name.as_str(), "stop" | "leave") {
                     let view = self.player_view();
-                    if request.respond_no_model(&self.shared.http, &view).await.is_ok()
+                    if request
+                        .respond_no_model(&self.shared.http, &view)
+                        .await
+                        .is_ok()
                         && let Some(panel) = self.panel.as_mut()
                     {
                         panel.last_view = Some(view);
@@ -1267,7 +1270,7 @@ mod tests {
         Guild {
             available: true,
             owner: 99,
-            channels: channels.into_iter().map(|c| (c.id.get(), c)).collect(),
+            channels: channels.iter().map(|c| (c.id.get(), c.into())).collect(),
             roles: HashMap::from([(
                 1,
                 Permissions::VIEW_CHANNEL | Permissions::CONNECT | Permissions::SPEAK,
@@ -1325,6 +1328,57 @@ mod tests {
         );
         owner.shutdown().await;
         backend.shutdown().await.unwrap();
+    }
+    #[tokio::test]
+    async fn successful_pause_button_edits_once_and_does_not_decode_message_body() {
+        let calls = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+        let observed = calls.clone();
+        let router = axum::Router::new().fallback(move || {
+            observed.fetch_add(1, Ordering::Relaxed);
+            async { axum::Json(json!({})) }
+        });
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let address = listener.local_addr().unwrap();
+        let server = tokio::spawn(async move {
+            axum::serve(listener, router).await.unwrap();
+        });
+        let (mut shared, backend, owner, _events) = Shared::fixture().await;
+        Arc::get_mut(&mut shared).unwrap().http = twilight_http::Client::builder()
+            .token("fixture".into())
+            .proxy(address.to_string(), true)
+            .ratelimiter(None)
+            .build();
+        shared.cache.write().unwrap().guilds.insert(1, guild());
+        let mut session = GuildSession::new(1, shared);
+        session.channel = Some(3);
+        session.queue.enqueue(vec![track("one")], 1000);
+        session.start_current().await.unwrap();
+        let mut button = request("pause", &[]);
+        button.custom_id = Some("raydio:player:panel:pause".into());
+        Arc::make_mut(&mut button.interaction).message = Some(serde_json::from_value(json!({
+            "id":"5","channel_id":"3","author":{"id":"9","username":"fixture","discriminator":"0001","avatar":null},
+            "content":"panel","timestamp":"2026-09-05T00:00:00+00:00","edited_timestamp":null,
+            "tts":false,"mention_everyone":false,"mentions":[],"mention_roles":[],"attachments":[],"embeds":[],"pinned":false,"type":0
+        })).unwrap());
+        session.panel = Some(Panel {
+            channel: 3,
+            message: 5,
+            token: "panel".into(),
+            last_view: None,
+        });
+        session.interaction(button).await;
+        assert!(session.paused);
+        assert_eq!(calls.load(Ordering::Relaxed), 1);
+        assert_eq!(
+            session.panel.as_ref().unwrap().last_view.as_ref(),
+            Some(&session.player_view())
+        );
+        session.refresh().await;
+        assert_eq!(calls.load(Ordering::Relaxed), 1);
+        owner.shutdown().await;
+        backend.shutdown().await.unwrap();
+        server.abort();
+        let _ = server.await;
     }
     #[tokio::test]
     async fn unchanged_panels_skip_http_and_single_page_queue_retires_buttons() {

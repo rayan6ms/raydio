@@ -4,7 +4,6 @@ use crate::{
     config::Config,
     discord::{Request, no_mentions},
     node::{self, Node},
-    playback::Track,
     resolver::{self, Failure, Resolution},
     session::{GuildSession, Message},
     urls,
@@ -30,10 +29,7 @@ use twilight_gateway::{
 };
 use twilight_http::Client;
 use twilight_model::{
-    application::{
-        command::{CommandOptionChoice, CommandOptionChoiceValue},
-        interaction::InteractionType,
-    },
+    application::{command::CommandOptionChoice, interaction::InteractionType},
     guild::Permissions,
     http::interaction::{InteractionResponse, InteractionResponseData, InteractionResponseType},
 };
@@ -49,7 +45,7 @@ pub(crate) struct Shared {
     pub cancel: CancellationToken,
     pub latency_ms: AtomicU64,
     pub interaction_errors: AtomicU64,
-    autocomplete: Mutex<HashMap<String, (Instant, Vec<Track>)>>,
+    autocomplete: Mutex<HashMap<String, (Instant, Vec<CommandOptionChoice>)>>,
     searches: Semaphore,
 }
 
@@ -190,19 +186,20 @@ impl Shared {
                 })
             })
             && self.node.health().ready;
-        let tracks = if valid {
+        let choices = if valid {
             let cached = self
                 .autocomplete
                 .lock()
                 .unwrap()
                 .get(query)
                 .filter(|(at, _)| at.elapsed() < Duration::from_secs(30))
-                .map(|(_, tracks)| tracks.clone());
-            if let Some(tracks) = cached {
-                tracks
+                .map(|(_, choices)| choices.clone());
+            if let Some(choices) = cached {
+                choices
             } else if let Ok(_permit) = self.searches.try_acquire() {
                 match timeout(Duration::from_millis(1900), self.resolve(query, 10, 10)).await {
                     Ok(Ok(result)) => {
+                        let choices = crate::views::search_choices(result.tracks);
                         let mut cache = self.autocomplete.lock().unwrap();
                         cache.retain(|_, (at, _)| at.elapsed() < Duration::from_secs(30));
                         if cache.len() >= 500
@@ -213,8 +210,8 @@ impl Shared {
                         {
                             cache.remove(&oldest);
                         }
-                        cache.insert(query.to_owned(), (Instant::now(), result.tracks.clone()));
-                        result.tracks
+                        cache.insert(query.to_owned(), (Instant::now(), choices.clone()));
+                        choices
                     }
                     _ => vec![],
                 }
@@ -224,18 +221,6 @@ impl Shared {
         } else {
             vec![]
         };
-        let choices = tracks
-            .into_iter()
-            .take(10)
-            .map(|track| CommandOptionChoice {
-                name: crate::views::truncate(&format!("{} — {}", track.title, track.author), 100),
-                name_localizations: None,
-                value: CommandOptionChoiceValue::String(format!(
-                    "https://www.youtube.com/watch?v={}",
-                    track.identifier
-                )),
-            })
-            .collect();
         let response = InteractionResponse {
             kind: InteractionResponseType::ApplicationCommandAutocompleteResult,
             data: Some(InteractionResponseData {

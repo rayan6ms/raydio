@@ -1,0 +1,110 @@
+{
+  "date": "2026-09-05T13:33:01.417227+00:00",
+  "baselineCommit": "bfc2a00",
+  "branch": "rewrite/rust-raydio",
+  "idlePssKiB": {
+    "before": 15197,
+    "after": 14374,
+    "reductionPercent": 5.416
+  },
+  "idleRssKiB": {
+    "before": 18304,
+    "after": 17316,
+    "reductionPercent": 5.398
+  },
+  "binaryBytes": {
+    "before": 34842784,
+    "after": 34054552,
+    "reductionPercent": 2.262
+  },
+  "workloads": {
+    "channelCacheRetainedBytes_100Guilds_5000Channels": {
+      "before": 9199932,
+      "after": 462032,
+      "reductionPercent": 94.978
+    },
+    "playlistPeakHeapBytes_1000Tracks_250Accepted": {
+      "before": 3741358,
+      "after": 1872468,
+      "reductionPercent": 49.952
+    },
+    "autocompleteCacheRetainedBytes_500Queries_10Results": {
+      "before": 3477576,
+      "after": 962576,
+      "reductionPercent": 72.32
+    },
+    "playerRenderAllocatedBytesPerCall": {
+      "before": 37064.0,
+      "after": 3655.5,
+      "reductionPercent": 90.137
+    },
+    "playerRenderAllocationCallsPerCall": {
+      "before": 360.0,
+      "after": 60.0,
+      "reductionPercent": 83.333
+    },
+    "playerRenderInstrumentedNsPerCall": {
+      "before": 36640.3913,
+      "after": 4265.9329,
+      "reductionPercent": 88.357
+    },
+    "playlistInstrumentedNsPer1000Tracks": {
+      "before": 2228852,
+      "after": 763514,
+      "reductionPercent": 65.744
+    }
+  },
+  "playerOutputSemanticallyEqual": true,
+  "checks": {
+    "testsPassed": 42,
+    "testsFailed": 0,
+    "clippy": "all targets, warnings denied",
+    "format": "cargo fmt --check"
+  },
+  "limits": [
+    "Whole-bot process measurement is authenticated idle in the test guild, three independent starts per build, alternating order, same shared host; no compilation during samples.",
+    "Heap instrumentation reports requested Rust allocation bytes, excluding allocator overhead and native allocations; it is not whole-process RSS/PSS.",
+    "Channel cache is synthetic 100 guilds / 5000 channels; autocomplete is a paired cache-representation model matching old Track retention and current cached choice clones. Not a many-guild playback throughput test.",
+    "Autocomplete construction timings cover different work and must not be compared; retained cache size and cache-hit workloads are comparable.",
+    "Instrumented rendering and parsing timings include allocation-counter overhead; they are not Discord response latency.",
+    "Idle startup median increased from 2608.04 to 2658.39 ms; no startup or idle CPU speedup claim.",
+    "Fresh live playback-memory and browser click-latency comparisons await Discord sign-in. The previous live figures are preserved, not relabeled as post-optimization results."
+  ],
+  "binaries": {
+    "before": {
+      "sha256": "57fd7021d2cfa7f6a4c49599b8d79d3cd5422144a650d64ee2190eb70c30c624",
+      "bytes": 34842784
+    },
+    "after": {
+      "sha256": "cbd660149ee0e331cfe73986684793152a91452e0c0d0d5da372d14d4be977ff",
+      "bytes": 34054552
+    }
+  },
+  "sourceSha256": {
+    "Cargo.lock": "673c2a7d3cf92035908c0fd6c863980fccbb1a132dce344263f23f6438fb178d",
+    "Cargo.toml": "a1fc23231e1250c511fea796ec808da555a488391e9b2ca010fa6437b8a78ecc",
+    "src/backend.rs": "661367cf62cf9a3776d97d9539e6c369118cdf0f1f134aa1e803e03c5bbe3070",
+    "src/commands.rs": "3c700abd58f26724dbba86a4717e1a63fe64da7a9cb35c0ccad1df55740ac894",
+    "src/config.rs": "9c5be67fc1d7384d47932b1d5abd61ec7fb342e60b715116ab7ea204b37f7981",
+    "src/discord.rs": "b0ca1bd8dd1a5e804dce40533441aed0a73e4564a8c5493344a61ef4119644c7",
+    "src/lib.rs": "c13ed9de75b3a619d8bd2e9bc1693f4b324a94ca668bb9b387a08a38488bfe20",
+    "src/main.rs": "572149bf42af6ab34b252f1589cc605abe55eb273343acd8e706c5c107ee4b30",
+    "src/node.rs": "a7aa80716b58d8b2514ed7584b90b77b44195d2c32f2acd7649b102999698f99",
+    "src/playback.rs": "c7524a4fbb962aa349b3b96b14884adafc035e61d6e2282877a3dd83244e8b1f",
+    "src/resolver.rs": "75d508ddb1dae08545551d8f2d44ca3b121d30461e70c1f16000eb50e7a5fade",
+    "src/runtime.rs": "d1ed4206f708bef9d9feef396308a7a5f701b9b09ad0bca4983d2d32054a19e1",
+    "src/session.rs": "76de71c7a26bf3aef8db637657164ce168dc51c7784b5276f3964255fecba346",
+    "src/urls.rs": "2a92777d567195410d98b93d06d366fa16fb9bd700336ff3e2bf6884cbd61e0f",
+    "src/views.rs": "85c8af8d16dbea7a48fc47f386e979e24c7f0ba001175b4c661ad5d6eaddb7a9",
+    "src/voice.rs": "749ac36557f5f3e7accf6e1509de225ce91a7d2b5ca2e2a831e73b50fef10b56"
+  },
+  "allocationWorkloadBinarySha256": {
+    "before": "20cd65f73dc511928d7e1261a1566dd947c0206caf53a7c060c4d5ace8126cf0",
+    "after": "0b6501296fb290edf6dcbbbeeb25e95d57423941b6c18d49b254155e90a81c1c"
+  },
+  "datasets": [
+    "optimization-idle.json",
+    "optimization-workloads-before.jsonl",
+    "optimization-workloads-after.jsonl"
+  ]
+}

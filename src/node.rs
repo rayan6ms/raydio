@@ -50,6 +50,8 @@ impl Node {
         bot_user_id: u64,
     ) -> Result<(Self, NodeOwner, mpsc::Receiver<Event>)> {
         let client = Client::builder()
+            // Crust is always embedded on loopback; it does not use a proxy or TLS.
+            .no_proxy()
             .timeout(Duration::from_secs(30))
             .connect_timeout(Duration::from_secs(5))
             .build()?;
@@ -207,6 +209,9 @@ async fn run(
             );
         }
         let config = WebSocketConfig::default()
+            // The stream carries small control events, not audio. It can grow
+            // for larger messages up to the unchanged protocol limits below.
+            .read_buffer_size(8 * 1024)
             .max_message_size(Some(1024 * 1024))
             .max_frame_size(Some(1024 * 1024));
         let connection = tokio::select! { _ = cancel.cancelled() => break, result = timeout(Duration::from_secs(10), connect_async_with_config(request, Some(config), false)) => result };

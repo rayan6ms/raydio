@@ -7,7 +7,7 @@ historical roadmaps are excluded from this branch; Git history and the original 
 
 The Discord runtime now authenticates and registers all 19 commands. Mantle's direct-video metadata
 regression is fixed, and Crust player volume now reaches the audio path. All 19 slash commands and all seven player buttons have been exercised through Discord.
-Encrypted playback connects in General and private-vc. Human listening confirmation remains pending.
+Encrypted playback connects in General and private-vc. The user confirmed clear audible playback in private-vc at volume 70.
 
 The runtime is one Rust process: Twilight for Discord; private, embedded Crust for player
 orchestration; Mantle for YouTube/media; Oto for Discord voice and DAVE. Crust binds an ephemeral
@@ -136,14 +136,47 @@ See [playback evidence](evidence/playback-performance.json) and [control timings
 The driver [sample_playback.py](benchmarks/sample_playback.py) reads only the explicitly selected
 processes; [start_reference.py](benchmarks/start_reference.py) owns and cleans up the original test stack.
 
-The original suite passed 149 tests before isolation. The Rust suite passes 39 tests (37 unit and
+The original suite passed 149 tests before isolation. The Rust suite passes 42 tests (40 unit and
 guild-control tests, one real-backend lifecycle test, and one reconnect test); formatting and Clippy
 pass. Dependency corrections are committed locally as Mantle `8be808b` and Crust `df19a6d`.
 The final UI correction preserves Stop's confirmation instead of overwriting it on periodic refresh.
 
 [Live evidence](evidence/live-discord.json) distinguishes connected/advancing encrypted playback from
-human listening confirmation, which is still pending. The earlier browser access blocker was resolved
+human listening confirmation, now received for clear playback in private-vc at volume 70. The earlier browser access blocker was resolved
 by the user's explicit instruction to use the controlled collaborative browser. No Oto source change
 was necessary to establish DAVE with a prejoined listener in these runs. General and private-vc both
 worked. Availability of every YouTube video is not guaranteed; the two shared source failures remain
 recorded in [source evidence](evidence/youtube-parity.json).
+
+### Memory optimization pass
+
+Compared with Rust commit `bfc2a00`, three authenticated idle starts per build gave
+median PSS **14.84 → 14.04 MiB**, saving **0.80 MiB (5.4%)**. Each optimized run
+used less memory than each baseline run. Both builds used four threads; this is
+an idle test in the dedicated test guild, with no compilation during sampling.
+
+Deterministic allocation workloads also measured:
+
+| Workload | Before | After | Reduction |
+| --- | ---: | ---: | ---: |
+| Retained channel cache, 100 guilds / 5,000 channels | 8.77 MiB | 0.44 MiB | 95.0% |
+| Peak Rust heap during 1,000-track playlist normalization | 3.57 MiB | 1.79 MiB | 50.0% |
+| Retained autocomplete cache model, 500 queries / 10 results | 3.32 MiB | 0.92 MiB | 72.3% |
+| Bytes allocated per player-panel render | 37,064 B | 3,655.5 B | 90.1% |
+
+Channel caching now retains voice access facts; autocomplete caches displayed
+choices; playlist normalization consumes its owned response; player panels are
+built directly as Discord types. The embedded Crust client uses HTTP/WS without
+TLS or proxies, with a smaller initial read buffer and unchanged message limits.
+External Discord and media connections retain TLS. No dependency source changes
+were needed for this pass.
+
+The allocation workloads exclude native allocations and allocator overhead and
+are separate from whole-process PSS. Rendering and parsing got faster in these
+instrumented workloads, but they do not establish Discord control latency.
+Fresh live playback-memory and button-latency comparisons await a new Discord
+browser login. The earlier live numbers above remain pre-optimization results.
+
+See [measurements and limitations](evidence/optimization-performance.json),
+[idle trials](evidence/optimization-idle.json), and
+[benchmark reproduction](benchmarks/README.md).

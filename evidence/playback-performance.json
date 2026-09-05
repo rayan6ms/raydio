@@ -29,7 +29,6 @@
     "One track and one guild; no many-guild scaling claim",
     "Sequential 20-second windows on a shared host, three per stack",
     "Playback profiles all use volume 70 and track loop; Node and Java costs summed",
-    "Small browser control latency sample is network dependent; Rust was slower in this sample",
-    "Human listening confirmation still pending"
+    "Small browser control latency sample is network dependent; Rust was slower in this sample"
   ]
 }

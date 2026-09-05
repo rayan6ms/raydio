@@ -34,10 +34,10 @@
     "watchdog": 0,
     "connectionErrors": 0
   },
-  "humanAudibilityConfirmed": null,
+  "humanAudibilityConfirmed": true,
   "limits": [
-    "Human listening response pending",
     "Direct source control video used for playback checks; universal YouTube availability is not claimed"
   ],
-  "runtime": "Initial live checks at 0664ba8, followed by the Stop panel correction and its regression test"
+  "runtime": "Initial live checks at 0664ba8, followed by the Stop panel correction and its regression test",
+  "humanConfirmation": "User confirmed clear music in private-vc at volume 70 during Never Gonna Give You Up."
 }

@@ -1,7 +1,10 @@
 //! The small subset of Discord guild state needed for voice access and handshakes.
 use std::collections::HashMap;
 use twilight_model::{
-    channel::{Channel, ChannelType, permission_overwrite::PermissionOverwriteType},
+    channel::{
+        Channel, ChannelType,
+        permission_overwrite::{PermissionOverwrite, PermissionOverwriteType},
+    },
     gateway::{event::Event, payload::incoming::GuildCreate},
     guild::{Member, Permissions},
     voice::VoiceState,
@@ -19,7 +22,7 @@ pub struct Cache {
 pub struct Guild {
     pub available: bool,
     pub owner: u64,
-    pub channels: HashMap<u64, Channel>,
+    pub channels: HashMap<u64, ChannelAccess>,
     pub roles: HashMap<u64, Permissions>,
     pub bot_roles: Option<Vec<u64>>,
     pub voices: HashMap<u64, Voice>,
@@ -45,6 +48,27 @@ pub struct Server {
     pub endpoint: String,
 }
 
+/// Only the channel facts used by voice admission. Names, topics, messages,
+/// thread/forum metadata and other Discord payload fields are not retained.
+pub struct ChannelAccess {
+    pub kind: ChannelType,
+    pub user_limit: Option<u32>,
+    pub permission_overwrites: Box<[PermissionOverwrite]>,
+}
+impl From<&Channel> for ChannelAccess {
+    fn from(channel: &Channel) -> Self {
+        Self {
+            kind: channel.kind,
+            user_limit: channel.user_limit,
+            permission_overwrites: channel
+                .permission_overwrites
+                .as_deref()
+                .unwrap_or_default()
+                .into(),
+        }
+    }
+}
+
 impl Cache {
     /// Return the guild whose voice/session facts changed, if any.
     pub fn update(&mut self, event: &Event, bot: u64) -> Option<u64> {
@@ -60,7 +84,7 @@ impl Cache {
                     let mut guild = Guild {
                         available: true,
                         owner: g.owner_id.get(),
-                        channels: g.channels.iter().map(|c| (c.id.get(), c.clone())).collect(),
+                        channels: g.channels.iter().map(|c| (c.id.get(), c.into())).collect(),
                         roles: g
                             .roles
                             .iter()
@@ -102,12 +126,12 @@ impl Cache {
             }
             Event::ChannelCreate(c) => {
                 if let Some(guild) = c.guild_id.and_then(|id| self.guilds.get_mut(&id.get())) {
-                    guild.channels.insert(c.id.get(), c.0.clone());
+                    guild.channels.insert(c.id.get(), (&c.0).into());
                 }
             }
             Event::ChannelUpdate(c) => {
                 if let Some(guild) = c.guild_id.and_then(|id| self.guilds.get_mut(&id.get())) {
-                    guild.channels.insert(c.id.get(), c.0.clone());
+                    guild.channels.insert(c.id.get(), (&c.0).into());
                 }
             }
             Event::ChannelDelete(c) => {
@@ -269,7 +293,7 @@ pub fn permissions(
     owner: u64,
     member_roles: &[u64],
     roles: &HashMap<u64, Permissions>,
-    channel: &Channel,
+    channel: &ChannelAccess,
 ) -> Permissions {
     let mut value = roles
         .get(&guild)
@@ -281,7 +305,7 @@ pub fn permissions(
     if user == owner || value.contains(Permissions::ADMINISTRATOR) {
         return Permissions::all();
     }
-    let overwrites = channel.permission_overwrites.as_deref().unwrap_or_default();
+    let overwrites = &channel.permission_overwrites;
     if let Some(overwrite) = overwrites
         .iter()
         .find(|o| o.kind == PermissionOverwriteType::Role && o.id.get() == guild)
@@ -312,6 +336,74 @@ mod tests {
     use super::*;
     use serde_json::json;
     #[test]
+    fn compact_channels_follow_permission_updates_limits_and_deletes() {
+        use twilight_model::gateway::payload::incoming::{
+            ChannelCreate, ChannelDelete, ChannelUpdate,
+        };
+        let mut cache = Cache::default();
+        let p = Permissions::VIEW_CHANNEL | Permissions::CONNECT | Permissions::SPEAK;
+        cache.guilds.insert(
+            1,
+            Guild {
+                roles: HashMap::from([(1, p)]),
+                bot_roles: Some(vec![]),
+                voices: HashMap::from([(
+                    2,
+                    Voice {
+                        channel: 3,
+                        bot: false,
+                        session: String::new(),
+                    },
+                )]),
+                ..Guild::default()
+            },
+        );
+        let mut channel: Channel =
+            serde_json::from_value(json!({"id":"3","guild_id":"1","type":2,"user_limit":2}))
+                .unwrap();
+        cache.update(
+            &Event::ChannelCreate(Box::new(ChannelCreate(channel.clone()))),
+            9,
+        );
+        assert_eq!(cache.guilds[&1].access(1, 2, 9, None), Ok(3));
+        channel.user_limit = Some(1);
+        cache.update(
+            &Event::ChannelUpdate(Box::new(ChannelUpdate(channel.clone()))),
+            9,
+        );
+        assert!(
+            cache.guilds[&1]
+                .access(1, 2, 9, None)
+                .unwrap_err()
+                .contains("full")
+        );
+        channel.user_limit = Some(2);
+        channel.permission_overwrites = Some(serde_json::from_value(json!([{"id":"1","type":0,"allow":"0","deny":Permissions::CONNECT.bits().to_string()}])).unwrap());
+        cache.update(
+            &Event::ChannelUpdate(Box::new(ChannelUpdate(channel.clone()))),
+            9,
+        );
+        assert!(
+            cache.guilds[&1]
+                .access(1, 2, 9, None)
+                .unwrap_err()
+                .contains("Connect")
+        );
+        channel.kind = ChannelType::GuildStageVoice;
+        cache.update(
+            &Event::ChannelUpdate(Box::new(ChannelUpdate(channel.clone()))),
+            9,
+        );
+        assert!(
+            cache.guilds[&1]
+                .caller_channel(2)
+                .unwrap_err()
+                .contains("Stage")
+        );
+        cache.update(&Event::ChannelDelete(Box::new(ChannelDelete(channel))), 9);
+        assert!(cache.guilds[&1].channels.is_empty());
+    }
+    #[test]
     fn private_voice_uses_role_aggregation_then_member_overwrites() {
         let p = Permissions::VIEW_CHANNEL | Permissions::CONNECT | Permissions::SPEAK;
         let roles = HashMap::from([(1, p), (2, Permissions::empty()), (3, Permissions::empty())]);
@@ -323,6 +415,7 @@ mod tests {
                 {"id":"9","type":1,"allow":"0","deny":Permissions::SPEAK.bits().to_string()}
             ]}))
             .unwrap();
+        let channel = ChannelAccess::from(&channel);
         assert_eq!(
             permissions(1, 8, 99, &[], &roles, &channel),
             Permissions::empty()

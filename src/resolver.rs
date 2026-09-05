@@ -59,7 +59,7 @@ struct RawTrack {
 
 /// Normalize Lavalink v4 data with the same acceptance policy as Raydio's TypeScript resolver.
 pub fn normalize(
-    value: Value,
+    mut value: Value,
     playlist: bool,
     search: bool,
     capacity: usize,
@@ -68,18 +68,38 @@ pub fn normalize(
     if capacity == 0 {
         return Err(Failure::Full);
     }
+    let playlist_name = if value["loadType"] == "playlist" {
+        value["data"]["info"]["name"].as_str().map(str::to_owned)
+    } else {
+        None
+    };
+    // Consume the owned response instead of cloning its complete track array.
     let raw = match value["loadType"].as_str() {
         Some("error") => return Err(Failure::LoadFailed),
         Some("empty") => return Err(Failure::NoMatch),
-        Some("track") => vec![value["data"].clone()],
-        Some("playlist") => value["data"]["tracks"]
-            .as_array()
-            .cloned()
-            .ok_or(Failure::InvalidResponse)?,
-        Some("search") => value["data"]
-            .as_array()
-            .cloned()
-            .ok_or(Failure::InvalidResponse)?,
+        Some("track") => vec![
+            value
+                .get_mut("data")
+                .map(Value::take)
+                .unwrap_or(Value::Null),
+        ],
+        Some("playlist") => match value
+            .get_mut("data")
+            .and_then(|data| data.get_mut("tracks"))
+            .map(Value::take)
+            .unwrap_or(Value::Null)
+        {
+            Value::Array(tracks) => tracks,
+            _ => return Err(Failure::InvalidResponse),
+        },
+        Some("search") => match value
+            .get_mut("data")
+            .map(Value::take)
+            .unwrap_or(Value::Null)
+        {
+            Value::Array(tracks) => tracks,
+            _ => return Err(Failure::InvalidResponse),
+        },
         _ => return Err(Failure::InvalidResponse),
     };
     let limit = capacity.min(limits.queue).min(if playlist {
@@ -91,11 +111,7 @@ pub fn normalize(
     });
     let mut result = Resolution {
         tracks: Vec::new(),
-        playlist: if value["loadType"] == "playlist" {
-            value["data"]["info"]["name"].as_str().map(str::to_owned)
-        } else {
-            None
-        },
+        playlist: playlist_name,
         rejected: 0,
         omitted: 0,
     };
@@ -217,6 +233,31 @@ mod tests {
                 false,
                 true,
                 10,
+                &Limits::default()
+            )
+            .unwrap_err(),
+            Failure::NoMatch
+        );
+    }
+    #[test]
+    fn malformed_containers_fail_without_panicking() {
+        for value in [
+            json!({"loadType":"playlist","data":"invalid"}),
+            json!({"loadType":"playlist","data":{"tracks":null}}),
+            json!({"loadType":"search"}),
+            json!({"loadType":"search","data":{}}),
+        ] {
+            assert_eq!(
+                normalize(value, true, false, 10, &Limits::default()).unwrap_err(),
+                Failure::InvalidResponse
+            );
+        }
+        assert_eq!(
+            normalize(
+                json!({"loadType":"track"}),
+                false,
+                false,
+                1,
                 &Limits::default()
             )
             .unwrap_err(),

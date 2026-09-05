@@ -4,7 +4,12 @@ use crate::{
 };
 use serde::Deserialize;
 use serde_json::{Value, json};
-use twilight_model::channel::message::{Component, Embed};
+use twilight_model::application::command::{CommandOptionChoice, CommandOptionChoiceValue};
+use twilight_model::channel::message::{
+    Component, Embed, EmojiReactionType,
+    component::{ActionRow, Button, ButtonStyle},
+    embed::{EmbedAuthor, EmbedField, EmbedFooter, EmbedThumbnail},
+};
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 pub struct View {
@@ -24,6 +29,23 @@ impl View {
     fn json(value: Value) -> Self {
         serde_json::from_value(value).expect("checked Discord view shape")
     }
+}
+
+/// Autocomplete only needs the display name and video URL. Discard encoded
+/// audio/source metadata before caching choices for the existing 30-second TTL.
+pub fn search_choices(tracks: Vec<Track>) -> Vec<CommandOptionChoice> {
+    tracks
+        .into_iter()
+        .take(10)
+        .map(|track| CommandOptionChoice {
+            name: truncate(&format!("{} — {}", track.title, track.author), 100),
+            name_localizations: None,
+            value: CommandOptionChoiceValue::String(format!(
+                "https://www.youtube.com/watch?v={}",
+                track.identifier
+            )),
+        })
+        .collect()
 }
 
 pub fn truncate(text: &str, max: usize) -> String {
@@ -78,8 +100,17 @@ fn button(
     emoji: &str,
     style: u8,
     disabled: bool,
-) -> Value {
-    json!({"type":2,"style":style,"custom_id":format!("raydio:player:{session}:{action}"),"label":label,"emoji":{"name":emoji},"disabled":disabled})
+) -> Component {
+    Component::Button(Button {
+        id: None,
+        custom_id: Some(format!("raydio:player:{session}:{action}")),
+        label: Some(label.into()),
+        emoji: Some(EmojiReactionType::Unicode { name: emoji.into() }),
+        style: ButtonStyle::from(style),
+        disabled,
+        url: None,
+        sku_id: None,
+    })
 }
 
 pub fn player(queue: &Queue, session: &str, paused: bool, volume: u16, position: u64) -> View {
@@ -104,15 +135,58 @@ pub fn player(queue: &Queue, session: &str, paused: bool, volume: u16, position:
             format_duration(track.duration_ms, false)
         )
     };
-    let mut embed = json!({"type":"rich","color":0x8b5cf6,"author":{"name":"Raydio • Now Playing"},"title":safe(&track.title,200),"description":progress,"fields":[
-        {"name":"Channel","value":safe(&track.author,100),"inline":true},
-        {"name":"Requested by","value":safe(&track.requested_by,64),"inline":true},
-        {"name":"Up next","value":queue.upcoming.first().map(|t|safe(&t.title,200)).unwrap_or_else(||"Nothing queued".into()),"inline":true},
-        {"name":"Volume","value":format!("{volume}%"),"inline":true}
-    ],"footer":{"text":format!("{} • {} • refreshes every second",if paused {"Paused"} else {"Playing"}, label(queue.loop_mode))}});
+    let field = |name: &str, value| EmbedField {
+        name: name.into(),
+        value,
+        inline: true,
+    };
+    let mut embed = Embed {
+        kind: "rich".into(),
+        color: Some(0x8b5cf6),
+        author: Some(EmbedAuthor {
+            name: "Raydio • Now Playing".into(),
+            icon_url: None,
+            proxy_icon_url: None,
+            url: None,
+        }),
+        title: Some(safe(&track.title, 200)),
+        description: Some(progress),
+        fields: vec![
+            field("Channel", safe(&track.author, 100)),
+            field("Requested by", safe(&track.requested_by, 64)),
+            field(
+                "Up next",
+                queue
+                    .upcoming
+                    .first()
+                    .map(|t| safe(&t.title, 200))
+                    .unwrap_or_else(|| "Nothing queued".into()),
+            ),
+            field("Volume", format!("{volume}%")),
+        ],
+        footer: Some(EmbedFooter {
+            text: format!(
+                "{} • {} • refreshes every second",
+                if paused { "Paused" } else { "Playing" },
+                label(queue.loop_mode)
+            ),
+            icon_url: None,
+            proxy_icon_url: None,
+        }),
+        thumbnail: None,
+        url: None,
+        image: None,
+        video: None,
+        provider: None,
+        timestamp: None,
+    };
     if valid_identifier(&track.identifier) {
-        embed["thumbnail"] =
-            json!({"url":format!("https://i.ytimg.com/vi/{}/hqdefault.jpg",track.identifier)});
+        embed.thumbnail = Some(EmbedThumbnail {
+            url: format!("https://i.ytimg.com/vi/{}/hqdefault.jpg", track.identifier),
+            height: None,
+            width: None,
+            proxy_url: None,
+        });
     }
     if let Some(uri) = &track.uri
         && let Ok(url) = url::Url::parse(uri)
@@ -124,12 +198,45 @@ pub fn player(queue: &Queue, session: &str, paused: bool, volume: u16, position:
         && url.username().is_empty()
         && url.password().is_none()
     {
-        embed["url"] = json!(url.as_str());
+        embed.url = Some(url.into());
     }
-    View::json(json!({"content":null,"embeds":[embed],"components":[
-        {"type":1,"components":[button(session,"previous","Previous","⏮️",2,queue.history.is_empty()),button(session,"pause",if paused {"Resume"} else {"Pause"},if paused {"▶️"} else {"⏸️"},1,false),button(session,"skip","Next","⏭️",2,queue.upcoming.is_empty()),button(session,"stop","Stop","⏹️",4,false)]},
-        {"type":1,"components":[button(session,"queue","Queue","📋",2,false),button(session,"loop",label(queue.loop_mode),"🔁",2,false),button(session,"leave","Leave","👋",4,false)]}
-    ]}))
+    View {
+        content: None,
+        embeds: vec![embed],
+        components: vec![
+            Component::ActionRow(ActionRow {
+                id: None,
+                components: vec![
+                    button(
+                        session,
+                        "previous",
+                        "Previous",
+                        "⏮️",
+                        2,
+                        queue.history.is_empty(),
+                    ),
+                    button(
+                        session,
+                        "pause",
+                        if paused { "Resume" } else { "Pause" },
+                        if paused { "▶️" } else { "⏸️" },
+                        1,
+                        false,
+                    ),
+                    button(session, "skip", "Next", "⏭️", 2, queue.upcoming.is_empty()),
+                    button(session, "stop", "Stop", "⏹️", 4, false),
+                ],
+            }),
+            Component::ActionRow(ActionRow {
+                id: None,
+                components: vec![
+                    button(session, "queue", "Queue", "📋", 2, false),
+                    button(session, "loop", label(queue.loop_mode), "🔁", 2, false),
+                    button(session, "leave", "Leave", "👋", 4, false),
+                ],
+            }),
+        ],
+    }
 }
 fn compact(track: &Track) -> String {
     format!(
