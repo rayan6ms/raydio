@@ -224,7 +224,12 @@ impl GuildSession {
         match self.control(&request).await {
             Ok(text) => {
                 if request.updates_message() && !matches!(request.name.as_str(), "stop" | "leave") {
-                    let _ = request.respond(&self.shared.http, self.player_view()).await;
+                    let view = self.player_view();
+                    if request.respond_no_model(&self.shared.http, &view).await.is_ok()
+                        && let Some(panel) = self.panel.as_mut()
+                    {
+                        panel.last_view = Some(view);
+                    }
                 } else {
                     let _ = request.respond(&self.shared.http, View::text(text)).await;
                     if request.updates_message() {
