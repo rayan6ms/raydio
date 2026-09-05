@@ -10,6 +10,7 @@ out=target/package
 mkdir -p "$out" dist
 stage=$(mktemp -d "$out/stage.XXXXXXXX")
 trap 'rm -rf "$stage"' EXIT
+chmod 755 "$stage"
 mkdir -p "$stage/bin" "$stage/deploy"
 install -m755 "$binary" "$stage/bin/raydio"
 install -m755 deploy/raydioctl "$stage/deploy/raydioctl"

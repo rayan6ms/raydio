@@ -26,6 +26,7 @@ make_package() {
     cp .env.example "$dir/deploy/env.example"
     printf '%s\n' "$rev" > "$dir/REVISION"
     (cd "$dir" && find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
+    chmod 700 "$dir" # Packaging may inherit mktemp's private directory mode.
     tar -czf "/tmp/raydio-deploy-test/$rev.tar.gz" -C "$dir" .
 }
 one=1111111111111111111111111111111111111111
@@ -33,6 +34,7 @@ two=2222222222222222222222222222222222222222
 three=3333333333333333333333333333333333333333
 for rev in "$one" "$two" "$three"; do make_package "$rev"; done
 bash deploy/raydioctl install "/tmp/raydio-deploy-test/$one.tar.gz"
+runuser -u raydio -- /opt/raydio/current/bin/raydio --check
 printf 'DISCORD_TOKEN=fixture-not-a-real-token\n' > /etc/raydio/env
 cp /etc/raydio/env /tmp/raydio-deploy-test/env.expected
 bash deploy/raydioctl update "/tmp/raydio-deploy-test/$two.tar.gz"

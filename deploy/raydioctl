@@ -97,6 +97,7 @@ else
     mv "$temp/release" "$next"
     chmod -R go-w "$next"
 fi
+chmod 755 "$next"
 install -m755 "$next/deploy/raydioctl" /usr/local/bin/raydioctl
 if [[ "$command" == install ]]; then
     link_current "$next"

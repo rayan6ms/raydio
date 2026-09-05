@@ -47,7 +47,11 @@ jobs:
       - name: Package and offline smoke test
         env:
           RAYDIO_REVISION: ${{ github.sha }}
-        run: bash deploy/package.sh
+        run: |
+          bash deploy/package.sh
+          mkdir -p /tmp/raydio-package-smoke
+          tar -xzf "dist/raydio-linux-${{ matrix.arch }}.tar.gz" -C /tmp/raydio-package-smoke
+          runuser -u raydio -- /tmp/raydio-package-smoke/bin/raydio --check
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: raydio-linux-${{ matrix.arch }}
