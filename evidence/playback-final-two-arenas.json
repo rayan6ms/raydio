@@ -1,0 +1,46 @@
+{
+  "date": "2026-09-05T19:29:25.529267+00:00",
+  "stack": "rust-final-two-arenas",
+  "workload": "One live Discord voice session, dQw4w9WgXcQ, volume 70, track loop, panel refresh enabled",
+  "limitations": [
+    "Shared host",
+    "3 consecutive windows in one warmed process; not independent process restarts",
+    "Human listening confirmation recorded separately"
+  ],
+  "processCount": 1,
+  "executables": [
+    {
+      "name": "raydio",
+      "sha256": "b3bc5211bc536d19562d7a5055210746b1f3b629d5583d3dfb0c9d1bb0351648"
+    }
+  ],
+  "trials": [
+    {
+      "trial": 1,
+      "observationSeconds": 20.021,
+      "medianRssKiB": 19328.0,
+      "medianPssKiB": 16155.0,
+      "cpuSeconds": 0.62,
+      "cpuPercentOneCore": 3.097,
+      "maxThreads": 4
+    },
+    {
+      "trial": 2,
+      "observationSeconds": 20.022,
+      "medianRssKiB": 19328.0,
+      "medianPssKiB": 16155.0,
+      "cpuSeconds": 0.65,
+      "cpuPercentOneCore": 3.246,
+      "maxThreads": 4
+    },
+    {
+      "trial": 3,
+      "observationSeconds": 20.023,
+      "medianRssKiB": 19328.0,
+      "medianPssKiB": 16155.0,
+      "cpuSeconds": 0.65,
+      "cpuPercentOneCore": 3.246,
+      "maxThreads": 4
+    }
+  ]
+}

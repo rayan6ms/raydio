@@ -87,6 +87,13 @@ bounded queues, 128 MiB MemoryHigh, 256 MiB MemoryMax, 32 tasks, and a 15-second
 shutdown deadline. `MemoryHigh` can throttle allocations, so raise it if measured
 multi-guild usage approaches that limit.
 
+The service sets `MALLOC_ARENA_MAX=2` before process startup to reduce glibc's
+retained allocator memory with two Tokio workers. The same binary measured
+15.78 MiB playback PSS with this setting versus 19.75 MiB without it in the
+initial comparison. For a manual run, prefix the command with
+`MALLOC_ARENA_MAX=2`; putting it in an application-read env file after startup
+does not configure glibc. Recheck contention and memory when scaling to many guilds.
+
 Read-only Oracle API verification confirmed the configured image is available:
 `Canonical-Ubuntu-24.04-aarch64-2026.06.29-0`. The configured São Paulo compartment
 has no instances. No cloud instance has been created or modified by this rewrite;

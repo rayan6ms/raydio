@@ -1704,6 +1704,69 @@ mod tests {
         let _ = server.await;
     }
     #[tokio::test]
+    async fn paused_panel_reconciliation_corrects_stale_state_and_stops_polling() {
+        let reads = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+        let writes = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+        let stored = Arc::new(std::sync::Mutex::new("Playing".to_owned()));
+        let router = axum::Router::new().fallback({
+            let reads = reads.clone();
+            let writes = writes.clone();
+            let stored = stored.clone();
+            move |method: axum::http::Method| {
+                let text = if method == axum::http::Method::GET {
+                    reads.fetch_add(1, Ordering::Relaxed);
+                    stored.lock().unwrap().clone()
+                } else {
+                    writes.fetch_add(1, Ordering::Relaxed);
+                    *stored.lock().unwrap() = "Paused • Loop: OFF • refreshes every second".into();
+                    stored.lock().unwrap().clone()
+                };
+                async move { axum::Json(json!({"embeds":[{"footer":{"text":text}}]})) }
+            }
+        });
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let address = listener.local_addr().unwrap();
+        let server = tokio::spawn(async move { axum::serve(listener, router).await.unwrap() });
+        let (mut shared, backend, owner, _events) = Shared::fixture().await;
+        Arc::get_mut(&mut shared).unwrap().http = twilight_http::Client::builder()
+            .token("fixture".into())
+            .proxy(address.to_string(), true)
+            .ratelimiter(None)
+            .build();
+        let mut session = GuildSession::new(1, shared);
+        session.queue.enqueue(vec![track("one")], 1000);
+        session.paused = true;
+        session.panel = Some(Panel {
+            channel: 3,
+            message: 5,
+            token: "panel".into(),
+            last_view: None,
+        });
+        session.panel.as_mut().unwrap().last_view = Some(session.player_view());
+        session.panel_checks = 3;
+        for _ in 0..8 {
+            session.panel_check_at = Instant::now();
+            session.refresh().await;
+            session.flush_refresh().await;
+        }
+        assert_eq!(
+            reads.load(Ordering::Relaxed),
+            3,
+            "reconciliation must stop after its bounded checks"
+        );
+        assert_eq!(
+            writes.load(Ordering::Relaxed),
+            1,
+            "only a stale stored snapshot needs a corrective edit"
+        );
+        assert_eq!(session.panel_checks, 0);
+        assert!(stored.lock().unwrap().starts_with("Paused"));
+        owner.shutdown().await;
+        backend.shutdown().await.unwrap();
+        server.abort();
+        let _ = server.await;
+    }
+    #[tokio::test]
     async fn unchanged_panels_skip_http_and_single_page_queue_retires_buttons() {
         let (shared, backend, owner, _events) = Shared::fixture().await;
         let mut session = GuildSession::new(1, shared);

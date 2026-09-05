@@ -1,0 +1,972 @@
+{
+  "audio": {
+    "current": {
+      "bytesReceived": 4227947,
+      "concealedSamples": 46057,
+      "concealmentEvents": 11,
+      "jitter": 0.01,
+      "jitterBufferDelay": 1525660.8,
+      "jitterBufferEmittedCount": 15656640,
+      "packetsLost": 4,
+      "packetsReceived": 16314,
+      "silentConcealedSamples": 30600,
+      "timestamp": 1788636394704.935,
+      "totalAudioEnergy": 33.6761294297429,
+      "totalSamplesDuration": 327.03999999984757,
+      "totalSamplesReceived": 15697920
+    },
+    "delta": {
+      "bytesReceived": 3876693,
+      "concealedSamples": 46057,
+      "concealmentEvents": 11,
+      "jitterBufferDelay": 1430035.2,
+      "jitterBufferEmittedCount": 14364480,
+      "packetsLost": 4,
+      "packetsReceived": 14965,
+      "silentConcealedSamples": 30600,
+      "timestamp": 300138.7380371094,
+      "totalAudioEnergy": 31.486048672683353,
+      "totalSamplesDuration": 300.13999999984617,
+      "totalSamplesReceived": 14406720
+    },
+    "elapsedSeconds": 300.13873803710936,
+    "initial": {
+      "bytesReceived": 351254,
+      "concealedSamples": 0,
+      "concealmentEvents": 0,
+      "jitter": 0.005,
+      "jitterBufferDelay": 95625.6,
+      "jitterBufferEmittedCount": 1292160,
+      "packetsLost": 0,
+      "packetsReceived": 1349,
+      "silentConcealedSamples": 0,
+      "timestamp": 1788636094566.197,
+      "totalAudioEnergy": 2.1900807570595493,
+      "totalSamplesDuration": 26.900000000001405,
+      "totalSamplesReceived": 1291200
+    },
+    "pcm": {
+      "blocks": 7034,
+      "nearFullScale": 0,
+      "nonFinite": 0,
+      "peak": 0.5731680989265442,
+      "rms": 0.08963818552021996,
+      "samples": 28811264,
+      "squared": 231498.63022516528,
+      "zeroBlocks": 59
+    },
+    "receiverBufferMeanMs": 99.55356546147163,
+    "valid": true,
+    "windows": [
+      {
+        "elapsedSeconds": 5.00410986328125,
+        "jitter": 0.004,
+        "packetRate": 49.958935121394845,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 10.00585888671875,
+        "jitter": 0.01,
+        "packetRate": 49.98251588165156,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 15.007552978515625,
+        "jitter": 0.013,
+        "packetRate": 49.78313256070123,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 20.00901806640625,
+        "jitter": 0.011,
+        "packetRate": 50.18529482645246,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 25.01072509765625,
+        "jitter": 0.008,
+        "packetRate": 50.18286725547606,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 30.012029052734373,
+        "jitter": 0.01,
+        "packetRate": 49.986963848929825,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 35.01364208984375,
+        "jitter": 0.009,
+        "packetRate": 49.983874831005444,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 40.01547607421875,
+        "jitter": 0.004,
+        "packetRate": 49.981666880780836,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 45.017136962890625,
+        "jitter": 0.003,
+        "packetRate": 49.98339662855156,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 50.01890087890625,
+        "jitter": 0.004,
+        "packetRate": 49.982367060448645,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 55.02046704101563,
+        "jitter": 0.004,
+        "packetRate": 49.9843432830976,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 60.02235009765625,
+        "jitter": 0.005,
+        "packetRate": 49.981176522728525,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 65.03542602539062,
+        "jitter": 0.005,
+        "packetRate": 49.86958179047286,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 70.03693505859376,
+        "jitter": 0.004,
+        "packetRate": 49.984914220957045,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 75.03859399414063,
+        "jitter": 0.005,
+        "packetRate": 49.98341614683995,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 80.04018505859375,
+        "jitter": 0.003,
+        "packetRate": 49.984094416830345,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 85.0419580078125,
+        "jitter": 0.005,
+        "packetRate": 49.98227679228196,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 90.043583984375,
+        "jitter": 0.006,
+        "packetRate": 50.18368050233664,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 95.0449990234375,
+        "jitter": 0.005,
+        "packetRate": 49.98585361291306,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 100.065166015625,
+        "jitter": 0.005,
+        "packetRate": 49.998336786527624,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 105.09172509765625,
+        "jitter": 0.006,
+        "packetRate": 49.93475574519061,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 110.0930849609375,
+        "jitter": 0.004,
+        "packetRate": 50.18635068489674,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 115.0955439453125,
+        "jitter": 0.005,
+        "packetRate": 49.77552055453978,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 120.096833984375,
+        "jitter": 0.006,
+        "packetRate": 50.187051348665705,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 125.09818090820312,
+        "jitter": 0.006,
+        "packetRate": 50.18648052670577,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 130.09962109375,
+        "jitter": 0.012,
+        "packetRate": 49.585717473272716,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 135.1013388671875,
+        "jitter": 0.008,
+        "packetRate": 49.98282816508938,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 140.10310693359375,
+        "jitter": 0.009,
+        "packetRate": 50.18225488818847,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 145.10460107421875,
+        "jitter": 0.008,
+        "packetRate": 49.985063057328574,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 150.10601489257812,
+        "jitter": 0.01,
+        "packetRate": 49.98586581304085,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 155.10765991210937,
+        "jitter": 0.01,
+        "packetRate": 50.18348943594632,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 160.10936889648437,
+        "jitter": 0.014,
+        "packetRate": 49.982915995509344,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 165.110751953125,
+        "jitter": 0.008,
+        "packetRate": 49.986173258227154,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 170.11239697265626,
+        "jitter": 0.01,
+        "packetRate": 49.98355521508597,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 175.1139260253906,
+        "jitter": 0.013,
+        "packetRate": 49.58483643405339,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 180.1154580078125,
+        "jitter": 0.021,
+        "packetRate": 49.984684868283765,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 185.1171689453125,
+        "jitter": 0.013,
+        "packetRate": 49.98289647761157,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 190.11897705078124,
+        "jitter": 0.007,
+        "packetRate": 42.38467280826084,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 195.120505859375,
+        "jitter": 0.004,
+        "packetRate": 50.18465545349366,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 200.12192895507812,
+        "jitter": 0.005,
+        "packetRate": 49.785829999850144,
+        "packetsLost": 1
+      },
+      {
+        "elapsedSeconds": 205.12347705078125,
+        "jitter": 0.004,
+        "packetRate": 49.78458573934701,
+        "packetsLost": 1
+      },
+      {
+        "elapsedSeconds": 210.1247770996094,
+        "jitter": 0.004,
+        "packetRate": 50.18695090265837,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 215.12611596679687,
+        "jitter": 0.006,
+        "packetRate": 49.586721992997575,
+        "packetsLost": 1
+      },
+      {
+        "elapsedSeconds": 220.12794091796874,
+        "jitter": 0.006,
+        "packetRate": 50.18168417533151,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 225.12927587890624,
+        "jitter": 0.006,
+        "packetRate": 49.98665395391504,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 230.13074096679688,
+        "jitter": 0.008,
+        "packetRate": 49.98535341280126,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 235.13195703125,
+        "jitter": 0.003,
+        "packetRate": 49.9878423123751,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 240.13344799804688,
+        "jitter": 0.004,
+        "packetRate": 50.185035155776546,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 245.1349089355469,
+        "jitter": 0.003,
+        "packetRate": 49.985394892429866,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 250.13617895507812,
+        "jitter": 0.008,
+        "packetRate": 49.98730302976754,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 255.13755786132813,
+        "jitter": 0.007,
+        "packetRate": 49.98621473921645,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 260.13885498046875,
+        "jitter": 0.006,
+        "packetRate": 49.98703217275713,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 265.14004296875,
+        "jitter": 0.007,
+        "packetRate": 49.98812293914932,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 270.1413798828125,
+        "jitter": 0.005,
+        "packetRate": 49.98663443309787,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 275.1428659667969,
+        "jitter": 0.008,
+        "packetRate": 49.98514357573508,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 280.1439670410156,
+        "jitter": 0.008,
+        "packetRate": 49.789035715279496,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 285.1455048828125,
+        "jitter": 0.005,
+        "packetRate": 50.38450332097565,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 290.0999860839844,
+        "jitter": 0.007,
+        "packetRate": 49.85385754245621,
+        "packetsLost": 0
+      },
+      {
+        "elapsedSeconds": 295.12730688476563,
+        "jitter": 0.01,
+        "packetRate": 49.927189838570555,
+        "packetsLost": 1
+      },
+      {
+        "elapsedSeconds": 300.13873803710936,
+        "jitter": 0.01,
+        "packetRate": 49.88594922292403,
+        "packetsLost": 0
+      }
+    ]
+  },
+  "panels": [
+    {
+      "elapsedSeconds": 5.000799999982118,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:30",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 10.000799999982119,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:34",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 15.000599999994039,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:39",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 20.00069999998808,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:45",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 25.015399999976157,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:50",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 30.00069999998808,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:54",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 35.00059999999404,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:59",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 40.00069999998808,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:04",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 45.00059999999404,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:09",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 50.0005,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:14",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 55.0005,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:20",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 60.00059999999404,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:24",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 65.00059999999404,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:29",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 70.00069999998809,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:34",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 75.00069999998809,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:34",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 80.00059999999404,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:44",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 85.00059999999404,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:49",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 90.0005,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:54",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 95.0005,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:59",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 100.00079999998212,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "2:04",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 105.00059999999404,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "2:09",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 110.00039999997615,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "2:14",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 115.00039999997615,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "2:18",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 120.00069999998809,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "2:24",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 125.00059999999404,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "2:29",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 130.00059999999405,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "2:32",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 135.0005,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "2:38",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 140.00059999999405,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "2:43",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 145.00059999999405,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "2:49",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 150.0006999999881,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "2:52",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 155.00059999999405,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "2:58",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 160.00059999999405,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "3:04",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 165.00059999999405,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "3:09",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 170.00059999999405,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "3:13",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 175.00059999999405,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "3:18",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 180.00089999997616,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "3:23",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 185.00059999999405,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "3:29",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 190.0006999999881,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:00",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 195.00079999998212,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:04",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 200.00059999999405,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:09",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 205.00429999998212,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:14",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 210.0005,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:19",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 215.0006999999881,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:24",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 220.0006999999881,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:29",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 225.0005,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:34",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 230.0005,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:39",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 235.0005,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:44",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 240.0006999999881,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:49",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 245.0005,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:54",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 250.0005,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "0:59",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 255.00059999999405,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:04",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 260.00059999999405,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:09",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 265.0005,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:14",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 270.0005,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:19",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 275.00059999999405,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:23",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 280.0007999999821,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:29",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 285.02339999997616,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:35",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 290.00059999999405,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:39",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 295.00039999997614,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:44",
+        "3:33"
+      ]
+    },
+    {
+      "elapsedSeconds": 300.00059999999405,
+      "loop": true,
+      "playing": true,
+      "position": [
+        "1:47",
+        "3:33"
+      ]
+    }
+  ],
+  "sourceRevision": "4cdb705242625888aab74d83a607e01210fd3857",
+  "buildProfile": "native x86_64 release",
+  "limitations": [
+    "One five-minute live run on the developer host",
+    "Loop reload is not gapless",
+    "No local compilation during sampling"
+  ]
+}

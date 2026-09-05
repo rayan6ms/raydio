@@ -1,0 +1,141 @@
+{
+  "current": {
+    "bytesReceived": 972734,
+    "concealedSamples": 3978,
+    "concealmentEvents": 5,
+    "jitter": 0.008,
+    "jitterBufferDelay": 347424,
+    "jitterBufferEmittedCount": 3583680,
+    "packetsLost": 0,
+    "packetsReceived": 3739,
+    "silentConcealedSamples": 0,
+    "timestamp": 1788636626272.281,
+    "totalAudioEnergy": 7.7068522925348635,
+    "totalSamplesDuration": 74.73000000000133,
+    "totalSamplesReceived": 3587040
+  },
+  "delta": {
+    "bytesReceived": 780113,
+    "concealedSamples": 3465,
+    "concealmentEvents": 4,
+    "jitterBufferDelay": 299587.2,
+    "jitterBufferEmittedCount": 2878080,
+    "packetsLost": 0,
+    "packetsReceived": 3001,
+    "silentConcealedSamples": 0,
+    "timestamp": 60030.80908203125,
+    "totalAudioEnergy": 6.588306446376199,
+    "totalSamplesDuration": 60.0400000000016,
+    "totalSamplesReceived": 2881920
+  },
+  "elapsedSeconds": 60.03080908203125,
+  "initial": {
+    "bytesReceived": 192621,
+    "concealedSamples": 513,
+    "concealmentEvents": 1,
+    "jitter": 0.007,
+    "jitterBufferDelay": 47836.8,
+    "jitterBufferEmittedCount": 705600,
+    "packetsLost": 0,
+    "packetsReceived": 738,
+    "silentConcealedSamples": 0,
+    "timestamp": 1788636566241.472,
+    "totalAudioEnergy": 1.1185458461586644,
+    "totalSamplesDuration": 14.689999999999731,
+    "totalSamplesReceived": 705120
+  },
+  "pcm": {
+    "blocks": 1407,
+    "nearFullScale": 0,
+    "nonFinite": 0,
+    "peak": 0.5731680989265442,
+    "rms": 0.09171446853903364,
+    "samples": 5763072,
+    "squared": 48476.3322012964,
+    "zeroBlocks": 5
+  },
+  "receiverBufferMeanMs": 104.0927284856571,
+  "valid": true,
+  "windows": [
+    {
+      "elapsedSeconds": 5.003323974609375,
+      "jitter": 0.009,
+      "packetRate": 49.76691520749267,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 10.005258056640624,
+      "jitter": 0.011,
+      "packetRate": 50.180589324773884,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 15.007212158203124,
+      "jitter": 0.009,
+      "packetRate": 50.18038848489096,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 20.008670166015627,
+      "jitter": 0.005,
+      "packetRate": 49.98542417220916,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 25.010214111328125,
+      "jitter": 0.008,
+      "packetRate": 49.98456531293755,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 30.019632080078125,
+      "jitter": 0.011,
+      "packetRate": 49.90599737525645,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 35.02142016601562,
+      "jitter": 0.007,
+      "packetRate": 49.78219703071031,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 40.02327319335937,
+      "jitter": 0.007,
+      "packetRate": 50.18140249780477,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 45.02538500976563,
+      "jitter": 0.009,
+      "packetRate": 49.978890751708875,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 50.02719018554688,
+      "jitter": 0.008,
+      "packetRate": 49.98195475715457,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 55.02886010742188,
+      "jitter": 0.007,
+      "packetRate": 49.983306356666034,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 60.03080908203125,
+      "jitter": 0.008,
+      "packetRate": 49.98051784795019,
+      "packetsLost": 0
+    }
+  ],
+  "sourceRevision": "4cdb705242625888aab74d83a607e01210fd3857",
+  "environment": {
+    "MALLOC_ARENA_MAX": "2"
+  },
+  "limitations": [
+    "One live 60-second run; shared host",
+    "Same binary as final untuned run"
+  ]
+}

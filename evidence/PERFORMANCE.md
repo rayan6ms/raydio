@@ -1,3 +1,43 @@
+# Final release: 4cdb705
+
+[Native CI](https://github.com/rayan6ms/raydio/actions/runs/33985944055) passed
+45 bot tests, formatting, Clippy, deployment lifecycle tests, and the unprivileged
+package check on ARM64 and x86-64. A subsequent test-only regression also passed,
+checking that stale paused panels are corrected once and polling stops after
+three status checks. See [artifact hashes](release-validation.json).
+
+The [final matched idle comparison](optimization-final-idle.json) used three
+alternating starts of each binary with no concurrent bot or local compilation.
+PSS fell from **12,937 KiB to 12,085 KiB (12.63 to 11.80 MiB, −6.59%)**. RSS
+fell from 15,820 to 15,016 KiB. Both used four threads. Startup medians were 2,557
+and 2,809 ms; no startup or idle CPU speedup is claimed. These figures compare
+the preserved baseline with the portable final package, including toolchain and
+runtime changes, rather than isolating the compiler option.
+
+The final ARM64 archive is 7,013,232 bytes (**6.69 MiB**), and x86-64 is
+7,398,147 bytes (**7.06 MiB**). Live measurements use x86-64 on the developer
+host. Native ARM64 CI and read-only Oracle image verification do not replace
+an actual Oracle VM/network test.
+
+## Final portable live checks
+
+The [final five-minute receiver capture](audio-final-release-soak.json) passed all
+60 five-second packet windows and crossed a full song loop. It received 14,965
+packets with 4 net lost packets, 46,057 concealed samples (~0.960 s cumulative),
+11 concealment events, a 99.55 ms mean jitter-buffer residence, and zero
+full-scale/non-finite PCM samples. Compared with the previous portable run,
+concealment decreased from 68,715 samples and the loop window rose from 37.94 to
+42.38 packets/s. Source reload still causes a short gap; network variability and
+one run each prevent a causal percentage claim for audio quality.
+
+[Playback memory](playback-final-release-soak.json) was stable but increased to
+20,223 KiB median PSS (~19.75 MiB) across fifteen 20-second windows after the
+asynchronous scheduling change. That is higher than the previous portable
+run's 16,531 KiB, so the earlier 9.7% compiler-only playback saving is not a
+claim about the complete final implementation. Final idle remains 6.6% lower.
+The extra resident memory is under investigation separately from the successful
+receiver run.
+
 # Portable build before asynchronous progress updates
 
 The pre-update portable runtime/deployment revision is

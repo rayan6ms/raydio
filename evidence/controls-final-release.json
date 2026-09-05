@@ -1,107 +1,109 @@
 {
-  "valid": true,
-  "settleMs": 2000,
   "results": [
     {
       "action": "Pause",
-      "ms": 966.9000000059605
+      "ms": 1235.199999988079
     },
     {
       "action": "Resume",
-      "ms": 907.5999999940395
+      "ms": 1179.7999999821186
     },
     {
       "action": "Pause",
-      "ms": 2035.699999988079
+      "ms": 1515.2000000178814
     },
     {
       "action": "Resume",
-      "ms": 1198
+      "ms": 1198.5
     },
     {
       "action": "Pause",
-      "ms": 1064.7000000178814
+      "ms": 1485.0999999940395
     },
     {
       "action": "Resume",
-      "ms": 1048.199999988079
+      "ms": 985.8999999761581
     },
     {
       "action": "Pause",
-      "ms": 979.9000000059605
+      "ms": 1217.800000011921
     },
     {
       "action": "Resume",
-      "ms": 2244
+      "ms": 1001
     },
     {
       "action": "Pause",
-      "ms": 1097.5
+      "ms": 1119.0999999940395
     },
     {
       "action": "Resume",
-      "ms": 1474.5999999940395
+      "ms": 1013.3000000119209
     },
     {
       "action": "Pause",
-      "ms": 1041.9000000059605
+      "ms": 1150
     },
     {
       "action": "Resume",
-      "ms": 1091.6000000238419
+      "ms": 1003.0999999940395
     },
     {
       "action": "Pause",
-      "ms": 1353.5999999940395
+      "ms": 1114.300000011921
     },
     {
       "action": "Resume",
-      "ms": 1216.9000000059605
+      "ms": 996
     },
     {
       "action": "Pause",
-      "ms": 1196.300000011921
+      "ms": 1053.800000011921
     },
     {
       "action": "Resume",
-      "ms": 959.2999999821186
+      "ms": 908.1999999880791
     },
     {
       "action": "Pause",
-      "ms": 1225.5999999940395
+      "ms": 1263.4000000059605
     },
     {
       "action": "Resume",
-      "ms": 1046.2999999821186
+      "ms": 982.9000000059605
     },
     {
       "action": "Pause",
-      "ms": 1771.3999999761581
+      "ms": 1028.5999999940395
     },
     {
       "action": "Resume",
-      "ms": 935.5
+      "ms": 1469.7000000178814
     },
     {
       "action": "Pause",
-      "ms": 944.1999999880791
+      "ms": 1085.5
     },
     {
       "action": "Resume",
-      "ms": 911
+      "ms": 2030.5
     },
     {
       "action": "Pause",
-      "ms": 1081.9000000059605
+      "ms": 1170.2000000178814
     },
     {
       "action": "Resume",
-      "ms": 2036.5
+      "ms": 972.3999999761581
     }
   ],
-  "buildProfile": "debug",
+  "settleMs": 2000,
+  "valid": true,
   "sourceRevision": "4cdb705242625888aab74d83a607e01210fd3857",
   "limitations": [
-    "24 controls in one live run; invalid baseline prevents speedup claim"
-  ]
+    "24 actions in one live run, no concurrent benchmark",
+    "Failed baseline is not a matched latency comparison"
+  ],
+  "finalStoredFooter": "Playing \u2022 Loop: ON \u2022 refreshes every second",
+  "storedMessageAgrees": true
 }

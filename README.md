@@ -24,7 +24,7 @@ After verifying and extracting the binary archive, run from its directory:
 ```sh
 cp deploy/env.example raydio.env
 # Set DISCORD_TOKEN in raydio.env.
-./bin/raydio --env-file raydio.env
+MALLOC_ARENA_MAX=2 ./bin/raydio --env-file raydio.env
 ```
 
 For boot startup, small-instance limits, verified updates, and rollback, follow
@@ -58,7 +58,9 @@ is not part of the distribution.
 
 ## Measured performance
 
-The latest matched compiler experiment reduced the already optimized Rust bot:
+The final native package reduced authenticated idle PSS from **12.63 MiB to
+11.80 MiB (−6.6%)**, across three alternating process starts per build. The
+isolated compiler experiment also reduced playback memory:
 
 | Workload | Previous Rust build | Size-optimized dependencies |
 | --- | ---: | ---: |
@@ -81,6 +83,6 @@ fresh control-latency improvement is claimed.
 
 See [performance evidence and limitations](evidence/PERFORMANCE.md) for exact
 observations, withdrawn results, and reproduction commands. The bot suite passes
-45 tests, including real-backend controls, reconnects, and service notification.
+46 tests (45 in native release CI plus a subsequent test-only reconciliation regression), including real-backend controls, reconnects, and service notification.
 Earlier live tests exercised all 19 commands and seven buttons; the user confirmed
 clear audible playback at volume 70.
