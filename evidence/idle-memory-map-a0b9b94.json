@@ -1,0 +1,107 @@
+{
+  "bot-image": {
+    "Rss": 12516,
+    "Pss": 12516,
+    "Private_Clean": 11968,
+    "Private_Dirty": 548,
+    "Anonymous": 548
+  },
+  "[heap]": {
+    "Rss": 1040,
+    "Pss": 1040,
+    "Private_Clean": 0,
+    "Private_Dirty": 1040,
+    "Anonymous": 1040
+  },
+  "[anonymous]": {
+    "Rss": 528,
+    "Pss": 528,
+    "Private_Clean": 0,
+    "Private_Dirty": 528,
+    "Anonymous": 528
+  },
+  "/usr/lib64/libnss_resolve.so.2": {
+    "Rss": 216,
+    "Pss": 44,
+    "Private_Clean": 0,
+    "Private_Dirty": 16,
+    "Anonymous": 16
+  },
+  "/usr/lib64/libnss_myhostname.so.2": {
+    "Rss": 200,
+    "Pss": 58,
+    "Private_Clean": 0,
+    "Private_Dirty": 24,
+    "Anonymous": 24
+  },
+  "/usr/lib64/libc.so.6": {
+    "Rss": 1668,
+    "Pss": 40,
+    "Private_Clean": 0,
+    "Private_Dirty": 24,
+    "Anonymous": 24
+  },
+  "/usr/lib64/libgcc_s-16-20260819.so.1": {
+    "Rss": 96,
+    "Pss": 4,
+    "Private_Clean": 0,
+    "Private_Dirty": 4,
+    "Anonymous": 4
+  },
+  "/usr/lib64/libm.so.6": {
+    "Rss": 608,
+    "Pss": 18,
+    "Private_Clean": 0,
+    "Private_Dirty": 8,
+    "Anonymous": 8
+  },
+  "/usr/lib64/libnss_mdns4_minimal.so.2": {
+    "Rss": 16,
+    "Pss": 4,
+    "Private_Clean": 0,
+    "Private_Dirty": 4,
+    "Anonymous": 4
+  },
+  "[vvar]": {
+    "Rss": 8,
+    "Pss": 0,
+    "Private_Clean": 0,
+    "Private_Dirty": 0,
+    "Anonymous": 0
+  },
+  "[vvar_vclock]": {
+    "Rss": 0,
+    "Pss": 0,
+    "Private_Clean": 0,
+    "Private_Dirty": 0,
+    "Anonymous": 0
+  },
+  "[vdso]": {
+    "Rss": 8,
+    "Pss": 0,
+    "Private_Clean": 0,
+    "Private_Dirty": 0,
+    "Anonymous": 0
+  },
+  "/usr/lib64/ld-linux-x86-64.so.2": {
+    "Rss": 232,
+    "Pss": 13,
+    "Private_Clean": 0,
+    "Private_Dirty": 12,
+    "Anonymous": 12
+  },
+  "[stack]": {
+    "Rss": 148,
+    "Pss": 148,
+    "Private_Clean": 0,
+    "Private_Dirty": 148,
+    "Anonymous": 148
+  },
+  "[vsyscall]": {
+    "Rss": 0,
+    "Pss": 0,
+    "Private_Clean": 0,
+    "Private_Dirty": 0,
+    "Anonymous": 0
+  }
+}

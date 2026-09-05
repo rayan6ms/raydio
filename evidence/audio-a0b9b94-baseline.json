@@ -1,0 +1,66 @@
+{
+  "workload": "Discord General, dQw4w9WgXcQ, volume 70, track loop; warmed receiver",
+  "measurement": {
+    "current": {
+      "bytesReceived": 2022861,
+      "concealedSamples": 44152,
+      "concealmentEvents": 6,
+      "jitter": 0.004,
+      "jitterBufferDelay": 1146672,
+      "jitterBufferEmittedCount": 7461120,
+      "packetsLost": 0,
+      "packetsReceived": 7781,
+      "silentConcealedSamples": 31162,
+      "timestamp": 1788616510998.461,
+      "totalAudioEnergy": 16.311283669206336,
+      "totalSamplesDuration": 156.31000000000282,
+      "totalSamplesReceived": 7502880
+    },
+    "delta": {
+      "bytesReceived": 584529,
+      "concealedSamples": 1560,
+      "concealmentEvents": 1,
+      "jitterBufferDelay": 225686.40000000002,
+      "jitterBufferEmittedCount": 2152320,
+      "packetsLost": 0,
+      "packetsReceived": 2246,
+      "silentConcealedSamples": 0,
+      "timestamp": 45019.44384765625,
+      "totalAudioEnergy": 4.993737242985702,
+      "totalSamplesDuration": 45.00999999998278,
+      "totalSamplesReceived": 2160480
+    },
+    "initial": {
+      "bytesReceived": 1438332,
+      "concealedSamples": 42592,
+      "concealmentEvents": 5,
+      "jitter": 0.007,
+      "jitterBufferDelay": 920985.6,
+      "jitterBufferEmittedCount": 5308800,
+      "packetsLost": 0,
+      "packetsReceived": 5535,
+      "silentConcealedSamples": 31162,
+      "timestamp": 1788616465979.017,
+      "totalAudioEnergy": 11.317546426220634,
+      "totalSamplesDuration": 111.30000000002003,
+      "totalSamplesReceived": 5342400
+    },
+    "pcm": {
+      "blocks": 1055,
+      "nearFullScale": 0,
+      "nonFinite": 0,
+      "peak": 0.5425885915756226,
+      "rms": 0.09203808019353028,
+      "samples": 4321280,
+      "squared": 36605.598339173586,
+      "zeroBlocks": 3
+    },
+    "receiverBufferMeanMs": 104.85727029438003
+  },
+  "limits": [
+    "Browser receiver stats, not sender-only timing",
+    "PCM analyzed in memory via Web Audio; no recording saved",
+    "Zero blocks include analysis node startup and may include source silence; not classified as stream breaks",
+    "Single short shared-host run; no universal lossless or latency guarantee"
+  ]
+}

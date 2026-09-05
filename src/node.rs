@@ -23,6 +23,34 @@ pub struct Health {
     pub session: String,
     pub connections: u64,
     pub errors: u64,
+    pub audio: AudioHealth,
+}
+/// Crust's last node-wide frame window, not cumulative per-guild counters.
+#[derive(Clone, Debug, Default)]
+pub struct AudioHealth {
+    pub windows: u64,
+    pub sent: u64,
+    pub unavailable: u64,
+    pub missed_deadlines: u64,
+    pub observed_at: Option<Instant>,
+}
+impl AudioHealth {
+    fn observe(&mut self, value: &Value) {
+        let Some(sent) = value["sent"].as_u64() else {
+            return;
+        };
+        let Some(unavailable) = value["nulled"].as_u64() else {
+            return;
+        };
+        let Some(missed_deadlines) = value["deficit"].as_u64() else {
+            return;
+        };
+        self.windows = self.windows.saturating_add(1);
+        self.sent = sent;
+        self.unavailable = unavailable;
+        self.missed_deadlines = missed_deadlines;
+        self.observed_at = Some(Instant::now());
+    }
 }
 #[derive(Debug)]
 pub enum Event {
@@ -269,6 +297,9 @@ async fn run(
                             outage = None;
                             health_tx.send_replace(state.clone());
                             tokio::select! { _ = cancel.cancelled() => return, result = events.send(Event::Connected) => { if result.is_err() { return; } } }
+                        } else if value["op"] == "stats" {
+                            state.audio.observe(&value["frameStats"]);
+                            health_tx.send_replace(state.clone());
                         } else if matches!(value["op"].as_str(), Some("event" | "playerUpdate")) {
                             tokio::select! { _ = cancel.cancelled() => return, result = events.send(Event::Payload(value)) => { if result.is_err() { return; } } }
                         }
@@ -309,5 +340,37 @@ impl Drop for NodeOwner {
         if let Some(task) = &self.task {
             task.abort();
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn audio_windows_replace_values_and_ignore_incomplete_samples() {
+        let mut health = AudioHealth::default();
+        health.observe(&json!({"sent":3000,"nulled":2,"deficit":1}));
+        assert_eq!(
+            (
+                health.windows,
+                health.sent,
+                health.unavailable,
+                health.missed_deadlines
+            ),
+            (1, 3000, 2, 1)
+        );
+        health.observe(&Value::Null);
+        health.observe(&json!({"sent":5}));
+        assert_eq!(health.windows, 1);
+        health.observe(&json!({"sent":2999,"nulled":0,"deficit":0}));
+        assert_eq!(
+            (
+                health.windows,
+                health.sent,
+                health.unavailable,
+                health.missed_deadlines
+            ),
+            (2, 2999, 0, 0)
+        );
     }
 }

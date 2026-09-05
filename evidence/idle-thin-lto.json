@@ -1,0 +1,111 @@
+{
+  "date": "2026-09-05T14:11:27.957657+00:00",
+  "workload": "Authenticated idle, no commands or voice; alternating build order",
+  "warmupSeconds": 5,
+  "trials": [
+    {
+      "stack": "rust",
+      "startupMs": 2708.41,
+      "observationSeconds": 15.015,
+      "medianRssKiB": 17308,
+      "medianPssKiB": 14441,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "variant": "before",
+      "trial": 1
+    },
+    {
+      "stack": "rust",
+      "startupMs": 5064.48,
+      "observationSeconds": 15.013,
+      "medianRssKiB": 17184,
+      "medianPssKiB": 14138,
+      "maxThreads": 4,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.067,
+      "variant": "after",
+      "trial": 1
+    },
+    {
+      "stack": "rust",
+      "startupMs": 5565.73,
+      "observationSeconds": 15.015,
+      "medianRssKiB": 16876,
+      "medianPssKiB": 14011,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "variant": "after",
+      "trial": 2
+    },
+    {
+      "stack": "rust",
+      "startupMs": 2758.15,
+      "observationSeconds": 15.015,
+      "medianRssKiB": 17388,
+      "medianPssKiB": 14291,
+      "maxThreads": 4,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.067,
+      "variant": "before",
+      "trial": 2
+    },
+    {
+      "stack": "rust",
+      "startupMs": 3008.79,
+      "observationSeconds": 15.014,
+      "medianRssKiB": 17344,
+      "medianPssKiB": 14433,
+      "maxThreads": 4,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.067,
+      "variant": "before",
+      "trial": 3
+    },
+    {
+      "stack": "rust",
+      "startupMs": 3861.55,
+      "observationSeconds": 15.012,
+      "medianRssKiB": 17064,
+      "medianPssKiB": 14156,
+      "maxThreads": 4,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.067,
+      "variant": "after",
+      "trial": 3
+    }
+  ],
+  "binaries": {
+    "before": {
+      "sha256": "cbd660149ee0e331cfe73986684793152a91452e0c0d0d5da372d14d4be977ff",
+      "bytes": 34054552
+    },
+    "after": {
+      "sha256": "713df8bd3bc183b6259e1a1feed6d487824ac3a1490ac49801b858c49cf70ef7",
+      "bytes": 26815832
+    }
+  },
+  "limitations": [
+    "Shared host; idle only, no playback or end-to-end latency claim",
+    "Three independent starts per variant; no compilation during sampling"
+  ],
+  "medians": {
+    "before": {
+      "medianPssKiB": 14433,
+      "medianRssKiB": 17344,
+      "startupMs": 2758.15
+    },
+    "after": {
+      "medianPssKiB": 14138,
+      "medianRssKiB": 17064,
+      "startupMs": 5064.48
+    }
+  },
+  "candidate": "Thin LTO, one codegen unit; audio-window diagnostics added",
+  "baselineCommit": "a0b9b94",
+  "notes": [
+    "File size fell 21.3%; median idle PSS fell only 2.04%.",
+    "Startup median increased in this small network-dependent sample; investigate with next candidate, no startup speedup claim."
+  ]
+}

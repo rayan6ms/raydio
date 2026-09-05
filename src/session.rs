@@ -189,7 +189,7 @@ impl GuildSession {
                 } else {
                     "playing"
                 };
-                let text = format!(
+                let mut text = format!(
                     "Raydio diagnostics\nState: {status} • upcoming {} • history {} • pending {}\nLoop: {} • volume {}% • position {} ms\nDiscord: {} • {} ms • response errors {}\nMusic service: {} • connections {} • errors {}\nVoice connected: {} • track started: {}\nEvents: queue {}, transitions {}, starts {}, finished {}, failed {}, watchdog {}, cleanup {}\nPlayer edits: {} successful • {} transient failures • {} terminal failures",
                     self.queue.upcoming.len(),
                     self.queue.history.len(),
@@ -216,6 +216,13 @@ impl GuildSession {
                     self.edit_errors,
                     self.edit_terminal
                 );
+                if let Some(at) = health.audio.observed_at {
+                    text.push_str(&format!(
+                        "\nLast node audio window ({}s ago): {} sent • {} unavailable • {} missed deadlines; {} observed windows",
+                        at.elapsed().as_secs(), health.audio.sent, health.audio.unavailable,
+                        health.audio.missed_deadlines, health.audio.windows
+                    ));
+                }
                 let _ = request.respond(&self.shared.http, View::text(text)).await;
                 return;
             }

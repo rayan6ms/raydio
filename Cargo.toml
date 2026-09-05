@@ -41,6 +41,13 @@ debug = 0
 
 [profile.release]
 strip = "debuginfo"
+lto = "thin"
+codegen-units = 1
+
+# Most idle resident pages are bot/control code. Keep codec/voice dependencies
+# at the default speed setting while measuring a smaller control executable.
+[profile.release.package.raydio]
+opt-level = "s"
 
 [dev-dependencies]
 crust-testkit = { path = "../crust/crates/crust-testkit" }

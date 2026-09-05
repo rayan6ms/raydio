@@ -1,0 +1,114 @@
+{
+  "date": "2026-09-05T14:17:31.407488+00:00",
+  "workload": "Authenticated idle, no commands or voice; alternating build order",
+  "warmupSeconds": 5,
+  "trials": [
+    {
+      "stack": "rust",
+      "startupMs": 3209.5,
+      "observationSeconds": 15.014,
+      "medianRssKiB": 17276,
+      "medianPssKiB": 14345,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "variant": "before",
+      "trial": 1
+    },
+    {
+      "stack": "rust",
+      "startupMs": 2859.13,
+      "observationSeconds": 15.013,
+      "medianRssKiB": 15788,
+      "medianPssKiB": 12918,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "variant": "after",
+      "trial": 1
+    },
+    {
+      "stack": "rust",
+      "startupMs": 2808.96,
+      "observationSeconds": 15.012,
+      "medianRssKiB": 15732,
+      "medianPssKiB": 12865,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "variant": "after",
+      "trial": 2
+    },
+    {
+      "stack": "rust",
+      "startupMs": 2557.56,
+      "observationSeconds": 15.013,
+      "medianRssKiB": 17268,
+      "medianPssKiB": 14398,
+      "maxThreads": 4,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.067,
+      "variant": "before",
+      "trial": 2
+    },
+    {
+      "stack": "rust",
+      "startupMs": 3409.54,
+      "observationSeconds": 15.014,
+      "medianRssKiB": 17364,
+      "medianPssKiB": 14319,
+      "maxThreads": 4,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.067,
+      "variant": "before",
+      "trial": 3
+    },
+    {
+      "stack": "rust",
+      "startupMs": 2808.99,
+      "observationSeconds": 15.013,
+      "medianRssKiB": 15668,
+      "medianPssKiB": 12804,
+      "maxThreads": 4,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.067,
+      "variant": "after",
+      "trial": 3
+    }
+  ],
+  "binaries": {
+    "before": {
+      "sha256": "cbd660149ee0e331cfe73986684793152a91452e0c0d0d5da372d14d4be977ff",
+      "bytes": 34054552
+    },
+    "after": {
+      "sha256": "fc6ea1b4f3d23647ab9d59db122e0efd37f328c3a980fb8bd3de6532e807ff3e",
+      "bytes": 25505760
+    }
+  },
+  "limitations": [
+    "Shared host; idle only, no playback or end-to-end latency claim",
+    "Three independent starts per variant; no compilation during sampling"
+  ],
+  "medians": {
+    "before": {
+      "medianPssKiB": 14345,
+      "medianRssKiB": 17276,
+      "startupMs": 3209.5
+    },
+    "after": {
+      "medianPssKiB": 12865,
+      "medianRssKiB": 15732,
+      "startupMs": 2808.99
+    }
+  },
+  "comparison": {
+    "beforePssKiB": 14345,
+    "afterPssKiB": 12865
+  },
+  "notes": [
+    "Size-optimized release profile: package opt-level=s, thin LTO, one codegen unit.",
+    "All three after PSS values were below all three before values.",
+    "Startup and idle CPU are not claimed as improved."
+  ]
+}

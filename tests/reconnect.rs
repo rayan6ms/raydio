@@ -53,6 +53,14 @@ async fn serve(mut socket: WebSocket, peer: Peer) {
         ))
         .await
         .unwrap();
+    socket
+        .send(Message::Text(
+            json!({"op":"stats","frameStats":{"sent":3000,"nulled":2,"deficit":1}})
+                .to_string()
+                .into(),
+        ))
+        .await
+        .unwrap();
     if number == 0 {
         peer.disconnect.notified().await;
         let _ = socket.send(Message::Close(None)).await;
@@ -84,6 +92,16 @@ async fn reconnect_preserves_resumed_sessions_and_invalidates_replacements() {
         let (node, owner, mut events) = Node::start(address, "fixture-password".into(), 9).unwrap();
         node.wait_ready().await.unwrap();
         assert!(matches!(events.recv().await, Some(Event::Connected)));
+        timeout(Duration::from_secs(2), async {
+            while node.health().audio.windows == 0 {
+                tokio::time::sleep(Duration::from_millis(10)).await;
+            }
+        })
+        .await
+        .unwrap();
+        assert_eq!(node.health().audio.sent, 3000);
+        assert_eq!(node.health().audio.unavailable, 2);
+        assert_eq!(node.health().audio.missed_deadlines, 1);
         peer.disconnect.notify_one();
         timeout(Duration::from_secs(5), async {
             while node.health().connections < 2 {
