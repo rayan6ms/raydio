@@ -7,23 +7,44 @@ use tokio_util::sync::CancellationToken;
 async fn main() -> Result<()> {
     let mut testbot = false;
     let mut probe = false;
+    let mut check = false;
     let mut env_file = PathBuf::from(".env");
     let mut args = std::env::args().skip(1);
     while let Some(arg) = args.next() {
         match arg.as_str() {
             "--testbot" => testbot = true,
             "--probe-backend" => probe = true,
+            "--check" => check = true,
+            "--version" | "-V" => {
+                println!(
+                    "raydio {} {}",
+                    env!("CARGO_PKG_VERSION"),
+                    std::env::consts::ARCH
+                );
+                return Ok(());
+            }
             "--env-file" => {
                 env_file = PathBuf::from(args.next().context("--env-file needs a path")?)
             }
             "--help" | "-h" => {
                 println!(
-                    "raydio [--testbot] [--env-file PATH] [--probe-backend]\n--testbot selects DISCORD_TOKEN_TESTBOT explicitly."
+                    "raydio [--testbot] [--env-file PATH] [--check] [--probe-backend] [--version]\n--testbot selects DISCORD_TOKEN_TESTBOT explicitly.\n--check checks the embedded backend offline, without a Discord token."
                 );
                 return Ok(());
             }
             _ => anyhow::bail!("Unknown argument; use --help"),
         }
+    }
+    if check {
+        tracing_subscriber::fmt().with_env_filter("warn").init();
+        let backend = Backend::start().await?;
+        let (node, owner, _events) =
+            raydio::node::Node::start(backend.address, backend.password.clone(), 1)?;
+        node.wait_ready().await?;
+        owner.shutdown().await;
+        backend.shutdown().await?;
+        println!("Backend check passed");
+        return Ok(());
     }
     if probe {
         tracing_subscriber::fmt().with_env_filter("warn").init();
@@ -41,6 +62,7 @@ async fn main() -> Result<()> {
     }
     values.extend(std::env::vars());
     let config = Config::from_env(&values, testbot)?;
+    drop(values);
     let level = match config.log_level.as_str() {
         "silent" => "off",
         "fatal" => "error",

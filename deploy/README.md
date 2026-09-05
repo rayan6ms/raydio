@@ -1,0 +1,90 @@
+# Oracle Cloud deployment
+
+Use **Ubuntu 24.04** on `VM.Standard.A1.Flex` (Ampere ARM64) or an x86-64 shape.
+One OCPU and 1 GiB RAM are sufficient for the tested single-guild workload; the
+provided service caps the bot at 256 MiB. Raise limits deliberately for many guilds.
+The binary is built natively for each architecture on Debian 12 (glibc 2.36),
+and includes the media codecs. Runtime dependencies are libc, libgcc, libm, and
+the OS CA certificate bundle. No JVM, Node, ffmpeg, or Rust compiler is needed.
+Oracle Linux 8/9 and Ubuntu 22.04 have older glibc: use Ubuntu 24.04 for this package.
+
+## Network and Discord
+
+- Give the instance outbound internet access through a public subnet/internet
+  gateway or NAT. Permit DNS, HTTPS/WSS (TCP 443), and outbound UDP plus stateful
+  reply traffic for Discord voice. No inbound bot port is required.
+- Restrict SSH to your administrative IP. Keep the instance clock synchronized.
+- Invite the bot with `bot` and `applications.commands`; permit View Channel,
+  Connect, Speak, Send Messages, Embed Links, and Read Message History where used.
+  The runtime requests Guilds and Guild Voice States; no privileged intent is required.
+- Put only the **production** token in `/etc/raydio/env` as `DISCORD_TOKEN=...`.
+  Never commit this file or pass the token on a command line. Testbot is separate.
+
+The earlier local Terraform bundle selects A1/1 OCPU/4 GiB and already permits
+outbound traffic. Its image ID is region-specific; select a current Ubuntu 24.04
+ARM64 image. Its tenancy, compartment, SSH key, and stack identifiers are personal
+and are intentionally not included in this repository.
+
+## First install
+
+Download the release archive and matching checksum from
+[GitHub Releases](https://github.com/rayan6ms/raydio/releases). Choose `aarch64`
+for Ampere A1 or `x86_64` for Intel/AMD.
+
+```sh
+sudo apt-get update
+sudo apt-get install -y --no-install-recommends ca-certificates curl
+sha256sum --check raydio-linux-aarch64.tar.gz.sha256
+mkdir raydio-package
+tar -xzf raydio-linux-aarch64.tar.gz -C raydio-package
+sudo bash raydio-package/deploy/raydioctl install "$PWD/raydio-linux-aarch64.tar.gz"
+sudoedit /etc/raydio/env
+sudo raydioctl start
+sudo raydioctl status
+```
+
+`start` enables boot startup and waits for Discord readiness (up to 90 seconds).
+The service runs as the unprivileged `raydio` user. Crust listens only on an
+ephemeral loopback port and uses a random per-process password.
+
+## Update and rollback
+
+After code changes pass CI, publish a new `vMAJOR.MINOR.PATCH` tag. CI tests and
+builds on native ARM64 and x86-64 runners, then publishes small archives and SHA256
+checksums. No VM build is needed.
+
+```sh
+sudo raydioctl update v0.2.1           # use the release you intend to deploy
+sudo raydioctl rollback              # switch to the previous installed release
+sudo raydioctl logs
+```
+
+An update verifies checksums, executes the offline backend check, then swaps the
+`/opt/raydio/current` symlink and restarts the service. If Discord startup fails,
+the updater restores the previous release and returns an error. `/etc/raydio/env`
+is preserved. A restart disconnects voice and clears the in-memory queue; this is
+not a zero-downtime music migration. Old releases are retained for manual removal
+after validation. There is no unattended updater or scheduled network poll.
+
+For an unpublished CI artifact, unpack its ZIP and use `raydioctl update` with
+the local `.tar.gz` path. Never use the GitHub source ZIP as a binary package.
+
+## Verification and troubleshooting
+
+`raydio --check` checks the real embedded backend without contacting Discord or
+YouTube. `raydio --probe-backend` additionally exercises live YouTube loading.
+After deployment, join voice and run `/play`; use `/diagnostics` for player and
+audio frame health. A successful build cannot guarantee YouTube permits every
+Oracle egress IP or video. Verify source access from the actual instance before
+depending on it for continuous operation.
+
+Use `journalctl -u raydio -n 100` for startup failures, `systemctl show raydio -p
+MemoryCurrent -p MemoryPeak -p TasksCurrent` for resource use, and
+`systemctl edit raydio` for local limit overrides. Defaults are two Tokio workers,
+bounded queues, 128 MiB MemoryHigh, 256 MiB MemoryMax, 32 tasks, and a 15-second
+shutdown deadline. `MemoryHigh` can throttle allocations, so raise it if measured
+multi-guild usage approaches that limit.
+
+The developer host's Oracle CLI could not retrieve the pinned image. No cloud
+instance has been created or modified by this rewrite, and an actual Oracle
+instance/network test must be distinguished from the native ARM64 CI smoke test.

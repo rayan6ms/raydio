@@ -23,35 +23,30 @@ twilight-gateway = { version = "0.17.1", default-features = false, features = ["
 twilight-http = { version = "0.17.1", default-features = false, features = ["rustls-native-roots"] }
 twilight-model = "0.17.1"
 url = "2.5.8"
-crust = { path = "../crust/crates/crust" }
-crust-server = { path = "../crust/crates/crust-server" }
-crust-mantle-adapter = { path = "../crust/crates/crust-mantle-adapter" }
-crust-oto-adapter = { path = "../crust/crates/crust-oto-adapter" }
+crust = { git = "https://github.com/rayan6ms/crust", rev = "2d612772557730516022ab94b0aeac5bfa85f0a8" }
+crust-server = { git = "https://github.com/rayan6ms/crust", rev = "2d612772557730516022ab94b0aeac5bfa85f0a8" }
+crust-mantle-adapter = { git = "https://github.com/rayan6ms/crust", rev = "2d612772557730516022ab94b0aeac5bfa85f0a8" }
+crust-oto-adapter = { git = "https://github.com/rayan6ms/crust", rev = "2d612772557730516022ab94b0aeac5bfa85f0a8" }
 
 [patch.crates-io]
-openmls_rust_crypto = { path = "../oto/vendor/openmls_rust_crypto" }
+openmls_rust_crypto = { git = "https://github.com/rayan6ms/oto", rev = "efa16faa8a3bd472f0818f65bd89f745f6b97f6d" }
 
-[patch."https://github.com/rayan6ms/mantle"]
-mantle-audio = { path = "../mantle/crates/mantle-audio" }
-mantle-core = { path = "../mantle/crates/mantle-core" }
-mantle-media = { path = "../mantle/crates/mantle-media" }
 
 [profile.dev]
 debug = 0
 
 [profile.release]
-strip = "debuginfo"
+strip = "symbols"
 lto = "thin"
 codegen-units = 1
-
-# Most idle resident pages are bot/control code. Keep codec/voice dependencies
-# at the default speed setting while measuring a smaller control executable.
-[profile.release.package.raydio]
 opt-level = "s"
 
+# Keep the complete release graph size-optimized so dependency code does not
+# dominate resident executable pages on small Oracle instances.
+
 [dev-dependencies]
-crust-testkit = { path = "../crust/crates/crust-testkit" }
+crust-testkit = { git = "https://github.com/rayan6ms/crust", rev = "2d612772557730516022ab94b0aeac5bfa85f0a8" }
 axum = { version = "0.8.4", features = ["ws"] }
-oto = { path = "../oto/crates/oto" }
-mantle-core = { path = "../mantle/crates/mantle-core" }
-mantle-media = { path = "../mantle/crates/mantle-media" }
+oto = { git = "https://github.com/rayan6ms/oto", rev = "efa16faa8a3bd472f0818f65bd89f745f6b97f6d" }
+mantle-core = { git = "https://github.com/rayan6ms/mantle", rev = "8be808baf31b667af42da0246d8f1cfaf4d2105d" }
+mantle-media = { git = "https://github.com/rayan6ms/mantle", rev = "8be808baf31b667af42da0246d8f1cfaf4d2105d" }

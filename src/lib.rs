@@ -6,6 +6,7 @@ pub mod node;
 pub mod playback;
 pub mod resolver;
 pub mod runtime;
+pub mod service;
 mod session;
 pub mod urls;
 pub mod views;

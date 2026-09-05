@@ -1,7 +1,7 @@
 {
   "date": "2026-09-05T14:30:33.536800+00:00",
   "stack": "rust-size-control",
-  "workload": "One live Discord voice session, dQw4w9WgXcQ, volume 70, track loop, panel refresh enabled",
+  "workload": "Post-playback process, NOT active playback",
   "limitations": [
     "Shared host",
     "Three consecutive windows in one warmed process; not independent process restarts",
@@ -42,5 +42,7 @@
       "cpuPercentOneCore": 0.0,
       "maxThreads": 3
     }
-  ]
+  ],
+  "validPlaybackMeasurement": false,
+  "invalidReason": "Loop was not enabled; CPU was near zero, decoder worker had exited, bot absent from General and receiver had no active audio. Withdrawn as playback evidence."
 }

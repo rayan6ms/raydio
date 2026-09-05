@@ -1,0 +1,46 @@
+{
+  "date": "2026-09-05T17:11:31.922973+00:00",
+  "stack": "rust-global-s",
+  "workload": "One live Discord voice session, dQw4w9WgXcQ, volume 70, track loop, panel refresh enabled",
+  "limitations": [
+    "Shared host",
+    "Three consecutive windows in one warmed process; not independent process restarts",
+    "Human listening confirmation recorded separately"
+  ],
+  "processCount": 1,
+  "executables": [
+    {
+      "name": "raydio",
+      "sha256": "83b566673bbbcdc9df31566e4caf98250bb44e4c0643dc7a0bac489ce07ca915"
+    }
+  ],
+  "trials": [
+    {
+      "trial": 1,
+      "observationSeconds": 20.02,
+      "medianRssKiB": 19680.0,
+      "medianPssKiB": 16670.0,
+      "cpuSeconds": 0.64,
+      "cpuPercentOneCore": 3.197,
+      "maxThreads": 4
+    },
+    {
+      "trial": 2,
+      "observationSeconds": 20.022,
+      "medianRssKiB": 19704.0,
+      "medianPssKiB": 16694.0,
+      "cpuSeconds": 0.67,
+      "cpuPercentOneCore": 3.346,
+      "maxThreads": 4
+    },
+    {
+      "trial": 3,
+      "observationSeconds": 20.022,
+      "medianRssKiB": 19712.0,
+      "medianPssKiB": 16702.0,
+      "cpuSeconds": 0.66,
+      "cpuPercentOneCore": 3.296,
+      "maxThreads": 4
+    }
+  ]
+}

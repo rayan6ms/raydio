@@ -1,0 +1,139 @@
+{
+  "current": {
+    "bytesReceived": 1475373,
+    "concealedSamples": 5997,
+    "concealmentEvents": 6,
+    "jitter": 0.006,
+    "jitterBufferDelay": 428476.8,
+    "jitterBufferEmittedCount": 5444160,
+    "packetsLost": 1,
+    "packetsReceived": 5679,
+    "silentConcealedSamples": 0,
+    "timestamp": 1788628393546.896,
+    "totalAudioEnergy": 12.860999630699462,
+    "totalSamplesDuration": 113.5700000000212,
+    "totalSamplesReceived": 5451360
+  },
+  "delta": {
+    "bytesReceived": 778641,
+    "concealedSamples": 5034,
+    "concealmentEvents": 5,
+    "jitterBufferDelay": 270576,
+    "jitterBufferEmittedCount": 2875200,
+    "packetsLost": 1,
+    "packetsReceived": 2998,
+    "silentConcealedSamples": 0,
+    "timestamp": 60013.930908203125,
+    "totalAudioEnergy": 7.486973848353092,
+    "totalSamplesDuration": 60.01000000002328,
+    "totalSamplesReceived": 2880480
+  },
+  "elapsedSeconds": 60.01393090820312,
+  "initial": {
+    "bytesReceived": 696732,
+    "concealedSamples": 963,
+    "concealmentEvents": 1,
+    "jitter": 0.004,
+    "jitterBufferDelay": 157900.8,
+    "jitterBufferEmittedCount": 2568960,
+    "packetsLost": 0,
+    "packetsReceived": 2681,
+    "silentConcealedSamples": 0,
+    "timestamp": 1788628333532.965,
+    "totalAudioEnergy": 5.37402578234637,
+    "totalSamplesDuration": 53.55999999999791,
+    "totalSamplesReceived": 2570880
+  },
+  "pcm": {
+    "blocks": 1406,
+    "nearFullScale": 0,
+    "nonFinite": 0,
+    "peak": 0.5578478574752808,
+    "rms": 0.0993318406905643,
+    "samples": 5758976,
+    "squared": 56822.74833373495,
+    "zeroBlocks": 5
+  },
+  "receiverBufferMeanMs": 94.10684474123539,
+  "valid": true,
+  "windows": [
+    {
+      "elapsedSeconds": 5.002989013671875,
+      "jitter": 0.003,
+      "packetRate": 49.97012772101131,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 10.004005859375,
+      "jitter": 0.002,
+      "packetRate": 49.58991494161466,
+      "packetsLost": 1
+    },
+    {
+      "elapsedSeconds": 15.00489501953125,
+      "jitter": 0.007,
+      "packetRate": 49.99110997936793,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 20.006016845703126,
+      "jitter": 0.005,
+      "packetRate": 49.98878425470457,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 25.006872802734375,
+      "jitter": 0.005,
+      "packetRate": 49.99144189476157,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 30.007923828125,
+      "jitter": 0.013,
+      "packetRate": 49.78953398711843,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 35.008974853515625,
+      "jitter": 0.013,
+      "packetRate": 50.18944992275794,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 40.01044482421875,
+      "jitter": 0.011,
+      "packetRate": 49.98530461332633,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 45.01143701171875,
+      "jitter": 0.008,
+      "packetRate": 49.5901594527336,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 50.0123359375,
+      "jitter": 0.005,
+      "packetRate": 50.19097640746424,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 55.01320703125,
+      "jitter": 0.009,
+      "packetRate": 49.99129057984429,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 60.01393090820312,
+      "jitter": 0.006,
+      "packetRate": 50.192733327425984,
+      "packetsLost": 0
+    }
+  ],
+  "build": "global-s",
+  "limitations": [
+    "Shared host and Discord network; one warmed 60-second window.",
+    "Silent PCM blocks alone do not distinguish source silence, analysis startup, and dropouts.",
+    "A low loss rate is not a guarantee of uninterrupted service."
+  ]
+}

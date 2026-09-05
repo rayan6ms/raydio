@@ -1,0 +1,29 @@
+{
+  "error": "Error: Panel status timeout",
+  "partial": [
+    {
+      "action": "Pause",
+      "ms": 1275
+    },
+    {
+      "action": "Resume",
+      "ms": 1068.7999999821186
+    },
+    {
+      "action": "Pause",
+      "ms": 2371.7999999821186
+    },
+    {
+      "action": "Pause",
+      "ms": 841.7000000178814
+    },
+    {
+      "action": "Resume",
+      "ms": 835.0999999940395
+    },
+    {
+      "action": "Resume",
+      "ms": 1232.5999999940395
+    }
+  ]
+}

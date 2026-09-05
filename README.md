@@ -1,182 +1,83 @@
-# Raydio — Rust rewrite
+# Raydio
 
-Rust implementation on branch `rewrite/rust-raydio`, in a separate Git worktree at
-`/home/rayan/Documents/Projects/raydio-rust`. The original TypeScript bot remains on `main` in
-`/home/rayan/Documents/Projects/raydio`. Legacy deployment scripts, TypeScript source/tests, and
-historical roadmaps are excluded from this branch; Git history and the original checkout preserve them.
+A lightweight Discord music bot written in Rust, powered by
+[Crust](https://github.com/rayan6ms/crust), [Mantle](https://github.com/rayan6ms/mantle),
+and [Oto](https://github.com/rayan6ms/oto).
 
-The Discord runtime now authenticates and registers all 19 commands. Mantle's direct-video metadata
-regression is fixed, and Crust player volume now reaches the audio path. All 19 slash commands and all seven player buttons have been exercised through Discord.
-Encrypted playback connects in General and private-vc. The user confirmed clear audible playback in private-vc at volume 70.
+Raydio runs as one process. It plays YouTube audio with Discord's encrypted voice
+transport, including private voice channels. It includes the original 19 slash
+commands, seven player buttons, autocomplete, playlists, bounded queues/history,
+track and queue loops, volume, progress panels, permission checks, diagnostics,
+reconnection handling, and idle/alone cleanup.
 
-The runtime is one Rust process: Twilight for Discord; private, embedded Crust for player
-orchestration; Mantle for YouTube/media; Oto for Discord voice and DAVE. Crust binds an ephemeral
-loopback port using a random process-local password. No public music-service port or JVM is needed
-by the new runtime. All three local sibling projects are used through Cargo path dependencies;
-Mantle's git dependencies in Crust are overridden to the local Mantle checkout. The supported
-revisions used for the current checks are recorded in [evidence/revisions.json](evidence/revisions.json).
+The TypeScript implementation is preserved on
+[`legacy/typescript`](https://github.com/rayan6ms/raydio/tree/legacy/typescript)
+and in Git history. This branch contains the bot, its tests, and its deployment tools.
 
-## Implemented and checked so far
+## Run
 
-- Real Crust/Mantle/Oto dependency integration and explicit backend shutdown.
-- Lavalink v4 WebSocket session creation and server-issued session IDs, with bounded event delivery
-  and reconnect/session invalidation handling. Real backend lifecycle and resumable/replaced
-  connections are covered by integration tests.
-- Definitions for all 19 original slash commands and the original help text.
-- Queue, track/queue loops, skip, previous, jump, move, remove, clear, shuffle, bounded history,
-  queue admission, and three-failure recovery policy.
-- Original playback configuration defaults with explicit test-bot token selection.
-- YouTube-only input classification, playlist precedence, resolver filtering, and result limits.
-- Player and paginated queue view rendering, including the seven player buttons, artwork, progress,
-  and Unicode-safe length limits.
-
-The runtime includes serialized guild commands, FIFO source requests with stop/leave cancellation,
-voice state and permission checks, autocomplete, stale panel protection, presence, diagnostics,
-watchdogs, and idle/alone cleanup. Deterministic tests exercise controls through real Crust with
-its media/voice test fixtures; a separate integration test starts all real backends. Live testbot
-login and command registration passed. Live receiver-backed tests establish DAVE and advance playback in both public and private voice
-channels. Autocomplete returns ten choices; pause/resume, volume, loops, queue edits, panel replacement,
-natural advancement, stop, and leave were exercised through the controlled browser.
-
-## Build and verification
-
-Requirements: Rust 1.97.1+, C and C++ toolchains, CMake, make, and the sibling `crust`, `mantle`, and
-`oto` repositories (including their required submodules). Cargo is limited to one compilation job;
-the integrated runtime uses two Tokio workers. Upstream native codec build scripts may use two jobs.
+Download a native Linux release from [Releases](https://github.com/rayan6ms/raydio/releases).
+Use `aarch64` on Oracle Ampere A1 and `x86_64` on Intel/AMD. Packages target
+Ubuntu 24.04 or newer (glibc 2.36+); no JVM, Node, ffmpeg, or compiler is needed on the server.
 
 ```sh
-cargo fmt --check
-cargo test --all-targets
-cargo clippy --all-targets -- -D warnings
-cargo run -- --probe-backend
-cargo run --example mantle_load_probe
-cargo run --example media_probe
+cp .env.example raydio.env
+# Set DISCORD_TOKEN in raydio.env.
+./raydio --env-file raydio.env
 ```
 
-To run the bot:
+For boot startup, small-instance limits, verified updates, and rollback, follow
+the [Oracle deployment guide](deploy/README.md). Tokens stay outside the repository.
+Crust is embedded on an ephemeral loopback port with a random per-process password.
+
+## Build and test
+
+Install Rust 1.97.1, Git, a C/C++ toolchain, CMake, make, and CA certificates.
+All dependencies are pinned to public Git revisions in `Cargo.lock`; sibling
+checkouts are no longer required. Cargo fetches Mantle's pinned codec submodule.
+The runtime uses two Tokio workers; build examples below use one compilation job.
 
 ```sh
-cargo run --release -- --env-file /path/to/raydio.env
-cargo run --release -- --testbot --env-file ../raydio/.env
+CARGO_BUILD_JOBS=1 cargo test --locked --all-targets
+cargo fmt --all -- --check
+CARGO_BUILD_JOBS=1 cargo clippy --locked --all-targets -- -D warnings
+CARGO_BUILD_JOBS=1 cargo build --locked --release
+target/release/raydio --check
+target/release/raydio --env-file /path/to/raydio.env
 ```
 
-The production token is `DISCORD_TOKEN`; `--testbot` explicitly selects `DISCORD_TOKEN_TESTBOT`.
-See [.env.example](.env.example) for playback settings. The optional
-[systemd user service](deploy/raydio.service) runs a release binary from `~/.local/bin/raydio`
-and reads `~/.config/raydio/env`; installation is not performed automatically.
+`--check` exercises the real embedded backend offline. `--probe-backend` also
+checks live YouTube loading. `--testbot` explicitly selects `DISCORD_TOKEN_TESTBOT`.
+See [.env.example](.env.example) for playback and queue limits.
 
-The backend probe and `mantle_load_probe`/`media_probe` examples perform read-only YouTube metadata
-and frame checks. `media_probe` exercises the bot’s default volume of 70. The opt-in
-`discord_voice_probe` reads a specified test environment file, verifies the dedicated testbot identity,
-joins General and private-vc in the authorized test server, and cleans up its voice connection.
-It requires a receiving participant to verify encrypted playback:
+CI builds and tests natively on ARM64 and x86-64 using pinned Debian 12 builder
+images. Version tags publish binary archives with checksums, license notices,
+source revision, and an install/update tool. The developer host's compiler cache
+is not part of the distribution.
 
-```sh
-cargo run --example discord_voice_probe -- ../raydio/.env
-```
+## Measured performance
 
-On this particular host, the available compiler is Mantle's existing cached toolchain. The following
-process-local environment was used successfully; it changes neither T3 Code nor sibling source:
+The latest matched compiler experiment reduced the already optimized Rust bot:
 
-```sh
-mkdir -p target/toolchain-libs
-ln -sf /usr/lib64/libstdc++.so.6 target/toolchain-libs/libstdc++.so
+| Workload | Previous Rust build | Size-optimized dependencies |
+| --- | ---: | ---: |
+| Authenticated idle PSS | 12.66 MiB | 12.04 MiB (−4.8%) |
+| Active playback PSS | 18.05 MiB | 16.30 MiB (−9.7%) |
+| Playback CPU, one core | 3.20% | 3.30% |
 
-env -u APPIMAGE -u APPDIR -u ARGV0 \
-  CC="$PWD/../mantle/.cache/media-toolchains/xaac-root/usr/bin/cc" \
-  CXX="$PWD/../mantle/.cache/media-toolchains/xaac-root/usr/bin/c++" \
-  LD_LIBRARY_PATH="$PWD/../mantle/.cache/media-toolchains/xaac-root/usr/lib64" \
-  LIBRARY_PATH="$PWD/target/toolchain-libs" \
-  cargo test --all-targets
-```
+Idle uses three alternating process starts per build. Playback uses three
+20-second windows, one stream at volume 70, looping, with an active listener.
+These are shared-host measurements, not capacity guarantees or Oracle measurements.
+The earlier tuned TypeScript + Lavalink stack measured 338.7 MiB idle PSS and
+391.6 MiB during playback; those were separate experiments, not the same trial.
 
-Use that same environment for other Cargo commands that build native dependencies. Prefer an
-installed compiler for normal development; these cache paths are an environment-specific workaround.
+Fresh receiver captures validated advancing encrypted audio across each full
+60-second window. Both builds had one net lost packet, no full-scale PCM samples,
+and no non-finite samples. Small concealment events remained; this does not prove
+zero glitches on every network. No fresh control-latency improvement is claimed.
 
-## Performance status
-
-Nine authenticated idle runs (three per profile, rotating order) compare the complete Rust bot
-with the complete original Node + Lavalink stack. Medians across trials:
-
-| Stack | Idle PSS | Idle RSS | Startup | Threads |
-| --- | ---: | ---: | ---: | ---: |
-| Rust | 14.8 MiB | 17.6 MiB | 2.56 s | 4 |
-| Node + Lavalink, tuned | 338.7 MiB | 346.6 MiB | 8.82 s | 42 |
-| Node + Lavalink, ordinary | 496.5 MiB | 504.4 MiB | 8.17 s | 117 |
-
-Rust uses **95.6% less idle proportional memory than the tuned original** in this measurement.
-The release binary is 33.2 MiB. PSS apportions shared pages; original measurements sum
-both processes. Each run waits for bot/backend/command registration readiness, warms up for five
-seconds, then samples for 15 seconds. Node is v24.19.0; Lavalink is 4.2.2 with YouTube plugin 1.18.2.
-The tuned JVM uses `-Xms64m -Xmx192m -XX:ActiveProcessorCount=2`. The ordinary profile uses its normal
-processor defaults with a 512 MiB Java heap safety cap. This is a shared host with warm OS caches;
-startup includes Discord network requests. Idle CPU differences are near the measurement resolution.
-
-Earlier failed-startup figures have been withdrawn and are not used here. Full idle observations,
-revisions, binary hash, and limitations are in [evidence/idle-performance.json](evidence/idle-performance.json). Reproduce with:
-
-```sh
-uv run --no-project python benchmarks/compare_idle.py --env-file ../raydio/.env --node /path/to/node
-```
-
-Live playback measurements use the same control video, volume 70, track loop, and active panel.
-Three consecutive 20-second windows per stack produced these medians:
-
-| Stack | Playback PSS | CPU (% of one core) | Threads |
-| --- | ---: | ---: | ---: |
-| Rust | 21.9 MiB | 3.05% | 4 |
-| Node + Lavalink, tuned | 391.6 MiB | 4.17% | 46 |
-| Node + Lavalink, ordinary | 659.1 MiB | 3.56% | 172 |
-
-Rust used **94.4% less playback PSS** than the tuned original.
-Its CPU median was lower in these windows, but this small shared-host sample is not a throughput
-or scaling guarantee. Browser pause/resume click-to-panel latency did **not** improve: medians were
-1.23s for Rust and 0.98s for the tuned original (six actions each).
-See [playback evidence](evidence/playback-performance.json) and [control timings](evidence/control-latency.json).
-The driver [sample_playback.py](benchmarks/sample_playback.py) reads only the explicitly selected
-processes; [start_reference.py](benchmarks/start_reference.py) owns and cleans up the original test stack.
-
-The original suite passed 149 tests before isolation. The Rust suite passes 42 tests (40 unit and
-guild-control tests, one real-backend lifecycle test, and one reconnect test); formatting and Clippy
-pass. Dependency corrections are committed locally as Mantle `8be808b` and Crust `df19a6d`.
-The final UI correction preserves Stop's confirmation instead of overwriting it on periodic refresh.
-
-[Live evidence](evidence/live-discord.json) distinguishes connected/advancing encrypted playback from
-human listening confirmation, now received for clear playback in private-vc at volume 70. The earlier browser access blocker was resolved
-by the user's explicit instruction to use the controlled collaborative browser. No Oto source change
-was necessary to establish DAVE with a prejoined listener in these runs. General and private-vc both
-worked. Availability of every YouTube video is not guaranteed; the two shared source failures remain
-recorded in [source evidence](evidence/youtube-parity.json).
-
-### Memory optimization pass
-
-Compared with Rust commit `bfc2a00`, three authenticated idle starts per build gave
-median PSS **14.84 → 14.04 MiB**, saving **0.80 MiB (5.4%)**. Each optimized run
-used less memory than each baseline run. Both builds used four threads; this is
-an idle test in the dedicated test guild, with no compilation during sampling.
-
-Deterministic allocation workloads also measured:
-
-| Workload | Before | After | Reduction |
-| --- | ---: | ---: | ---: |
-| Retained channel cache, 100 guilds / 5,000 channels | 8.77 MiB | 0.44 MiB | 95.0% |
-| Peak Rust heap during 1,000-track playlist normalization | 3.57 MiB | 1.79 MiB | 50.0% |
-| Retained autocomplete cache model, 500 queries / 10 results | 3.32 MiB | 0.92 MiB | 72.3% |
-| Bytes allocated per player-panel render | 37,064 B | 3,655.5 B | 90.1% |
-
-Channel caching now retains voice access facts; autocomplete caches displayed
-choices; playlist normalization consumes its owned response; player panels are
-built directly as Discord types. The embedded Crust client uses HTTP/WS without
-TLS or proxies, with a smaller initial read buffer and unchanged message limits.
-External Discord and media connections retain TLS. No dependency source changes
-were needed for this pass.
-
-The allocation workloads exclude native allocations and allocator overhead and
-are separate from whole-process PSS. Rendering and parsing got faster in these
-instrumented workloads, but they do not establish Discord control latency.
-Fresh live playback-memory and button-latency comparisons await a new Discord
-browser login. The earlier live numbers above remain pre-optimization results.
-
-See [measurements and limitations](evidence/optimization-performance.json),
-[idle trials](evidence/optimization-idle.json), and
-[benchmark reproduction](benchmarks/README.md).
+See [performance evidence and limitations](evidence/PERFORMANCE.md) for exact
+observations, withdrawn results, and reproduction commands. The bot suite passes
+44 tests, including real-backend controls, reconnects, and service notification.
+Earlier live tests exercised all 19 commands and seven buttons; the user confirmed
+clear audible playback at volume 70.

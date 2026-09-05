@@ -339,7 +339,10 @@ pub async fn run(config: Config, cancel: CancellationToken) -> Result<()> {
                 shared.changed.send_modify(|version| *version = version.wrapping_add(1));
                 if let Some(guild) = changed_guild && let Some(tx) = guilds.get(&guild) { let _ = tx.try_send(Message::VoiceChanged); }
                 match event {
-                    Event::Ready(_) => tracing::info!(bot_id = shared.bot, "Raydio ready"),
+                    Event::Ready(_) => {
+                        tracing::info!(bot_id = shared.bot, "Raydio ready");
+                        crate::service::ready();
+                    },
                     Event::InteractionCreate(interaction) => {
                         let interaction = Arc::new(interaction.0);
                         let Some(guild) = interaction.guild_id.map(|id| id.get()) else {
