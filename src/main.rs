@@ -1,11 +1,12 @@
 use anyhow::{Context, Result, bail};
-use futures_util::StreamExt;
 use reqwest::Client;
 use serde::Deserialize;
 use serde_json::{Value, json};
 use std::{collections::HashMap, env, sync::Arc};
 use tokio::sync::Mutex;
-use twilight_gateway::{Event, EventTypeFlags, Intents, Shard, StreamExt as GatewayStreamExt};
+use twilight_gateway::{
+    Event, EventTypeFlags, Intents, MessageSender, Shard, StreamExt as GatewayStreamExt,
+};
 use twilight_model::{
     application::interaction::{Interaction, InteractionData},
     gateway::payload::outgoing::UpdateVoiceState,
@@ -59,6 +60,8 @@ struct Guild {
     volume: u64,
     paused: bool,
     voice: Option<Voice>,
+    history: Vec<Item>,
+    loop_mode: LoopMode,
 }
 impl Guild {
     fn new(text: Id<ChannelMarker>) -> Self {
@@ -70,8 +73,16 @@ impl Guild {
             volume: 70,
             paused: false,
             voice: None,
+            history: Vec::new(),
+            loop_mode: LoopMode::Off,
         }
     }
+}
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum LoopMode {
+    Off,
+    Track,
+    Queue,
 }
 #[derive(Clone, Debug)]
 struct Voice {
@@ -84,15 +95,24 @@ struct State {
     guilds: HashMap<Id<GuildMarker>, Guild>,
     voice_sessions: HashMap<Id<UserMarker>, (Id<GuildMarker>, Option<Id<ChannelMarker>>, String)>,
     bot_voice: HashMap<Id<GuildMarker>, Voice>,
+    bot_user_id: Option<u64>,
 }
 
 #[derive(Clone)]
 struct App {
     http: Client,
     token: Arc<str>,
+    crust_password: Arc<str>,
     crust: Arc<str>,
     state: Arc<Mutex<State>>,
     application: Arc<Mutex<Option<Id<ApplicationMarker>>>>,
+}
+
+fn option_i64(
+    data: &twilight_model::application::interaction::application_command::CommandData,
+    name: &str,
+) -> Option<i64> {
+    data.options.iter().find(|o| o.name == name).and_then(|o| match o.value { twilight_model::application::interaction::application_command::CommandOptionValue::Integer(v) => Some(v), _ => None })
 }
 
 impl App {
@@ -125,7 +145,7 @@ impl App {
         let x = self
             .http
             .request(method, format!("{}{}", self.crust, path))
-            .header("Authorization", "Bot")
+            .header("Authorization", self.crust_password.as_ref())
             .header("Content-Type", "application/json")
             .json(&body)
             .send()
@@ -167,7 +187,18 @@ impl App {
             ("ping", "Check readiness"),
             ("help", "Show commands"),
         ];
-        let body:Vec<Value>=names.iter().map(|(name,description)|{let mut x=json!({"name":name,"description":description,"type":1}); if *name=="play" {x["options"]=json!([{"name":"request","description":"Search or YouTube URL","type":3,"required":true}]);} x}).collect();
+        let body: Vec<Value> = names.iter().map(|(name,description)| {
+            let mut x=json!({"name":name,"description":description,"type":1});
+            match *name {
+                "play" => x["options"]=json!([{"name":"request","description":"Search or YouTube URL","type":3,"required":true}]),
+                "volume" => x["options"]=json!([{"name":"level","description":"Volume from 0 to 100","type":4,"required":false,"min_value":0,"max_value":100}]),
+                "loop" => x["options"]=json!([{"name":"mode","description":"off, track, or queue","type":3,"required":true,"choices":[{"name":"Off","value":"off"},{"name":"Current song","value":"track"},{"name":"Entire queue","value":"queue"}]}]),
+                "remove"|"jump" => x["options"]=json!([{"name":"position","description":"Upcoming queue position","type":4,"required":true,"min_value":1}]),
+                "move" => x["options"]=json!([{"name":"from","description":"Current queue position","type":4,"required":true,"min_value":1},{"name":"to","description":"New queue position","type":4,"required":true,"min_value":1}]),
+                _ => {}
+            }
+            x
+        }).collect();
         self.discord(
             reqwest::Method::PUT,
             &format!("/applications/{app}/commands"),
@@ -258,10 +289,13 @@ impl App {
             .get(&guild)
             .cloned()
             .context("voice state not ready")?;
+        if voice.session_id.is_empty() {
+            bail!("voice session is still negotiating")
+        }
         self.crust(reqwest::Method::PATCH,&format!("/v4/sessions/{session}/players/{guild}?noReplace={no_replace}"),json!({"encodedTrack":encoded,"volume":70,"voice":{"token":voice.token,"endpoint":voice.endpoint,"sessionId":voice.session_id}})).await?;
         Ok(())
     }
-    async fn handle(&self, i: Interaction, shard: &Shard) -> Result<()> {
+    async fn handle(&self, i: Interaction, sender: MessageSender) -> Result<()> {
         let id = i.id.to_string();
         let token = i.token.clone();
         let Some(ref data) = i.data else {
@@ -271,7 +305,12 @@ impl App {
             return Ok(());
         };
         let guild = i.guild_id.context("DM unsupported")?;
-        let text = i.channel_id.context("missing channel")?;
+        let text = i
+            .channel
+            .as_ref()
+            .map(|c| c.id)
+            .or(i.channel_id)
+            .context("missing channel")?;
         let opt=c.options.iter().find(|o|o.name=="request").and_then(|o|match &o.value {twilight_model::application::interaction::application_command::CommandOptionValue::String(s)=>Some(s.as_str()), _=>None});
         let result = match c.name.as_str() {
             "play" => {
@@ -284,7 +323,20 @@ impl App {
                     .get(&user)
                     .and_then(|(_, c, _)| *c)
                     .context("Join a voice channel before using /play")?;
-                shard.command(&UpdateVoiceState::new(guild, Some(channel), true, false));
+                sender.command(&UpdateVoiceState::new(guild, Some(channel), true, false))?;
+                for _ in 0..50 {
+                    if self
+                        .state
+                        .lock()
+                        .await
+                        .bot_voice
+                        .get(&guild)
+                        .is_some_and(|v| !v.session_id.is_empty())
+                    {
+                        break;
+                    }
+                    tokio::time::sleep(std::time::Duration::from_millis(100)).await;
+                }
                 self.play(guild, text, "user", opt.context("request required")?)
                     .await?
             }
@@ -307,6 +359,32 @@ impl App {
                     None => "The queue is empty.".into(),
                 }
             }
+            "volume" => {
+                let value = c.options.iter().find(|o| o.name == "level").and_then(|o| match o.value { twilight_model::application::interaction::application_command::CommandOptionValue::Integer(v) => Some(v.clamp(0,100) as u64), _ => None });
+                let Some(volume) = value else {
+                    let s = self.state.lock().await;
+                    return self
+                        .respond(
+                            &id,
+                            &token,
+                            s.guilds
+                                .get(&guild)
+                                .map(|g| format!("Current volume: {}%.", g.volume))
+                                .unwrap_or_else(|| "There is no active music session.".into()),
+                        )
+                        .await;
+                };
+                self.crust(
+                    reqwest::Method::PATCH,
+                    &format!("/v4/sessions/raydio-{guild}/players/{guild}"),
+                    json!({"volume":volume}),
+                )
+                .await?;
+                if let Some(g) = self.state.lock().await.guilds.get_mut(&guild) {
+                    g.volume = volume;
+                }
+                format!("Volume set to {volume}%.")
+            }
             "pause" => {
                 self.crust(
                     reqwest::Method::PATCH,
@@ -324,6 +402,86 @@ impl App {
                 )
                 .await?;
                 "Playback resumed.".into()
+            }
+            "clear" => {
+                let n = self
+                    .state
+                    .lock()
+                    .await
+                    .guilds
+                    .get_mut(&guild)
+                    .map(|g| {
+                        let n = g.queue.len();
+                        g.queue.clear();
+                        n
+                    })
+                    .unwrap_or(0);
+                format!("Cleared {n} upcoming tracks.")
+            }
+            "shuffle" => {
+                if let Some(g) = self.state.lock().await.guilds.get_mut(&guild) {
+                    use rand::seq::SliceRandom;
+                    g.queue.shuffle(&mut rand::thread_rng());
+                }
+                "Shuffled the upcoming queue.".into()
+            }
+            "remove" => {
+                let p = option_i64(c, "position").unwrap_or(0).saturating_sub(1) as usize;
+                let x = self
+                    .state
+                    .lock()
+                    .await
+                    .guilds
+                    .get_mut(&guild)
+                    .and_then(|g| {
+                        if p < g.queue.len() {
+                            Some(g.queue.remove(p))
+                        } else {
+                            None
+                        }
+                    });
+                x.map(|t| format!("Removed **{}**.", t.title))
+                    .unwrap_or_else(|| "There is no upcoming track at that index.".into())
+            }
+            "move" => {
+                let from = option_i64(c, "from").unwrap_or(0).saturating_sub(1) as usize;
+                let to = option_i64(c, "to").unwrap_or(0).saturating_sub(1) as usize;
+                let changed = self
+                    .state
+                    .lock()
+                    .await
+                    .guilds
+                    .get_mut(&guild)
+                    .and_then(|g| {
+                        if from < g.queue.len() && to < g.queue.len() {
+                            let x = g.queue.remove(from);
+                            let title = x.title.clone();
+                            g.queue.insert(to, x);
+                            Some(title)
+                        } else {
+                            None
+                        }
+                    });
+                changed
+                    .map(|t| format!("Moved **{t}**."))
+                    .unwrap_or_else(|| "One of those queue positions does not exist.".into())
+            }
+            "leave" => {
+                self.crust(
+                    reqwest::Method::DELETE,
+                    &format!("/v4/sessions/raydio-{guild}/players/{guild}"),
+                    Value::Null,
+                )
+                .await
+                .ok();
+                self.state.lock().await.guilds.remove(&guild);
+                sender.command(&UpdateVoiceState::new(
+                    guild,
+                    None::<Id<ChannelMarker>>,
+                    true,
+                    false,
+                ))?;
+                "Disconnected and cleared the session.".into()
             }
             "stop" => {
                 self.crust(
@@ -358,6 +516,7 @@ async fn main() -> Result<()> {
     let app = App {
         http: Client::new(),
         token: Arc::from(token),
+        crust_password: Arc::from(env::var("LAVALINK_PASSWORD").unwrap_or_default()),
         crust: Arc::from(env::var("CRUST_URL").unwrap_or_else(|_| CRUST.into())),
         state: Default::default(),
         application: Default::default(),
@@ -366,29 +525,49 @@ async fn main() -> Result<()> {
         let event = item?;
         match event {
             Event::Ready(r) => {
+                app.state.lock().await.bot_user_id = Some(r.user.id.get());
                 *app.application.lock().await = Some(r.application.id);
                 app.commands().await?;
                 tracing::info!("Raydio Rust connected");
             }
-            Event::InteractionCreate(x) => app.handle(x.0, &shard).await?,
+            Event::InteractionCreate(x) => {
+                let app = app.clone();
+                let sender = shard.sender();
+                tokio::spawn(async move {
+                    if let Err(error) = app.handle(x.0, sender).await {
+                        tracing::warn!(?error, "interaction failed");
+                    }
+                });
+            }
             Event::VoiceServerUpdate(v) => {
                 let endpoint = v.endpoint.context("missing voice endpoint")?;
-                app.state.lock().await.bot_voice.insert(
+                let mut state = app.state.lock().await;
+                let session_id = state
+                    .bot_voice
+                    .get(&v.guild_id)
+                    .map(|voice| voice.session_id.clone())
+                    .unwrap_or_default();
+                state.bot_voice.insert(
                     v.guild_id,
                     Voice {
                         token: v.token,
                         endpoint,
-                        session_id: String::new(),
+                        session_id,
                     },
                 );
             }
             Event::VoiceStateUpdate(v) => {
                 if let Some(g) = v.guild_id {
-                    app.state
-                        .lock()
-                        .await
-                        .voice_sessions
-                        .insert(v.user_id, (g, v.channel_id, v.session_id.clone()));
+                    let mut state = app.state.lock().await;
+                    if state.bot_user_id == Some(v.user_id.get()) {
+                        if let Some(voice) = state.bot_voice.get_mut(&g) {
+                            voice.session_id = v.session_id.clone();
+                        }
+                    } else {
+                        state
+                            .voice_sessions
+                            .insert(v.user_id, (g, v.channel_id, v.session_id.clone()));
+                    }
                 }
             }
             _ => {}
