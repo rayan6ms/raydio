@@ -85,6 +85,7 @@ bounded queues, 128 MiB MemoryHigh, 256 MiB MemoryMax, 32 tasks, and a 15-second
 shutdown deadline. `MemoryHigh` can throttle allocations, so raise it if measured
 multi-guild usage approaches that limit.
 
-The developer host's Oracle CLI could not retrieve the pinned image. No cloud
-instance has been created or modified by this rewrite, and an actual Oracle
-instance/network test must be distinguished from the native ARM64 CI smoke test.
+Read-only Oracle API verification confirmed the configured image is available:
+`Canonical-Ubuntu-24.04-aarch64-2026.06.29-0`. The configured São Paulo compartment
+has no instances. No cloud instance has been created or modified by this rewrite;
+an actual Oracle instance/network test remains separate from native ARM64 CI.

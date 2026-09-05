@@ -1,0 +1,11 @@
+{
+  "image": {
+    "display-name": "Canonical-Ubuntu-24.04-aarch64-2026.06.29-0",
+    "operating-system": "Canonical Ubuntu",
+    "operating-system-version": "24.04",
+    "lifecycle-state": "AVAILABLE"
+  },
+  "instances": [],
+  "infrastructureChanges": false,
+  "region": "sa-saopaulo-1"
+}
