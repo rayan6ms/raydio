@@ -39,6 +39,18 @@ struct Panel {
     token: String,
     last_view: Option<View>,
 }
+enum EditOutcome {
+    Delivered,
+    TransientFailure,
+    TerminalFailure,
+}
+struct PanelEdit {
+    channel: u64,
+    message: u64,
+    view: View,
+    retire: bool,
+    outcome: EditOutcome,
+}
 pub(crate) struct GuildSession {
     id: u64,
     shared: Arc<Shared>,
@@ -62,6 +74,8 @@ pub(crate) struct GuildSession {
     loading: Option<Pending>,
     loaders: JoinSet<(u64, Result<Resolution, Failure>)>,
     responses: JoinSet<()>,
+    // At most one progress edit, with newer snapshots coalesced in session state.
+    panel_edits: JoinSet<PanelEdit>,
     panel: Option<Panel>,
     notification: Option<u64>,
     events: [u64; 7],
@@ -230,6 +244,11 @@ impl GuildSession {
         }
         match self.control(&request).await {
             Ok(text) => {
+                if request.updates_message() {
+                    // Apply the audio control first, then serialize its message
+                    // after any older progress snapshot already in flight.
+                    self.flush_refresh().await;
+                }
                 if request.updates_message() && !matches!(request.name.as_str(), "stop" | "leave") {
                     let view = self.player_view();
                     if request
@@ -505,6 +524,7 @@ impl GuildSession {
             loading: None,
             loaders: JoinSet::new(),
             responses: JoinSet::new(),
+            panel_edits: JoinSet::new(),
             panel: None,
             notification: None,
             events: [0; 7],
@@ -547,6 +567,10 @@ impl GuildSession {
                     }
                 }
                 Some(_) = self.responses.join_next(), if !self.responses.is_empty() => {},
+                Some(result) = self.panel_edits.join_next(), if !self.panel_edits.is_empty() => {
+                    self.finish_refresh(result);
+                    self.refresh().await;
+                },
                 _ = tick.tick() => self.tick().await,
             }
             self.start_load();
@@ -564,6 +588,7 @@ impl GuildSession {
         }
         self.loaders.abort_all();
         let _ = timeout(Duration::from_secs(3), self.cleanup(None)).await;
+        self.panel_edits.shutdown().await;
         self.responses.abort_all();
         self.publish_activity();
     }
@@ -1138,13 +1163,16 @@ impl GuildSession {
             false,
         ));
         let _ = timeout(Duration::from_secs(3), self.shared.node.destroy(self.id)).await;
+        self.flush_refresh().await;
         self.refresh().await;
+        self.flush_refresh().await;
         if active && let Some(text) = notification {
             self.notify(text).await;
         }
         self.events[6] = self.events[6].saturating_add(1);
     }
     async fn present_player(&mut self, request: &Request, content: Option<String>) {
+        self.flush_refresh().await;
         let token = random_token();
         let mut view = views::player(
             &self.queue,
@@ -1177,7 +1205,7 @@ impl GuildSession {
         }
     }
     async fn refresh(&mut self) {
-        if Instant::now() < self.panel_retry {
+        if !self.panel_edits.is_empty() || Instant::now() < self.panel_retry {
             return;
         }
         let Some(panel) = &self.panel else {
@@ -1187,38 +1215,63 @@ impl GuildSession {
         if panel.last_view.as_ref() == Some(&view) {
             return;
         }
-        let result = timeout(
-            Duration::from_secs(4),
-            self.shared
+        let (channel, message) = (panel.channel, panel.message);
+        let shared = self.shared.clone();
+        let retire = self.queue.current.is_none();
+        self.panel_edits.spawn(async move {
+            let result = timeout(Duration::from_secs(4), shared
                 .http
-                .update_message(Id::new(panel.channel), Id::new(panel.message))
+                .update_message(Id::new(channel), Id::new(message))
                 .content(view.content.as_deref())
                 .embeds(Some(&view.embeds))
-                .components(Some(&view.components)),
-        )
-        .await;
-        match result {
-            Ok(Ok(response)) => {
-                // The edit succeeded. Drain without decoding, bounded so a
-                // slow response body cannot hold the guild actor indefinitely.
-                let _ = timeout(Duration::from_secs(2), response.bytes()).await;
-                self.panel.as_mut().expect("active panel").last_view = Some(view);
-                self.edits = self.edits.saturating_add(1);
-                if self.queue.current.is_none() {
-                    self.panel = None;
+                .components(Some(&view.components))).await;
+            let outcome = match result {
+                Ok(Ok(response)) => {
+                    match timeout(Duration::from_secs(2), response.bytes()).await {
+                        Ok(Ok(_)) => EditOutcome::Delivered,
+                        _ => EditOutcome::TransientFailure,
+                    }
                 }
-            }
-            Ok(Err(error)) => {
-                let terminal = matches!(error.kind(), twilight_http::error::ErrorType::Response { status, .. } if [401, 403, 404].contains(&status.get()));
-                if terminal {
-                    self.edit_terminal = self.edit_terminal.saturating_add(1);
-                    self.panel = None;
-                } else {
-                    self.edit_errors = self.edit_errors.saturating_add(1);
-                    self.panel_retry = Instant::now() + Duration::from_secs(3);
-                }
-            }
+                Ok(Err(error)) if matches!(error.kind(), twilight_http::error::ErrorType::Response { status, .. } if [401, 403, 404].contains(&status.get())) => EditOutcome::TerminalFailure,
+                _ => EditOutcome::TransientFailure,
+            };
+            PanelEdit { channel, message, view, retire, outcome }
+        });
+    }
+    async fn flush_refresh(&mut self) {
+        if let Some(result) = self.panel_edits.join_next().await {
+            self.finish_refresh(result);
+        }
+    }
+    fn finish_refresh(&mut self, result: Result<PanelEdit, tokio::task::JoinError>) {
+        let edit = match result {
+            Ok(edit) => edit,
             Err(_) => {
+                self.edit_errors = self.edit_errors.saturating_add(1);
+                self.panel_retry = Instant::now() + Duration::from_secs(3);
+                return;
+            }
+        };
+        if !self
+            .panel
+            .as_ref()
+            .is_some_and(|p| p.channel == edit.channel && p.message == edit.message)
+        {
+            return;
+        }
+        match edit.outcome {
+            EditOutcome::Delivered => {
+                self.panel.as_mut().expect("active panel").last_view = Some(edit.view);
+                self.edits = self.edits.saturating_add(1);
+                if edit.retire && self.queue.current.is_none() {
+                    self.panel = None;
+                }
+            }
+            EditOutcome::TerminalFailure => {
+                self.edit_terminal = self.edit_terminal.saturating_add(1);
+                self.panel = None;
+            }
+            EditOutcome::TransientFailure => {
                 self.edit_errors = self.edit_errors.saturating_add(1);
                 self.panel_retry = Instant::now() + Duration::from_secs(3);
             }
@@ -1308,6 +1361,109 @@ mod tests {
         }
     }
     #[tokio::test]
+    async fn slow_progress_edit_does_not_block_track_restart() {
+        let entered = Arc::new(tokio::sync::Notify::new());
+        let release = Arc::new(tokio::sync::Notify::new());
+        let first = Arc::new(std::sync::atomic::AtomicBool::new(true));
+        let calls = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+        let router = axum::Router::new().fallback({
+            let entered = entered.clone();
+            let release = release.clone();
+            let calls = calls.clone();
+            move || {
+                let entered = entered.clone();
+                let release = release.clone();
+                let first = first.clone();
+                calls.fetch_add(1, Ordering::Relaxed);
+                async move {
+                    if first.swap(false, Ordering::Relaxed) {
+                        entered.notify_one();
+                        release.notified().await;
+                    }
+                    axum::Json(json!({}))
+                }
+            }
+        });
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let address = listener.local_addr().unwrap();
+        let server = tokio::spawn(async move { axum::serve(listener, router).await.unwrap() });
+        let (mut shared, backend, owner, _events) = Shared::fixture().await;
+        Arc::get_mut(&mut shared).unwrap().http = twilight_http::Client::builder()
+            .token("fixture".into())
+            .proxy(address.to_string(), true)
+            .ratelimiter(None)
+            .build();
+        shared.cache.write().unwrap().guilds.insert(1, guild());
+        let mut session = GuildSession::new(1, shared.clone());
+        session.channel = Some(3);
+        session.queue.enqueue(vec![track("one")], 1000);
+        session.queue.loop_mode = LoopMode::Track;
+        session.start_current().await.unwrap();
+        let generation = session.generation;
+        session.panel = Some(Panel {
+            channel: 3,
+            message: 5,
+            token: "panel".into(),
+            last_view: None,
+        });
+        let (messages, receiver) = mpsc::channel(8);
+        let actor = tokio::spawn(session.run(receiver));
+        timeout(Duration::from_secs(2), entered.notified())
+            .await
+            .unwrap();
+        let started = Instant::now();
+        messages
+            .send(Message::Backend(json!({
+                "type":"TrackEndEvent", "reason":"finished",
+                "track":{"userData":{"raydioGeneration":generation}}
+            })))
+            .await
+            .unwrap();
+        let restarted = timeout(Duration::from_secs(1), async {
+            loop {
+                let player = shared
+                    .node
+                    .request(
+                        reqwest::Method::GET,
+                        &format!("/v4/sessions/{}/players/1", shared.node.health().session),
+                        &[],
+                        None,
+                    )
+                    .await
+                    .unwrap();
+                if player["track"]["userData"]["raydioGeneration"] == generation + 1 {
+                    break;
+                }
+                tokio::time::sleep(Duration::from_millis(10)).await;
+            }
+        })
+        .await;
+        let elapsed = started.elapsed();
+        let requests_while_blocked = calls.load(Ordering::Relaxed);
+        release.notify_one();
+        shared.cancel.cancel();
+        timeout(Duration::from_secs(5), actor)
+            .await
+            .unwrap()
+            .unwrap();
+        owner.shutdown().await;
+        backend.shutdown().await.unwrap();
+        server.abort();
+        let _ = server.await;
+        eprintln!(
+            "track restart while Discord edit pending: {elapsed:?}, success={}",
+            restarted.is_ok()
+        );
+        assert!(
+            restarted.is_ok(),
+            "track restart waited for a Discord progress edit"
+        );
+        assert_eq!(
+            requests_while_blocked, 1,
+            "progress edits must stay single-flight"
+        );
+    }
+    #[tokio::test]
     async fn stop_button_retires_panel_before_periodic_refresh() {
         let (shared, backend, owner, _events) = Shared::fixture().await;
         shared.cache.write().unwrap().guilds.insert(1, guild());
@@ -1340,16 +1496,34 @@ mod tests {
         backend.shutdown().await.unwrap();
     }
     #[tokio::test]
-    async fn successful_pause_button_edits_once_and_does_not_decode_message_body() {
+    async fn pause_button_applies_audio_before_progress_finishes_and_edits_in_order() {
         let calls = Arc::new(std::sync::atomic::AtomicUsize::new(0));
         let paths = Arc::new(std::sync::Mutex::new(Vec::new()));
+        let bodies = Arc::new(std::sync::Mutex::new(Vec::new()));
+        let entered = Arc::new(tokio::sync::Notify::new());
+        let release = Arc::new(tokio::sync::Notify::new());
         let observed_paths = paths.clone();
         let observed = calls.clone();
-        let router = axum::Router::new().fallback(move |uri: axum::http::Uri| {
-            observed.fetch_add(1, Ordering::Relaxed);
-            observed_paths.lock().unwrap().push(uri.path().to_owned());
-            async { axum::Json(json!({})) }
-        });
+        let observed_bodies = bodies.clone();
+        let wait_entered = entered.clone();
+        let wait_release = release.clone();
+        let router = axum::Router::new().fallback(
+            move |uri: axum::http::Uri, axum::Json(body): axum::Json<Value>| {
+                let index = observed.fetch_add(1, Ordering::Relaxed);
+                observed_paths.lock().unwrap().push(uri.path().to_owned());
+                observed_bodies.lock().unwrap().push(body);
+                let entered = wait_entered.clone();
+                let release = wait_release.clone();
+                async move {
+                    if index == 0 {
+                        entered.notify_one();
+                        release.notified().await;
+                    }
+                    // No valid Message model: successful edits only drain bytes.
+                    axum::Json(json!({}))
+                }
+            },
+        );
         let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
         let address = listener.local_addr().unwrap();
         let server = tokio::spawn(async move {
@@ -1362,7 +1536,7 @@ mod tests {
             .ratelimiter(None)
             .build();
         shared.cache.write().unwrap().guilds.insert(1, guild());
-        let mut session = GuildSession::new(1, shared);
+        let mut session = GuildSession::new(1, shared.clone());
         session.channel = Some(3);
         session.queue.enqueue(vec![track("one")], 1000);
         session.start_current().await.unwrap();
@@ -1379,16 +1553,75 @@ mod tests {
             token: "panel".into(),
             last_view: None,
         });
-        session.interaction(button).await;
+        session.refresh().await;
+        timeout(Duration::from_secs(2), entered.notified())
+            .await
+            .unwrap();
+        let control = tokio::spawn(async move {
+            session.interaction(button).await;
+            session
+        });
+        let paused_before_edit_finished = timeout(Duration::from_secs(1), async {
+            loop {
+                let player = shared
+                    .node
+                    .request(
+                        reqwest::Method::GET,
+                        &format!("/v4/sessions/{}/players/1", shared.node.health().session),
+                        &[],
+                        None,
+                    )
+                    .await
+                    .unwrap();
+                if player["paused"] == true {
+                    break;
+                }
+                tokio::time::sleep(Duration::from_millis(10)).await;
+            }
+        })
+        .await;
+        let requests_while_blocked = calls.load(Ordering::Relaxed);
+        release.notify_one();
+        let mut session = timeout(Duration::from_secs(3), control)
+            .await
+            .unwrap()
+            .unwrap();
         assert!(session.paused);
-        assert_eq!(calls.load(Ordering::Relaxed), 1);
-        assert!(paths.lock().unwrap()[0].ends_with("/channels/3/messages/5"));
+        assert!(paused_before_edit_finished.is_ok());
+        assert_eq!(requests_while_blocked, 1);
+        assert_eq!(
+            calls.load(Ordering::Relaxed),
+            2,
+            "one progress edit and one control edit"
+        );
+        assert!(
+            paths
+                .lock()
+                .unwrap()
+                .iter()
+                .all(|p| p.ends_with("/channels/3/messages/5"))
+        );
+        {
+            let bodies = bodies.lock().unwrap();
+            assert!(
+                bodies[0]["embeds"][0]["footer"]["text"]
+                    .as_str()
+                    .unwrap()
+                    .starts_with("Playing")
+            );
+            assert!(
+                bodies[1]["embeds"][0]["footer"]["text"]
+                    .as_str()
+                    .unwrap()
+                    .starts_with("Paused")
+            );
+        }
         assert_eq!(
             session.panel.as_ref().unwrap().last_view.as_ref(),
             Some(&session.player_view())
         );
         session.refresh().await;
-        assert_eq!(calls.load(Ordering::Relaxed), 1);
+        assert_eq!(calls.load(Ordering::Relaxed), 2);
         owner.shutdown().await;
         backend.shutdown().await.unwrap();
         server.abort();
@@ -1415,6 +1648,7 @@ mod tests {
         );
         session.volume = 37;
         session.refresh().await;
+        session.flush_refresh().await;
         assert_eq!(
             session.edit_errors, 1,
             "a real content change must attempt delivery"

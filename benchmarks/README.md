@@ -1,11 +1,15 @@
 # Rust memory comparison
 
+For the current release experiment, exact binary hashes, live receiver captures,
+and reproduction commands, start with [performance evidence](../evidence/PERFORMANCE.md).
+The allocation experiment below documents an earlier optimization round.
+
 `evidence/optimization-performance.json` identifies the baseline commit, measured
 binary hashes, final source hashes, raw evidence, workload limits, and results.
 The baseline is `bfc2a00`; the earlier playback comparison is a separate dataset.
 
 Build with one Cargo job. On this host, retain the working native compiler/library
-environment used for Mantle; do not compile while measuring. The final checks were
+environment used for Mantle; do not compile while measuring. That round's checks were
 `cargo test --all-targets` (42 passed), `cargo clippy --all-targets -- -D warnings`,
 `cargo fmt --check`, and `git diff --check`.
 

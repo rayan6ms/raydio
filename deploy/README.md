@@ -1,12 +1,14 @@
 # Oracle Cloud deployment
 
 Use **Ubuntu 24.04** on `VM.Standard.A1.Flex` (Ampere ARM64) or an x86-64 shape.
-One OCPU and 1 GiB RAM are sufficient for the tested single-guild workload; the
+Start with one OCPU and 1 GiB RAM for a small bot; the
 provided service caps the bot at 256 MiB. Raise limits deliberately for many guilds.
 The binary is built natively for each architecture on Debian 12 (glibc 2.36),
 and includes the media codecs. Runtime dependencies are libc, libgcc, libm, and
 the OS CA certificate bundle. No JVM, Node, ffmpeg, or Rust compiler is needed.
-Oracle Linux 8/9 and Ubuntu 22.04 have older glibc: use Ubuntu 24.04 for this package.
+Use Ubuntu 24.04 for the validated deployment path. The examined artifacts need
+glibc symbols through 2.34, but other distributions have not received the same
+installation and runtime validation.
 
 ## Network and Discord
 

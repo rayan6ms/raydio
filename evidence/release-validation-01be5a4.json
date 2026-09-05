@@ -1,0 +1,39 @@
+{
+  "sourceRevision": "01be5a4f3d05fddbc0c247a705e4b08d959c738c",
+  "ciRun": "https://github.com/rayan6ms/raydio/actions/runs/33983111996",
+  "ciConclusion": "success",
+  "nativeArchitectures": [
+    "x86_64",
+    "aarch64"
+  ],
+  "checks": [
+    "44 bot tests per architecture",
+    "cargo fmt",
+    "cargo clippy with warnings denied",
+    "deployment install/update/rollback and failure injection",
+    "release build",
+    "unprivileged package offline backend smoke test"
+  ],
+  "artifacts": {
+    "x86_64": {
+      "archiveBytes": 7387206,
+      "binaryBytes": 18107320,
+      "archiveSha256": "aba5704054150ffefd780c4fb840fc8dbffa3e50beb586ea17cff32474c17bae",
+      "binarySha256": "4547cfbe10ea4c50cfce526d6bc3a24caa9152d800c6ccedb0df99544bb0f15d",
+      "archiveRootMode": "0o755",
+      "highestRequiredGlibcSymbol": "2.34"
+    },
+    "aarch64": {
+      "archiveBytes": 7003622,
+      "binaryBytes": 16077680,
+      "archiveSha256": "e2113bb861eed88a4bab79595f4cc5c1fe6fdd89ef6bf7e8b83b338cbdbc68f3",
+      "binarySha256": "fa50db82cd43e1e6f846d33aede9729f44c2f2e256c7205eb955ea822cd9d7d9",
+      "archiveRootMode": "0o755",
+      "highestRequiredGlibcSymbol": "2.34"
+    }
+  },
+  "limitations": [
+    "Native ARM64 CI is not an actual Oracle VM test",
+    "Live Discord tests use the x86-64 artifact on the developer host"
+  ]
+}

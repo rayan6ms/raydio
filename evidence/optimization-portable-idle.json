@@ -1,0 +1,105 @@
+{
+  "date": "2026-09-05T18:06:41.454531+00:00",
+  "workload": "Authenticated idle, no commands or voice; alternating build order",
+  "warmupSeconds": 5,
+  "trials": [
+    {
+      "stack": "rust",
+      "startupMs": 2758.14,
+      "observationSeconds": 15.013,
+      "medianRssKiB": 15776,
+      "medianPssKiB": 12899,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "variant": "before",
+      "trial": 1
+    },
+    {
+      "stack": "rust",
+      "startupMs": 3158.5,
+      "observationSeconds": 15.012,
+      "medianRssKiB": 14788,
+      "medianPssKiB": 11828,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "variant": "after",
+      "trial": 1
+    },
+    {
+      "stack": "rust",
+      "startupMs": 3057.31,
+      "observationSeconds": 15.013,
+      "medianRssKiB": 14812,
+      "medianPssKiB": 11852,
+      "maxThreads": 4,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.067,
+      "variant": "after",
+      "trial": 2
+    },
+    {
+      "stack": "rust",
+      "startupMs": 2656.92,
+      "observationSeconds": 15.011,
+      "medianRssKiB": 15904,
+      "medianPssKiB": 12773,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "variant": "before",
+      "trial": 2
+    },
+    {
+      "stack": "rust",
+      "startupMs": 2606.66,
+      "observationSeconds": 15.013,
+      "medianRssKiB": 15304,
+      "medianPssKiB": 12351,
+      "maxThreads": 4,
+      "cpuSeconds": 0.02,
+      "cpuPercentOneCore": 0.133,
+      "variant": "before",
+      "trial": 3
+    },
+    {
+      "stack": "rust",
+      "startupMs": 2806.51,
+      "observationSeconds": 15.012,
+      "medianRssKiB": 15108,
+      "medianPssKiB": 12186,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "variant": "after",
+      "trial": 3
+    }
+  ],
+  "binaries": {
+    "before": {
+      "sha256": "fc6ea1b4f3d23647ab9d59db122e0efd37f328c3a980fb8bd3de6532e807ff3e",
+      "bytes": 25505760
+    },
+    "after": {
+      "sha256": "108c09eac17d876c516fc484d5d8e9bd7e3409f8ebcdf2bcde5d3a4c83e17fa7",
+      "bytes": 18104184
+    }
+  },
+  "limitations": [
+    "Shared host; idle only, no playback or end-to-end latency claim",
+    "Three independent starts per variant; no compilation during sampling"
+  ],
+  "medians": {
+    "before": {
+      "medianPssKiB": 12773,
+      "medianRssKiB": 15776,
+      "startupMs": 2656.92
+    },
+    "after": {
+      "medianPssKiB": 11852,
+      "medianRssKiB": 14812,
+      "startupMs": 3057.31
+    }
+  }
+}

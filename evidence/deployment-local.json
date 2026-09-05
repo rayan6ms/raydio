@@ -20,6 +20,6 @@
   "limitations": [
     "User systemd test on developer host, not Oracle",
     "Container lifecycle test uses a fake service manager to inject failed readiness",
-    "OCI CLI requires private-key passphrase; image lookup not completed"
+    "Oracle API verification was completed later; see oracle-inventory.json. No actual Oracle instance was tested."
   ]
 }

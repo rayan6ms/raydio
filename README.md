@@ -17,13 +17,14 @@ and in Git history. This branch contains the bot, its tests, and its deployment 
 ## Run
 
 Download a native Linux release from [Releases](https://github.com/rayan6ms/raydio/releases).
-Use `aarch64` on Oracle Ampere A1 and `x86_64` on Intel/AMD. Packages target
-Ubuntu 24.04 or newer (glibc 2.36+); no JVM, Node, ffmpeg, or compiler is needed on the server.
+Use `aarch64` on Oracle Ampere A1 and `x86_64` on Intel/AMD. Ubuntu 24.04 is
+the validated deployment target; no JVM, Node, ffmpeg, or compiler is needed on the server.
+After verifying and extracting the binary archive, run from its directory:
 
 ```sh
-cp .env.example raydio.env
+cp deploy/env.example raydio.env
 # Set DISCORD_TOKEN in raydio.env.
-./raydio --env-file raydio.env
+./bin/raydio --env-file raydio.env
 ```
 
 For boot startup, small-instance limits, verified updates, and rollback, follow
@@ -80,6 +81,6 @@ fresh control-latency improvement is claimed.
 
 See [performance evidence and limitations](evidence/PERFORMANCE.md) for exact
 observations, withdrawn results, and reproduction commands. The bot suite passes
-44 tests, including real-backend controls, reconnects, and service notification.
+45 tests, including real-backend controls, reconnects, and service notification.
 Earlier live tests exercised all 19 commands and seven buttons; the user confirmed
 clear audible playback at volume 70.

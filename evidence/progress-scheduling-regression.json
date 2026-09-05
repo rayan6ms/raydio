@@ -1,0 +1,17 @@
+{
+  "baselineRevision": "01be5a4f3d05fddbc0c247a705e4b08d959c738c",
+  "test": "slow_progress_edit_does_not_block_track_restart",
+  "workload": "Real guild actor and embedded backend; Discord progress HTTP response held until observation completes",
+  "before": {
+    "restartObserved": false,
+    "observationMs": 1001.179561
+  },
+  "after": {
+    "restartObserved": true,
+    "observationMs": 13.801748
+  },
+  "limitations": [
+    "One debug test run; controlled failure injection, not live Discord latency",
+    "Old measurement is a timeout lower bound, not a completed restart duration"
+  ]
+}

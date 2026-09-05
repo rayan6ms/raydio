@@ -44,7 +44,7 @@ def main():
         "date": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "stack": args.stack,
         "workload": "One live Discord voice session, dQw4w9WgXcQ, volume 70, track loop, panel refresh enabled",
-        "limitations": ["Shared host", "Three consecutive windows in one warmed process; not independent process restarts", "Human listening confirmation recorded separately"],
+        "limitations": ["Shared host", f"{args.trials} consecutive windows in one warmed process; not independent process restarts", "Human listening confirmation recorded separately"],
         "processCount": len(args.pid),
         "executables": [{"name": Path(f"/proc/{pid}/exe").resolve().name,
                          "sha256": hashlib.file_digest(Path(f"/proc/{pid}/exe").open("rb"), "sha256").hexdigest()}

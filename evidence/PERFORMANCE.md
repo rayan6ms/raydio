@@ -1,3 +1,49 @@
+# Portable build before asynchronous progress updates
+
+The pre-update portable runtime/deployment revision is
+`01be5a4f3d05fddbc0c247a705e4b08d959c738c`. Both native CI jobs passed all 44
+bot tests, formatting, Clippy, deployment lifecycle tests, release packaging,
+and the unprivileged offline backend smoke test.
+[Artifact hashes and sizes](release-validation-01be5a4.json) identify the tested downloads.
+
+This x86-64 package reduced authenticated idle PSS from **12,905 KiB to
+11,924 KiB (12.60 to 11.64 MiB, −7.60%)**, with three alternating process starts
+per binary. RSS went from 15,792 to 14,832 KiB. Both used four threads. Startup
+medians were 2,959 and 2,808 ms, but network variation and three starts do not
+establish a startup-latency speedup. This compares the preserved old executable
+against this portable build; it includes compiler/toolchain and subsequent
+runtime changes. The isolated compiler experiment is retained below.
+See [portable idle samples](optimization-portable-before-async-idle.json).
+The [intermediate portable experiment](optimization-portable-idle.json) is an
+older artifact and is not the current release result.
+
+The ARM64 archive is **6.68 MiB** (15.33 MiB executable); x86-64 is **7.05 MiB**
+(17.27 MiB executable). Tests used native GitHub ARM64/x86-64 runners, and live
+Discord measurements used the x86-64 package on the developer host. Oracle API
+verification found the configured Ubuntu 24.04 ARM64 image available and no
+instances in the configured compartment. No Oracle VM or egress-network claim
+is inferred from CI.
+
+## Loop-boundary failure and progress scheduling
+
+The [portable receiver run](audio-portable-before-async-soak.json) retained all
+300 seconds, including a complete loop, but **failed** its strict packet-window
+threshold. One five-second window at the loop boundary had 37.94 packets/s,
+about 1.2 seconds of packet deficit; the other 59 windows were within 40–60.
+It recorded 14,940 packets, 4 net lost packets, 68,715 concealed samples, and
+no full-scale/non-finite PCM. This is retained failure evidence, not a passing
+continuity claim. Its [memory samples](playback-portable-before-async-soak.json)
+include the restart and should not be called uninterrupted playback.
+
+Inspection found that the guild task awaited each Discord progress edit before
+processing track-end events. The controlled HTTP regression failed on the old
+implementation: restart remained blocked at the 1,001 ms deadline. With one
+owned progress-edit task and coalescing, restart completed in 13.8 ms while the
+same edit was still blocked. Controls apply to audio before waiting for the
+previous panel edit, and message writes stay ordered. The regression also checks
+that only one progress request is in flight. Live revalidation is required before
+attributing the observed loop gap to this scheduling change.
+
 # September 5 follow-up
 
 The baseline is the preserved `6873ad1` size-control executable. The candidate
