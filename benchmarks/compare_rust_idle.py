@@ -24,6 +24,8 @@ def main():
     parser.add_argument("--trials", type=int, default=3)
     parser.add_argument("--warmup", type=int, default=5)
     parser.add_argument("--seconds", type=int, default=15)
+    parser.add_argument("--before-arena-max", type=int, choices=range(1, 9))
+    parser.add_argument("--after-arena-max", type=int, choices=range(1, 9))
     args = parser.parse_args()
     token = next(line.partition("=")[2].strip().strip("\"'") for line in args.env_file.read_text().splitlines() if line.startswith("DISCORD_TOKEN_TESTBOT="))
     request = urllib.request.Request("https://discord.com/api/v10/users/@me", headers={
@@ -36,11 +38,13 @@ def main():
               "workload": "Authenticated idle, no commands or voice; alternating build order",
               "warmupSeconds": args.warmup, "trials": [],
               "binaries": {key: {"sha256": hashlib.file_digest(path.open("rb"), "sha256").hexdigest(), "bytes": path.stat().st_size} for key, path in variants.items()},
+              "arenaMaxOverrides": {key: getattr(args, key + "_arena_max") for key in variants},
               "limitations": ["Shared host; idle only, no playback or end-to-end latency claim", "Three independent starts per variant; no compilation during sampling"]}
     for trial in range(args.trials):
         order = ["before", "after"] if trial % 2 == 0 else ["after", "before"]
         for variant in order:
             args.binary = variants[variant]
+            args.arena_max = getattr(args, variant + "_arena_max")
             record = run_trial(args, "rust", token)
             record.update(variant=variant, trial=trial+1)
             report["trials"].append(record)

@@ -14,7 +14,7 @@ and 2,809 ms; no startup or idle CPU speedup is claimed. These figures compare
 the preserved baseline with the portable final package, including toolchain and
 runtime changes, rather than isolating the compiler option.
 
-The final ARM64 archive is 7,013,232 bytes (**6.69 MiB**), and x86-64 is
+The ARM64 archive from the tested release is 7,013,232 bytes (**6.69 MiB**), and x86-64 is
 7,398,147 bytes (**7.06 MiB**). Live measurements use x86-64 on the developer
 host. Native ARM64 CI and read-only Oracle image verification do not replace
 an actual Oracle VM/network test.
@@ -35,8 +35,37 @@ one run each prevent a causal percentage claim for audio quality.
 asynchronous scheduling change. That is higher than the previous portable
 run's 16,531 KiB, so the earlier 9.7% compiler-only playback saving is not a
 claim about the complete final implementation. Final idle remains 6.6% lower.
-The extra resident memory is under investigation separately from the successful
-receiver run.
+The two-arena allocator experiment below recovered the extra resident memory.
+
+## Allocator experiment for Oracle
+
+The same final binary with `MALLOC_ARENA_MAX=2` used **16,155 KiB (15.78 MiB)**
+playback PSS in three consecutive 20-second windows, compared with the default
+allocator run's 20,223 KiB. The process map showed allocator-owned anonymous
+memory falling while resident executable pages remained similar. These are
+single-process samples, so additional restarts are needed to separate allocator
+retention variability from a repeatable average saving. CPU was 3.246% versus
+3.146% of one core in the first comparison; no CPU speedup is claimed.
+The [60-second receiver check](audio-final-two-arenas.json) passed with 3,001
+packets, zero packet loss/full-scale/non-finite samples and 3,465 concealed samples.
+The systemd service sets the allocator limit before process startup. A repeated three-window comparison measured 16,563 KiB default versus
+16,378 KiB with the limit (about 1.1% in that shorter pair); the five-minute
+run's stable median was 16,407 KiB. The larger initial 20,223→16,155 KiB
+observation is retained as a run-specific result, not an expected fixed delta.
+
+The [five-minute allocator-limited run](audio-final-two-arenas-soak.json) crossed
+**two** song restarts and passed all 60 packet-rate windows. It received 14,936
+packets, lost 4 net packets, concealed 80,363 samples (~1.674 s cumulative), and
+had 13 concealment events, 96.25 ms mean receiver buffer residence, and zero
+full-scale/non-finite samples. This run includes twice as many source reloads
+as the default-allocator run, so raw concealment totals are not a matched quality
+comparison. [Memory](playback-final-two-arenas-soak.json) stayed at 16,407 KiB
+median PSS (16.02 MiB); CPU median was 3.147% of one core. The final
+[24-action release test](controls-final-release.json) passed and an independent
+REST read confirmed the final stored Playing state. Its median DOM update time
+was 1,116.7 ms, with a range of 908.2–2,030.5 ms. No before/after speedup is
+claimed from incomplete control baselines.
+
 
 # Portable build before asynchronous progress updates
 

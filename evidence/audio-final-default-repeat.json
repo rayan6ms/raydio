@@ -1,0 +1,139 @@
+{
+  "current": {
+    "bytesReceived": 1029440,
+    "concealedSamples": 0,
+    "concealmentEvents": 0,
+    "jitter": 0.008,
+    "jitterBufferDelay": 321196.8,
+    "jitterBufferEmittedCount": 3795840,
+    "packetsLost": 0,
+    "packetsReceived": 3958,
+    "silentConcealedSamples": 0,
+    "timestamp": 1788637289287.471,
+    "totalAudioEnergy": 8.16364587282035,
+    "totalSamplesDuration": 79.09000000000356,
+    "totalSamplesReceived": 3796320
+  },
+  "delta": {
+    "bytesReceived": 780733,
+    "concealedSamples": 0,
+    "concealmentEvents": 0,
+    "jitterBufferDelay": 246288,
+    "jitterBufferEmittedCount": 2881920,
+    "packetsLost": 0,
+    "packetsReceived": 3001,
+    "silentConcealedSamples": 0,
+    "timestamp": 60020.828857421875,
+    "totalAudioEnergy": 6.716758635069314,
+    "totalSamplesDuration": 60.030000000003376,
+    "totalSamplesReceived": 2881440
+  },
+  "elapsedSeconds": 60.020828857421876,
+  "initial": {
+    "bytesReceived": 248707,
+    "concealedSamples": 0,
+    "concealmentEvents": 0,
+    "jitter": 0.005,
+    "jitterBufferDelay": 74908.8,
+    "jitterBufferEmittedCount": 913920,
+    "packetsLost": 0,
+    "packetsReceived": 957,
+    "silentConcealedSamples": 0,
+    "timestamp": 1788637229266.642,
+    "totalAudioEnergy": 1.4468872377510358,
+    "totalSamplesDuration": 19.06000000000018,
+    "totalSamplesReceived": 914880
+  },
+  "pcm": {
+    "blocks": 1406,
+    "nearFullScale": 0,
+    "nonFinite": 0,
+    "peak": 0.5731680989265442,
+    "rms": 0.09288102229941876,
+    "samples": 5758976,
+    "squared": 49682.01965797166,
+    "zeroBlocks": 4
+  },
+  "receiverBufferMeanMs": 85.45969353764157,
+  "valid": true,
+  "windows": [
+    {
+      "elapsedSeconds": 5.0029638671875,
+      "jitter": 0.005,
+      "packetRate": 49.7704973711872,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 10.0045888671875,
+      "jitter": 0.006,
+      "packetRate": 50.18369030065229,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 15.006140869140625,
+      "jitter": 0.014,
+      "packetRate": 49.98448479639401,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 20.0077080078125,
+      "jitter": 0.013,
+      "packetRate": 49.984333523589456,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 25.00956884765625,
+      "jitter": 0.014,
+      "packetRate": 50.18132411853362,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 30.01133984375,
+      "jitter": 0.009,
+      "packetRate": 49.78236712445699,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 35.01298901367188,
+      "jitter": 0.007,
+      "packetRate": 49.98351373851057,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 40.0145009765625,
+      "jitter": 0.009,
+      "packetRate": 49.98488494177518,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 45.01659594726563,
+      "jitter": 0.008,
+      "packetRate": 49.979059067096934,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 50.01802392578125,
+      "jitter": 0.007,
+      "packetRate": 50.185667189092335,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 55.01952294921875,
+      "jitter": 0.008,
+      "packetRate": 49.98501425842057,
+      "packetsLost": 0
+    },
+    {
+      "elapsedSeconds": 60.020828857421876,
+      "jitter": 0.008,
+      "packetRate": 49.98694432787062,
+      "packetsLost": 0
+    }
+  ],
+  "sourceRevision": "4cdb705242625888aab74d83a607e01210fd3857",
+  "environment": {},
+  "limitations": [
+    "Second independent default-allocator process",
+    "60-second live check on shared host"
+  ]
+}

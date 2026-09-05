@@ -85,6 +85,8 @@ def summarize(trials):
 def run_trial(args, stack, token):
     env = {key: value for key, value in os.environ.items() if key not in ("APPIMAGE", "APPDIR", "ARGV0")}
     env.update(DISCORD_TOKEN=token, DISCORD_TOKEN_TESTBOT=token, LOG_LEVEL="info")
+    if getattr(args, "arena_max", None) is not None:
+        env["MALLOC_ARENA_MAX"] = str(args.arena_max)
     processes = []
     started = time.monotonic()
     with tempfile.TemporaryDirectory(prefix="raydio-idle-") as work:
