@@ -1,0 +1,59 @@
+{
+  "buttons": [
+    "Pause",
+    "Pause",
+    "Pause"
+  ],
+  "panel": "Raydio • Now Playing\nRick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)\n━━━━━●━━━━━━━━━━━━━━━━━━━━━━━━\n0:40 / 3:33\nChannel\nRick Astley\nRequested by\nmigole\nUp next\nNothing queued\nVolume\n70%\nPlaying • Loop: ON • refreshes every second",
+  "result": {
+    "error": "Error: Panel status timeout",
+    "results": [
+      {
+        "action": "Pause",
+        "ms": 1158
+      },
+      {
+        "action": "Resume",
+        "ms": 1194.699999988079
+      },
+      {
+        "action": "Pause",
+        "ms": 1430
+      },
+      {
+        "action": "Resume",
+        "ms": 938.5999999940395
+      },
+      {
+        "action": "Pause",
+        "ms": 2094.800000011921
+      },
+      {
+        "action": "Resume",
+        "ms": 836.0999999940395
+      },
+      {
+        "action": "Pause",
+        "ms": 1057.2999999821186
+      },
+      {
+        "action": "Resume",
+        "ms": 1318.0999999940395
+      },
+      {
+        "action": "Pause",
+        "ms": 1685.5
+      },
+      {
+        "action": "Resume",
+        "ms": 1025.7999999821186
+      }
+    ],
+    "settleMs": 2000,
+    "valid": false
+  },
+  "sourceRevision": "01be5a4f3d05fddbc0c247a705e4b08d959c738c",
+  "limitations": [
+    "Live 24-action attempt failed after 10 observed transitions; not a valid completed latency benchmark"
+  ]
+}

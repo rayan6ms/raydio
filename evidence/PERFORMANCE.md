@@ -44,6 +44,23 @@ previous panel edit, and message writes stay ordered. The regression also checks
 that only one progress request is in flight. Live revalidation is required before
 attributing the observed loop gap to this scheduling change.
 
+The follow-up live run on the updated debug bot completed 24 alternating
+pause/resume actions with the stored panel ending in the expected Playing state.
+Observed browser-to-panel update times ranged from 908 ms to 2,244 ms; this is a
+valid correctness run, but it is not a matched latency improvement because the
+portable baseline run timed out. A 60-second receiver capture after the update
+had 3,002 packets, zero packet loss, all twelve packet-rate windows between
+49.78 and 50.27 packets/s, 1,262 concealed samples (~26 ms), 0 full-scale and
+0 non-finite samples, and a 104.4 ms mean jitter-buffer residence. It is a
+short continuity check; the failed loop-boundary run above remains the relevant
+five-minute limitation.
+
+The stored panel mismatch was independently reproduced with the Discord REST
+API: a direct PATCH remained Paused for six seconds. The code now performs up to
+three delayed, status-only checks after a paused control and re-edits only when
+Discord persisted a stale snapshot. This bound is reached only during a paused
+transition and does not affect authenticated idle memory.
+
 # September 5 follow-up
 
 The baseline is the preserved `6873ad1` size-control executable. The candidate

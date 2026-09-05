@@ -41,6 +41,7 @@ struct Panel {
 }
 enum EditOutcome {
     Delivered,
+    Stale,
     TransientFailure,
     TerminalFailure,
 }
@@ -50,6 +51,19 @@ struct PanelEdit {
     view: View,
     retire: bool,
     outcome: EditOutcome,
+}
+#[derive(serde::Deserialize)]
+struct StoredPanel {
+    #[serde(default)]
+    embeds: Vec<StoredEmbed>,
+}
+#[derive(serde::Deserialize)]
+struct StoredEmbed {
+    footer: Option<StoredFooter>,
+}
+#[derive(serde::Deserialize)]
+struct StoredFooter {
+    text: String,
 }
 pub(crate) struct GuildSession {
     id: u64,
@@ -83,6 +97,8 @@ pub(crate) struct GuildSession {
     edit_errors: u64,
     edit_terminal: u64,
     panel_retry: Instant,
+    panel_checks: u8,
+    panel_check_at: Instant,
 }
 impl GuildSession {
     async fn interaction(&mut self, mut request: Request) {
@@ -258,6 +274,16 @@ impl GuildSession {
                         && let Some(panel) = self.panel.as_mut()
                     {
                         panel.last_view = Some(view);
+                        // Discord has acknowledged a paused snapshot and later
+                        // persisted an older Playing snapshot in live tests.
+                        // Playing panels self-correct on the next progress edit;
+                        // paused panels need bounded reconciliation instead.
+                        if self.paused {
+                            self.panel_checks = 3;
+                            self.panel_check_at = Instant::now() + Duration::from_millis(500);
+                        } else {
+                            self.panel_checks = 0;
+                        }
                     }
                 } else {
                     let _ = request.respond(&self.shared.http, View::text(text)).await;
@@ -532,6 +558,8 @@ impl GuildSession {
             edit_errors: 0,
             edit_terminal: 0,
             panel_retry: Instant::now(),
+            panel_checks: 0,
+            panel_check_at: Instant::now(),
         }
     }
     pub async fn run(mut self, mut receiver: mpsc::Receiver<Message>) {
@@ -1154,6 +1182,7 @@ impl GuildSession {
         self.alone_at = None;
         self.started = false;
         self.paused = false;
+        self.panel_checks = 0;
         self.end_deadline = None;
         self.volume = self.shared.config.volume;
         let _ = self.shared.gateway.command(&UpdateVoiceState::new(
@@ -1173,6 +1202,7 @@ impl GuildSession {
     }
     async fn present_player(&mut self, request: &Request, content: Option<String>) {
         self.flush_refresh().await;
+        self.panel_checks = 0;
         let token = random_token();
         let mut view = views::player(
             &self.queue,
@@ -1212,7 +1242,50 @@ impl GuildSession {
             return;
         };
         let view = self.player_view();
+        let check = self.paused && self.panel_checks > 0 && Instant::now() >= self.panel_check_at;
         if panel.last_view.as_ref() == Some(&view) {
+            if check {
+                let (channel, message) = (panel.channel, panel.message);
+                let shared = self.shared.clone();
+                self.panel_checks -= 1;
+                self.panel_check_at = Instant::now() + Duration::from_secs(1);
+                self.panel_edits.spawn(async move {
+                    let result = timeout(Duration::from_secs(3), async {
+                        let bytes = shared
+                            .http
+                            .message(Id::new(channel), Id::new(message))
+                            .await?
+                            .bytes()
+                            .await?;
+                        let stored: StoredPanel = serde_json::from_slice(&bytes)?;
+                        Ok::<_, anyhow::Error>(
+                            stored
+                                .embeds
+                                .first()
+                                .and_then(|e| e.footer.as_ref())
+                                .map(|f| f.text.as_str())
+                                == view
+                                    .embeds
+                                    .first()
+                                    .and_then(|e| e.footer.as_ref())
+                                    .map(|f| f.text.as_str()),
+                        )
+                    })
+                    .await;
+                    let outcome = match result {
+                        Ok(Ok(true)) => EditOutcome::Delivered,
+                        Ok(Ok(false)) => EditOutcome::Stale,
+                        _ => EditOutcome::TransientFailure,
+                    };
+                    PanelEdit {
+                        channel,
+                        message,
+                        view,
+                        retire: false,
+                        outcome,
+                    }
+                });
+            }
             return;
         }
         let (channel, message) = (panel.channel, panel.message);
@@ -1260,6 +1333,9 @@ impl GuildSession {
             return;
         }
         match edit.outcome {
+            EditOutcome::Stale => {
+                self.panel.as_mut().expect("active panel").last_view = None;
+            }
             EditOutcome::Delivered => {
                 self.panel.as_mut().expect("active panel").last_view = Some(edit.view);
                 self.edits = self.edits.saturating_add(1);
