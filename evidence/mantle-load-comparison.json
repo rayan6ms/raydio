@@ -1,0 +1,59 @@
+{
+  "date": "2026-09-05",
+  "results": [
+    {
+      "client": "default",
+      "elapsedMs": 341,
+      "identifier": "dQw4w9WgXcQ",
+      "outcome": "track"
+    },
+    {
+      "client": "default",
+      "elapsedMs": 368,
+      "identifier": "5NV6Rdv1a3I",
+      "outcome": "SourceFailure"
+    },
+    {
+      "client": "default",
+      "elapsedMs": 348,
+      "identifier": "kJQP7kiw5Fk",
+      "outcome": "SourceFailure"
+    },
+    {
+      "client": "android-vr",
+      "elapsedMs": 370,
+      "identifier": "dQw4w9WgXcQ",
+      "outcome": "track"
+    },
+    {
+      "client": "android-vr",
+      "elapsedMs": 129,
+      "identifier": "5NV6Rdv1a3I",
+      "outcome": "SourceFailure"
+    },
+    {
+      "client": "android-vr",
+      "elapsedMs": 109,
+      "identifier": "kJQP7kiw5Fk",
+      "outcome": "SourceFailure"
+    },
+    {
+      "client": "web",
+      "elapsedMs": 244,
+      "identifier": "dQw4w9WgXcQ",
+      "outcome": "SourceFailure"
+    },
+    {
+      "client": "web",
+      "elapsedMs": 120,
+      "identifier": "5NV6Rdv1a3I",
+      "outcome": "SourceFailure"
+    },
+    {
+      "client": "web",
+      "elapsedMs": 141,
+      "identifier": "kJQP7kiw5Fk",
+      "outcome": "SourceFailure"
+    }
+  ]
+}

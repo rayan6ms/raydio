@@ -1,23 +1,8 @@
-# Dependencies and build output
-node_modules/
-dist/
-coverage/
-
-# Local configuration and logs
+/target/
 .env
 .env.*
 !.env.example
 *.log
-
-# Editor and operating-system files
 .idea/
 .vscode/
 .DS_Store
-
-# Agent-only planning and project memory. Publish only the curated roadmap documents below.
-/docs/*
-!/docs/enhancement-backlog.md
-!/docs/current-system-improvements.md
-!/docs/feature-roadmap.md
-# Rust build output
-target/

@@ -1,0 +1,23 @@
+{
+  "date": "2026-09-05",
+  "results": [
+    {
+      "elapsedMs": 1157,
+      "identifier": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "result": {
+        "bytes": 3689,
+        "frames": 10
+      }
+    },
+    {
+      "error": "Mantle source or playback failed",
+      "identifier": "https://www.youtube.com/watch?v=5NV6Rdv1a3I",
+      "stage": "load"
+    },
+    {
+      "error": "Mantle source or playback failed",
+      "identifier": "https://www.youtube.com/watch?v=kJQP7kiw5Fk",
+      "stage": "load"
+    }
+  ]
+}

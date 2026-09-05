@@ -1,0 +1,29 @@
+{
+  "date": "2026-09-05",
+  "results": [
+    {
+      "elapsedMs": 1024,
+      "error": null,
+      "input": "ytmsearch:Daft Punk Get Lucky",
+      "loadType": "search",
+      "status": 200,
+      "trackCount": 20
+    },
+    {
+      "elapsedMs": 708,
+      "error": null,
+      "input": "ytsearch:Daft Punk Get Lucky",
+      "loadType": "search",
+      "status": 200,
+      "trackCount": 20
+    },
+    {
+      "elapsedMs": 329,
+      "error": null,
+      "input": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "loadType": "track",
+      "status": 200,
+      "trackCount": null
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "date": "2026-09-05",
+  "rustTests": {
+    "passed": 27,
+    "failed": 0,
+    "unit": 26,
+    "realBackendIntegration": 1
+  },
+  "checks": [
+    "cargo fmt --check",
+    "cargo test --all-targets",
+    "cargo clippy --all-targets -- -D warnings",
+    "git diff --check"
+  ],
+  "liveDiscordTested": false,
+  "endToEndRewriteComplete": false,
+  "performanceComparison": "pending parity and completion; previous failed-startup comparison withdrawn",
+  "blocker": "Mantle default YouTube loader rejects 5NV6Rdv1a3I and kJQP7kiw5Fk, both loadable by frozen original Lavalink stack on same host"
+}

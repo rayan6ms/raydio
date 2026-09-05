@@ -1,0 +1,300 @@
+[
+  {
+    "options": [
+      {
+        "autocomplete": true,
+        "type": 3,
+        "name": "request",
+        "description": "Search terms or a YouTube video or playlist URL",
+        "required": true
+      }
+    ],
+    "name": "play",
+    "description": "Play a YouTube song or add it to the queue",
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  },
+  {
+    "options": [],
+    "name": "nowplaying",
+    "description": "Show the current song and player controls",
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  },
+  {
+    "options": [],
+    "name": "queue",
+    "description": "Show the current song and upcoming queue",
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  },
+  {
+    "options": [],
+    "name": "pause",
+    "description": "Pause the current song",
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  },
+  {
+    "options": [],
+    "name": "resume",
+    "description": "Resume the current song",
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  },
+  {
+    "options": [],
+    "name": "previous",
+    "description": "Return to the previous song in this session",
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  },
+  {
+    "options": [],
+    "name": "skip",
+    "description": "Skip to the next song",
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  },
+  {
+    "options": [],
+    "name": "stop",
+    "description": "Stop playback and clear the queue",
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  },
+  {
+    "options": [
+      {
+        "min_value": 1,
+        "type": 4,
+        "name": "from",
+        "description": "Current queue position",
+        "required": true
+      },
+      {
+        "min_value": 1,
+        "type": 4,
+        "name": "to",
+        "description": "New queue position",
+        "required": true
+      }
+    ],
+    "name": "move",
+    "description": "Move an upcoming song to another queue position",
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  },
+  {
+    "options": [
+      {
+        "min_value": 1,
+        "type": 4,
+        "name": "position",
+        "description": "Upcoming queue position",
+        "required": true
+      }
+    ],
+    "name": "jump",
+    "description": "Immediately play a selected upcoming song",
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  },
+  {
+    "options": [],
+    "name": "shuffle",
+    "description": "Shuffle the upcoming queue",
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  },
+  {
+    "options": [
+      {
+        "min_value": 1,
+        "type": 4,
+        "name": "position",
+        "description": "Upcoming queue position",
+        "required": true
+      }
+    ],
+    "name": "remove",
+    "description": "Remove an upcoming song from the queue",
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  },
+  {
+    "options": [],
+    "name": "clear",
+    "description": "Clear every upcoming song",
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  },
+  {
+    "options": [
+      {
+        "max_value": 100,
+        "min_value": 0,
+        "type": 4,
+        "name": "level",
+        "description": "Volume from 0 to 100",
+        "required": false
+      }
+    ],
+    "name": "volume",
+    "description": "Show or set the player volume",
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  },
+  {
+    "options": [
+      {
+        "type": 3,
+        "choices": [
+          {
+            "name": "Off",
+            "value": "off"
+          },
+          {
+            "name": "Current song",
+            "value": "track"
+          },
+          {
+            "name": "Entire queue",
+            "value": "queue"
+          }
+        ],
+        "name": "mode",
+        "description": "Loop mode",
+        "required": true
+      }
+    ],
+    "name": "loop",
+    "description": "Choose how playback should repeat",
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  },
+  {
+    "options": [],
+    "name": "leave",
+    "description": "Leave voice and clear the playback session",
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  },
+  {
+    "options": [],
+    "name": "diagnostics",
+    "description": "Show private playback and connection health",
+    "contexts": [
+      0
+    ],
+    "default_member_permissions": "32",
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  },
+  {
+    "options": [],
+    "name": "help",
+    "description": "Show Raydio's commands and usage",
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  },
+  {
+    "options": [],
+    "name": "ping",
+    "description": "Check Discord latency and music service readiness",
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "type": 1
+  }
+]

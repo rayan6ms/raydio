@@ -1,0 +1,18 @@
+**Raydio commands**
+**Start and view**
+`/play request:` — search, play a YouTube video, or queue a playlist
+`/nowplaying` — show the modern player and controls
+`/queue` — show the current and upcoming songs
+**Playback**
+`/pause` | `/resume` — pause or resume
+`/previous` | `/skip` — move through playback history and queue
+`/stop` — stop and clear the queue
+**Queue and settings**
+`/move from: to:` | `/jump position:` — reorder or jump within the queue
+`/shuffle` | `/remove position:` | `/clear` — edit upcoming songs
+`/volume [level:]` | `/loop mode:` — player settings
+**Session and utility**
+`/leave` — disconnect and clear the session
+`/diagnostics` — private connection and playback health for server managers
+`/ping` — show Discord and Lavalink readiness
+`/help` — show this menu

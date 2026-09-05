@@ -1,184 +1,82 @@
-<p align="center">
-  <img src="icons/raydio.png" width="160" height="160" alt="Raydio logo">
-</p>
+# Raydio — Rust rewrite
 
-# Raydio
+Work in progress on branch `rewrite/rust-raydio`, in a separate Git worktree at
+`/home/rayan/Documents/Projects/raydio-rust`. The original TypeScript bot remains on `main` in
+`/home/rayan/Documents/Projects/raydio`. Legacy deployment scripts, TypeScript source/tests, and
+historical roadmaps are excluded from this branch; Git history and the original checkout preserve them.
 
-Raydio is a self-hosted, YouTube-first Discord music bot for personal servers. It uses native slash
-commands, discord.js, Shoukaku, and a private Lavalink 4 service with youtube-source.
+**Blocked on a verified Mantle YouTube loading regression.** Give [MANTLE_HANDOFF.md](MANTLE_HANDOFF.md)
+to Mantle's Codex. This checkout is not yet a working replacement for the Discord bot.
 
-The deployment is intentionally small: one stateless bot container and one Lavalink container.
-Queues live in memory, so a bot restart—or a Lavalink restart that cannot resume its session—clears
-them.
+The intended runtime is one Rust process: Twilight for Discord; private, embedded Crust for player
+orchestration; Mantle for YouTube/media; Oto for Discord voice and DAVE. Crust binds an ephemeral
+loopback port using a random process-local password. No public music-service port or JVM is needed
+by the new runtime. All three local sibling projects are used through Cargo path dependencies;
+Mantle's git dependencies in Crust are overridden to the local Mantle checkout. The supported
+revisions used for the current checks are recorded in [evidence/revisions.json](evidence/revisions.json).
 
-## Quick start
+## Implemented and checked so far
 
-You need a private Discord application, a Linux amd64/arm64 host, Docker Engine with Compose, and
-outbound HTTPS/DNS access.
+- Real Crust/Mantle/Oto dependency integration and explicit backend shutdown.
+- Lavalink v4 WebSocket session creation and server-issued session IDs, with bounded event delivery
+  and reconnect/session invalidation handling. Basic live backend lifecycle is covered by integration tests;
+  reconnect/failure behavior still needs dedicated integration tests.
+- Definitions for all 19 original slash commands and the original help text.
+- Queue, track/queue loops, skip, previous, jump, move, remove, clear, shuffle, bounded history,
+  queue admission, and three-failure recovery policy.
+- Original playback configuration defaults with explicit test-bot token selection.
+- YouTube-only input classification, playlist precedence, resolver filtering, and result limits.
+- Player and paginated queue view rendering, including the seven player buttons, artwork, progress,
+  and Unicode-safe length limits.
 
-1. Create an application in the [Discord Developer Portal](https://discord.com/developers/applications).
-   Under **General Information**, upload `icons/raydio.png` as the application icon. Upload it under
-   **Bot** too if you want the bot avatar to match.
-2. Under **Bot**, create the bot user and copy its token. Raydio requires no privileged Gateway
-   intents.
-3. Under **Installation**, enable **Guild Install**, disable **User Install**, choose the `bot` and
-   `applications.commands` scopes, and request only:
+Discord command execution, voice handshake/cache/permission handling, stale interaction enforcement,
+concurrent play cancellation, timers, autocomplete, panel refresh ownership, diagnostics, and live
+Discord tests are still pending. Do not infer completion of those features from the pure policy/view
+modules or from command registration data.
 
-   - View Channels
-   - Send Messages
-   - Connect
-   - Speak
+## Build and verification
 
-   Do not grant Administrator. Raydio synchronizes its native slash commands when it starts.
-   Use regular server text channels; forum posts and threads are outside the supported setup.
-4. Open the generated install link and add the bot to your private server.
-
-Create the ignored secrets file:
-
-```sh
-cp .env.example .env
-chmod 600 .env
-openssl rand -hex 32
-```
-
-Put the bot token in `DISCORD_TOKEN` and the generated value in `LAVALINK_PASSWORD`. Keep both as
-plain, one-line values. Then start the stack:
+Requirements: Rust 1.97.1+, C and C++ toolchains, CMake, make, and the sibling `crust`, `mantle`, and
+`oto` repositories (including their required submodules). Cargo is limited to one compilation job;
+the integrated runtime uses two Tokio workers. Upstream native codec build scripts may use two jobs.
 
 ```sh
-docker compose config --quiet
-docker compose up -d --build
-docker compose ps
-docker compose logs --tail 100 bot lavalink
+cargo fmt --check
+cargo test --all-targets
+cargo clippy --all-targets -- -D warnings
+cargo run -- --probe-backend
+cargo run --example mantle_load_probe
+cargo run --example media_probe
 ```
 
-Lavalink may need extra time on its first start to download youtube-source. Stop with
-`docker compose down`. For Oracle Cloud deployment, updates, rollback, secret rotation, monitoring,
-and troubleshooting, see [OPERATIONS.md](OPERATIONS.md).
+The explicit backend probe performs read-only YouTube metadata/search requests. The examples perform
+the documented metadata/frame checks. They do not read `.env`, log into Discord, or alter bot commands.
 
-### Automatic Windows installation and migration
-
-On 64-bit Intel/AMD Windows 10 build 19043 or newer, download
-[`scripts/windows/install-raydio.ps1`](scripts/windows/install-raydio.ps1), then run it from
-PowerShell:
-
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\install-raydio.ps1
-```
-
-The installer elevates itself, enables WSL2 if needed, resumes after the required restart, installs
-Git and rootless Podman, and clones Raydio into `%LOCALAPPDATA%\Raydio\app`. It then pauses and shows
-the exact destination `%LOCALAPPDATA%\Raydio\app\.env`. Manually copy the existing `.env` there and
-press Enter. The installer validates both existing secrets without displaying or changing them,
-locks down the file, registers startup at sign-in, and starts the stack.
-
-Only one running Raydio instance may use a Discord bot token. The installer requires confirmation
-that the old host is stopped before it registers automatic startup or starts Windows. Afterward,
-manage it with:
-
-```powershell
-& "$env:LOCALAPPDATA\Raydio\app\scripts\windows\raydio.ps1" <status|logs|update|rollback|restart|stop|doctor>
-```
-
-`update` records the prior revision and restores it automatically if readiness checks fail.
-`rollback` switches to that known-good revision, rebuilds, verifies readiness, and records the
-revision it replaced so the operation can be reversed.
-
-## Commands
-
-Enter search terms in `/play request:` to play the best YouTube match. Recognized YouTube video,
-Music, playlist, and video-with-playlist URLs are resolved directly.
-
-| Command | Behavior |
-|---|---|
-| `/play request:` | Search, join, enqueue, and play videos or playlists when idle |
-| `/nowplaying` | Show the artwork, progress, and player controls |
-| `/queue` | Show and navigate the queue |
-| `/pause` | Pause the current song |
-| `/resume` | Resume the current song |
-| `/previous` | Return to the most recent prior song in this session |
-| `/skip` | Skip to the next song |
-| `/stop` | Stop, clear the queue, and remain until the idle timeout |
-| `/move from: to:` | Move an upcoming song between displayed queue positions |
-| `/jump position:` | Immediately play one upcoming song without discarding the others |
-| `/shuffle` | Shuffle upcoming songs |
-| `/remove position:` | Remove an upcoming song by its displayed position |
-| `/clear` | Clear upcoming songs |
-| `/volume [level:]` | Show or set volume from 0 to 100 |
-| `/loop mode:` | Set loop mode using Discord's choices |
-| `/leave` | Disconnect and clear session state |
-| `/diagnostics` | Privately show playback, controls-panel, Discord, and Lavalink health to server managers |
-| `/help` | Show the command list |
-| `/ping` | Show Discord latency and Lavalink readiness |
-
-The modern player offers Previous, Pause/Resume, Next, Stop, Queue, Loop, and Leave buttons, a
-YouTube thumbnail, and a progress display refreshed every second. Player controls become
-harmless when their playback session is stale. Queue and playback transitions also trigger an
-immediate panel refresh instead of waiting for the progress interval.
-Playback-changing controls require the caller to share the bot's normal voice channel. Stage
-channels are unsupported. Read-only commands and cleanup remain available during a Lavalink outage;
-commands that need Lavalink fail fast.
-
-## Configuration reference
-
-Compose supplies the networking values and forwards tuning values from `.env`. Booleans must be
-exactly `true` or `false`; numeric bounds use decimal integers.
-
-| Variable | Default | Constraint and purpose |
-|---|---:|---|
-| `DISCORD_TOKEN` | required | Discord bot token; never log or commit it |
-| `LAVALINK_PASSWORD` | required | Random bot-to-Lavalink shared secret |
-| `LOG_LEVEL` | `info` | `fatal`, `error`, `warn`, `info`, `debug`, `trace`, or `silent` |
-| `LAVALINK_HOST` | `lavalink` | Lavalink host; Compose fixes it to `lavalink` |
-| `LAVALINK_PORT` | `2333` | Integer from 1 through 65535; Compose fixes it to 2333 |
-| `LAVALINK_SECURE` | `false` | Use TLS for an externally managed Lavalink node |
-| `DEFAULT_VOLUME` | `70` | Integer from 0 through 100 |
-| `IDLE_DISCONNECT_SECONDS` | `120` | Positive seconds with an empty queue before leaving |
-| `ALONE_DISCONNECT_SECONDS` | `120` | Positive seconds without a human listener before leaving |
-| `MAX_PLAYLIST_TRACKS` | `250` | Positive accepted-track cap per playlist |
-| `MAX_QUEUE_TRACKS` | `1000` | Positive current-plus-upcoming cap per server |
-| `MAX_PENDING_PLAY_REQUESTS` | `10` | Positive unresolved-play cap per server |
-| `MAX_TRACK_DURATION_HOURS` | `3` | Positive accepted-track duration ceiling |
-| `ALLOW_LIVESTREAMS` | `false` | Whether livestream tracks are accepted |
-
-## Development
-
-Local tooling is pinned to Node 24.19.0, npm 11.17.0, and TypeScript 7.0.2. Install from the
-lockfile and run every static check, test, and build:
+On this particular host, the available compiler is Mantle's existing cached toolchain. The following
+process-local environment was used successfully; it changes neither T3 Code nor sibling source:
 
 ```sh
-npm ci
-npm run check
+mkdir -p target/toolchain-libs
+ln -sf /usr/lib64/libstdc++.so.6 target/toolchain-libs/libstdc++.so
+
+env -u APPIMAGE -u APPDIR -u ARGV0 \
+  CC="$PWD/../mantle/.cache/media-toolchains/xaac-root/usr/bin/cc" \
+  CXX="$PWD/../mantle/.cache/media-toolchains/xaac-root/usr/bin/c++" \
+  LD_LIBRARY_PATH="$PWD/../mantle/.cache/media-toolchains/xaac-root/usr/lib64" \
+  LIBRARY_PATH="$PWD/target/toolchain-libs" \
+  cargo test --all-targets
 ```
 
-`npm run dev` watches TypeScript source, `npm run build` creates `dist/`, and `npm start` runs that
-build. The development and start scripts load an existing `.env`; shell variables take precedence.
-The complete two-service stack is supported through Compose.
+Use that same environment for other Cargo commands that build native dependencies. Prefer an
+installed compiler for normal development; these cache paths are an environment-specific workaround.
 
-## Roadmaps
+## Performance status
 
-The [current-system improvement plan](docs/current-system-improvements.md) records the latest full
-diagnostic and prioritizes security, reliability, maintainability, testing, operations, and existing
-UX work. New user-facing ideas are kept separately in the [feature roadmap](docs/feature-roadmap.md)
-so maintenance needs and product expansion are not mixed together. The historical
-[enhancement backlog](docs/enhancement-backlog.md) retains completed passes and earlier decisions.
+A valid end-to-end comparison is pending completion and playback parity. Earlier 98 MiB versus 9 MiB
+figures compared different failed startup paths and **do not establish a performance improvement**.
+The final comparison must include the complete original Node + Lavalink stack and the complete Rust
+bot under the same idle, playback, and queue/control workloads, with repeated startup time, CPU,
+RSS/PSS, and command latency measurements. Any source failures must be reported separately.
 
-## Boundaries and recovery
-
-Raydio has no database, persistence, autoplay, Spotify/SoundCloud or arbitrary-HTTP playback,
-dashboard, public metrics endpoint, multi-node failover, horizontal scaling, Stage support, or
-supported forum/thread command surface. It is built for personal/private servers, not public
-multi-tenant use. `/diagnostics` is ephemeral, restricted to server managers, and reports bounded
-counters and connection timestamps without track, requester, search, URL, or secret data.
-
-Idle or listener-empty sessions disconnect on their configured timers. Manual bot moves clear that
-server's state. Brief Lavalink WebSocket interruptions can resume for up to 60 seconds; a Lavalink
-restart or exhausted reconnect window clears affected queues. YouTube behavior remains dependent on
-upstream availability.
-
-Never commit `.env` or include it, resolved container environments, authorization headers, or tokens
-in logs and reports. Lavalink port 2333 stays private to the Compose network. Rotate a Discord token
-immediately if a real token is exposed.
-
-## License
-
-Raydio is available under the [MIT License](LICENSE).
+The original suite passed 149 tests before isolation. Rust verification results and the current source
+compatibility blocker are recorded under [evidence](evidence/).

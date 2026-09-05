@@ -1,25 +1,47 @@
 [package]
 name = "raydio"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.97.1"
+license = "MIT"
+description = "A lightweight YouTube-first Discord music bot powered by Crust, Mantle, and Oto"
 
 [dependencies]
-anyhow = "1"
-dotenvy = "0.15"
-futures-util = "0.3"
-reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
-rand = "0.9"
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
-tokio = { version = "1", features = ["macros", "rt-multi-thread", "sync", "time", "signal"] }
-tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
-urlencoding = "2"
-twilight-gateway = { version = "0.17", features = ["rustls-native-roots"] }
-twilight-model = "0.17"
+anyhow = "1.0.104"
+dotenvy = "0.15.7"
+futures-util = "0.3.34"
+rand = "0.9.5"
+reqwest = { version = "0.12.28", default-features = false, features = ["json", "rustls-tls"] }
+serde = { version = "1.0.229", features = ["derive", "rc"] }
+serde_json = "1.0.151"
+tokio = { version = "1.53.1", features = ["macros", "rt-multi-thread", "sync", "time", "signal", "test-util"] }
+tokio-util = { version = "0.7.19", features = ["rt"] }
+tokio-tungstenite = { version = "0.29.0", features = ["rustls-tls-native-roots"] }
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter", "fmt", "json"] }
+twilight-gateway = { version = "0.17.1", default-features = false, features = ["rustls-native-roots", "zlib"] }
+twilight-http = { version = "0.17.1", default-features = false, features = ["rustls-native-roots"] }
+twilight-model = "0.17.1"
+url = "2.5.8"
+crust = { path = "../crust/crates/crust" }
+crust-server = { path = "../crust/crates/crust-server" }
+crust-mantle-adapter = { path = "../crust/crates/crust-mantle-adapter" }
+crust-oto-adapter = { path = "../crust/crates/crust-oto-adapter" }
+
+[patch.crates-io]
+openmls_rust_crypto = { path = "../oto/vendor/openmls_rust_crypto" }
+
+[patch."https://github.com/rayan6ms/mantle"]
+mantle-audio = { path = "../mantle/crates/mantle-audio" }
+mantle-core = { path = "../mantle/crates/mantle-core" }
+mantle-media = { path = "../mantle/crates/mantle-media" }
+
+[profile.dev]
+debug = 0
 
 [profile.release]
-lto = "thin"
-codegen-units = 1
-panic = "abort"
+strip = "debuginfo"
+
+[dev-dependencies]
+mantle-core = { path = "../mantle/crates/mantle-core" }
+mantle-media = { path = "../mantle/crates/mantle-media" }

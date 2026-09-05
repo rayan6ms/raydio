@@ -1,0 +1,39 @@
+{
+  "lavalink": "4.2.2",
+  "youtubeSource": "1.18.2",
+  "results": [
+    {
+      "identifier": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "loadType": "track",
+      "elapsedMs": 706
+    },
+    {
+      "identifier": "https://www.youtube.com/watch?v=5NV6Rdv1a3I",
+      "loadType": "track",
+      "elapsedMs": 1168
+    },
+    {
+      "identifier": "https://www.youtube.com/watch?v=kJQP7kiw5Fk",
+      "loadType": "track",
+      "elapsedMs": 259
+    },
+    {
+      "identifier": "ytmsearch:Daft Punk Get Lucky",
+      "loadType": "search",
+      "elapsedMs": 845,
+      "firstIdentifier": "4D7u5KF7SP8"
+    }
+  ],
+  "artifacts": {
+    "Lavalink.jar": "8cb801e591072c3689fafd71ccf571a95a4ead3cc35dfc045e157d763d89119a",
+    "youtube-plugin-1.18.2.jar": "fc1128b606b54fda124b78d261c3878198116028baf00f7bd014f44bab95d77d",
+    "original-application.yml": "20123e8cae928d6d62bc740312ebac17337f8872422dd202337ca74bb8508d80"
+  },
+  "date": "2026-09-05",
+  "processLimits": {
+    "javaHeap": "64\u2013192 MiB",
+    "activeProcessorCount": 2,
+    "bind": "loopback ephemeral port",
+    "credentials": "random test password; no Discord or YouTube credentials"
+  }
+}
