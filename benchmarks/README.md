@@ -73,6 +73,7 @@ code are identical. Locally the original executable is preserved as
   Raydio without changing those behaviors.
 - Did not claim startup or idle CPU improvement: the startup median was 2.608s
   before and 2.658s after, and idle CPU was near measurement resolution.
-- Live playback-memory and browser click-latency measurements require the user
-  to sign in to the reopened controlled Discord tab. The previous live datasets
-  have not been relabeled as measurements of this build.
+- Fresh receiver and playback-memory runs are in `evidence/PERFORMANCE.md`.
+  The browser audit now selects an advancing stream and times its own windows.
+  A player-panel edit race found by the control test is fixed; control speedup
+  remains unclaimed because the failed baseline is not a valid comparison.

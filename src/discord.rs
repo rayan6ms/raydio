@@ -154,17 +154,26 @@ impl Request {
         .await??;
         Ok(response.model().await?)
     }
-    /// Update an interaction response when the returned message is not needed.
-    /// Avoids deserializing the complete Discord message.
+    /// Edit a deferred player component through the same channel route as its
+    /// periodic refresh. Mixing webhook and channel edits allowed Discord to
+    /// persist an older progress snapshot after a newer control snapshot.
+    /// Drain the response before the next edit without decoding a Message.
     pub async fn respond_no_model(&self, http: &Client, view: &View) -> Result<()> {
-        timeout(
-            Duration::from_secs(8),
-            http.interaction(self.interaction.application_id)
-                .update_response(&self.interaction.token)
+        let message = self
+            .interaction
+            .message
+            .as_ref()
+            .ok_or_else(|| anyhow::anyhow!("Player component has no message"))?;
+        timeout(Duration::from_secs(8), async {
+            http.update_message(message.channel_id, message.id)
                 .content(view.content.as_deref())
                 .embeds(Some(&view.embeds))
-                .components(Some(&view.components)),
-        )
+                .components(Some(&view.components))
+                .await?
+                .bytes()
+                .await?;
+            Ok::<(), anyhow::Error>(())
+        })
         .await??;
         Ok(())
     }

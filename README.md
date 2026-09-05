@@ -74,7 +74,9 @@ The earlier tuned TypeScript + Lavalink stack measured 338.7 MiB idle PSS and
 Fresh receiver captures validated advancing encrypted audio across each full
 60-second window. Both builds had one net lost packet, no full-scale PCM samples,
 and no non-finite samples. Small concealment events remained; this does not prove
-zero glitches on every network. No fresh control-latency improvement is claimed.
+zero glitches on every network. Five-minute tests also crossed the loop boundary.
+A stale player-panel update was fixed and passed 24 consecutive controls; no
+fresh control-latency improvement is claimed.
 
 See [performance evidence and limitations](evidence/PERFORMANCE.md) for exact
 observations, withdrawn results, and reproduction commands. The bot suite passes

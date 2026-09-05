@@ -1,0 +1,108 @@
+{
+  "results": [
+    {
+      "action": "Pause",
+      "ms": 1180.199999988079
+    },
+    {
+      "action": "Resume",
+      "ms": 1191.300000011921
+    },
+    {
+      "action": "Pause",
+      "ms": 1969.199999988079
+    },
+    {
+      "action": "Resume",
+      "ms": 991.3000000119209
+    },
+    {
+      "action": "Pause",
+      "ms": 1203.0999999940395
+    },
+    {
+      "action": "Resume",
+      "ms": 1165.0999999940395
+    },
+    {
+      "action": "Pause",
+      "ms": 1803
+    },
+    {
+      "action": "Resume",
+      "ms": 1304.4000000059605
+    },
+    {
+      "action": "Pause",
+      "ms": 2235.9000000059605
+    },
+    {
+      "action": "Resume",
+      "ms": 993
+    },
+    {
+      "action": "Pause",
+      "ms": 1351.7000000178814
+    },
+    {
+      "action": "Resume",
+      "ms": 1274.5999999940395
+    },
+    {
+      "action": "Pause",
+      "ms": 1145.8999999761581
+    },
+    {
+      "action": "Resume",
+      "ms": 1148.5999999940395
+    },
+    {
+      "action": "Pause",
+      "ms": 1406.1000000238419
+    },
+    {
+      "action": "Resume",
+      "ms": 1069.800000011921
+    },
+    {
+      "action": "Pause",
+      "ms": 1110.5999999940395
+    },
+    {
+      "action": "Resume",
+      "ms": 1286.300000011921
+    },
+    {
+      "action": "Pause",
+      "ms": 1232.2999999821186
+    },
+    {
+      "action": "Resume",
+      "ms": 1868.199999988079
+    },
+    {
+      "action": "Pause",
+      "ms": 1157.5
+    },
+    {
+      "action": "Resume",
+      "ms": 1088.2000000178814
+    },
+    {
+      "action": "Pause",
+      "ms": 1101
+    },
+    {
+      "action": "Resume",
+      "ms": 1458.300000011921
+    }
+  ],
+  "settleMs": 2000,
+  "valid": true,
+  "buildProfile": "debug",
+  "change": "Use channel message route for both controls and refresh; drain successful bodies without decoding",
+  "limitations": [
+    "24 actions in one live run on a shared host",
+    "Correctness reproduction; no matched speedup claim because baseline reverted or timed out"
+  ]
+}

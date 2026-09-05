@@ -66,3 +66,24 @@ of playback. It stores aggregate PCM statistics, not audio recordings.
 The release also strips nonresident symbol tables, adds systemd readiness, and
 uses public dependency pins. Those deployment changes require their own final
 artifact validation; the table above describes the measured compiler experiment.
+
+## Extended audio and controls
+
+Five-minute runs crossed a full 3:33 song loop with the same receiver and advancing
+player positions throughout. [Baseline](audio-baseline-soak.json) and
+[size-optimized](audio-global-s-soak.json) captures recorded 14,945 and 14,973
+received packets, respectively; net loss was 3 and 2 packets. Both had zero
+full-scale and non-finite samples. Cumulative concealment was 89,052 and 40,967
+samples (~1.855 s and ~0.853 s), and mean receiver buffer residence was 145.4 and
+102.9 ms. These runs include the natural loop reload and network variation;
+they are evidence of functioning extended playback, not a causal audio-quality
+speedup or a gapless guarantee.
+
+Rapid control testing exposed a separate correctness bug: the bot reported paused
+while both Discord's stored message and the browser displayed Playing. Player
+controls edited via a webhook while the periodic refresh used the channel route.
+Controls now use that same channel route, and edits consume response bodies before
+the next update. The [24-action reproduction](controls-channel-route.json) passed
+without a reversion after the change; the final stored Discord message agreed.
+The regression test checks the route and absence of duplicate edits. This is a
+correctness improvement, not a claimed latency reduction.

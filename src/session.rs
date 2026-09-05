@@ -1198,7 +1198,10 @@ impl GuildSession {
         )
         .await;
         match result {
-            Ok(Ok(_)) => {
+            Ok(Ok(response)) => {
+                // The edit succeeded. Drain without decoding, bounded so a
+                // slow response body cannot hold the guild actor indefinitely.
+                let _ = timeout(Duration::from_secs(2), response.bytes()).await;
                 self.panel.as_mut().expect("active panel").last_view = Some(view);
                 self.edits = self.edits.saturating_add(1);
                 if self.queue.current.is_none() {
@@ -1339,9 +1342,12 @@ mod tests {
     #[tokio::test]
     async fn successful_pause_button_edits_once_and_does_not_decode_message_body() {
         let calls = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+        let paths = Arc::new(std::sync::Mutex::new(Vec::new()));
+        let observed_paths = paths.clone();
         let observed = calls.clone();
-        let router = axum::Router::new().fallback(move || {
+        let router = axum::Router::new().fallback(move |uri: axum::http::Uri| {
             observed.fetch_add(1, Ordering::Relaxed);
+            observed_paths.lock().unwrap().push(uri.path().to_owned());
             async { axum::Json(json!({})) }
         });
         let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
@@ -1376,6 +1382,7 @@ mod tests {
         session.interaction(button).await;
         assert!(session.paused);
         assert_eq!(calls.load(Ordering::Relaxed), 1);
+        assert!(paths.lock().unwrap()[0].ends_with("/channels/3/messages/5"));
         assert_eq!(
             session.panel.as_ref().unwrap().last_view.as_ref(),
             Some(&session.player_view())
