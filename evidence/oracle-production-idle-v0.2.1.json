@@ -1,0 +1,46 @@
+{
+  "date": "2026-09-06T13:34:25.204798+00:00",
+  "stack": "Production Raydio v0.2.1 on Oracle Always Free E2.1.Micro",
+  "workload": "Authenticated idle production bot, no active voice socket, Testbot stopped, all diagnostic overrides removed",
+  "limitations": [
+    "Shared host",
+    "3 consecutive windows in one warmed process; not independent process restarts",
+    "This sampler does not assess audio quality; automated receiver evidence is recorded separately"
+  ],
+  "processCount": 1,
+  "executables": [
+    {
+      "name": "raydio",
+      "sha256": "9321d226c186224701bb1384558321e972969249756541e538c3f215c0c045ec"
+    }
+  ],
+  "trials": [
+    {
+      "trial": 1,
+      "observationSeconds": 15.021,
+      "medianRssKiB": 15132,
+      "medianPssKiB": 12683,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.067,
+      "maxThreads": 3
+    },
+    {
+      "trial": 2,
+      "observationSeconds": 15.021,
+      "medianRssKiB": 15132,
+      "medianPssKiB": 12683,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "maxThreads": 3
+    },
+    {
+      "trial": 3,
+      "observationSeconds": 15.021,
+      "medianRssKiB": 15132,
+      "medianPssKiB": 12683,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.067,
+      "maxThreads": 3
+    }
+  ]
+}

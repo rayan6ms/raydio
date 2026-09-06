@@ -60,6 +60,95 @@ Warm idle after playback is a different workload and must be labelled separately
 
 Further matched worker-count and corrected-package audio measurements follow.
 
+## Packaged release, host scheduling, and measurement interference
+
+Release `v0.2.1` passed native x86-64 and ARM64 CI and was deployed using
+`sudo raydioctl update v0.2.1`. Production readiness passed. Its x86 binary
+SHA256 is `9321d226c186224701bb1384558321e972969249756541e538c3f215c0c045ec`;
+this exactly matches the earlier `f4bfcf5` CI binary used in the following
+receiver tests. See `release-validation-v0.2.1.json`.
+
+The 150-second packaged-release test had 43 sender intervals over 40 ms,
+maximum 98.154 ms, 1,684.729 ms receiver concealment, two silent PCM blocks
+(85.333 ms maximum quiet run), and eight speaking interruptions. No send/RTP
+errors or net packet loss were reported. An independent 20 ms sleeper also
+stalled: 36 of the 43 sender gaps overlapped a delayed independent wakeup.
+The guest reported 2.83% average CPU steal in the receiver-aligned snapshots,
+with individual one-second windows around 40–45%. Idle-only probes had missed
+this behavior. See `oracle-motd-comparison.json` and raw `scheduler-release.json`.
+
+A bounded 60-second kernel scheduling trace showed SSH login generating
+`landscape-sysinfo` and update-status scripts. One landscape on-CPU wall interval
+was 173.962 ms; wall duration includes hypervisor descheduling and is not its
+CPU consumption. Ubuntu's landscape wrapper itself notes the CPU cost and
+caches results for only one minute. Fresh administrative logins during tests
+were therefore a source of interference on this fractional-CPU VM.
+
+The dynamic SSH `pam_motd.so` entry now uses `noupdate`; authentication and
+account rules were preserved. A backup is retained on the VM. `sshd -t` and
+twelve new SSH logins passed. A repeated kernel trace contained zero landscape
+or update-status script switch-ins. The repeated receiver window had 35 sender
+gaps over 40 ms (maximum 101.357 ms), 1,642.750 ms concealment, zero silent PCM
+blocks, and two speaking interruptions. This removes a specific source of
+load but **does not establish a complete audio fix**. Average steal remained
+2.12%, and 32 of 35 gaps overlapped the independent sleeper. The repeat had
+twelve deliberate logins rather than the baseline's incidental login pattern;
+the captures are sequential and not randomized.
+
+The baseline's 12 alternating Pause/Resume UI checks all passed. The later
+repeat only completed ten before the track ended and the control panel expired;
+do not use that timeout as a valid latency comparison. Neither test measures
+audible pause latency. Raw captures retain both results.
+
+## Quiet playback qualification
+
+A subsequent full track with no new SSH logins, kernel tracing, builds, or
+controls delivered all 10,658 packets in 213.440 seconds, with seven sender
+intervals over 40 ms and maximum 60.310 ms. Its receiver capture started 38.053
+seconds into playback and extended past EOF to 218.080 seconds. The recorded
+quiet tail is expected after EOF and is **invalid for stutter qualification**;
+retain `audio-oracle-quiet-over-eof.json` without presenting its silence as a bug.
+
+A fresh, automatically started 150-second repeat recorded 7,501 received packets,
+zero net packet loss, zero silent PCM blocks, zero clipping, no speaking changes,
+and **95.563 ms concealed audio**. Aligned sender intervals had **zero over 40 ms**,
+16 over 25 ms, maximum **34.359 ms**, and zero send or RTP discontinuities.
+The earlier local same-stack comparison had 74.708 ms concealment and maximum
+21.027 ms spacing. Oracle's quiet repeat approaches that result but does not
+prove identical timing or six-hour reliability. The preceding quiet track still
+had seven gaps over 40 ms, so retain run-to-run variation. See
+`oracle-quiet-comparison.json` and `audio-oracle-quiet-repeat.json`.
+
+Quiet playback PSS was 16,221–16,505 KiB in the sampler windows after startup;
+steady CPU was about 4.34–5.44% of one core. These are warmed Testbot playback
+figures and **not a new authenticated-idle memory improvement**. The source/voice
+packet diagnostic writes only header counters and is not linked into production.
+
+A longer repeat kept the same Testbot alive and played three consecutive track
+loops over approximately ten minutes. Three automatic 150-second captures
+started at positions 2, 0, and 0 seconds. All three had **zero reported packet
+loss, zero silent PCM blocks, zero clipping, and no speaking interruptions**.
+Receiver concealment was 455.979, 19.896, and 51.958 ms; sender gaps over 40 ms
+were 5, 1, and 0, with maximum spacing 80.030, 59.520, and 36.483 ms. There were
+no send errors or RTP sequence/timestamp discontinuities in the aligned windows.
+This is repeatable evidence of continuous received sound, while the first window
+still demonstrates timing variability. The natural tails and intervals between
+captures are not receiver-qualified, and this is not a six-hour endurance test.
+See `oracle-release-soak.json` and `audio-oracle-soak-{1,2,3}.json`.
+
+The warmed multi-track process retained 17,936–18,064 KiB PSS (17.52–17.64 MiB)
+in playback windows after the initial idle window, at approximately 4.1–4.4%
+of one core in fully active windows. The additional retained memory compared
+with an initial track is reported, not hidden as a memory improvement. See
+`oracle-soak-memory.json`. Testbot and all temporary service overrides were
+stopped/removed after testing; production uses no packet interposer.
+
+Final production authenticated idle after Testbot cleanup measured 12,683 KiB
+PSS (12.39 MiB), 15,132 KiB RSS, three threads, and 0–0.067% of one core across
+three 15-second samples. `MemoryCurrent` was only 2,691,072 bytes and must not
+be substituted for PSS. This is a fresh state measurement, not evidence of a
+new memory reduction. See `oracle-production-idle-v0.2.1.json`.
+
 ## Fresh CI package and source diagnostic
 
 The one-worker CI package `1e944a9` completed the track, but failed the receiver

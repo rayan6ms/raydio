@@ -1,0 +1,107 @@
+{
+  "date": "2026-09-06",
+  "release": "v0.2.1",
+  "binarySha256": "9321d226c186224701bb1384558321e972969249756541e538c3f215c0c045ec",
+  "scope": "Three consecutive plays of dQw4w9WgXcQ, loop enabled, volume 70, Oracle E2.1.Micro, two workers. 150-second windows near each track start; one browser connection and warmed Testbot. No new SSH, kernel tracing, builds or controls during windows. UDP metadata tracing plus 1-second vmstat and process-memory sampling remained active.",
+  "limitations": [
+    "The intervals between measured windows include natural track tails and restarts; those intervals are not receiver-qualified",
+    "This is about ten minutes of playback, not a six-hour endurance test",
+    "CPU steal and external Internet conditions can still vary"
+  ],
+  "clockMapping": {
+    "startedUnixNs": 1788700974958392709,
+    "startedMonoNs": 34576891554667
+  },
+  "windows": [
+    {
+      "index": 1,
+      "startedAt": "2026-09-06T13:23:37.002Z",
+      "finishedAt": "2026-09-06T13:26:08.021Z",
+      "positionAtStart": 2,
+      "elapsedSeconds": 150.015755859375,
+      "receiverPackets": 7487,
+      "lostPackets": 0,
+      "concealedMs": 455.9791666666667,
+      "checks": {
+        "noClipping": true,
+        "noConcealment": false,
+        "noNetPacketLoss": true,
+        "noSilentPcmBlocks": true,
+        "uninterruptedSpeaking": true
+      },
+      "silentBlocks": 0,
+      "longestQuietMs": 0,
+      "speakingChanges": 0,
+      "sender": {
+        "packets": 7487,
+        "maxGapMs": 80.030187,
+        "over40": 5,
+        "over25": 34,
+        "maxSendCallMs": 15.586139,
+        "sendErrors": 0,
+        "rtpSequenceErrors": 0,
+        "rtpTimestampErrors": 0
+      }
+    },
+    {
+      "index": 2,
+      "startedAt": "2026-09-06T13:27:08.111Z",
+      "finishedAt": "2026-09-06T13:29:39.124Z",
+      "positionAtStart": 0,
+      "elapsedSeconds": 150.01038403320314,
+      "receiverPackets": 7499,
+      "lostPackets": 0,
+      "concealedMs": 19.895833333333332,
+      "checks": {
+        "noClipping": true,
+        "noConcealment": false,
+        "noNetPacketLoss": true,
+        "noSilentPcmBlocks": true,
+        "uninterruptedSpeaking": true
+      },
+      "silentBlocks": 0,
+      "longestQuietMs": 0,
+      "speakingChanges": 0,
+      "sender": {
+        "packets": 7499,
+        "maxGapMs": 59.51974,
+        "over40": 1,
+        "over25": 10,
+        "maxSendCallMs": 2.166624,
+        "sendErrors": 0,
+        "rtpSequenceErrors": 0,
+        "rtpTimestampErrors": 0
+      }
+    },
+    {
+      "index": 3,
+      "startedAt": "2026-09-06T13:30:41.578Z",
+      "finishedAt": "2026-09-06T13:33:12.602Z",
+      "positionAtStart": 0,
+      "elapsedSeconds": 150.02076098632813,
+      "receiverPackets": 7502,
+      "lostPackets": 0,
+      "concealedMs": 51.958333333333336,
+      "checks": {
+        "noClipping": true,
+        "noConcealment": false,
+        "noNetPacketLoss": true,
+        "noSilentPcmBlocks": true,
+        "uninterruptedSpeaking": true
+      },
+      "silentBlocks": 0,
+      "longestQuietMs": 0,
+      "speakingChanges": 0,
+      "sender": {
+        "packets": 7501,
+        "maxGapMs": 36.483249,
+        "over40": 0,
+        "over25": 20,
+        "maxSendCallMs": 4.353234,
+        "sendErrors": 0,
+        "rtpSequenceErrors": 0,
+        "rtpTimestampErrors": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "checkedOn": "2026-09-06",
+  "usage": {
+    "hoursPerDay": 6,
+    "simultaneousVoiceChannels": 1,
+    "requiresUnattendedRenewal": true,
+    "budgetDollars": 0
+  },
+  "voiceEstimate": {
+    "udpDatagramBytesPerSecond": 14535,
+    "ipv4UdpHeaderBytesPerSecond": 1400,
+    "monthlyHours30Days": 180,
+    "monthlyBytes30Days": 10325880000,
+    "railwayEgressDollarsDecimalGB": 0.516294
+  },
+  "candidates": [
+    {
+      "provider": "Railway",
+      "officialRecurringFreeCreditDollars": 1,
+      "accountState": "Limited Trial with restricted networking after GitHub sign-in; no project or paid plan created",
+      "estimatedTotalDollarsBeforeIdleCpuControlAndBuilds": [
+        0.89,
+        1.02
+      ],
+      "qualified": false
+    },
+    {
+      "provider": "Bot-Hosting.net",
+      "freeRamMiB": 256,
+      "renewalDays": 4,
+      "renewalGuide": "Dashboard bot check followed by Renew for 4 days",
+      "officialApiRenewalFound": false,
+      "freeUptimeCommitment": false,
+      "qualified": false,
+      "reason": "No documented unattended renewal"
+    },
+    {
+      "provider": "Discloud",
+      "freeRamMB": 100,
+      "freeBots": 1,
+      "rustSupported": true,
+      "automaticRestart": "Documented as Platinum or higher",
+      "freeShutdownFAQ": "Unfinished",
+      "qualified": false
+    },
+    {
+      "provider": "Square Cloud",
+      "freePlan": false,
+      "qualified": false
+    },
+    {
+      "provider": "Northflank",
+      "alwaysOnSandbox": true,
+      "cardRequired": true,
+      "productionUse": "Current docs advise against",
+      "freeEgressCeilingVerified": false,
+      "qualified": false
+    }
+  ],
+  "decision": "Retain existing one-instance Always Free Oracle deployment while measuring audio; no paid host or second Oracle instance created",
+  "sources": [
+    "https://docs.railway.com/pricing/plans",
+    "https://docs.railway.com/pricing/free-trial",
+    "https://bot-hosting.net/pricing",
+    "https://bot-hosting.net/legal",
+    "https://bot-hosting.net/docs/guides/renew-free-subscription",
+    "https://bot-hosting.net/api",
+    "https://bot-hosting.net/mcp",
+    "https://discloud.com/plans",
+    "https://docs.discloud.com/configurations/discloud.config",
+    "https://docs.squarecloud.app/en/platform/plans",
+    "https://northflank.com/docs/v1/application/billing/pricing-on-northflank"
+  ]
+}

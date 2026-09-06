@@ -1,5 +1,19 @@
 # Rust memory comparison
 
+For live cloud audio, avoid new SSH logins, builds, and kernel tracing during the
+quiet receiver window. Ubuntu's dynamic SSH MOTD generation was observed to
+disturb the fractional-CPU Oracle VM. A running bot and zero net packet loss do
+not establish good audio: record concealment, PCM silence/clipping, speaking
+changes, and sender timing separately. Start captures automatically early in a
+track and finish before EOF; natural ending silence must not count as stutter.
+
+`playback_scheduler.py --pid PID --seconds 180 --output report.json` is a bounded
+Linux diagnostic for a separate investigation window. It reads per-thread
+scheduling counters once per second and measures independent 20 ms wakeups.
+It must target the owned `raydio` or `testbot-release` process. Run it using
+`uv run --no-project` locally or the standard-library Python interpreter on the
+VM. Its own load and sampling limits must be retained in the interpretation.
+
 For the current release experiment, exact binary hashes, live receiver captures,
 and reproduction commands, start with [performance evidence](../evidence/PERFORMANCE.md).
 The allocation experiment below documents an earlier optimization round.

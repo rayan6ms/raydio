@@ -1,0 +1,109 @@
+{
+  "date": "2026-09-06T13:11:17.073639+00:00",
+  "stack": "Oracle release v0.2.1, two workers, cached MOTD, no concurrent SSH or perf trace",
+  "workload": "First window includes startup; subsequent windows one General voice channel dQw4w9WgXcQ volume70",
+  "limitations": [
+    "Shared host",
+    "10 consecutive windows in one warmed process; not independent process restarts",
+    "This sampler does not assess audio quality; automated receiver evidence is recorded separately"
+  ],
+  "processCount": 1,
+  "executables": [
+    {
+      "name": "testbot-release",
+      "sha256": "9321d226c186224701bb1384558321e972969249756541e538c3f215c0c045ec"
+    }
+  ],
+  "trials": [
+    {
+      "trial": 1,
+      "observationSeconds": 20.027,
+      "medianRssKiB": 18650.0,
+      "medianPssKiB": 16167.0,
+      "cpuSeconds": 0.53,
+      "cpuPercentOneCore": 2.646,
+      "maxThreads": 5
+    },
+    {
+      "trial": 2,
+      "observationSeconds": 20.027,
+      "medianRssKiB": 18704.0,
+      "medianPssKiB": 16221.0,
+      "cpuSeconds": 0.88,
+      "cpuPercentOneCore": 4.394,
+      "maxThreads": 5
+    },
+    {
+      "trial": 3,
+      "observationSeconds": 20.026,
+      "medianRssKiB": 18964.0,
+      "medianPssKiB": 16481.0,
+      "cpuSeconds": 0.87,
+      "cpuPercentOneCore": 4.344,
+      "maxThreads": 5
+    },
+    {
+      "trial": 4,
+      "observationSeconds": 20.027,
+      "medianRssKiB": 18964.0,
+      "medianPssKiB": 16481.0,
+      "cpuSeconds": 0.91,
+      "cpuPercentOneCore": 4.544,
+      "maxThreads": 5
+    },
+    {
+      "trial": 5,
+      "observationSeconds": 20.038,
+      "medianRssKiB": 18856.0,
+      "medianPssKiB": 16373.0,
+      "cpuSeconds": 0.89,
+      "cpuPercentOneCore": 4.441,
+      "maxThreads": 5
+    },
+    {
+      "trial": 6,
+      "observationSeconds": 20.026,
+      "medianRssKiB": 18988.0,
+      "medianPssKiB": 16505.0,
+      "cpuSeconds": 0.89,
+      "cpuPercentOneCore": 4.444,
+      "maxThreads": 5
+    },
+    {
+      "trial": 7,
+      "observationSeconds": 20.041,
+      "medianRssKiB": 18988.0,
+      "medianPssKiB": 16505.0,
+      "cpuSeconds": 1.09,
+      "cpuPercentOneCore": 5.439,
+      "maxThreads": 5
+    },
+    {
+      "trial": 8,
+      "observationSeconds": 20.028,
+      "medianRssKiB": 18988.0,
+      "medianPssKiB": 16505.0,
+      "cpuSeconds": 0.87,
+      "cpuPercentOneCore": 4.344,
+      "maxThreads": 5
+    },
+    {
+      "trial": 9,
+      "observationSeconds": 20.028,
+      "medianRssKiB": 18860.0,
+      "medianPssKiB": 16377.0,
+      "cpuSeconds": 0.9,
+      "cpuPercentOneCore": 4.494,
+      "maxThreads": 5
+    },
+    {
+      "trial": 10,
+      "observationSeconds": 20.026,
+      "medianRssKiB": 18988.0,
+      "medianPssKiB": 16505.0,
+      "cpuSeconds": 0.93,
+      "cpuPercentOneCore": 4.644,
+      "maxThreads": 5
+    }
+  ]
+}

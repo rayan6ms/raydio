@@ -19,11 +19,23 @@
   "production": {
     "identity": "Raydio",
     "runtime": "Rust",
-    "revision": "3c6c2a41508f759d813fbafb32769bacdd30071c",
+    "revision": "7c8307630fdee555aa534ed017743d0c73781da2",
     "systemdActive": true,
     "systemdEnabled": true,
-    "restarts": 0
+    "restarts": 0,
+    "release": "v0.2.1",
+    "idlePssKiB": 12683,
+    "idleRssKiB": 15132,
+    "threads": 3,
+    "packetInterposer": false
   },
   "localBots": [],
-  "qualification": "Deployed, but audio quality has not passed qualification. Temporary diagnostic Testbot runs on the same VM during testing; it is not another instance."
+  "qualification": "Quiet release playback approached local timing. Three 150-second windows across roughly ten minutes had no reported loss, silence, clipping or speaking interruptions, but late-frame concealment and variable sender gaps remained. Not a six-hour endurance guarantee.",
+  "verifiedAtUtc": "2026-09-06T13:36:47.938975+00:00",
+  "testbot": {
+    "localRunning": false,
+    "oracleRunning": false,
+    "temporaryServiceRemoved": true,
+    "temporaryTokenFileRemoved": true
+  }
 }

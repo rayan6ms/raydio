@@ -1,0 +1,40 @@
+{
+  "date": "2026-09-06",
+  "release": "v0.2.1",
+  "binarySha256": "9321d226c186224701bb1384558321e972969249756541e538c3f215c0c045ec",
+  "scope": "Quiet 150-second receiver window with no fresh SSH sessions, kernel tracing, builds or controls. UDP metadata interposer and 1-second vmstat remained active. Cached MOTD enabled. Sequential, not randomized.",
+  "clockMapping": {
+    "startedUnixNs": 1788700646272329222,
+    "startedMonoNs": 34248205491411
+  },
+  "receiver": {
+    "elapsedSeconds": 150.0251640625,
+    "packets": 7501,
+    "lost": 0,
+    "concealedMs": 95.5625,
+    "checks": {
+      "noClipping": true,
+      "noConcealment": false,
+      "noNetPacketLoss": true,
+      "noSilentPcmBlocks": true,
+      "uninterruptedSpeaking": true
+    },
+    "silentPcmBlocks": 0,
+    "speakingChanges": 0
+  },
+  "sender": {
+    "packets": 7502,
+    "maxGapMs": 34.358933,
+    "over40": 0,
+    "over25": 16,
+    "maxSendCallMs": 4.630104,
+    "sendErrors": 0,
+    "rtpSequenceErrors": 0,
+    "rtpTimestampErrors": 0
+  },
+  "limitations": [
+    "Short capture is not proof of six-hour reliability",
+    "Earlier quiet full track had seven intervals over 40 ms in 213.440 seconds, max 60.310 ms; variability remains",
+    "Do not classify audio-oracle-quiet-over-eof.json terminal silence as stutter: capture ran from 38.053 seconds to 218.080 seconds, beyond 213.440-second sender completion"
+  ]
+}

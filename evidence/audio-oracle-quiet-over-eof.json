@@ -1,0 +1,1852 @@
+{
+  "audio": {
+    "checks": {
+      "noClipping": true,
+      "noConcealment": false,
+      "noNetPacketLoss": true,
+      "noSilentPcmBlocks": false,
+      "uninterruptedSpeaking": false
+    },
+    "current": {
+      "bytesReceived": 2771102,
+      "concealedSamples": 235272,
+      "concealmentEvents": 14,
+      "jitter": 0.003,
+      "jitterBufferDelay": 714432,
+      "jitterBufferEmittedCount": 10223040,
+      "packetsLost": 0,
+      "packetsReceived": 10654,
+      "silentConcealedSamples": 215280,
+      "timestamp": 1788700504443.76,
+      "totalAudioEnergy": 21.27047017330576,
+      "totalSamplesDuration": 217.95999999994675,
+      "totalSamplesReceived": 10462080
+    },
+    "delta": {
+      "bytesReceived": 2275261,
+      "concealedSamples": 233297,
+      "concealmentEvents": 12,
+      "jitterBufferDelay": 646387.2,
+      "jitterBufferEmittedCount": 8403840,
+      "packetsLost": 0,
+      "packetsReceived": 8756,
+      "silentConcealedSamples": 215280,
+      "timestamp": 180027.2890625,
+      "totalAudioEnergy": 17.80906917868064,
+      "totalSamplesDuration": 180.02999999994572,
+      "totalSamplesReceived": 8641440
+    },
+    "elapsedSeconds": 180.0272890625,
+    "fine": {
+      "anomalies": [
+        {
+          "concealedMs": 22.770833333333332,
+          "concealmentEvents": 1,
+          "elapsedMs": 37682.028076171875,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 6,
+          "windowMs": 101.033935546875
+        },
+        {
+          "concealedMs": 5.875,
+          "concealmentEvents": 0,
+          "elapsedMs": 47846.31396484375,
+          "jitterMs": 5,
+          "lost": 0,
+          "packets": 7,
+          "windowMs": 101.052001953125
+        },
+        {
+          "concealedMs": 20.041666666666668,
+          "concealmentEvents": 1,
+          "elapsedMs": 52704.840087890625,
+          "jitterMs": 4,
+          "lost": 0,
+          "packets": 7,
+          "windowMs": 101.14208984375
+        },
+        {
+          "concealedMs": 7.729166666666667,
+          "concealmentEvents": 1,
+          "elapsedMs": 67629.02807617188,
+          "jitterMs": 4,
+          "lost": 1,
+          "packets": 4,
+          "windowMs": 101.027099609375
+        },
+        {
+          "concealedMs": 9.625,
+          "concealmentEvents": 0,
+          "elapsedMs": 67730.05297851562,
+          "jitterMs": 3,
+          "lost": -1,
+          "packets": 6,
+          "windowMs": 101.02490234375
+        },
+        {
+          "concealedMs": 5.604166666666667,
+          "concealmentEvents": 1,
+          "elapsedMs": 84258.68505859375,
+          "jitterMs": 5,
+          "lost": 0,
+          "packets": 3,
+          "windowMs": 100.929931640625
+        },
+        {
+          "concealedMs": 74.39583333333333,
+          "concealmentEvents": 1,
+          "elapsedMs": 84359.75415039062,
+          "jitterMs": 7,
+          "lost": 0,
+          "packets": 3,
+          "windowMs": 101.069091796875
+        },
+        {
+          "concealedMs": 70.54166666666667,
+          "concealmentEvents": 1,
+          "elapsedMs": 84562.10205078125,
+          "jitterMs": 9,
+          "lost": 0,
+          "packets": 3,
+          "windowMs": 100.97998046875
+        },
+        {
+          "concealedMs": 41.333333333333336,
+          "concealmentEvents": 1,
+          "elapsedMs": 84764.34204101562,
+          "jitterMs": 10,
+          "lost": 0,
+          "packets": 3,
+          "windowMs": 101.069091796875
+        },
+        {
+          "concealedMs": 29.583333333333332,
+          "concealmentEvents": 1,
+          "elapsedMs": 84865.39599609375,
+          "jitterMs": 9,
+          "lost": 0,
+          "packets": 4,
+          "windowMs": 101.053955078125
+        },
+        {
+          "concealedMs": 45.833333333333336,
+          "concealmentEvents": 1,
+          "elapsedMs": 85067.57397460938,
+          "jitterMs": 10,
+          "lost": 0,
+          "packets": 6,
+          "windowMs": 101.126953125
+        },
+        {
+          "concealedMs": 9.520833333333334,
+          "concealmentEvents": 1,
+          "elapsedMs": 142610.73706054688,
+          "jitterMs": 10,
+          "lost": 0,
+          "packets": 4,
+          "windowMs": 100.965087890625
+        },
+        {
+          "concealedMs": 77.5,
+          "concealmentEvents": 1,
+          "elapsedMs": 175586.34497070312,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.94287109375
+        },
+        {
+          "concealedMs": 90,
+          "concealmentEvents": 0,
+          "elapsedMs": 175687.37915039062,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 101.0341796875
+        },
+        {
+          "concealedMs": 110,
+          "concealmentEvents": 0,
+          "elapsedMs": 175788.46899414062,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 101.08984375
+        },
+        {
+          "concealedMs": 100,
+          "concealmentEvents": 0,
+          "elapsedMs": 175889.333984375,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.864990234375
+        },
+        {
+          "concealedMs": 100,
+          "concealmentEvents": 0,
+          "elapsedMs": 175990.326171875,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.9921875
+        },
+        {
+          "concealedMs": 100,
+          "concealmentEvents": 0,
+          "elapsedMs": 176091.37915039062,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 101.052978515625
+        },
+        {
+          "concealedMs": 110,
+          "concealmentEvents": 0,
+          "elapsedMs": 176191.35498046875,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 99.975830078125
+        },
+        {
+          "concealedMs": 90,
+          "concealmentEvents": 0,
+          "elapsedMs": 176292.84912109375,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 101.494140625
+        },
+        {
+          "concealedMs": 110,
+          "concealmentEvents": 0,
+          "elapsedMs": 176393.86401367188,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 101.014892578125
+        },
+        {
+          "concealedMs": 90,
+          "concealmentEvents": 0,
+          "elapsedMs": 176494.81811523438,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.9541015625
+        },
+        {
+          "concealedMs": 110,
+          "concealmentEvents": 0,
+          "elapsedMs": 176595.76000976562,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.94189453125
+        },
+        {
+          "concealedMs": 100,
+          "concealmentEvents": 0,
+          "elapsedMs": 176696.75415039062,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.994140625
+        },
+        {
+          "concealedMs": 90,
+          "concealmentEvents": 0,
+          "elapsedMs": 176797.7451171875,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.990966796875
+        },
+        {
+          "concealedMs": 110,
+          "concealmentEvents": 0,
+          "elapsedMs": 176898.67309570312,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.927978515625
+        },
+        {
+          "concealedMs": 100,
+          "concealmentEvents": 0,
+          "elapsedMs": 176999.63403320312,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.9609375
+        },
+        {
+          "concealedMs": 100,
+          "concealmentEvents": 0,
+          "elapsedMs": 177100.73510742188,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 101.10107421875
+        },
+        {
+          "concealedMs": 90,
+          "concealmentEvents": 0,
+          "elapsedMs": 177192.81201171875,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 92.076904296875
+        },
+        {
+          "concealedMs": 120,
+          "concealmentEvents": 0,
+          "elapsedMs": 177301.88598632812,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 109.073974609375
+        },
+        {
+          "concealedMs": 90,
+          "concealmentEvents": 0,
+          "elapsedMs": 177402.98706054688,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 101.10107421875
+        },
+        {
+          "concealedMs": 110,
+          "concealmentEvents": 0,
+          "elapsedMs": 177504.01904296875,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 101.031982421875
+        },
+        {
+          "concealedMs": 90,
+          "concealmentEvents": 0,
+          "elapsedMs": 177604.98706054688,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.968017578125
+        },
+        {
+          "concealedMs": 110,
+          "concealmentEvents": 0,
+          "elapsedMs": 177705.85498046875,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.867919921875
+        },
+        {
+          "concealedMs": 100,
+          "concealmentEvents": 0,
+          "elapsedMs": 177806.7060546875,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.85107421875
+        },
+        {
+          "concealedMs": 90,
+          "concealmentEvents": 0,
+          "elapsedMs": 177907.64306640625,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.93701171875
+        },
+        {
+          "concealedMs": 110,
+          "concealmentEvents": 0,
+          "elapsedMs": 178008.7099609375,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 101.06689453125
+        },
+        {
+          "concealedMs": 100,
+          "concealmentEvents": 0,
+          "elapsedMs": 178109.68603515625,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.97607421875
+        },
+        {
+          "concealedMs": 80,
+          "concealmentEvents": 0,
+          "elapsedMs": 178194.11401367188,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 84.427978515625
+        },
+        {
+          "concealedMs": 120,
+          "concealmentEvents": 0,
+          "elapsedMs": 178310.94213867188,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 116.828125
+        },
+        {
+          "concealedMs": 100,
+          "concealmentEvents": 0,
+          "elapsedMs": 178412.037109375,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 101.094970703125
+        },
+        {
+          "concealedMs": 100,
+          "concealmentEvents": 0,
+          "elapsedMs": 178513.27905273438,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 101.241943359375
+        },
+        {
+          "concealedMs": 110,
+          "concealmentEvents": 0,
+          "elapsedMs": 178614.34399414062,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 101.06494140625
+        },
+        {
+          "concealedMs": 90,
+          "concealmentEvents": 0,
+          "elapsedMs": 178715.1181640625,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.774169921875
+        },
+        {
+          "concealedMs": 110,
+          "concealmentEvents": 0,
+          "elapsedMs": 178816.06909179688,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.950927734375
+        },
+        {
+          "concealedMs": 100,
+          "concealmentEvents": 0,
+          "elapsedMs": 178917.02709960938,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.9580078125
+        },
+        {
+          "concealedMs": 100,
+          "concealmentEvents": 0,
+          "elapsedMs": 179018.01196289062,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.98486328125
+        },
+        {
+          "concealedMs": 100,
+          "concealmentEvents": 0,
+          "elapsedMs": 179119.080078125,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 101.068115234375
+        },
+        {
+          "concealedMs": 70,
+          "concealmentEvents": 0,
+          "elapsedMs": 179195.34497070312,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 76.264892578125
+        },
+        {
+          "concealedMs": 130,
+          "concealmentEvents": 0,
+          "elapsedMs": 179320.44799804688,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 125.10302734375
+        },
+        {
+          "concealedMs": 100,
+          "concealmentEvents": 0,
+          "elapsedMs": 179421.49609375,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 101.048095703125
+        },
+        {
+          "concealedMs": 100,
+          "concealmentEvents": 0,
+          "elapsedMs": 179522.44799804688,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.951904296875
+        },
+        {
+          "concealedMs": 100,
+          "concealmentEvents": 0,
+          "elapsedMs": 179623.35400390625,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.906005859375
+        },
+        {
+          "concealedMs": 110,
+          "concealmentEvents": 0,
+          "elapsedMs": 179724.35595703125,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 101.001953125
+        },
+        {
+          "concealedMs": 90,
+          "concealmentEvents": 0,
+          "elapsedMs": 179825.3271484375,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.97119140625
+        },
+        {
+          "concealedMs": 110,
+          "concealmentEvents": 0,
+          "elapsedMs": 179926.205078125,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 100.8779296875
+        },
+        {
+          "concealedMs": 100,
+          "concealmentEvents": 0,
+          "elapsedMs": 180027.2890625,
+          "jitterMs": 3,
+          "lost": 0,
+          "packets": 0,
+          "windowMs": 101.083984375
+        }
+      ],
+      "concealmentWindows": 57,
+      "emptyPacketWindows": 45,
+      "maxConcealedMs": 130,
+      "maxPollMs": 159.364013671875,
+      "polls": 1775,
+      "stalePolls": 0,
+      "truncated": false
+    },
+    "initial": {
+      "bytesReceived": 495841,
+      "concealedSamples": 1975,
+      "concealmentEvents": 2,
+      "jitter": 0.003,
+      "jitterBufferDelay": 68044.8,
+      "jitterBufferEmittedCount": 1819200,
+      "packetsLost": 0,
+      "packetsReceived": 1898,
+      "silentConcealedSamples": 0,
+      "timestamp": 1788700324416.471,
+      "totalAudioEnergy": 3.461400994625118,
+      "totalSamplesDuration": 37.93000000000102,
+      "totalSamplesReceived": 1820640
+    },
+    "pcm": {
+      "blocks": 4219,
+      "longestQuietMs": 5504.000000000004,
+      "nearFullScale": 0,
+      "nonFinite": 0,
+      "peak": 0.5582140684127808,
+      "quietRuns": [],
+      "quietRunsTruncated": false,
+      "rms": 0.08661120939843282,
+      "samples": 17281024,
+      "squared": 129633.6290726063,
+      "zeroBlocks": 129
+    },
+    "qualification": "Counters sampled at 100 ms; source silence and listening quality require independent confirmation. This does not prove gapless playback.",
+    "receiverBufferMeanMs": 76.91569568197396,
+    "ring": {
+      "events": [
+        {
+          "ms": 175438.39999999944,
+          "speaking": false
+        }
+      ],
+      "initialSpeaking": true,
+      "rowStillConnected": true,
+      "started": 4658828.2,
+      "truncated": false
+    },
+    "valid": false,
+    "windows": [
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 1.011885986328125,
+        "jitter": 0.002,
+        "packetRate": 50.40093517360185,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 2.04389013671875,
+        "jitter": 0.002,
+        "packetRate": 49.41840590534053,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 3.0565400390625,
+        "jitter": 0.002,
+        "packetRate": 50.36291405545186,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 4.068156982421875,
+        "jitter": 0.001,
+        "packetRate": 50.414339473832186,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 5.078984130859375,
+        "jitter": 0.001,
+        "packetRate": 49.46444115325572,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 6.08884716796875,
+        "jitter": 0.002,
+        "packetRate": 50.501897906850864,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 7.099488037109375,
+        "jitter": 0.001,
+        "packetRate": 49.47355833978527,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 8.111108154296875,
+        "jitter": 0.002,
+        "packetRate": 50.414181305320305,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 9.121754150390625,
+        "jitter": 0,
+        "packetRate": 50.46277351032924,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 10.134696044921874,
+        "jitter": 0,
+        "packetRate": 49.36117290630777,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 11.146650146484374,
+        "jitter": 0,
+        "packetRate": 50.397542656582786,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 12.161718017578124,
+        "jitter": 0,
+        "packetRate": 50.24294576977082,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 13.18852099609375,
+        "jitter": 0.001,
+        "packetRate": 49.66873009438191,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 14.197928955078124,
+        "jitter": 0,
+        "packetRate": 49.533986288663655,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 15.207007080078125,
+        "jitter": 0,
+        "packetRate": 50.541180842662705,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 16.217869140625,
+        "jitter": 0,
+        "packetRate": 49.462732801496244,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 17.22864306640625,
+        "jitter": 0,
+        "packetRate": 50.45638663520228,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 18.241696044921873,
+        "jitter": 0,
+        "packetRate": 50.34287552732702,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 19.253967041015624,
+        "jitter": 0,
+        "packetRate": 49.393887795802584,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 20.26497412109375,
+        "jitter": 0.001,
+        "packetRate": 50.44475059072683,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 21.290260009765625,
+        "jitter": 0.001,
+        "packetRate": 49.74222366998915,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 22.301878173828126,
+        "jitter": 0.001,
+        "packetRate": 50.41427863967171,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 23.3402080078125,
+        "jitter": 0.002,
+        "packetRate": 50.08042560085248,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 24.3859990234375,
+        "jitter": 0.002,
+        "packetRate": 49.72312749208602,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 25.4080361328125,
+        "jitter": 0.001,
+        "packetRate": 49.900340733408115,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 26.417069091796876,
+        "jitter": 0.003,
+        "packetRate": 49.55239524616386,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 27.42666015625,
+        "jitter": 0.004,
+        "packetRate": 50.51550255907392,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 28.4352470703125,
+        "jitter": 0.003,
+        "packetRate": 49.574309663214216,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 29.463359130859374,
+        "jitter": 0.001,
+        "packetRate": 50.57814414932559,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 30.475238037109374,
+        "jitter": 0.001,
+        "packetRate": 49.41302728139561,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 31.487486083984376,
+        "jitter": 0.001,
+        "packetRate": 50.38290778376564,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 32.4979541015625,
+        "jitter": 0.003,
+        "packetRate": 49.48202133090691,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 33.50948315429687,
+        "jitter": 0.003,
+        "packetRate": 50.41871991925127,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 34.53852001953125,
+        "jitter": 0.003,
+        "packetRate": 49.56090663319838,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 35.55489208984375,
+        "jitter": 0.002,
+        "packetRate": 50.1784744875164,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 36.57144409179688,
+        "jitter": 0.002,
+        "packetRate": 50.169592801954565,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 37.580994140625,
+        "jitter": 0.001,
+        "packetRate": 49.52701459233197,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 22.770833333333332,
+        "elapsedSeconds": 38.59123803710938,
+        "jitter": 0.003,
+        "packetRate": 50.482858820012474,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 39.6184150390625,
+        "jitter": 0.003,
+        "packetRate": 49.650644341750336,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 40.62778393554687,
+        "jitter": 0.002,
+        "packetRate": 50.52662131519274,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 41.63802416992188,
+        "jitter": 0.004,
+        "packetRate": 49.493178254708134,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 42.668623046875,
+        "jitter": 0.003,
+        "packetRate": 50.45610000442988,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 43.67996997070313,
+        "jitter": 0.003,
+        "packetRate": 49.43901921483209,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 44.69897094726562,
+        "jitter": 0.003,
+        "packetRate": 50.04901974877738,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 45.7089130859375,
+        "jitter": 0.003,
+        "packetRate": 50.497942453483105,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 46.71876708984375,
+        "jitter": 0.004,
+        "packetRate": 49.512107499295276,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 47.74526196289062,
+        "jitter": 0.003,
+        "packetRate": 48.70944932397801,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 5.875,
+        "elapsedSeconds": 48.75643896484375,
+        "jitter": 0.003,
+        "packetRate": 51.42522021323677,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 49.76564208984375,
+        "jitter": 0.002,
+        "packetRate": 50.53492080694855,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 50.77497900390625,
+        "jitter": 0.003,
+        "packetRate": 49.5374728729122,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 51.78517797851563,
+        "jitter": 0.003,
+        "packetRate": 50.48510370911903,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 20.041666666666668,
+        "elapsedSeconds": 52.80613793945312,
+        "jitter": 0.004,
+        "packetRate": 49.952987336711104,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 53.817800048828126,
+        "jitter": 0.002,
+        "packetRate": 49.42361638006761,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 54.828281005859374,
+        "jitter": 0.002,
+        "packetRate": 50.471015455685404,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 55.83826098632812,
+        "jitter": 0.002,
+        "packetRate": 49.50593176786939,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 56.84668408203125,
+        "jitter": 0.003,
+        "packetRate": 50.57401027139323,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 57.85753100585937,
+        "jitter": 0.002,
+        "packetRate": 49.46347347098573,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 58.88190600585938,
+        "jitter": 0.003,
+        "packetRate": 50.76266015863331,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 59.892507080078126,
+        "jitter": 0.002,
+        "packetRate": 49.47550648375546,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 60.90272705078125,
+        "jitter": 0.002,
+        "packetRate": 50.48405444262144,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 61.91252514648438,
+        "jitter": 0.003,
+        "packetRate": 49.51484877299642,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 62.94130908203125,
+        "jitter": 0.002,
+        "packetRate": 49.57309133417768,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 63.951123046875,
+        "jitter": 0.003,
+        "packetRate": 50.50435206438377,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 64.98288208007813,
+        "jitter": 0.002,
+        "packetRate": 50.39936489682531,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 65.99397705078125,
+        "jitter": 0.002,
+        "packetRate": 49.45133884429227,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 67.02292797851563,
+        "jitter": 0.002,
+        "packetRate": 50.53690958275113,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 17.354166666666668,
+        "elapsedSeconds": 68.03360595703126,
+        "jitter": 0.003,
+        "packetRate": 49.47174180388754,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 69.05142114257812,
+        "jitter": 0.003,
+        "packetRate": 50.107328642967296,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 70.05302807617187,
+        "jitter": 0.003,
+        "packetRate": 49.91978222495004,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 71.05479809570312,
+        "jitter": 0.003,
+        "packetRate": 49.91165539511363,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 72.05636596679688,
+        "jitter": 0.002,
+        "packetRate": 49.921729163893914,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 73.05775903320313,
+        "jitter": 0.002,
+        "packetRate": 49.93044357640455,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 74.11667895507813,
+        "jitter": 0.003,
+        "packetRate": 50.05099904641928,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 75.12557299804688,
+        "jitter": 0.004,
+        "packetRate": 50.55040254765356,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 76.13402294921875,
+        "jitter": 0.002,
+        "packetRate": 49.58104261088735,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 77.14310693359376,
+        "jitter": 0.003,
+        "packetRate": 50.540887368842796,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 78.15290698242187,
+        "jitter": 0.003,
+        "packetRate": 49.51475300285943,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 79.16538012695312,
+        "jitter": 0.003,
+        "packetRate": 50.37170642546943,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 80.1752861328125,
+        "jitter": 0.003,
+        "packetRate": 49.509558028078786,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 81.18522216796875,
+        "jitter": 0.002,
+        "packetRate": 50.49824763615811,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 82.19624609375,
+        "jitter": 0.002,
+        "packetRate": 49.45481380310899,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 83.2467109375,
+        "jitter": 0.002,
+        "packetRate": 50.45385413451634,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 5.604166666666667,
+        "elapsedSeconds": 84.25868505859376,
+        "jitter": 0.005,
+        "packetRate": 47.43204297370885,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 261.6875,
+        "elapsedSeconds": 85.26963916015625,
+        "jitter": 0.009,
+        "packetRate": 39.56658362449612,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 86.2784609375,
+        "jitter": 0.002,
+        "packetRate": 50.5540236594457,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 87.2867431640625,
+        "jitter": 0.002,
+        "packetRate": 48.59750445770915,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 88.29683203125,
+        "jitter": 0.003,
+        "packetRate": 50.4906069720428,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 89.30573095703124,
+        "jitter": 0.001,
+        "packetRate": 50.55015789664727,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 90.31590209960937,
+        "jitter": 0.001,
+        "packetRate": 49.49656339656632,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 91.33814404296875,
+        "jitter": 0.001,
+        "packetRate": 50.86858383947087,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 92.34772900390625,
+        "jitter": 0.002,
+        "packetRate": 49.52530191571993,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 93.35877612304688,
+        "jitter": 0.001,
+        "packetRate": 49.45367931269045,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 94.37064599609376,
+        "jitter": 0.001,
+        "packetRate": 50.40173777131263,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 95.3827490234375,
+        "jitter": 0.001,
+        "packetRate": 50.39012691607965,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 96.39315405273437,
+        "jitter": 0.002,
+        "packetRate": 49.485106022081276,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 97.40411694335937,
+        "jitter": 0.001,
+        "packetRate": 50.44695554400682,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 98.41522216796875,
+        "jitter": 0.001,
+        "packetRate": 49.45083734417131,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 99.42471899414062,
+        "jitter": 0.001,
+        "packetRate": 50.52021826893474,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 100.4354599609375,
+        "jitter": 0.001,
+        "packetRate": 49.468658778573406,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 101.4454111328125,
+        "jitter": 0.001,
+        "packetRate": 50.49749078989354,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 102.46143798828125,
+        "jitter": 0.001,
+        "packetRate": 50.19552359811478,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 103.49463208007812,
+        "jitter": 0.002,
+        "packetRate": 49.361490164257106,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 104.5168291015625,
+        "jitter": 0,
+        "packetRate": 49.892534343272466,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 105.52790698242187,
+        "jitter": 0.001,
+        "packetRate": 50.44121819444025,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 106.53806005859374,
+        "jitter": 0.002,
+        "packetRate": 49.49744863370849,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 107.54981494140625,
+        "jitter": 0.001,
+        "packetRate": 50.40746614261846,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 108.5629169921875,
+        "jitter": 0,
+        "packetRate": 50.340437037583264,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 109.59288208007813,
+        "jitter": 0.002,
+        "packetRate": 49.51624147227002,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 110.60489013671875,
+        "jitter": 0.002,
+        "packetRate": 50.39485571814045,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 111.61880810546874,
+        "jitter": 0.002,
+        "packetRate": 49.31365410324276,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 112.63194311523438,
+        "jitter": 0.003,
+        "packetRate": 49.35176409663981,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 113.64190405273438,
+        "jitter": 0.002,
+        "packetRate": 51.48713981821698,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 114.6573740234375,
+        "jitter": 0.003,
+        "packetRate": 49.238285170933544,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 115.66850415039063,
+        "jitter": 0.003,
+        "packetRate": 50.43861184680566,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 116.6798759765625,
+        "jitter": 0.004,
+        "packetRate": 50.42655794856296,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 117.690787109375,
+        "jitter": 0.003,
+        "packetRate": 49.46033175131113,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 118.70185498046875,
+        "jitter": 0.003,
+        "packetRate": 49.452664286435244,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 119.73003295898438,
+        "jitter": 0.002,
+        "packetRate": 50.57490151177145,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 120.74376513671875,
+        "jitter": 0.003,
+        "packetRate": 50.309145867285835,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 121.75213403320312,
+        "jitter": 0.003,
+        "packetRate": 49.58502803321519,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 122.76068994140626,
+        "jitter": 0.003,
+        "packetRate": 50.56735039197104,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 123.76930810546875,
+        "jitter": 0.005,
+        "packetRate": 49.5727737031927,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 124.78848095703125,
+        "jitter": 0.003,
+        "packetRate": 50.040579399079945,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 125.79818310546875,
+        "jitter": 0.002,
+        "packetRate": 49.51955393714305,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 126.81467309570313,
+        "jitter": 0.002,
+        "packetRate": 50.17265343482702,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 127.82453198242187,
+        "jitter": 0.005,
+        "packetRate": 50.50210546318014,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 128.8378291015625,
+        "jitter": 0.004,
+        "packetRate": 50.33074607303037,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 129.84736401367186,
+        "jitter": 0.005,
+        "packetRate": 49.527757188235704,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 130.8566630859375,
+        "jitter": 0.003,
+        "packetRate": 49.53933018858568,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 131.8658759765625,
+        "jitter": 0.004,
+        "packetRate": 50.534431806965905,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 132.87480200195313,
+        "jitter": 0.005,
+        "packetRate": 49.557647182945395,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 133.8840490722656,
+        "jitter": 0.005,
+        "packetRate": 50.53272038154991,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 134.91856298828125,
+        "jitter": 0.002,
+        "packetRate": 49.29851518713617,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 135.928330078125,
+        "jitter": 0.003,
+        "packetRate": 50.5066965570166,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 136.9380849609375,
+        "jitter": 0.004,
+        "packetRate": 49.51696778205571,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 137.94800512695312,
+        "jitter": 0.004,
+        "packetRate": 50.49904112837663,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 138.96093310546874,
+        "jitter": 0.004,
+        "packetRate": 50.34908807113506,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 139.971875,
+        "jitter": 0.003,
+        "packetRate": 49.458826734234634,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 140.98263305664062,
+        "jitter": 0.003,
+        "packetRate": 50.45717881240995,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 141.99584716796875,
+        "jitter": 0.004,
+        "packetRate": 49.34791120749375,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 9.520833333333334,
+        "elapsedSeconds": 143.01467895507812,
+        "jitter": 0.009,
+        "packetRate": 47.112782117041505,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 144.06434716796875,
+        "jitter": 0.007,
+        "packetRate": 52.39750935063419,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 145.07535815429688,
+        "jitter": 0.003,
+        "packetRate": 50.44455568700208,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 146.08562109375,
+        "jitter": 0.002,
+        "packetRate": 50.481907242492035,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 147.0953049316406,
+        "jitter": 0.001,
+        "packetRate": 49.520451970843865,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 148.1155661621094,
+        "jitter": 0.002,
+        "packetRate": 49.987197863598624,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 149.12480395507814,
+        "jitter": 0.003,
+        "packetRate": 50.53318489984368,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 150.14667602539063,
+        "jitter": 0.001,
+        "packetRate": 49.908399966743026,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 151.15536303710937,
+        "jitter": 0.002,
+        "packetRate": 49.56939012707481,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 152.163451171875,
+        "jitter": 0.002,
+        "packetRate": 50.59081467302184,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 153.1646201171875,
+        "jitter": 0.001,
+        "packetRate": 49.94162097626115,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 154.16602099609375,
+        "jitter": 0.002,
+        "packetRate": 49.93005404050673,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 155.16726293945314,
+        "jitter": 0.002,
+        "packetRate": 49.93797985753533,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 156.168955078125,
+        "jitter": 0.002,
+        "packetRate": 49.91553599122189,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 157.235666015625,
+        "jitter": 0.003,
+        "packetRate": 49.68543786024506,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 158.25074609375,
+        "jitter": 0.002,
+        "packetRate": 50.24234156403147,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 159.26288305664062,
+        "jitter": 0.004,
+        "packetRate": 50.38843740509775,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 160.27435693359374,
+        "jitter": 0.003,
+        "packetRate": 49.43281397500409,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 161.2863239746094,
+        "jitter": 0.004,
+        "packetRate": 50.396898251563265,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 162.2962890625,
+        "jitter": 0.002,
+        "packetRate": 49.50666176434684,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 163.3050109863281,
+        "jitter": 0.003,
+        "packetRate": 50.559028008882485,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 164.3140791015625,
+        "jitter": 0.003,
+        "packetRate": 47.56864207214703,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 165.3438190917969,
+        "jitter": 0.002,
+        "packetRate": 50.49818448651731,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 166.37732104492187,
+        "jitter": 0.003,
+        "packetRate": 49.34678627920469,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 167.38672607421876,
+        "jitter": 0.003,
+        "packetRate": 50.5248126567442,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 168.39528002929688,
+        "jitter": 0.003,
+        "packetRate": 49.575929724183055,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 169.4051091308594,
+        "jitter": 0.003,
+        "packetRate": 49.51332846581211,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 170.41575610351563,
+        "jitter": 0.003,
+        "packetRate": 50.462724749432915,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 171.42519604492188,
+        "jitter": 0.004,
+        "packetRate": 50.523065224615486,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 172.45549609375,
+        "jitter": 0.003,
+        "packetRate": 49.50014324274562,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 173.46528100585937,
+        "jitter": 0.004,
+        "packetRate": 50.505805135733624,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 174.47551416015625,
+        "jitter": 0.003,
+        "packetRate": 49.49352512074318,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 0,
+        "elapsedSeconds": 175.4854020996094,
+        "jitter": 0.003,
+        "packetRate": 46.53981710629346,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 977.5,
+        "elapsedSeconds": 176.49481811523438,
+        "jitter": 0.003,
+        "packetRate": 0,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 1020,
+        "elapsedSeconds": 177.50401904296876,
+        "jitter": 0.003,
+        "packetRate": 0,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 1000,
+        "elapsedSeconds": 178.51327905273436,
+        "jitter": 0.003,
+        "packetRate": 0,
+        "packetsLost": 0
+      },
+      {
+        "concealedMs": 1010,
+        "elapsedSeconds": 179.52244799804689,
+        "jitter": 0.003,
+        "packetRate": 0,
+        "packetsLost": 0
+      }
+    ]
+  },
+  "finishedAt": "2026-09-06T13:15:04.444Z",
+  "requestedAt": "2026-09-06T13:12:03.414Z",
+  "startedAt": "2026-09-06T13:12:03.415Z"
+}

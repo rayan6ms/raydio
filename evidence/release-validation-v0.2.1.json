@@ -1,0 +1,47 @@
+{
+  "date": "2026-09-06",
+  "tag": "v0.2.1",
+  "releaseUrl": "https://github.com/rayan6ms/raydio/releases/tag/v0.2.1",
+  "ciUrl": "https://github.com/rayan6ms/raydio/actions/runs/34034209738",
+  "ciConclusion": "success",
+  "checks": [
+    "49 Rust tests on each native architecture",
+    "cargo fmt",
+    "Clippy with warnings denied",
+    "Disposable-container install/update/rollback tests",
+    "Release build and packaged offline backend check",
+    "Downloaded release archives match published SHA256 files"
+  ],
+  "artifacts": [
+    {
+      "name": "raydio-linux-aarch64.tar.gz",
+      "bytes": 7043618,
+      "sha256": "855e7e90417aedf4e87a3834b3279501842eff0aba336b41253e894d0a6802f6",
+      "binaryBytes": 16208776,
+      "binarySha256": "f7cb3f6168b5222a7b93a767681eee55d9350d673c4569089aca41b2fde8d2a5",
+      "revision": "7c8307630fdee555aa534ed017743d0c73781da2"
+    },
+    {
+      "name": "raydio-linux-x86_64.tar.gz",
+      "bytes": 7427033,
+      "sha256": "dd0769552fe98788fa6dd6845fbb2bb460813d0ec63c17a48e05ce43389f2a18",
+      "binaryBytes": 18237944,
+      "binarySha256": "9321d226c186224701bb1384558321e972969249756541e538c3f215c0c045ec",
+      "revision": "7c8307630fdee555aa534ed017743d0c73781da2"
+    }
+  ],
+  "productionUpdate": {
+    "command": "sudo raydioctl update v0.2.1",
+    "readiness": "passed",
+    "revision": "7c8307630fdee555aa534ed017743d0c73781da2",
+    "restarts": 0
+  },
+  "previousLiveLifecycle": {
+    "revision": "f4bfcf52d67b321884e6fb027aca50a4817afea7",
+    "updatePassed": true,
+    "rollbackTo": "3c6c2a41508f759d813fbafb32769bacdd30071c",
+    "rollbackReadinessPassed": true,
+    "finalUpdatePassed": true,
+    "environmentPreserved": true
+  }
+}

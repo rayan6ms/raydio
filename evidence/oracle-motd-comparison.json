@@ -1,0 +1,382 @@
+{
+  "date": "2026-09-06",
+  "binarySha256": "9321d226c186224701bb1384558321e972969249756541e538c3f215c0c045ec",
+  "release": "v0.2.1",
+  "scope": "Sequential same binary, browser receiver, track and volume. Before had incidental SSH activity; after had twelve intentional SSH logins. 60-second perf sched_switch tracing in each. Not randomized; no claim of proven audio improvement from these two captures.",
+  "before": {
+    "audioSeconds": 150.09765600585936,
+    "receivedPackets": 7402,
+    "networkLostPackets": 0,
+    "concealedMs": 1684.7291666666667,
+    "quietBlocks": 2,
+    "longestQuietMs": 85.33333333333333,
+    "speakingInterruptions": 8,
+    "checks": {
+      "noClipping": true,
+      "noConcealment": false,
+      "noNetPacketLoss": true,
+      "noSilentPcmBlocks": false,
+      "uninterruptedSpeaking": false
+    },
+    "sender": {
+      "packets": 7402,
+      "maxGapMs": 98.153983,
+      "gapsOver40": 43,
+      "gapsOver25": 87,
+      "sendErrors": 0,
+      "maxSendCallMs": 38.722295,
+      "over40OverlappingIndependentLateWakeup": 36,
+      "lateEvents": [
+        {
+          "endMonoNs": 33194737786439,
+          "gapMs": 60.655543
+        },
+        {
+          "endMonoNs": 33194837921484,
+          "gapMs": 61.047271
+        },
+        {
+          "endMonoNs": 33194938301160,
+          "gapMs": 60.677805
+        },
+        {
+          "endMonoNs": 33195037448143,
+          "gapMs": 59.318564
+        },
+        {
+          "endMonoNs": 33195137944028,
+          "gapMs": 60.990224
+        },
+        {
+          "endMonoNs": 33195435276342,
+          "gapMs": 57.717627
+        },
+        {
+          "endMonoNs": 33195636445607,
+          "gapMs": 59.65598
+        },
+        {
+          "endMonoNs": 33195835247114,
+          "gapMs": 58.507325
+        },
+        {
+          "endMonoNs": 33218237447799,
+          "gapMs": 40.760624
+        },
+        {
+          "endMonoNs": 33251138782166,
+          "gapMs": 60.088285
+        },
+        {
+          "endMonoNs": 33251239100166,
+          "gapMs": 60.84955
+        },
+        {
+          "endMonoNs": 33251535507000,
+          "gapMs": 57.171388
+        },
+        {
+          "endMonoNs": 33251657339309,
+          "gapMs": 61.154494
+        },
+        {
+          "endMonoNs": 33251735305321,
+          "gapMs": 58.629897
+        },
+        {
+          "endMonoNs": 33252237663490,
+          "gapMs": 80.138837
+        },
+        {
+          "endMonoNs": 33252357344376,
+          "gapMs": 98.153983
+        },
+        {
+          "endMonoNs": 33278836833930,
+          "gapMs": 79.468603
+        },
+        {
+          "endMonoNs": 33279538635135,
+          "gapMs": 59.307724
+        },
+        {
+          "endMonoNs": 33279637480100,
+          "gapMs": 59.36895
+        },
+        {
+          "endMonoNs": 33279837720019,
+          "gapMs": 59.978642
+        },
+        {
+          "endMonoNs": 33280038147686,
+          "gapMs": 60.024684
+        },
+        {
+          "endMonoNs": 33280138030356,
+          "gapMs": 59.915699
+        },
+        {
+          "endMonoNs": 33280337861178,
+          "gapMs": 60.209523
+        },
+        {
+          "endMonoNs": 33280437421020,
+          "gapMs": 79.688979
+        },
+        {
+          "endMonoNs": 33280537974203,
+          "gapMs": 80.799881
+        },
+        {
+          "endMonoNs": 33280635244762,
+          "gapMs": 57.610096
+        },
+        {
+          "endMonoNs": 33280736871889,
+          "gapMs": 61.005273
+        },
+        {
+          "endMonoNs": 33280836358348,
+          "gapMs": 59.749872
+        },
+        {
+          "endMonoNs": 33281035224422,
+          "gapMs": 58.49346
+        },
+        {
+          "endMonoNs": 33281136825158,
+          "gapMs": 60.169367
+        },
+        {
+          "endMonoNs": 33281336811929,
+          "gapMs": 60.136139
+        },
+        {
+          "endMonoNs": 33281436913571,
+          "gapMs": 60.241413
+        },
+        {
+          "endMonoNs": 33281556277319,
+          "gapMs": 59.312683
+        },
+        {
+          "endMonoNs": 33281636428678,
+          "gapMs": 80.151359
+        },
+        {
+          "endMonoNs": 33281836535000,
+          "gapMs": 79.227779
+        },
+        {
+          "endMonoNs": 33281937259396,
+          "gapMs": 80.894069
+        },
+        {
+          "endMonoNs": 33282038801584,
+          "gapMs": 82.501057
+        },
+        {
+          "endMonoNs": 33295036486268,
+          "gapMs": 60.07969
+        },
+        {
+          "endMonoNs": 33295136657562,
+          "gapMs": 59.389348
+        },
+        {
+          "endMonoNs": 33323057635440,
+          "gapMs": 59.399037
+        },
+        {
+          "endMonoNs": 33323337639606,
+          "gapMs": 59.943642
+        },
+        {
+          "endMonoNs": 33323535197672,
+          "gapMs": 57.336229
+        },
+        {
+          "endMonoNs": 33323735214950,
+          "gapMs": 58.333783
+        }
+      ]
+    },
+    "scheduler": {
+      "maxTimerIntervalMs": 80.168853,
+      "cpuStealPercent": 2.830680405757588,
+      "scope": "CPU steal from scheduler snapshots within receiver window; timer maximum from complete 180-second probe"
+    }
+  },
+  "after": {
+    "audioSeconds": 150.033416015625,
+    "receivedPackets": 7409,
+    "networkLostPackets": 0,
+    "concealedMs": 1642.75,
+    "quietBlocks": 0,
+    "longestQuietMs": 0,
+    "speakingInterruptions": 2,
+    "checks": {
+      "noClipping": true,
+      "noConcealment": false,
+      "noNetPacketLoss": true,
+      "noSilentPcmBlocks": true,
+      "uninterruptedSpeaking": false
+    },
+    "sender": {
+      "packets": 7410,
+      "maxGapMs": 101.356589,
+      "gapsOver40": 35,
+      "gapsOver25": 73,
+      "sendErrors": 0,
+      "maxSendCallMs": 58.784628,
+      "over40OverlappingIndependentLateWakeup": 32,
+      "lateEvents": [
+        {
+          "endMonoNs": 33597239933114,
+          "gapMs": 79.777356
+        },
+        {
+          "endMonoNs": 33597335255138,
+          "gapMs": 56.122707
+        },
+        {
+          "endMonoNs": 33597436982744,
+          "gapMs": 60.880678
+        },
+        {
+          "endMonoNs": 33597536521227,
+          "gapMs": 59.769885
+        },
+        {
+          "endMonoNs": 33597637146221,
+          "gapMs": 60.760353
+        },
+        {
+          "endMonoNs": 33597737578896,
+          "gapMs": 81.620396
+        },
+        {
+          "endMonoNs": 33597856707600,
+          "gapMs": 79.887692
+        },
+        {
+          "endMonoNs": 33597938059061,
+          "gapMs": 60.501764
+        },
+        {
+          "endMonoNs": 33598057491549,
+          "gapMs": 101.099631
+        },
+        {
+          "endMonoNs": 33598135274425,
+          "gapMs": 77.782876
+        },
+        {
+          "endMonoNs": 33598335238407,
+          "gapMs": 57.81694
+        },
+        {
+          "endMonoNs": 33598836328238,
+          "gapMs": 60.012652
+        },
+        {
+          "endMonoNs": 33598936337042,
+          "gapMs": 60.04086
+        },
+        {
+          "endMonoNs": 33638837693086,
+          "gapMs": 59.897267
+        },
+        {
+          "endMonoNs": 33638937598474,
+          "gapMs": 60.044258
+        },
+        {
+          "endMonoNs": 33639057688531,
+          "gapMs": 80.216303
+        },
+        {
+          "endMonoNs": 33659137950699,
+          "gapMs": 60.314998
+        },
+        {
+          "endMonoNs": 33695737354995,
+          "gapMs": 59.604425
+        },
+        {
+          "endMonoNs": 33695935238690,
+          "gapMs": 56.730333
+        },
+        {
+          "endMonoNs": 33696057296446,
+          "gapMs": 80.828378
+        },
+        {
+          "endMonoNs": 33696236437258,
+          "gapMs": 59.207054
+        },
+        {
+          "endMonoNs": 33696335363924,
+          "gapMs": 58.54893
+        },
+        {
+          "endMonoNs": 33696457501100,
+          "gapMs": 101.356589
+        },
+        {
+          "endMonoNs": 33696536585036,
+          "gapMs": 59.709619
+        },
+        {
+          "endMonoNs": 33696635465096,
+          "gapMs": 78.316683
+        },
+        {
+          "endMonoNs": 33696836598850,
+          "gapMs": 59.705454
+        },
+        {
+          "endMonoNs": 33696937358583,
+          "gapMs": 80.504274
+        },
+        {
+          "endMonoNs": 33697037447831,
+          "gapMs": 60.198612
+        },
+        {
+          "endMonoNs": 33697156692728,
+          "gapMs": 80.436399
+        },
+        {
+          "endMonoNs": 33697235552155,
+          "gapMs": 78.859427
+        },
+        {
+          "endMonoNs": 33697337436376,
+          "gapMs": 60.936589
+        },
+        {
+          "endMonoNs": 33697536419954,
+          "gapMs": 59.285722
+        },
+        {
+          "endMonoNs": 33697635274770,
+          "gapMs": 79.294135
+        },
+        {
+          "endMonoNs": 33697737624860,
+          "gapMs": 61.168686
+        },
+        {
+          "endMonoNs": 33697856944516,
+          "gapMs": 99.844489
+        }
+      ]
+    },
+    "scheduler": {
+      "maxTimerIntervalMs": 80.327861,
+      "cpuStealPercent": 2.12133360058796,
+      "scope": "CPU steal from scheduler snapshots within receiver window; timer maximum from complete 180-second probe"
+    }
+  }
+}

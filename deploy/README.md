@@ -108,9 +108,39 @@ Oracle run used about 12 MiB idle PSS and 15.4 MiB playback PSS, with roughly
 4% of one CPU during steady playback. That run suffered a terminal audio failure;
 these resource numbers are not evidence of audio reliability.
 
-The production Discord application is now running on Oracle from the Rust
-package (revision `3c6c2a4`). Discord's developer portal does not host the
+After deploying `v0.2.1` and removing Testbot, three 15-second authenticated-idle
+windows measured **12,683 KiB PSS (12.39 MiB)**, 15,132 KiB RSS, and three threads.
+Idle CPU was 0–0.067% of one core at this sampling resolution. The warmed
+multi-track Testbot run retained **17.52–17.64 MiB PSS**, at about 4.1–4.4% of one
+core in fully active windows. This round improved diagnosis and deployment
+conditions; it does not claim an additional idle-memory reduction.
+
+The production Discord application is now running on Oracle from Rust release
+`v0.2.1` (revision `7c83076`). The published x86-64 package is 7,427,033 bytes;
+ARM64 is 7,043,618 bytes. Native CI passed on both architectures, and the live
+`raydioctl update v0.2.1` command passed checksum, backend, and Discord-readiness
+checks. A preceding update → rollback → update also passed on this VM and
+preserved the production environment file. See
+[`release-validation-v0.2.1.json`](../evidence/release-validation-v0.2.1.json).
+Discord's developer portal does not host the
 TypeScript or Rust program:
 deploying Rust with the existing production token preserves the bot identity,
 server membership, and permissions. Stop the previous runtime before starting
 that identity on the VM.
+
+## Keep administrative measurements from disturbing audio
+
+Ubuntu's SSH PAM session generated a fresh dynamic login message, including
+`landscape-sysinfo` and update-status scripts. On the Micro VM, these bursts
+coincided with CPU steal and delayed audio. The dynamic `pam_motd.so` entry in
+`/etc/pam.d/sshd` now has `noupdate`, so SSH uses the cached status message.
+Authentication/account rules were preserved, `sshd -t` passed, and subsequent
+SSH logins worked. The prior file is retained on the VM for restoration.
+
+This removed those scripts from the repeated scheduling trace, but did not
+eliminate every late audio packet. It is not an audio-quality guarantee. Capture
+a quiet playback window without new SSH sessions, builds, or kernel tracing,
+then test controls separately. CPU steal is time the guest could not run on the
+host; a low average bot CPU percentage does not rule out short scheduling gaps.
+See [`ORACLE-RELIABILITY.md`](../evidence/ORACLE-RELIABILITY.md) for receiver evidence
+and [`FREE-HOSTING.md`](FREE-HOSTING.md) for the six-hour/day, one-channel budget.
