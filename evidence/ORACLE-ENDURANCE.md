@@ -64,5 +64,37 @@ the Oracle CPU-time rejection remains unproved until live diagnosis.
   continuous receiver coverage; do not combine shorter windows into a six-hour
   pass. Successful measurement completion is not automatically a quality pass.
 
+## Second attempt and targeted diagnosis
+
+The `poll_recv` candidate d307ca7 passed all 49 Raydio tests and native CI
+34051708409 on x86-64 and ARM64, but failed live. Its local-built Oracle binary
+SHA256 was `82df0a853837e725b549c2b722c056efc7529b909fe95ef32314097f4500526c`.
+At 18:36:01.858875 UTC it terminated with 2,065 us elapsed, 2,036 us thread CPU,
+zero send failures and 16 skipped deadlines. The receiver had 235 seconds of
+coverage, zero net/positive packet loss, and no clipping, but a 340.5 ms
+concealment burst and about 1.1 seconds of boundary silence. That is a failure,
+not an endurance pass. `endurance-poll-recv-terminal-failure.json` retains it.
+
+A separate two-minute single-thread C clock/copy probe on the stopped-testbot
+VM performed 763,392 tiny copies with no 2 ms overrun, 573,260 ns maximum wall
+duration, and about 1.06 seconds CPU time. It did not reproduce the failure;
+it is not playback evidence (`source-clock-copy-probe*`).
+
+A temporary three-stage wall-timing patch then reproduced the terminal stop at
+18:56:53.412951 UTC: 2,205 us wall and 2,210 us CPU. Receive took 2,485 ns, copy
+1,062 ns, and `Notify::notify_one` took **2,191,168 ns**. It isolates this
+occurrence to producer notification. That call includes both the internal
+waiter mutex and the Tokio task wake; the trace does not distinguish those two.
+See `source-stage-terminal-oracle.txt`, `source-stage-diagnostic.patch`, and
+`endurance-stage-diagnostic-failure.json`. The diagnostic build is expressly
+excluded from quality qualification. It had one positive/negative loss pair,
+mid-song concealment/silence, and repeated 1.1–1.3 s boundary silence.
+
+The next candidate replaces the consumption Notify with a single atomic permit
+and AtomicWaker register/recheck. The stage instrumentation is removed. This
+eliminates the waiter-list lock while preserving early consumption and the
+latest waker, but still needs a live test because waking the Tokio task can
+itself have scheduling cost. The CPU gate is unchanged. All 14 bridge tests pass.
+
 The final live result is pending. No finite test guarantees future network
 behavior or proves every audible source defect absent.

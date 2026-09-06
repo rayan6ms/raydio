@@ -1,0 +1,46 @@
+{
+  "allocation": {
+    "allocations": 1491,
+    "allocationsPerFrame": 0.994,
+    "bytesAllocated": 25040,
+    "note": "includes the object-safe boxed VoiceFrameSource future",
+    "reallocations": 0
+  },
+  "benchmarkId": "crust-oto-capacity-one-bridge",
+  "cpu": {
+    "clockTicksPerSecond": 100,
+    "percentOfOneLogicalCore": 0.9996667777407531,
+    "processTicks": 3
+  },
+  "cycles": 150,
+  "durationMs": 3001,
+  "measuredFrames": 1500,
+  "memoryKiB": {
+    "activePss": 3762,
+    "baselinePss": 2213,
+    "measurementGrowthPerSender": 6,
+    "stagedIncrementPerSender": 70,
+    "stagedPss": 2918,
+    "warmedPss": 3694,
+    "warmupIncrementPerSender": 77
+  },
+  "phase": "P10-Oto-revisit",
+  "profile": "release",
+  "schemaVersion": 1,
+  "senders": 10,
+  "tasks": {
+    "producerTasks": 10,
+    "slowPendingProducerTasks": 1,
+    "slowSourceIsolated": true
+  },
+  "threads": {
+    "active": 6,
+    "baseline": 6,
+    "staged": 6
+  },
+  "timingNanos": {
+    "p999BatchIntervalError": 840613,
+    "p99BatchIntervalError": 829940
+  },
+  "warmupCycles": 150
+}

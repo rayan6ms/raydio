@@ -1,0 +1,52 @@
+diff --git a/crates/crust-oto-adapter/src/lib.rs b/crates/crust-oto-adapter/src/lib.rs
+index 8783ca0..e4c1b1f 100644
+--- a/crates/crust-oto-adapter/src/lib.rs
++++ b/crates/crust-oto-adapter/src/lib.rs
+@@ -471,6 +471,9 @@ impl OtoVoiceConnection {
+                         .map(|duration| duration.as_micros() as u64),
+                     send_failures = state.stats().send_failures(),
+                     skipped_deadlines = state.stats().skipped_deadlines(),
++                    recv_ns = POLL_RECV_NS.load(Ordering::Relaxed),
++                    copy_ns = POLL_COPY_NS.load(Ordering::Relaxed),
++                    notify_ns = POLL_NOTIFY_NS.load(Ordering::Relaxed),
+                     "audio sender stopped after a terminal failure"
+                 );
+                 return Ok(Some(VoiceEvent::Closed(VoiceClose {
+@@ -668,13 +671,21 @@ struct OtoFrameSource {
+     shared: Arc<BridgeShared>,
+ }
+ 
++// TEMPORARY diagnostic build only: stage timing, no ordinary-frame logging.
++static POLL_RECV_NS: AtomicU64 = AtomicU64::new(0);
++static POLL_COPY_NS: AtomicU64 = AtomicU64::new(0);
++static POLL_NOTIFY_NS: AtomicU64 = AtomicU64::new(0);
++
+ impl FrameSource for OtoFrameSource {
+     fn poll_frame(&mut self, cx: &mut Context<'_>, output: &mut [u8]) -> Poll<FrameStatus> {
+         // Tokio's try_recv can park the thread while a producer is publishing.
+         // poll_recv instead registers/rechecks readiness and yields on that
+         // race (or an exhausted cooperative budget). Channel closure also wakes
+         // a pending receiver after EOF, failure, or producer cancellation.
+-        match self.frames.poll_recv(cx) {
++        let begin = std::time::Instant::now();
++        let result = self.frames.poll_recv(cx);
++        let received = std::time::Instant::now();
++        match result {
+             Poll::Ready(Some(frame)) => {
+                 let payload = frame.payload();
+                 if payload.len() > output.len() {
+@@ -686,7 +697,14 @@ impl FrameSource for OtoFrameSource {
+                     return Poll::Ready(FrameStatus::Ended);
+                 }
+                 output[..payload.len()].copy_from_slice(payload);
++                let copied = std::time::Instant::now();
+                 self.shared.consumed.notify_one();
++                let notified = std::time::Instant::now();
++                if notified.duration_since(begin) > Duration::from_millis(1) {
++                    POLL_RECV_NS.store(received.duration_since(begin).as_nanos() as u64, Ordering::Relaxed);
++                    POLL_COPY_NS.store(copied.duration_since(received).as_nanos() as u64, Ordering::Relaxed);
++                    POLL_NOTIFY_NS.store(notified.duration_since(copied).as_nanos() as u64, Ordering::Relaxed);
++                }
+                 Poll::Ready(FrameStatus::Frame { len: payload.len() })
+             }
+             Poll::Ready(None) => Poll::Ready(FrameStatus::Ended),
