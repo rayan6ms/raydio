@@ -1,0 +1,17 @@
+{
+  "scope": "Complete pooled HTTP prototype, two workers. Button test was attempted after natural EOF and is invalid; no playback controls changed this sender trace.",
+  "binarySha256": "d7f0e5c2677d8979bfa15cd39e17820ff7a958426591ed77e7a41e9e391ad07e",
+  "packets": 10658,
+  "seconds": 214.118643574,
+  "failedSends": 0,
+  "sequenceDiscontinuities": 0,
+  "timestampDiscontinuities": 0,
+  "gapMs": {
+    "median": 19.848061,
+    "p99": 21.142741,
+    "max": 100.277181,
+    "over25": 61,
+    "over40": 20,
+    "under10": 19
+  }
+}

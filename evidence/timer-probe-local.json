@@ -1,0 +1,16 @@
+{
+  "scope": "60-second independent Python time.sleep scheduler probe; no media or Discord, no busy wait and no catch-up loop",
+  "elapsedSeconds": 60.00010770300014,
+  "samples": 3000,
+  "latenessMs": {
+    "median": 0.12267274905752856,
+    "p99": 0.14783245751459617,
+    "max": 0.18603878288558917
+  },
+  "intervalMs": {
+    "max": 20.10024599985627,
+    "over25": 0,
+    "over40": 0
+  },
+  "lateEvents": []
+}

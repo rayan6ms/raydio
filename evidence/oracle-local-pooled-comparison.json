@@ -1,0 +1,40 @@
+{
+  "scope": "Same prototype and two Tokio workers. Sequential 150-second receiver windows; source/host/Internet conditions are not randomized. Sender intervals are aligned using wall-clock/monotonic samples taken during or after playback; not submillisecond cross-host clock calibration. Intentional button pauses excluded.",
+  "binarySha256": "d7f0e5c2677d8979bfa15cd39e17820ff7a958426591ed77e7a41e9e391ad07e",
+  "hosts": {
+    "local": {
+      "receivedPackets": 7503,
+      "netLostPackets": 0,
+      "concealedMs": 74.70833333333333,
+      "silentBlocks": 0,
+      "speakingTransitions": 0,
+      "senderPackets": 7502,
+      "senderDurationSeconds": 150.020173713,
+      "senderGapMs": {
+        "median": 19.813314,
+        "p99": 20.880635,
+        "max": 21.026655,
+        "over25": 0,
+        "over40": 0
+      },
+      "sendFailures": 0
+    },
+    "oracle": {
+      "receivedPackets": 7462,
+      "netLostPackets": 0,
+      "concealedMs": 796.75,
+      "silentBlocks": 0,
+      "speakingTransitions": 0,
+      "senderPackets": 7462,
+      "senderDurationSeconds": 149.999615229,
+      "senderGapMs": {
+        "median": 19.844324,
+        "p99": 21.325867,
+        "max": 100.277181,
+        "over25": 48,
+        "over40": 16
+      },
+      "sendFailures": 0
+    }
+  }
+}

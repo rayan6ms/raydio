@@ -10,7 +10,16 @@ const measureRaydioLatency = async (count=12) => {
     window.__raydioLatency=results;
     let expected=state();
     try {
-        if (!expected) throw Error('No active player');
+        if (expected!=='Playing') throw Error('Start with an active playing track');
+        // Old Discord messages can retain a Playing footer after a bot restart.
+        // Require fresh progress before any click, so a stale panel is never an oracle.
+        const before=panel()?.innerText;
+        let advancing=false;
+        for (let i=0;i<3;i++) {
+            await new Promise(resolve=>setTimeout(resolve,1000));
+            if (state()==='Playing' && panel()?.innerText!==before) { advancing=true; break; }
+        }
+        if (!advancing) throw Error('Player panel is not advancing');
         for (let i=0;i<count;i++) {
             if (state()!==expected) throw Error('Panel reverted during settling');
             const action=expected==='Playing'?'Pause':'Resume';

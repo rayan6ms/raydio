@@ -100,9 +100,61 @@ The first pooled one-worker track completed with 10,658 outgoing packets,
 zero send/RTP errors, and maximum spacing 85.607 ms (28 gaps over 40 ms). The
 180-second receiver capture began too late and included the final seconds of
 the song: its terminal quiet run is not a valid mid-track comparison. The full
-raw result is retained, and a new 150-second window with two workers is being
-measured. The pooled one-worker PSS was 15,849–16,201 KiB; no memory reduction
+raw result is retained. A new 150-second window with two workers is measured
+below. The pooled one-worker PSS was 15,849–16,201 KiB; no memory reduction
 is claimed for keeping HTTP connections reusable.
 
 See [the free hosting assessment](../deploy/FREE-HOSTING.md) for alternatives
 and their billing, uptime, and bandwidth constraints.
+
+The pooled two-worker 150-second receiver capture recorded 7,462 packets, zero
+net packet loss, 38,244 concealed samples (796.75 ms), no silent PCM blocks, no
+clipping, and no speaking interruptions. The complete track sender trace had
+10,658 packets, no send or RTP errors, maximum interval 100.277 ms, and 20 gaps
+over 40 ms. Memory across seven windows was 16,349–16,493 KiB PSS at roughly
+4.2–5.2% of one CPU. HTTP connection reuse is proved by the regression; these
+variable cloud timing results do not establish a live audio speedup.
+
+## Same-binary local versus Oracle comparison
+
+The same prototype binary, volume 70, two workers, and browser peer were tested
+sequentially on Oracle and locally. Both 150-second captures had zero silent
+PCM blocks, clipping, speaking transitions, and net packet loss. In the sender
+trace aligned to each receiver window:
+
+| Measurement | Local | Oracle Micro |
+| --- | ---: | ---: |
+| Received packets | 7,503 | 7,462 |
+| Concealed audio | 74.708 ms | 796.750 ms |
+| Maximum outgoing packet interval | 21.027 ms | 100.277 ms |
+| Outgoing intervals over 40 ms | 0 | 16 |
+| Playback PSS, seven windows | 16,001–16,025 KiB | 16,349–16,493 KiB |
+| Playback CPU, one core | 3.30–3.50% | 4.19–5.18% |
+
+The long intervals already exist before packets leave the Oracle process.
+Together with earlier low syscall durations this implicates sender/worker/host
+scheduling or upstream supply, rather than only downstream packet loss. It does
+not isolate hypervisor scheduling as the sole cause. The isolated source timing
+diagnostic did not reproduce the multi-second stall. A1 remains untested and
+out of capacity; this Micro has not matched local transmission timing.
+
+The local control phase followed the audio capture automatically in the browser
+and passed all 12 alternating Pause/Resume transitions. It measures click to
+updated footer, not audible control latency. The earlier cloud control attempt
+started after EOF and is retained as invalid. The benchmark now requires an
+advancing panel before clicking; stale historical messages cannot count as an
+active player. No matched live button speedup is claimed.
+
+Raw reports: `oracle-local-pooled-comparison.json`, both
+`audio-*-pooled-workers2.json` files, the corresponding memory files, and
+`latency-local-pooled-workers2.json`. Sequential shared-host observations are
+not randomized network trials or a guarantee for a whole future session.
+
+A 60-second independent Python/OS timer probe with Testbot stopped measured
+maximum wakeup lateness of 0.186 ms locally and 6.026 ms on Oracle. Neither
+recorded an interval over 40 ms. Therefore the 80–100 ms audio intervals were
+not reproduced by an idle host timer alone; assigning every gap to hypervisor
+steal would be unsupported. Oracle cgroup accounting reported no quota
+throttling and the service has no CPU quota. The worker/source/loaded-host
+interaction remains unresolved. Raw timer reports and the bounded probe are
+committed for reproducibility.

@@ -1,0 +1,59 @@
+{
+  "scope": "Same local pooled two-worker prototype after 150-second uncontested audio capture. Browser click to changed Discord player footer; not audible pause latency. No valid matched cloud baseline.",
+  "finishedAt": "2026-09-06T12:41:03.421Z",
+  "result": {
+    "results": [
+      {
+        "action": "Pause",
+        "ms": 1209.2000000001863
+      },
+      {
+        "action": "Resume",
+        "ms": 984.7000000001863
+      },
+      {
+        "action": "Pause",
+        "ms": 999.8999999994412
+      },
+      {
+        "action": "Resume",
+        "ms": 838.4000000003725
+      },
+      {
+        "action": "Pause",
+        "ms": 2032.9000000003725
+      },
+      {
+        "action": "Resume",
+        "ms": 2037.9000000003725
+      },
+      {
+        "action": "Pause",
+        "ms": 1040.7000000001863
+      },
+      {
+        "action": "Resume",
+        "ms": 937.4000000003725
+      },
+      {
+        "action": "Pause",
+        "ms": 1130
+      },
+      {
+        "action": "Resume",
+        "ms": 1074.2000000001863
+      },
+      {
+        "action": "Pause",
+        "ms": 1566.699999999255
+      },
+      {
+        "action": "Resume",
+        "ms": 1099.7000000001863
+      }
+    ],
+    "settleMs": 2000,
+    "valid": true
+  },
+  "startedAt": "2026-09-06T12:40:23.454Z"
+}

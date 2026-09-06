@@ -1,0 +1,82 @@
+{
+  "date": "2026-09-06T12:31:27.253983+00:00",
+  "stack": "oracle-pooled-workers2",
+  "workload": "Volume70 two workers; pooled HTTP prototype; trace and slow read diagnostics; production idle",
+  "limitations": [
+    "Shared host",
+    "7 consecutive windows in one warmed process; not independent process restarts",
+    "This sampler does not assess audio quality; automated receiver evidence is recorded separately"
+  ],
+  "processCount": 1,
+  "executables": [
+    {
+      "name": "testbot-diagnostic",
+      "sha256": "d7f0e5c2677d8979bfa15cd39e17820ff7a958426591ed77e7a41e9e391ad07e"
+    }
+  ],
+  "trials": [
+    {
+      "trial": 1,
+      "observationSeconds": 20.029,
+      "medianRssKiB": 18892.0,
+      "medianPssKiB": 16465.0,
+      "cpuSeconds": 0.91,
+      "cpuPercentOneCore": 4.544,
+      "maxThreads": 5
+    },
+    {
+      "trial": 2,
+      "observationSeconds": 20.027,
+      "medianRssKiB": 18892.0,
+      "medianPssKiB": 16465.0,
+      "cpuSeconds": 0.88,
+      "cpuPercentOneCore": 4.394,
+      "maxThreads": 5
+    },
+    {
+      "trial": 3,
+      "observationSeconds": 20.029,
+      "medianRssKiB": 18776.0,
+      "medianPssKiB": 16349.0,
+      "cpuSeconds": 0.91,
+      "cpuPercentOneCore": 4.543,
+      "maxThreads": 5
+    },
+    {
+      "trial": 4,
+      "observationSeconds": 20.029,
+      "medianRssKiB": 18792.0,
+      "medianPssKiB": 16365.0,
+      "cpuSeconds": 0.84,
+      "cpuPercentOneCore": 4.194,
+      "maxThreads": 5
+    },
+    {
+      "trial": 5,
+      "observationSeconds": 20.07,
+      "medianRssKiB": 18920.0,
+      "medianPssKiB": 16493.0,
+      "cpuSeconds": 1.04,
+      "cpuPercentOneCore": 5.182,
+      "maxThreads": 5
+    },
+    {
+      "trial": 6,
+      "observationSeconds": 20.034,
+      "medianRssKiB": 18920.0,
+      "medianPssKiB": 16493.0,
+      "cpuSeconds": 0.87,
+      "cpuPercentOneCore": 4.343,
+      "maxThreads": 5
+    },
+    {
+      "trial": 7,
+      "observationSeconds": 20.03,
+      "medianRssKiB": 18920.0,
+      "medianPssKiB": 16493.0,
+      "cpuSeconds": 0.84,
+      "cpuPercentOneCore": 4.194,
+      "maxThreads": 5
+    }
+  ]
+}

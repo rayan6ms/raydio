@@ -1,0 +1,6 @@
+{
+  "startedAt": "2026-09-06T12:34:53.262Z",
+  "scope": "Invalid attempt made after natural track ending; historical Discord panels still showed Playing. No latency comparison is possible.",
+  "result": {"valid": false, "error": "Error: Panel status timeout", "results": [], "settleMs": 2000},
+  "repair": "Benchmark now requires advancing current panel text before any control click. Future audio and button phases are started consecutively inside the browser to avoid tool delays crossing EOF."
+}

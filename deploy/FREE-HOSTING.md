@@ -12,6 +12,13 @@ separate gate. A read-only capacity report at 12:07 UTC again returned
 performance-tested, so Micro results do not establish that all Oracle shapes
 are unsuitable.
 
+The subsequent same-binary 150-second comparison measured maximum outgoing
+packet intervals of 21.027 ms locally and 100.277 ms on Micro, with 0 versus
+16 intervals over 40 ms. Receiver concealment was 74.708 versus 796.750 ms;
+neither window had silent blocks or clipping. This confirms a timing gap to
+investigate, without claiming a controlled proof that the hypervisor alone
+causes it. See `evidence/oracle-local-pooled-comparison.json`.
+
 ## Traffic budget from the real bot
 
 The complete `udp-send-oracle-source-diagnostic.json` track emitted about

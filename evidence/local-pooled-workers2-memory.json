@@ -1,0 +1,82 @@
+{
+  "date": "2026-09-06T12:37:52.617344+00:00",
+  "stack": "local-pooled-workers2",
+  "workload": "Same pooled HTTP prototype as Oracle; volume70 two workers, same controlled-browser listener; trace active",
+  "limitations": [
+    "Shared host",
+    "7 consecutive windows in one warmed process; not independent process restarts",
+    "This sampler does not assess audio quality; automated receiver evidence is recorded separately"
+  ],
+  "processCount": 1,
+  "executables": [
+    {
+      "name": "raydio-pooled-diagnostic",
+      "sha256": "d7f0e5c2677d8979bfa15cd39e17820ff7a958426591ed77e7a41e9e391ad07e"
+    }
+  ],
+  "trials": [
+    {
+      "trial": 1,
+      "observationSeconds": 20.019,
+      "medianRssKiB": 19132.0,
+      "medianPssKiB": 16001.0,
+      "cpuSeconds": 0.67,
+      "cpuPercentOneCore": 3.347,
+      "maxThreads": 4
+    },
+    {
+      "trial": 2,
+      "observationSeconds": 20.02,
+      "medianRssKiB": 19144.0,
+      "medianPssKiB": 16013.0,
+      "cpuSeconds": 0.67,
+      "cpuPercentOneCore": 3.347,
+      "maxThreads": 4
+    },
+    {
+      "trial": 3,
+      "observationSeconds": 20.021,
+      "medianRssKiB": 19144.0,
+      "medianPssKiB": 16013.0,
+      "cpuSeconds": 0.66,
+      "cpuPercentOneCore": 3.297,
+      "maxThreads": 4
+    },
+    {
+      "trial": 4,
+      "observationSeconds": 20.021,
+      "medianRssKiB": 19144.0,
+      "medianPssKiB": 16013.0,
+      "cpuSeconds": 0.68,
+      "cpuPercentOneCore": 3.396,
+      "maxThreads": 4
+    },
+    {
+      "trial": 5,
+      "observationSeconds": 20.021,
+      "medianRssKiB": 19144.0,
+      "medianPssKiB": 16013.0,
+      "cpuSeconds": 0.67,
+      "cpuPercentOneCore": 3.347,
+      "maxThreads": 4
+    },
+    {
+      "trial": 6,
+      "observationSeconds": 20.02,
+      "medianRssKiB": 19156.0,
+      "medianPssKiB": 16025.0,
+      "cpuSeconds": 0.67,
+      "cpuPercentOneCore": 3.347,
+      "maxThreads": 4
+    },
+    {
+      "trial": 7,
+      "observationSeconds": 20.022,
+      "medianRssKiB": 19156.0,
+      "medianPssKiB": 16025.0,
+      "cpuSeconds": 0.7,
+      "cpuPercentOneCore": 3.496,
+      "maxThreads": 4
+    }
+  ]
+}
