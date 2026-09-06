@@ -96,5 +96,32 @@ eliminates the waiter-list lock while preserving early consumption and the
 latest waker, but still needs a live test because waking the Tokio task can
 itself have scheduling cost. The CPU gate is unchanged. All 14 bridge tests pass.
 
+## Atomic handoff and buffer experiment
+
+Raydio 8627be9 (Crust 7f1f444) passed native CI 34053501317 on both architectures.
+Its locally built Oracle binary SHA256 was
+`33a451b80b9dd84c8ee1a0f7fb09f687f1c93f7638ce63115fa68d446154f28f`.
+The fresh receiver stayed connected for 438.695 seconds until manually stopped.
+There was no terminal sender warning. It nevertheless recorded one 605.292 ms
+mid-song quiet interval, 1,403.521 ms total concealment, 883.625 ms silent
+concealment, no positive/net packet loss, and no clipping. Two track restarts
+also had 1.17–1.32 s boundary silence. The second boundary's panel position was
+stale at 205 seconds: panel-derived phases are approximate and need review.
+`endurance-atomic-consumed-diagnostic.json` contains the finalized stopped report.
+
+A subsequent Crust 4bf2445 experiment enlarged finite-source prefetch from 320 ms
+to 1.28 s. Its 19 adapter tests and Clippy passed, but the fresh 86.197-second
+receiver run still recorded 751.104 ms mid-song silence, 975.833 ms concealment,
+and four lost packets. This is no proved improvement (`endurance-buffer64-diagnostic.json`).
+Increasing the encoded buffer also delays audible filters/volume, so the
+experiment is reverted. There is no evidence yet to attribute these receiver
+gaps to source reads, VM scheduling, Discord, or the receiving computer.
+
+The post-capture /diagnostics window reported 3,000 sent, zero unavailable and
+zero missed deadlines, but was too late to cover the gap. The next candidate
+retains lifetime sender counters in one audio-shutdown log. This adds no
+per-frame work and allows receiver events to be checked against source
+starvation and missed pacing deadlines over the entire run.
+
 The final live result is pending. No finite test guarantees future network
 behavior or proves every audible source defect absent.

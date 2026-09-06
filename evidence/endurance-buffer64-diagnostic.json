@@ -1,0 +1,222 @@
+{
+  "current": {
+    "bytesReceived": 1707157,
+    "concealedSamples": 51644,
+    "concealmentEvents": 7,
+    "jitterBufferDelay": 1564944,
+    "jitterBufferEmittedCount": 6264960,
+    "packetsLost": 4,
+    "packetsReceived": 6534,
+    "silentConcealedSamples": 38341,
+    "timestamp": 1788723120370.372,
+    "totalSamplesReceived": 6274560
+  },
+  "currentPhase": {
+    "durationSeconds": 213,
+    "label": "middle",
+    "loop": true,
+    "playing": true,
+    "positionSeconds": 129
+  },
+  "delta": {
+    "bytesReceived": 1125035,
+    "concealedSamples": 46840,
+    "concealmentEvents": 2,
+    "jitterBufferDelay": 1484985.6,
+    "jitterBufferEmittedCount": 4132800,
+    "packetsLost": 4,
+    "packetsReceived": 4306,
+    "silentConcealedSamples": 38341,
+    "timestamp": 86197.47509765625,
+    "totalSamplesReceived": 4137120
+  },
+  "elapsedSeconds": 86.19747509765625,
+  "events": [
+    {
+      "concealedMs": 146.85416666666666,
+      "jitterMs": 5,
+      "kind": "receiver",
+      "lost": 0,
+      "ms": 8016.60000000149,
+      "packets": 40,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 52
+      },
+      "silentConcealedMs": 0,
+      "windowMs": 1004.475830078125
+    },
+    {
+      "kind": "speaking",
+      "ms": 8049,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 52
+      },
+      "speaking": false
+    },
+    {
+      "kind": "speaking",
+      "ms": 8870.800000000745,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 52
+      },
+      "speaking": true
+    },
+    {
+      "audioSeconds": 10.12,
+      "durationMs": 751.1041666666666,
+      "endFrame": 423293,
+      "kind": "quiet",
+      "ms": 9017.10000000149,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 52
+      }
+    },
+    {
+      "audioSeconds": 10.12,
+      "durationMs": 42.708333333333336,
+      "endFrame": 425351,
+      "kind": "quiet",
+      "ms": 9017.5,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 52
+      }
+    },
+    {
+      "concealedMs": 813.5,
+      "jitterMs": 5,
+      "kind": "receiver",
+      "lost": 4,
+      "ms": 9017.900000002235,
+      "packets": 56,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 52
+      },
+      "silentConcealedMs": 798.7708333333334,
+      "windowMs": 1001.692138671875
+    },
+    {
+      "concealedMs": 15.479166666666666,
+      "jitterMs": 2,
+      "kind": "receiver",
+      "lost": 0,
+      "ms": 83160.40000000224,
+      "packets": 50,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 126
+      },
+      "silentConcealedMs": 0,
+      "windowMs": 1000.90185546875
+    }
+  ],
+  "eventsTruncated": false,
+  "finishedAt": "2026-09-06T19:32:00.448Z",
+  "graphWarmupMs": 1100,
+  "initial": {
+    "bytesReceived": 582122,
+    "concealedSamples": 4804,
+    "concealmentEvents": 5,
+    "jitterBufferDelay": 79958.4,
+    "jitterBufferEmittedCount": 2132160,
+    "packetsLost": 0,
+    "packetsReceived": 2228,
+    "silentConcealedSamples": 0,
+    "timestamp": 1788723034172.897,
+    "totalSamplesReceived": 2137440
+  },
+  "lastProgressAt": "2026-09-06T19:32:00.381Z",
+  "limitations": [
+    "Finite receiver observation, not a guarantee of future network behavior",
+    "Track phase comes from the once-per-second visible player; silence near track boundaries is retained for review, never silently excluded",
+    "No PCM is recorded; source defects and perceptual quality need separate evidence"
+  ],
+  "minutes": [
+    {
+      "concealedSamples": 46097,
+      "concealmentEvents": 1,
+      "fromMs": 0,
+      "index": 0,
+      "lostNet": 4,
+      "maxJitterMs": 6,
+      "maxPcmSilenceMs": 0,
+      "maxPollMs": 1021.528076171875,
+      "packets": 2952,
+      "polls": 59,
+      "positiveLoss": 4,
+      "silentConcealedSamples": 38341,
+      "toMs": 59130.2060546875
+    },
+    {
+      "concealedSamples": 743,
+      "concealmentEvents": 1,
+      "fromMs": 59130.2060546875,
+      "index": 1,
+      "lostNet": 0,
+      "maxJitterMs": 3,
+      "maxPcmSilenceMs": 0,
+      "maxPollMs": 1035.38916015625,
+      "packets": 1354,
+      "polls": 27,
+      "positiveLoss": 0,
+      "silentConcealedSamples": 0,
+      "toMs": 86197.47509765625
+    }
+  ],
+  "observationWallSeconds": 86.27560000000149,
+  "pcm": {
+    "audioSeconds": 86.21866666666666,
+    "emptyFrames": 0,
+    "frames": 4138496,
+    "longestQuietMs": 751.1041666666666,
+    "nearFullScale": 0,
+    "nonFinite": 0,
+    "ongoingQuietMs": 0,
+    "peak": 0.5582140684127808,
+    "reports": 344,
+    "rms": 0.09831940367394669,
+    "samples": 8276992,
+    "squared": 80011.24110021048
+  },
+  "requestedAt": "2026-09-06T19:30:31.962Z",
+  "requestedSeconds": 1200,
+  "sampleRate": 48000,
+  "sampling": {
+    "maxConcealedMsPerPoll": 813.5,
+    "maxPollMs": 1035.38916015625,
+    "negativeLossDeltas": 0,
+    "pcmReportsMissing": 0,
+    "polls": 86,
+    "positiveLossDeltas": 4,
+    "stalePolls": 0
+  },
+  "startedAt": "2026-09-06T19:30:34.172Z",
+  "status": "stopped",
+  "version": 1
+}
