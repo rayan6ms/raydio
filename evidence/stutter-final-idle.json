@@ -1,0 +1,109 @@
+{
+  "date": "2026-09-06T03:44:56.105608+00:00",
+  "workload": "Authenticated idle, no commands or voice; alternating build order",
+  "warmupSeconds": 5,
+  "trials": [
+    {
+      "stack": "rust",
+      "startupMs": 2608.82,
+      "observationSeconds": 15.01,
+      "medianRssKiB": 15140,
+      "medianPssKiB": 12230,
+      "maxThreads": 4,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.067,
+      "variant": "before",
+      "trial": 1
+    },
+    {
+      "stack": "rust",
+      "startupMs": 2506.33,
+      "observationSeconds": 15.011,
+      "medianRssKiB": 14916,
+      "medianPssKiB": 12021,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "variant": "after",
+      "trial": 1
+    },
+    {
+      "stack": "rust",
+      "startupMs": 2356.93,
+      "observationSeconds": 15.013,
+      "medianRssKiB": 14916,
+      "medianPssKiB": 12012,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "variant": "after",
+      "trial": 2
+    },
+    {
+      "stack": "rust",
+      "startupMs": 2556.51,
+      "observationSeconds": 15.012,
+      "medianRssKiB": 15068,
+      "medianPssKiB": 11928,
+      "maxThreads": 4,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.067,
+      "variant": "before",
+      "trial": 2
+    },
+    {
+      "stack": "rust",
+      "startupMs": 2807.83,
+      "observationSeconds": 15.012,
+      "medianRssKiB": 14736,
+      "medianPssKiB": 11706,
+      "maxThreads": 4,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.067,
+      "variant": "before",
+      "trial": 3
+    },
+    {
+      "stack": "rust",
+      "startupMs": 3158.95,
+      "observationSeconds": 15.011,
+      "medianRssKiB": 15280,
+      "medianPssKiB": 12322,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "variant": "after",
+      "trial": 3
+    }
+  ],
+  "binaries": {
+    "before": {
+      "sha256": "b3bc5211bc536d19562d7a5055210746b1f3b629d5583d3dfb0c9d1bb0351648",
+      "bytes": 18148312
+    },
+    "after": {
+      "sha256": "cc572c6119ae76e2fb93d3e848438589309a47427f09436a375788dea78cf2c8",
+      "bytes": 18159928
+    }
+  },
+  "arenaMaxOverrides": {
+    "before": 2,
+    "after": 2
+  },
+  "limitations": [
+    "Shared host; idle only, no playback or end-to-end latency claim",
+    "Three independent starts per variant; no compilation during sampling"
+  ],
+  "medians": {
+    "before": {
+      "medianPssKiB": 11928,
+      "medianRssKiB": 15068,
+      "startupMs": 2608.82
+    },
+    "after": {
+      "medianPssKiB": 12021,
+      "medianRssKiB": 14916,
+      "startupMs": 2506.33
+    }
+  }
+}

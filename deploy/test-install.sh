@@ -8,8 +8,20 @@ cd "$(dirname "$0")/.."
 mkdir -p /run/lock /etc/systemd/system /opt/raydio /tmp/raydio-deploy-test/bin
 cat > /tmp/raydio-deploy-test/bin/systemctl <<'SH'
 #!/bin/sh
+if [ "$1" = is-failed ]; then
+    test -f /tmp/raydio-unit-failed
+    exit $?
+fi
+if [ "$1" = reset-failed ]; then
+    # A fresh Ubuntu manager may not have loaded an inactive new unit yet.
+    test -f /tmp/raydio-unit-failed || exit 1
+    rm /tmp/raydio-unit-failed
+fi
 if [ "$1" = restart ] && [ -f /tmp/raydio-fail-revision ]; then
-    [ "$(cat /opt/raydio/current/REVISION)" != "$(cat /tmp/raydio-fail-revision)" ] || exit 1
+    if [ "$(cat /opt/raydio/current/REVISION)" = "$(cat /tmp/raydio-fail-revision)" ]; then
+        touch /tmp/raydio-unit-failed
+        exit 1
+    fi
 fi
 exit 0
 SH
@@ -37,6 +49,7 @@ bash deploy/raydioctl install "/tmp/raydio-deploy-test/$one.tar.gz"
 runuser -u raydio -- /opt/raydio/current/bin/raydio --check
 printf 'DISCORD_TOKEN=fixture-not-a-real-token\n' > /etc/raydio/env
 cp /etc/raydio/env /tmp/raydio-deploy-test/env.expected
+bash deploy/raydioctl start
 bash deploy/raydioctl update "/tmp/raydio-deploy-test/$two.tar.gz"
 [[ $(cat /opt/raydio/current/REVISION) == "$two" ]]
 [[ $(cat /opt/raydio/previous/REVISION) == "$one" ]]

@@ -25,6 +25,10 @@ Raw observations: [before](source-stalls-before.json) and
 16 seconds and take 90–130 ms. This establishes a source-starvation mechanism;
 it does not by itself measure Discord reception or subjective sound quality.
 
+The final public dependency `f7d6c69` was remeasured after the filter-command
+fix: [180 seconds, 9,000 frames](source-stalls-final.json), zero reads exceeding
+20 ms, median 0.047 ms, p99 0.104 ms, maximum 0.592 ms. No build overlapped it.
+
 The prototype keeps at most 16 encoded frames in the Mantle adapter and one
 owned read in flight on the existing blocking pool. Oto still owns pacing.
 Prefetched EOF/errors follow the buffered audio; delivered position advances

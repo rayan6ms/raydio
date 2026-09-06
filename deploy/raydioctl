@@ -20,10 +20,17 @@ link_current() {
     ln -s "$1" "$root/current.next"
     mv -Tf "$root/current.next" "$root/current"
 }
+reset_failure() {
+    # reset-failed can reject a newly installed, not-yet-loaded inactive unit.
+    # Only failed units need their restart-rate counter cleared.
+    if systemctl is-failed --quiet "$service"; then
+        systemctl reset-failed "$service"
+    fi
+}
 load_service() {
     install -m644 "$1/deploy/raydio.service" /etc/systemd/system/raydio.service
     systemctl daemon-reload
-    systemctl reset-failed "$service"
+    reset_failure
 }
 activate() {
     local next=$1 old=${2:-}
@@ -46,7 +53,7 @@ activate() {
 }
 if [[ "$command" == start ]]; then
     systemctl enable "$service"
-    systemctl reset-failed "$service"
+    reset_failure
     systemctl start "$service" # Type=notify waits for Discord readiness.
     exit
 fi

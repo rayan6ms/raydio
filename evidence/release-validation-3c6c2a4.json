@@ -1,0 +1,25 @@
+{
+  "revision": "3c6c2a41508f759d813fbafb32769bacdd30071c",
+  "crustRevision": "f7d6c69c42db461f26ac8bc81ff3966a888a86b0",
+  "ci": "https://github.com/rayan6ms/raydio/actions/runs/34009217136",
+  "checks": [
+    "46 bot tests on native x86-64 and ARM64",
+    "formatting and Clippy with warnings denied",
+    "deployment install/update/rollback and failure injection",
+    "packaged backend smoke test as unprivileged raydio user"
+  ],
+  "artifacts": {
+    "x86_64": {
+      "archiveBytes": 7403477,
+      "archiveSha256": "52c23a04fef9760a1c4850e4c39534deade7da6d4be9423a7f3ab0a135c27d7d",
+      "binaryBytes": 18159928,
+      "binarySha256": "cc572c6119ae76e2fb93d3e848438589309a47427f09436a375788dea78cf2c8"
+    },
+    "aarch64": {
+      "archiveBytes": 7017901,
+      "archiveSha256": "5ff2251be806a0cea92888a54b5bc189b0857fa9f79638047e598b35a716d92b",
+      "binaryBytes": 16143216,
+      "binarySha256": "1709274501b2bc4a1c06b7102a2a82287cbfcaccfc020e96826a074d0ef799e8"
+    }
+  }
+}

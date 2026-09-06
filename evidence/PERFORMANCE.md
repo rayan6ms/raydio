@@ -1,4 +1,14 @@
-# v0.2.0 measurements (mid-song stutter investigation remains open)
+# Audio reliability correction after v0.2.0
+
+The pinned `f7d6c69` Crust change adds bounded source read ahead and prevents
+filter updates waiting on HTTP from blocking buffered audio. The final
+three-minute source check delivered all 9,000 frames with zero reads over
+20 ms (maximum 0.592 ms), versus 11 overruns before. Prototype receiver runs
+eliminated the periodic encoded-silence pattern but still needed some network
+loss concealment. Do not interpret this as a lossless transmission guarantee.
+See [the detailed diagnosis and raw comparisons](STUTTER-DIAGNOSIS.md).
+
+# v0.2.0 measurements
 
 The user subsequently reported repeated mid-song stutters. The coarse receiver
 windows below did not rule them out. See the [current diagnosis](STUTTER-DIAGNOSIS.md)

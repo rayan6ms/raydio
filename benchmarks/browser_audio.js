@@ -162,3 +162,31 @@ const fineRaydioAudioAudit = async (seconds=180) => {
         throw error;
     }
 };
+
+// Current Discord voice-row classes were inspected in the controlled browser.
+// Fail before capture if the UI changes or the bot is not already speaking.
+// `valid` describes advancing packet windows, never an audio-quality pass.
+const playbackRaydioAudioAudit = async (seconds=150) => {
+    const row=[...document.querySelectorAll('.username__07f91')]
+        .find(e=>e.textContent==='bot1544468432907669644');
+    if (!row || !row.className.includes('usernameSpeaking')) throw Error('Testbot is not visibly speaking');
+    const ring={initialSpeaking:true,events:[],truncated:false,started:performance.now()};
+    let last=true;
+    const observer=new MutationObserver(()=>{
+        const speaking=row.className.includes('usernameSpeaking');
+        if (speaking===last) return;
+        last=speaking;
+        if (ring.events.length<200) ring.events.push({ms:performance.now()-ring.started,speaking});
+        else ring.truncated=true;
+    });
+    observer.observe(row.parentElement.parentElement.parentElement,{subtree:true,attributes:true,attributeFilter:['class']});
+    try {
+        const audio=await fineRaydioAudioAudit(seconds);
+        return {...audio,ring:{...ring,rowStillConnected:row.isConnected},
+            checks:{noNetPacketLoss:audio.delta.packetsLost===0,
+                noConcealment:audio.delta.concealedSamples===0,
+                noSilentPcmBlocks:audio.pcm.zeroBlocks===0,
+                noClipping:audio.pcm.nearFullScale===0 && audio.pcm.nonFinite===0,
+                uninterruptedSpeaking:row.isConnected && !ring.truncated && ring.events.length===0}};
+    } finally {observer.disconnect();}
+};

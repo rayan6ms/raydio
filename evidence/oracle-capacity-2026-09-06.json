@@ -1,7 +1,15 @@
 {
   "date": "2026-09-06",
   "region": "sa-saopaulo-1",
-  "instances": [],
+  "instances": [
+    {
+      "name": "raydio",
+      "shape": "VM.Standard.E2.1.Micro",
+      "state": "RUNNING",
+      "memoryGiB": 1,
+      "bootVolumeGiB": 47
+    }
+  ],
   "resourceManagerStack": "ACTIVE",
   "capacityReports": [
     {
@@ -15,11 +23,11 @@
       "status": "OUT_OF_HOST_CAPACITY"
     }
   ],
-  "instanceCreated": false,
-  "botRunningOnOracle": false,
+  "instanceCreated": true,
+  "botRunningOnOracle": true,
   "oracleBotResourceMeasurements": null,
-  "infrastructureChanged": false,
-  "qualification": "Authenticated inventory and capacity reports only. No launch or capacity-retry loop was run. Native CI and local measurements are not Oracle runtime measurements.",
+  "infrastructureChanged": true,
+  "qualification": "Capacity reports initially said OUT_OF_HOST_CAPACITY for both shapes. Actual A1 launch failed; actual Micro launch succeeded. Exactly one instance exists across all accessible compartments and the sole subscribed region. Existing network reused; SSH restricted to the current administrator IPv4 /32. Testbot configuration installed first; production identity switch pending.",
   "inventoryScope": {
     "configuredProfiles": 1,
     "subscribedRegions": [
@@ -27,5 +35,16 @@
     ],
     "accessibleChildCompartments": 0,
     "includesRootCompartment": true
-  }
+  },
+  "launchAttempts": [
+    {
+      "shape": "VM.Standard.A1.Flex",
+      "result": "FAILED",
+      "reason": "Out of host capacity"
+    },
+    {
+      "shape": "VM.Standard.E2.1.Micro",
+      "result": "SUCCEEDED"
+    }
+  ]
 }
