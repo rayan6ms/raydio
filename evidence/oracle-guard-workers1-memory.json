@@ -1,0 +1,74 @@
+{
+  "date": "2026-09-06T04:56:29.034211+00:00",
+  "stack": "oracle-guard-workers1",
+  "workload": "One active track volume70, corrected Oto; one worker; tracing loaded; production Raydio idle",
+  "limitations": [
+    "Shared host",
+    "6 consecutive windows in one warmed process; not independent process restarts",
+    "This sampler does not assess audio quality; automated receiver evidence is recorded separately",
+    "Receiver disappeared before song end. Final CPU window includes the transmission stop; exclude it from active playback comparisons."
+  ],
+  "processCount": 1,
+  "executables": [
+    {
+      "name": "testbot-diagnostic",
+      "sha256": "8490d67a52bf5d9439d897599c42e3327fd97382dca1e48a1dc70437d8695187"
+    }
+  ],
+  "trials": [
+    {
+      "trial": 1,
+      "observationSeconds": 20.027,
+      "medianRssKiB": 18268.0,
+      "medianPssKiB": 15784.0,
+      "cpuSeconds": 0.85,
+      "cpuPercentOneCore": 4.244,
+      "maxThreads": 4
+    },
+    {
+      "trial": 2,
+      "observationSeconds": 20.027,
+      "medianRssKiB": 18140.0,
+      "medianPssKiB": 15656.0,
+      "cpuSeconds": 0.84,
+      "cpuPercentOneCore": 4.194,
+      "maxThreads": 4
+    },
+    {
+      "trial": 3,
+      "observationSeconds": 20.025,
+      "medianRssKiB": 18276.0,
+      "medianPssKiB": 15792.0,
+      "cpuSeconds": 0.8,
+      "cpuPercentOneCore": 3.995,
+      "maxThreads": 4
+    },
+    {
+      "trial": 4,
+      "observationSeconds": 20.026,
+      "medianRssKiB": 18284.0,
+      "medianPssKiB": 15800.0,
+      "cpuSeconds": 0.8,
+      "cpuPercentOneCore": 3.995,
+      "maxThreads": 4
+    },
+    {
+      "trial": 5,
+      "observationSeconds": 20.027,
+      "medianRssKiB": 18284.0,
+      "medianPssKiB": 15800.0,
+      "cpuSeconds": 0.85,
+      "cpuPercentOneCore": 4.244,
+      "maxThreads": 4
+    },
+    {
+      "trial": 6,
+      "observationSeconds": 20.025,
+      "medianRssKiB": 18284.0,
+      "medianPssKiB": 15800.0,
+      "cpuSeconds": 0.37,
+      "cpuPercentOneCore": 1.848,
+      "maxThreads": 4
+    }
+  ]
+}

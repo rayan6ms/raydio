@@ -1,0 +1,19 @@
+{
+  "revision": "1e944a982a91bce39698979fe03a41e13c1d55d9",
+  "ciRun": 34012761819,
+  "ciStatus": "success",
+  "artifacts": [
+    {
+      "architecture": "x86_64",
+      "archiveBytes": 7425172,
+      "archiveSha256": "176d5a0258291e92f1223a45bdb99e6b134527a96da80a7135652b020a8e7264",
+      "binaryBytes": 18235160
+    },
+    {
+      "architecture": "aarch64",
+      "archiveBytes": 7038784,
+      "archiveSha256": "3f15ce7f3f16163b5774af19732d3ac44439cc904dd72639edce310c2224074e",
+      "binaryBytes": 16143240
+    }
+  ]
+}

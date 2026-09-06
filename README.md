@@ -84,7 +84,13 @@ A stale player-panel update was fixed and passed 24 consecutive controls; no
 fresh control-latency improvement is claimed.
 
 See [performance evidence and limitations](evidence/PERFORMANCE.md) for exact
-observations, withdrawn results, and reproduction commands. The bot suite passes
-46 tests (45 in native release CI plus a subsequent test-only reconciliation regression), including real-backend controls, reconnects, and service notification.
+observations, withdrawn results, and reproduction commands. The latest native
+CI passes 49 bot tests, including real-backend controls, reconnects, command
+registration, and service notification.
 Earlier live tests exercised all 19 commands and seven buttons; the user confirmed
 clear audible playback at volume 70.
+
+The [Oracle receiver audit](evidence/ORACLE-RELIABILITY.md) records later cloud
+failures as well as successful windows. Low memory use and a running service
+do not establish interruption-free playback. See the [free hosting assessment](deploy/FREE-HOSTING.md)
+for current alternatives and their bandwidth, uptime, and billing limits.

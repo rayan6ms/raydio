@@ -1,0 +1,15 @@
+{
+  "scope": "Interrupted previous track, one worker: trace stopped after 156.4 s; browser closed and receiver result lost. Not a full-song qualification.",
+  "packets": 7796,
+  "seconds": 156.40141732,
+  "failedSends": 0,
+  "sequenceDiscontinuities": 0,
+  "gapMs": {
+    "median": 19.869784,
+    "p99": 21.023733,
+    "max": 81.632934,
+    "over25": 30,
+    "over40": 10,
+    "under10": 12
+  }
+}

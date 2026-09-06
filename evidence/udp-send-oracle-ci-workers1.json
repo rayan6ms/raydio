@@ -1,0 +1,103 @@
+{
+  "scope": "Complete CI 1e944a9 track, one worker; trace interposer active",
+  "binarySha256": "bac83ad16edfed00c52d3be121f3eda3e3e435e5eaec96264d3c40eee46e64ad",
+  "packets": 10668,
+  "seconds": 221.74549932,
+  "failedSends": 0,
+  "sequenceDiscontinuities": 0,
+  "timestampDiscontinuities": 0,
+  "gapMs": {
+    "median": 19.851581,
+    "p99": 20.954229,
+    "max": 3730.024368,
+    "over25": 43,
+    "over40": 25,
+    "under10": 12
+  },
+  "largestGaps": [
+    {
+      "index": 8755,
+      "seconds": 183.504135081,
+      "gapMs": 3730.024368,
+      "sendSyscallMs": 0.024566,
+      "packetSize": 292
+    },
+    {
+      "index": 756,
+      "seconds": 19.152469168,
+      "gapMs": 3590.780172,
+      "sendSyscallMs": 0.02134,
+      "packetSize": 289
+    },
+    {
+      "index": 1619,
+      "seconds": 36.794066684,
+      "gapMs": 100.115582,
+      "sendSyscallMs": 0.049132,
+      "packetSize": 284
+    },
+    {
+      "index": 1650,
+      "seconds": 37.699173927,
+      "gapMs": 85.228877,
+      "sendSyscallMs": 0.059732,
+      "packetSize": 290
+    },
+    {
+      "index": 1648,
+      "seconds": 37.593654411,
+      "gapMs": 80.411533,
+      "sendSyscallMs": 0.055344,
+      "packetSize": 291
+    },
+    {
+      "index": 433,
+      "seconds": 8.802050069,
+      "gapMs": 80.122476,
+      "sendSyscallMs": 0.045175,
+      "packetSize": 294
+    },
+    {
+      "index": 1623,
+      "seconds": 36.993602421,
+      "gapMs": 80.057173,
+      "sendSyscallMs": 0.049473,
+      "packetSize": 283
+    },
+    {
+      "index": 1606,
+      "seconds": 36.29362034,
+      "gapMs": 80.021797,
+      "sendSyscallMs": 0.049283,
+      "packetSize": 285
+    },
+    {
+      "index": 1621,
+      "seconds": 36.893593167,
+      "gapMs": 79.544215,
+      "sendSyscallMs": 0.054282,
+      "packetSize": 289
+    },
+    {
+      "index": 436,
+      "seconds": 8.981594893,
+      "gapMs": 79.470045,
+      "sendSyscallMs": 0.045746,
+      "packetSize": 291
+    },
+    {
+      "index": 434,
+      "seconds": 8.881378448,
+      "gapMs": 79.328379,
+      "sendSyscallMs": 0.045015,
+      "packetSize": 295
+    },
+    {
+      "index": 1609,
+      "seconds": 36.393730483,
+      "gapMs": 60.369319,
+      "sendSyscallMs": 0.053871,
+      "packetSize": 294
+    }
+  ]
+}

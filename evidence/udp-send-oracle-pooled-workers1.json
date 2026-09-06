@@ -1,0 +1,16 @@
+{
+  "scope": "Complete pooled HTTP prototype, one worker; receiver capture overlaps the final seconds of the song and is not a valid pre-end quality window.",
+  "binarySha256": "d7f0e5c2677d8979bfa15cd39e17820ff7a958426591ed77e7a41e9e391ad07e",
+  "packets": 10658,
+  "seconds": 214.529934598,
+  "failedSends": 0,
+  "sequenceDiscontinuities": 0,
+  "timestampDiscontinuities": 0,
+  "gapMs": {
+    "median": 19.866545,
+    "p99": 21.24963,
+    "max": 85.606669,
+    "over25": 69,
+    "over40": 28
+  }
+}

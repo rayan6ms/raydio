@@ -59,3 +59,50 @@ when interpreting `oracle-playback-first.json`. The cgroup's ~2.6 MiB
 Warm idle after playback is a different workload and must be labelled separately.
 
 Further matched worker-count and corrected-package audio measurements follow.
+
+## Fresh CI package and source diagnostic
+
+The one-worker CI package `1e944a9` completed the track, but failed the receiver
+gate. The 180-second window recorded 8,798 packets, zero net packet loss,
+206,826 concealed samples (4,308.9 ms), 90 silent PCM blocks, a 3,712 ms quiet
+run, and three speaking interruptions. The complete sender trace contains two
+long gaps, 3,590.8 and 3,730.0 ms, each preceded by exactly five small encrypted
+silence packets. The UDP send calls themselves took only about 0.02 ms. This
+locates the interruption before/during frame supply rather than in the browser
+alone. It does not distinguish a slow source read from delayed worker delivery.
+See `audio-oracle-ci-workers1.json` and `udp-send-oracle-ci-workers1.json`.
+
+A repeat added only temporary read-duration diagnostics. It recorded 8,966
+packets, zero net loss, 30,445 concealed samples (634.3 ms), no quiet PCM blocks,
+no clipping, and no speaking interruptions in 180 seconds. The complete sender
+trace's maximum gap was 99.380 ms, with 21 intervals over 40 ms. No source read
+over 58 ms was logged, so the multi-second source delay was not reproduced.
+This unchanged behavior is run-to-run variability, not a proven optimization.
+See `audio-oracle-source-diagnostic.json` and its matching sender report.
+
+The current receiver path differs from earlier sessions after a local public-IP
+change and browser restart. Preserve that limitation in cross-session comparisons.
+The current CI playback sampler measured 15,709–15,837 KiB PSS in the first seven
+20-second windows, at approximately 3.85–4.05% of one CPU. The eighth includes
+the audio interruption and must not be treated as an equally active CPU sample.
+These are playback measurements, not a new authenticated-idle improvement.
+
+The HTTP audit found that Crust always supplies a RoutePlanner policy, including
+when disabled. Mantle deliberately disables connection pooling for routed
+requests. A regression proved that two real adapter metadata loads opened two
+TCP connections before and one afterward. Crust now uses Mantle's normal source
+and playback paths when the planner is disabled. Enabled routing retains its
+connection isolation, and 19 adapter/filter tests plus Clippy pass. See
+`source-http-reuse.json`. Temporary source-read diagnostics are excluded from
+the committed implementation.
+
+The first pooled one-worker track completed with 10,658 outgoing packets,
+zero send/RTP errors, and maximum spacing 85.607 ms (28 gaps over 40 ms). The
+180-second receiver capture began too late and included the final seconds of
+the song: its terminal quiet run is not a valid mid-track comparison. The full
+raw result is retained, and a new 150-second window with two workers is being
+measured. The pooled one-worker PSS was 15,849–16,201 KiB; no memory reduction
+is claimed for keeping HTTP connections reusable.
+
+See [the free hosting assessment](../deploy/FREE-HOSTING.md) for alternatives
+and their billing, uptime, and bandwidth constraints.

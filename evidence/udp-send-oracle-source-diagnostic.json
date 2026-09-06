@@ -1,0 +1,14 @@
+{
+  "scope": "Complete unchanged one-worker stack with temporary source-read diagnostics",
+  "binarySha256": "74eb76ca9ec49f253657ec71e2dddb6e5020c49fe1f71287921523ca58ef12d6",
+  "packets": 10658,
+  "seconds": 214.199828076,
+  "failedSends": 0,
+  "gapMs": {
+    "median": 19.893158,
+    "p99": 21.183658,
+    "max": 99.379574,
+    "over25": 53,
+    "over40": 21
+  }
+}

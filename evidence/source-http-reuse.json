@@ -1,0 +1,10 @@
+{
+  "date": "2026-09-06",
+  "scope": "Deterministic HTTP keep-alive fixture through RealMantleAdapter's actual YouTube manager; two metadata loads with a disabled RoutePlanner",
+  "baselineCrust": "785b382ed40b283a7c1270d022e574b94035a455",
+  "test": "disabled_route_planner_reuses_source_http_connection",
+  "before": {"httpRequests": 2, "tcpConnections": 2, "regressionPassed": false},
+  "after": {"httpRequests": 2, "tcpConnections": 1, "regressionPassed": true},
+  "otherValidation": "19 adapter/filter tests pass; two existing manual benchmarks excluded. Configured route selection still binds the selected addresses without cross-route reuse.",
+  "limitations": "This proves removal of an unnecessary connection, not a live audio latency reduction. The full bot and cloud path require separate receiver measurements."
+}
