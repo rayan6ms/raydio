@@ -1,0 +1,166 @@
+{
+  "current": {
+    "bytesReceived": 864425,
+    "concealedSamples": 4634,
+    "concealmentEvents": 6,
+    "jitterBufferDelay": 167952,
+    "jitterBufferEmittedCount": 3168960,
+    "packetsLost": 0,
+    "packetsReceived": 3308,
+    "silentConcealedSamples": 0,
+    "timestamp": 1788717759504.376,
+    "totalSamplesReceived": 3178080
+  },
+  "currentPhase": {
+    "durationSeconds": 213,
+    "label": "middle",
+    "loop": true,
+    "playing": true,
+    "positionSeconds": 62
+  },
+  "delta": {
+    "bytesReceived": 390990,
+    "concealedSamples": 3388,
+    "concealmentEvents": 4,
+    "jitterBufferDelay": 83385.6,
+    "jitterBufferEmittedCount": 1433280,
+    "packetsLost": 0,
+    "packetsReceived": 1497,
+    "silentConcealedSamples": 0,
+    "timestamp": 30007.89794921875,
+    "totalSamplesReceived": 1440480
+  },
+  "elapsedSeconds": 30.00789794921875,
+  "events": [
+    {
+      "audioSeconds": 0.248,
+      "durationMs": 20,
+      "endFrame": 960,
+      "kind": "quiet",
+      "ms": 249.80000000074506,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 35
+      }
+    },
+    {
+      "concealedMs": 19.229166666666668,
+      "jitterMs": 4,
+      "kind": "receiver",
+      "lost": 0,
+      "ms": 3004.10000000149,
+      "packets": 50,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 38
+      },
+      "silentConcealedMs": 0,
+      "windowMs": 1001.39306640625
+    },
+    {
+      "concealedMs": 13.083333333333334,
+      "jitterMs": 5,
+      "kind": "receiver",
+      "lost": 0,
+      "ms": 14017.89999999851,
+      "packets": 50,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 48
+      },
+      "silentConcealedMs": 0,
+      "windowMs": 1001.265869140625
+    },
+    {
+      "concealedMs": 38.270833333333336,
+      "jitterMs": 9,
+      "kind": "receiver",
+      "lost": 0,
+      "ms": 19023.39999999851,
+      "packets": 47,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 54
+      },
+      "silentConcealedMs": 0,
+      "windowMs": 1001.044921875
+    }
+  ],
+  "eventsTruncated": false,
+  "finishedAt": "2026-09-06T18:02:39.555Z",
+  "initial": {
+    "bytesReceived": 473435,
+    "concealedSamples": 1246,
+    "concealmentEvents": 2,
+    "jitterBufferDelay": 84566.4,
+    "jitterBufferEmittedCount": 1735680,
+    "packetsLost": 0,
+    "packetsReceived": 1811,
+    "silentConcealedSamples": 0,
+    "timestamp": 1788717729496.478,
+    "totalSamplesReceived": 1737600
+  },
+  "lastProgressAt": "2026-09-06T18:02:39.505Z",
+  "limitations": [
+    "Finite receiver observation, not a guarantee of future network behavior",
+    "Track phase comes from the once-per-second visible player; silence near track boundaries is retained for review, never silently excluded",
+    "No PCM is recorded; source defects and perceptual quality need separate evidence"
+  ],
+  "minutes": [
+    {
+      "concealedSamples": 3388,
+      "concealmentEvents": 4,
+      "fromMs": 0,
+      "index": 0,
+      "lostNet": 0,
+      "maxJitterMs": 9,
+      "maxPcmSilenceMs": 0,
+      "maxPollMs": 1008.617919921875,
+      "packets": 1497,
+      "polls": 30,
+      "positiveLoss": 0,
+      "silentConcealedSamples": 0,
+      "toMs": 30007.89794921875
+    }
+  ],
+  "pcm": {
+    "emptyFrames": 0,
+    "frames": 1440256,
+    "longestQuietMs": 20,
+    "nearFullScale": 0,
+    "nonFinite": 0,
+    "ongoingQuietMs": 0,
+    "peak": 0.51422119140625,
+    "reports": 120,
+    "rms": 0.09858004484002075,
+    "samples": 2880512,
+    "squared": 27992.888322025465
+  },
+  "requestedAt": "2026-09-06T18:02:08.387Z",
+  "requestedSeconds": 30,
+  "sampleRate": 48000,
+  "sampling": {
+    "maxConcealedMsPerPoll": 38.270833333333336,
+    "maxPollMs": 1008.617919921875,
+    "negativeLossDeltas": 0,
+    "pcmReportsMissing": 0,
+    "polls": 30,
+    "positiveLossDeltas": 0,
+    "stalePolls": 0
+  },
+  "startedAt": "2026-09-06T18:02:09.504Z",
+  "status": "completed",
+  "version": 1
+}

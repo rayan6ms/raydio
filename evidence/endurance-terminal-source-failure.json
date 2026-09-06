@@ -1,0 +1,134 @@
+{
+  "current": {
+    "bytesReceived": 2693594,
+    "concealedSamples": 9377,
+    "concealmentEvents": 11,
+    "jitterBufferDelay": 702384,
+    "jitterBufferEmittedCount": 9887040,
+    "packetsLost": 0,
+    "packetsReceived": 10309,
+    "silentConcealedSamples": 0,
+    "timestamp": 1788717899552.673,
+    "totalSamplesReceived": 9900000
+  },
+  "currentPhase": {
+    "durationSeconds": 213,
+    "label": "middle",
+    "loop": true,
+    "playing": true,
+    "positionSeconds": 204
+  },
+  "delta": {
+    "bytesReceived": 261502,
+    "concealedSamples": 1039,
+    "concealmentEvents": 1,
+    "jitterBufferDelay": 75648,
+    "jitterBufferEmittedCount": 960000,
+    "packetsLost": 0,
+    "packetsReceived": 1001,
+    "silentConcealedSamples": 0,
+    "timestamp": 20023.47900390625,
+    "totalSamplesReceived": 960960
+  },
+  "elapsedSeconds": 20.02347900390625,
+  "error": "Error: Receiver or voice row was replaced/disconnected",
+  "events": [
+    {
+      "concealedMs": 21.645833333333332,
+      "jitterMs": 4,
+      "kind": "receiver",
+      "lost": 0,
+      "ms": 3004.300000000745,
+      "packets": 50,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 187
+      },
+      "silentConcealedMs": 0,
+      "windowMs": 1001.368896484375
+    },
+    {
+      "durationMs": 60.104166666666664,
+      "kind": "quiet-at-end",
+      "ms": 21025.89999999851,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 204
+      }
+    }
+  ],
+  "eventsTruncated": false,
+  "finishedAt": "2026-09-06T18:05:00.554Z",
+  "graphWarmupMs": 1100,
+  "initial": {
+    "bytesReceived": 2432092,
+    "concealedSamples": 8338,
+    "concealmentEvents": 10,
+    "jitterBufferDelay": 626736,
+    "jitterBufferEmittedCount": 8927040,
+    "packetsLost": 0,
+    "packetsReceived": 9308,
+    "silentConcealedSamples": 0,
+    "timestamp": 1788717879529.194,
+    "totalSamplesReceived": 8939040
+  },
+  "lastProgressAt": "2026-09-06T18:04:59.553Z",
+  "limitations": [
+    "Finite receiver observation, not a guarantee of future network behavior",
+    "Track phase comes from the once-per-second visible player; silence near track boundaries is retained for review, never silently excluded",
+    "No PCM is recorded; source defects and perceptual quality need separate evidence"
+  ],
+  "minutes": [
+    {
+      "concealedSamples": 1039,
+      "concealmentEvents": 1,
+      "fromMs": 0,
+      "index": 0,
+      "lostNet": 0,
+      "maxJitterMs": 4,
+      "maxPcmSilenceMs": 0,
+      "maxPollMs": 1001.625,
+      "packets": 1001,
+      "polls": 20,
+      "positiveLoss": 0,
+      "silentConcealedSamples": 0,
+      "toMs": 20023.47900390625
+    }
+  ],
+  "observationWallSeconds": 21.025800000000746,
+  "pcm": {
+    "audioSeconds": 20.805333333333333,
+    "emptyFrames": 0,
+    "frames": 998656,
+    "longestQuietMs": 60.104166666666664,
+    "nearFullScale": 0,
+    "nonFinite": 0,
+    "ongoingQuietMs": 60.104166666666664,
+    "peak": 0.46038818359375,
+    "reports": 83,
+    "rms": 0.07283261554999511,
+    "samples": 1997312,
+    "squared": 10594.921038088229
+  },
+  "requestedAt": "2026-09-06T18:04:37.320Z",
+  "requestedSeconds": 21600,
+  "sampleRate": 48000,
+  "sampling": {
+    "maxConcealedMsPerPoll": 21.645833333333332,
+    "maxPollMs": 1001.625,
+    "negativeLossDeltas": 0,
+    "pcmReportsMissing": 0,
+    "polls": 20,
+    "positiveLossDeltas": 0,
+    "stalePolls": 0
+  },
+  "startedAt": "2026-09-06T18:04:39.529Z",
+  "status": "failed",
+  "version": 1
+}

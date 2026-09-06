@@ -1,0 +1,10 @@
+{
+  "scope": "Local single-sender release benchmark after adding bounded source-overrun timing snapshots. Real DAVE, RTP and loopback UDP, 1 second warmup and 10 seconds measurement. Not an Oracle receiver result.",
+  "frames": 500,
+  "udpPackets": 500,
+  "measurementMs": 10001,
+  "allocations": 0,
+  "reallocations": 0,
+  "maxSenderLatenessNanos": 2079073,
+  "interpretation": "Retains zero steady-state allocations and 50 frames/s. No speedup is claimed against oto-poll-guard-dave.json. This run overlapped a local build; maximum timing is not a controlled latency comparison."
+}

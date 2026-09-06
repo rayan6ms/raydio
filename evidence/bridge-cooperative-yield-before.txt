@@ -1,0 +1,30 @@
+   Compiling ring v0.17.14
+   Compiling rustls v0.23.43
+   Compiling rustls-webpki v0.103.15
+   Compiling tungstenite v0.30.0
+   Compiling tokio-rustls v0.26.5
+   Compiling tokio-tungstenite v0.30.0
+   Compiling rcgen v0.14.10
+   Compiling oto-testkit v1.0.0 (https://github.com/rayan6ms/oto?rev=04be4964b2ef1d365a2994b1e93fad5c37585421#04be4964)
+   Compiling oto v1.0.0 (https://github.com/rayan6ms/oto?rev=04be4964b2ef1d365a2994b1e93fad5c37585421#04be4964)
+   Compiling crust-oto-adapter v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-oto-adapter)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 24.98s
+     Running unittests src/lib.rs (/home/rayan/Documents/Projects/crust/target/debug/deps/crust_oto_adapter-600cd6660f16e588)
+
+running 1 test
+
+thread 'tests::ready_frame_survives_a_cooperative_yield_without_a_missed_wake' (215509) panicked at crates/crust-oto-adapter/src/lib.rs:1206:9:
+assertion `left == right` failed
+  left: Ready(Frame { len: 2 })
+ right: Pending
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test tests::ready_frame_survives_a_cooperative_yield_without_a_missed_wake ... FAILED
+
+failures:
+
+failures:
+    tests::ready_frame_survives_a_cooperative_yield_without_a_missed_wake
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p crust-oto-adapter --lib`
