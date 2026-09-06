@@ -1,0 +1,27 @@
+{
+  "decoder": "libopus 1.6",
+  "quietIntervals": [
+    {
+      "startSeconds": 212.121563,
+      "durationMs": 938.4375,
+      "atEnd": true
+    }
+  ],
+  "frames": 10653,
+  "seconds": 213.06,
+  "wrongFrameDuration": 0,
+  "tinyPackets": 47,
+  "longestQuietMs": 938.4375,
+  "nearFullScale": 0,
+  "nonFinite": 0,
+  "peak": 0.583760023,
+  "rms": 0.09019444,
+  "failed": false,
+  "scope": "Locally fetched real Mantle/Crust source at volume 70, independent system libopus decoder; no Discord or receiver involved",
+  "inputSha256": "4373f1b03ec7dbca0a2586ca1ac6918a7a7e5cc71eebcfb28c7d99dcfc889f33",
+  "limitations": [
+    "local source selection; Oracle may fetch a different rendition",
+    "source output is temporary and is not committed",
+    "does not test downstream delivery"
+  ]
+}

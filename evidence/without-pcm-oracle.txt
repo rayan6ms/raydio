@@ -1,0 +1,8 @@
+Starting raydio-six-hour.service - Raydio six-hour receiver qualification Testbot...
+2026-09-06T21:35:18.499680Z  INFO raydio::runtime: Raydio ready bot_id=1544468432907669644
+Started raydio-six-hour.service - Raydio six-hour receiver qualification Testbot.
+Stopping raydio-six-hour.service - Raydio six-hour receiver qualification Testbot...
+2026-09-06T21:39:12.455349Z  INFO crust_oto_adapter: audio sender stopped frames_sent=10380 silence_frames_sent=10 frames_unavailable=10 skipped_deadlines=9 send_failures=0 source_overruns=0 max_lateness_us=48601 phase=Stopped failure=None
+raydio-six-hour.service: Deactivated successfully.
+Stopped raydio-six-hour.service - Raydio six-hour receiver qualification Testbot.
+raydio-six-hour.service: Consumed 12.269s CPU time.

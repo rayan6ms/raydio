@@ -1,0 +1,51 @@
+{
+  "scope": "Header-only diagnostic interposer; not qualification evidence",
+  "binarySha256": "1400ac10799beab484f01fd56641a1fb1d26ca4ec28b9434751bce3746d1ab67",
+  "clock": {
+    "realtime_ns": 1788730225592181620,
+    "monotonic_ns": 63827525343708
+  },
+  "aligned": {
+    "packets": 8517,
+    "maxGapMs": 39.272543,
+    "over25ms": 24,
+    "over40ms": 0,
+    "maxSyscallMs": 2.71191,
+    "sendErrors": 0,
+    "sequenceDiscontinuities": 0,
+    "timestampDiscontinuities": 0
+  },
+  "quiet": [
+    {
+      "receiverEvent": {
+        "audioSeconds": 148.488,
+        "durationMs": 461.1041666666667,
+        "endFrame": 7064224,
+        "kind": "quiet",
+        "ms": 147380.69999999553,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 164
+        }
+      },
+      "senderWindowPlusMinus2Seconds": {
+        "packets": 200,
+        "maxGapMs": 26.675737,
+        "over25ms": 1,
+        "over40ms": 0,
+        "maxSyscallMs": 0.204896,
+        "sendErrors": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0
+      }
+    }
+  ],
+  "limitations": [
+    "sender success is not proof of downstream delivery",
+    "after-capture administrative shutdown excluded",
+    "PCM tap involvement requires separate test"
+  ]
+}

@@ -175,3 +175,46 @@ credential-free lifecycle logs. The application now enables that module at its
 configured log level; HTTP/media debug logs remain suppressed. A new run is
 required to classify the gaps with complete sender counters. No counters can
 be reconstructed for the discarded process.
+
+## Counter, source, and receiver isolation
+
+Raydio b446bd6 enables the adapter's lifecycle summaries; local tests (49),
+formatting and Clippy passed. Its binary SHA256 is
+`1400ac10799beab484f01fd56641a1fb1d26ca4ec28b9434751bce3746d1ab67`.
+A 214.308-second repeat reproduced 588.25 ms quiet around song position 184 s.
+Shutdown counters: 11,495 music frames, 11 silence/unavailable opportunities,
+four skipped deadlines, max lateness 38.355 ms, no source overrun or send failure.
+The counts include the track boundary and administrative stop. First idle PSS
+was 12,431 KiB; playback samples 16,384–17,180 KiB, about 5.55–5.73% of one CPU
+in fully active minute samples. No memory improvement is claimed.
+See `endurance-ring-counters-diagnostic.json`, `ring-counters-oracle.txt`,
+and `ring-oracle-resources.json`.
+
+An independent system libopus 1.6 decode of the locally fetched source output
+at volume 70 found 10,653 valid 20 ms frames, no mid-song silence >=20 ms,
+no near-full-scale/nonfinite samples, and 938.438 ms quiet at the source tail.
+The encoded output stays under ignored target/, with its hash in
+`source-independent-decoder.json`. This narrows boundary silence but does not
+prove that Oracle fetched the same rendition.
+
+A subsequent explicitly diagnostic header-only sender trace reproduced
+461.104 ms received silence. In the +/-2-second event window the VM sent 200
+packets, maximum spacing 26.676 ms, maximum syscall duration 0.205 ms, no send
+errors, sequence gaps, or timestamp discontinuities. Across the aligned
+170.326-second capture, max spacing was 39.273 ms and zero gaps exceeded 40 ms.
+Longer gaps after capture coincided with administrative shutdown and are
+excluded. The sender had zero source overruns; all five unavailable/silence
+frames belonged to shutdown. Discord's logs retained zero failed DAVE audio
+decryptions throughout. See `ring-sender-receiver-correlation.json`,
+`ring-discord-decryption.json`, and `endurance-ring-traced-diagnostic.json`.
+This occurrence is beyond the outgoing send calls; it does not distinguish
+Oracle network, Discord forwarding, receiving network, or receiver scheduling.
+
+Removing the analysis AudioContext/PCM tap did not eliminate interruptions.
+A 179.337-second stats-only run reported 3,447.5 ms silent concealment and
+speaking interruptions, no reported loss, no source overruns or send failures.
+Shutdown had ten unavailable/silence frames (five more than administrative
+stop), nine skipped deadlines, max lateness 48.601 ms. This is a distinct source
+starvation episode to diagnose, not proof that every earlier downstream gap
+was source starvation. The optional `pcm:false` harness mode explicitly marks
+PCM unmeasured. See `endurance-without-pcm-tap.json`.

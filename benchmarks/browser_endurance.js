@@ -76,11 +76,12 @@
     }
     registerProcessor('raydio-endurance-meter',RaydioMeter);`;
     const api = window.raydioEndurance = {peers, report:null, running:false};
-    api.start = async ({seconds=21600, botName='bot1544468432907669644'}={}) => {
+    api.start = async ({seconds=21600, botName='bot1544468432907669644', pcm=true}={}) => {
         if(api.running)throw Error('Audit already running');
         if(!Number.isInteger(seconds)||seconds<10||seconds>21600)throw Error('Duration must be 10..21600 seconds');
+        if(typeof pcm!=='boolean')throw Error('pcm must be boolean');
         api.running=true;
-        const data=api.report={version:1,status:'starting',requestedSeconds:seconds,
+        const data=api.report={version:1,status:'starting',requestedSeconds:seconds,pcmEnabled:pcm,
             requestedAt:new Date().toISOString(),minutes:[],events:[],eventsTruncated:false,
             pcm:{samples:0,squared:0,peak:0,nearFullScale:0,nonFinite:0,emptyFrames:0,
                 longestQuietMs:0,ongoingQuietMs:0,reports:0,frames:0},
@@ -124,23 +125,25 @@
             if(!receiver||receiver.track.readyState!=='live')throw Error('Receiver is not live');
             const row=[...document.querySelectorAll('.username__07f91')].find(e=>e.textContent===botName);
             if(!row||!row.className.includes('usernameSpeaking'))throw Error('Bot is not visibly speaking');
-            ctx=new AudioContext({sampleRate:48000});await ctx.resume();
-            if(ctx.state!=='running')throw Error('Audio context is suspended');
-            const moduleUrl=URL.createObjectURL(new Blob([worklet],{type:'application/javascript'}));
-            try{await ctx.audioWorklet.addModule(moduleUrl);}finally{URL.revokeObjectURL(moduleUrl);}
-            meter=new AudioWorkletNode(ctx,'raydio-endurance-meter',{numberOfInputs:1,numberOfOutputs:1,outputChannelCount:[2]});
-            source=ctx.createMediaStreamSource(new MediaStream([receiver.track]));
-            source.connect(meter);meter.connect(ctx.destination);
-            // A newly connected analysis graph briefly outputs its own empty
-            // startup buffer. Prime that graph before the measured interval.
-            await sleep(1100);
-            await new Promise((resolve,reject)=>{
-                const timer=setTimeout(()=>reject(Error('Audio meter reset timed out')),2000);
-                meter.port.onmessage=({data:m})=>{if(m.ready){clearTimeout(timer);resolve();}};
-                meter.port.postMessage('reset');
-            });
+            if(pcm){
+                ctx=new AudioContext({sampleRate:48000});await ctx.resume();
+                if(ctx.state!=='running')throw Error('Audio context is suspended');
+                const moduleUrl=URL.createObjectURL(new Blob([worklet],{type:'application/javascript'}));
+                try{await ctx.audioWorklet.addModule(moduleUrl);}finally{URL.revokeObjectURL(moduleUrl);}
+                meter=new AudioWorkletNode(ctx,'raydio-endurance-meter',{numberOfInputs:1,numberOfOutputs:1,outputChannelCount:[2]});
+                source=ctx.createMediaStreamSource(new MediaStream([receiver.track]));
+                source.connect(meter);meter.connect(ctx.destination);
+                // A newly connected analysis graph briefly outputs its own empty
+                // startup buffer. Prime that graph before the measured interval.
+                await sleep(1100);
+                await new Promise((resolve,reject)=>{
+                    const timer=setTimeout(()=>reject(Error('Audio meter reset timed out')),2000);
+                    meter.port.onmessage=({data:m})=>{if(m.ready){clearTimeout(timer);resolve();}};
+                    meter.port.postMessage('reset');
+                });
+            }
             audioStarted=performance.now();pcmLastAt=audioStarted;
-            data.startedAt=new Date().toISOString();data.status='running';data.sampleRate=ctx.sampleRate;data.graphWarmupMs=1100;
+            data.startedAt=new Date().toISOString();data.status='running';data.sampleRate=ctx?.sampleRate||48000;data.graphWarmupMs=pcm?1100:0;
             let last=counters((await peer.getStats()).get(id));data.initial=last;
             let speaking=true;
             observer=new MutationObserver(()=>{
@@ -150,7 +153,7 @@
             observer.observe(row.parentElement.parentElement.parentElement,{subtree:true,attributes:true,attributeFilter:['class']});
             stateListener=()=>event('connection',{state:peer.connectionState});
             peer.addEventListener('connectionstatechange',stateListener);
-            meter.port.onmessage=({data:m})=>{
+            if(meter)meter.port.onmessage=({data:m})=>{
                 pcmLastAt=performance.now();const p=data.pcm;
                 p.samples+=m.samples;p.squared+=m.squared;p.peak=Math.max(p.peak,m.peak);
                 p.nearFullScale+=m.clipped;p.nonFinite+=m.nonFinite;p.emptyFrames+=m.empty;
@@ -164,7 +167,7 @@
                 await sleep(Math.min(1000,Math.max(1,seconds*1000-(performance.now()-audioStarted))));
                 const raw=(await peer.getStats()).get(id);
                 if(!raw||peer.connectionState==='closed'||!row.isConnected)throw Error('Receiver or voice row was replaced/disconnected');
-                if(ctx.state!=='running')throw Error('Audio context stopped running');
+                if(ctx&&ctx.state!=='running')throw Error('Audio context stopped running');
                 const now=counters(raw),dt=now.timestamp-last.timestamp;
                 if(dt<=0){data.sampling.stalePolls++;continue;}
                 const delta=Object.fromEntries(fields.map(k=>[k,now[k]-last[k]]));
@@ -187,11 +190,11 @@
                         insertedMs:delta.insertedSamplesForDeceleration/48,removedMs:delta.removedSamplesForAcceleration/48,
                         emittedSamples:delta.jitterBufferEmittedCount,receivedSamples:delta.totalSamplesReceived,
                         meanBufferMs:delta.jitterBufferEmittedCount?delta.jitterBufferDelay*1000/delta.jitterBufferEmittedCount:null});
-                if(performance.now()-pcmLastAt>2000){data.sampling.pcmReportsMissing++;event('pcm-report-gap');}
+                if(pcm&&performance.now()-pcmLastAt>2000){data.sampling.pcmReportsMissing++;event('pcm-report-gap');}
                 data.current=now;data.elapsedSeconds=elapsedMs/1000;data.lastProgressAt=new Date().toISOString();data.currentPhase=p;
                 last=now;
             }
-            meter.port.postMessage('flush');await sleep(50);
+            meter?.port.postMessage('flush');await sleep(50);
             data.status=stopped?'stopped':'completed';
         }catch(e){data.status='failed';data.error=String(e);}
         finally{
@@ -210,7 +213,7 @@
         const d=api.report;if(!d)return {status:'not-started'};
         return {status:d.status,startedAt:d.startedAt,elapsedSeconds:d.elapsedSeconds,lastProgressAt:d.lastProgressAt,
             minutes:d.minutes.length,events:d.events.length,eventsTruncated:d.eventsTruncated,
-            pcm:d.pcm,sampling:d.sampling,currentPhase:d.currentPhase,error:d.error,
+            pcmEnabled:d.pcmEnabled,pcm:d.pcmEnabled?d.pcm:null,sampling:d.sampling,currentPhase:d.currentPhase,error:d.error,
             delta:d.current&&d.initial?Object.fromEntries(fields.map(k=>[k,d.current[k]-d.initial[k]])):null};
     };
 })();

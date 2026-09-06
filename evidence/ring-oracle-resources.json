@@ -1,0 +1,110 @@
+{
+  "scope": "same ring bot with lifecycle log filter enabled; first sample authenticated idle, subsequent playback",
+  "samples": [
+    {
+      "utc": "2026-09-06T21:20:14.230943+00:00",
+      "elapsedSeconds": 0.0,
+      "pid": 17633,
+      "cpuTicks": [
+        42301,
+        2680,
+        17264,
+        12510914,
+        5777,
+        0,
+        665,
+        53890,
+        0,
+        0
+      ],
+      "cpuSeconds": 0.12,
+      "threads": 3,
+      "rssKiB": 14840,
+      "pssKiB": 12431
+    },
+    {
+      "utc": "2026-09-06T21:21:14.232069+00:00",
+      "elapsedSeconds": 60.001,
+      "pid": 17633,
+      "cpuTicks": [
+        42491,
+        2680,
+        17321,
+        12522522,
+        5783,
+        0,
+        668,
+        54034,
+        0,
+        0
+      ],
+      "cpuSeconds": 2.35,
+      "threads": 5,
+      "rssKiB": 18788,
+      "pssKiB": 16384
+    },
+    {
+      "utc": "2026-09-06T21:22:14.233589+00:00",
+      "elapsedSeconds": 120.003,
+      "pid": 17633,
+      "cpuTicks": [
+        42706,
+        2680,
+        17402,
+        12534118,
+        5784,
+        0,
+        670,
+        54129,
+        0,
+        0
+      ],
+      "cpuSeconds": 5.72,
+      "threads": 5,
+      "rssKiB": 18788,
+      "pssKiB": 16384
+    },
+    {
+      "utc": "2026-09-06T21:23:14.235238+00:00",
+      "elapsedSeconds": 180.004,
+      "pid": 17633,
+      "cpuTicks": [
+        42924,
+        2680,
+        17478,
+        12545712,
+        5784,
+        0,
+        673,
+        54219,
+        0,
+        0
+      ],
+      "cpuSeconds": 9.16,
+      "threads": 5,
+      "rssKiB": 18792,
+      "pssKiB": 16388
+    },
+    {
+      "utc": "2026-09-06T21:24:14.237864+00:00",
+      "elapsedSeconds": 240.007,
+      "pid": 17633,
+      "cpuTicks": [
+        43131,
+        2680,
+        17559,
+        12557315,
+        5784,
+        0,
+        677,
+        54321,
+        0,
+        0
+      ],
+      "cpuSeconds": 12.49,
+      "threads": 5,
+      "rssKiB": 19584,
+      "pssKiB": 17180
+    }
+  ]
+}
