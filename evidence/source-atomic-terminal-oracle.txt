@@ -1,0 +1,8 @@
+Starting raydio-six-hour.service - Raydio six-hour receiver qualification Testbot...
+2026-09-06T19:39:36.385527Z  INFO raydio::runtime: Raydio ready bot_id=1544468432907669644
+Started raydio-six-hour.service - Raydio six-hour receiver qualification Testbot.
+2026-09-06T19:44:36.028250Z  WARN crust_oto_adapter: audio sender stopped after a terminal failure failure=Some(FrameSourceContract) source_overruns=1 source_overrun_wall_us=5907 source_overrun_cpu_us=5913 send_failures=0 skipped_deadlines=0
+Stopping raydio-six-hour.service - Raydio six-hour receiver qualification Testbot...
+raydio-six-hour.service: Deactivated successfully.
+Stopped raydio-six-hour.service - Raydio six-hour receiver qualification Testbot.
+raydio-six-hour.service: Consumed 12.174s CPU time, 2.9M memory peak, 0B memory swap peak.

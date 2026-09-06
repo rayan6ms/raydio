@@ -16,7 +16,9 @@
     if (!existing) window.RTCPeerConnection = Observed;
     const fields = ['timestamp', 'packetsReceived', 'packetsLost', 'bytesReceived',
         'concealedSamples', 'silentConcealedSamples', 'concealmentEvents',
-        'totalSamplesReceived', 'jitterBufferDelay', 'jitterBufferEmittedCount'];
+        'totalSamplesReceived', 'jitterBufferDelay', 'jitterBufferEmittedCount',
+        'insertedSamplesForDeceleration', 'removedSamplesForAcceleration',
+        'jitterBufferTargetDelay', 'jitterBufferMinimumDelay'];
     const counters = r => Object.fromEntries(fields.map(k => [k, r[k] ?? 0]));
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     const worklet = `
@@ -181,7 +183,10 @@
                 data.sampling.positiveLossDeltas+=Math.max(0,delta.packetsLost);data.sampling.negativeLossDeltas+=Math.min(0,delta.packetsLost);
                 data.sampling.maxConcealedMsPerPoll=Math.max(data.sampling.maxConcealedMsPerPoll,delta.concealedSamples/48);
                 if(delta.packetsLost||delta.concealedSamples||delta.packetsReceived===0||dt>2000)
-                    event('receiver',{windowMs:dt,packets:delta.packetsReceived,lost:delta.packetsLost,concealedMs:delta.concealedSamples/48,silentConcealedMs:delta.silentConcealedSamples/48,jitterMs:raw.jitter*1000});
+                    event('receiver',{windowMs:dt,packets:delta.packetsReceived,lost:delta.packetsLost,concealedMs:delta.concealedSamples/48,silentConcealedMs:delta.silentConcealedSamples/48,jitterMs:raw.jitter*1000,
+                        insertedMs:delta.insertedSamplesForDeceleration/48,removedMs:delta.removedSamplesForAcceleration/48,
+                        emittedSamples:delta.jitterBufferEmittedCount,receivedSamples:delta.totalSamplesReceived,
+                        meanBufferMs:delta.jitterBufferEmittedCount?delta.jitterBufferDelay*1000/delta.jitterBufferEmittedCount:null});
                 if(performance.now()-pcmLastAt>2000){data.sampling.pcmReportsMissing++;event('pcm-report-gap');}
                 data.current=now;data.elapsedSeconds=elapsedMs/1000;data.lastProgressAt=new Date().toISOString();data.currentPhase=p;
                 last=now;

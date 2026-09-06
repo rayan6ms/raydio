@@ -123,5 +123,31 @@ retains lifetime sender counters in one audio-shutdown log. This adds no
 per-frame work and allows receiver events to be checked against source
 starvation and missed pacing deadlines over the entire run.
 
+## Remaining callback isolation
+
+The atomic-wakeup candidate 8097bb9 passed native CI 34055389129, but terminated
+at 19:44:36.028250 UTC, after 242.409 seconds of receiver coverage. Its overrun
+was 5,907 us wall / 5,913 us thread CPU, with zero skipped deadlines and send
+failures. The shutdown summary did not run on this failure path; the terminal
+warning now includes the other sender counters too. The longer atomic handoff
+run therefore did not prove the fatal issue fixed. See
+`endurance-lifetime-summary-failure.json` and `source-atomic-terminal-oracle.txt`.
+
+Crust 7383101 replaces the remaining Tokio channel (whose bounded semaphore
+release takes a mutex) with a capacity-one `rtrb` ring. Normal callbacks now copy
+the frame and store the consumed atomic; they do not wake a Tokio producer task.
+Empty-source readiness uses register/recheck and the producer's completion guard
+wakes on normal end, failure, shutdown, and abort-before-first-poll. While one
+frame is staged, the producer checks consumption after 1 ms sleeps. It still
+awaits source readiness and cancellation, and does not pull additional frames
+before consumption. The source CPU kill gate and 16-frame media buffer remain.
+
+All 14 existing bridge tests plus the new abort-before-start regression and
+Clippy pass. In the ten-sender release benchmark, warmed PSS fell from 3,694 to
+2,696 KiB, with unchanged 1,491 allocations / 1,500 frames and no new threads.
+CPU increased from roughly 1% to 3.33% of one core due to producer timers. This
+is an isolated benchmark, not whole-bot memory or latency improvement. The
+ring candidate still requires live Oracle validation.
+
 The final live result is pending. No finite test guarantees future network
 behavior or proves every audible source defect absent.
