@@ -1,0 +1,167 @@
+{
+  "scope": "isolated source delivery; first run uninstrumented, second socket-read interposer",
+  "exampleSha256": "e5bac09f182409b0331dd25ada7d25d5ada7d9a23b6dbaf0d82acd89d4e57696",
+  "records": [
+    {
+      "bytes": 2633918,
+      "elapsedSeconds": 217.784886362,
+      "frames": 10653,
+      "paced": true,
+      "scope": "source packets, no Discord transport",
+      "stalls": [
+        {
+          "elapsedSeconds": 8.429862874,
+          "frame": 399,
+          "readMs": 448.805994
+        },
+        {
+          "elapsedSeconds": 80.200425944,
+          "frame": 3979,
+          "readMs": 180.397053
+        },
+        {
+          "elapsedSeconds": 113.366441257,
+          "frame": 5634,
+          "readMs": 85.29722000000001
+        },
+        {
+          "elapsedSeconds": 206.45096793,
+          "frame": 10092,
+          "readMs": 3943.613997
+        },
+        {
+          "elapsedSeconds": 215.044282146,
+          "frame": 10515,
+          "readMs": 152.463653
+        }
+      ],
+      "volume": 70
+    },
+    {
+      "kind": "slow-socket-read",
+      "endMonotonicNs": 64841105696241,
+      "wallMs": 54.158896,
+      "cpuMs": 0.079038,
+      "bytes": 4468,
+      "errno": 0
+    },
+    {
+      "kind": "slow-socket-read",
+      "endMonotonicNs": 64841239518212,
+      "wallMs": 132.751474,
+      "cpuMs": 0.162114,
+      "bytes": 18772,
+      "errno": 0
+    },
+    {
+      "kind": "slow-socket-read",
+      "endMonotonicNs": 64841379238304,
+      "wallMs": 136.92774,
+      "cpuMs": 0.22948,
+      "bytes": 33715,
+      "errno": 0
+    },
+    {
+      "kind": "slow-socket-read",
+      "endMonotonicNs": 64937673116849,
+      "wallMs": 153.412767,
+      "cpuMs": 0.10099,
+      "bytes": 19544,
+      "errno": 0
+    },
+    {
+      "bytes": 2633918,
+      "elapsedSeconds": 213.352521966,
+      "frames": 10653,
+      "paced": true,
+      "scope": "source packets, no Discord transport",
+      "stalls": [
+        {
+          "elapsedSeconds": 28.410348758,
+          "frame": 1416,
+          "readMs": 38.253737
+        },
+        {
+          "elapsedSeconds": 80.710470914,
+          "frame": 4029,
+          "readMs": 38.746562999999995
+        },
+        {
+          "elapsedSeconds": 81.410362751,
+          "frame": 4060,
+          "readMs": 37.5925
+        },
+        {
+          "elapsedSeconds": 81.910365693,
+          "frame": 4082,
+          "readMs": 38.152024
+        }
+      ],
+      "volume": 70
+    }
+  ],
+  "secondSocketTraceRepeat": [
+    {
+      "kind": "slow-socket-read",
+      "endMonotonicNs": 65206698032521,
+      "wallMs": 62.303633,
+      "cpuMs": 0.08549,
+      "bytes": 4467,
+      "errno": 0
+    },
+    {
+      "kind": "slow-socket-read",
+      "endMonotonicNs": 65206810127548,
+      "wallMs": 111.076859,
+      "cpuMs": 0.137418,
+      "bytes": 11772,
+      "errno": 0
+    },
+    {
+      "kind": "slow-socket-read",
+      "endMonotonicNs": 65206934509247,
+      "wallMs": 121.425828,
+      "cpuMs": 0.189625,
+      "bytes": 33715,
+      "errno": 0
+    },
+    {
+      "kind": "slow-socket-read",
+      "endMonotonicNs": 65238373497366,
+      "wallMs": 48.185791,
+      "cpuMs": 0.083436,
+      "bytes": 19544,
+      "errno": 0
+    },
+    {
+      "bytes": 2633918,
+      "elapsedSeconds": 213.329387474,
+      "frames": 10653,
+      "paced": true,
+      "scope": "source packets, no Discord transport",
+      "stalls": [
+        {
+          "elapsedSeconds": 17.900855059,
+          "frame": 892,
+          "readMs": 20.125042999999998
+        },
+        {
+          "elapsedSeconds": 164.974884809,
+          "frame": 8244,
+          "readMs": 38.236258
+        },
+        {
+          "elapsedSeconds": 194.074883407,
+          "frame": 9691,
+          "readMs": 40.982778999999994
+        },
+        {
+          "elapsedSeconds": 194.275044121,
+          "frame": 9700,
+          "readMs": 38.06781
+        }
+      ],
+      "volume": 70
+    }
+  ]
+}

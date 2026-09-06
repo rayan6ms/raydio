@@ -218,3 +218,25 @@ stop), nine skipped deadlines, max lateness 48.601 ms. This is a distinct source
 starvation episode to diagnose, not proof that every earlier downstream gap
 was source starvation. The optional `pcm:false` harness mode explicitly marks
 PCM unmeasured. See `endurance-without-pcm-tap.json`.
+
+## Source-only follow-up
+
+The complete paced source diagnostic on Oracle reproduced a **3,943.614 ms**
+frame request at frame 10,092, without Discord/Oto involved. Other requests
+waited 448.806, 180.397, 85.297, and 152.464 ms. All 10,653 produced packets
+independently decode as 20 ms audio with no mid-song quiet interval, clipping,
+or nonfinite PCM. The tail is 938.458 ms quiet, consistent with local output.
+
+Two repeats with a slow-socket-read interposer did not reproduce the multi-second
+wait: max frame request 38.747/40.983 ms, observed socket reads up to 153.413/
+121.426 ms. The interposer retains no content, URLs, addresses, or credentials,
+and is confined to the bounded source-only executable. These repeats are
+variation, not an implemented repair. `source-oracle-paced-audit.json` and
+`source-oracle-independent-decoder.json` retain both findings.
+
+A separate compressed HTTP input experiment (`examples/http_staging.rs`) is
+now comparing streamed versus pre-staged input through the same Mantle demuxer
+on Oracle. It uses an 8 MiB source ceiling, 64 KiB copy buffer, a private file
+unlinked immediately on Linux, bounded duration, and no first-party network
+implementation. This is a diagnostic prototype, not a new bot feature or a
+reliability pass. Its startup, storage and playback numbers are pending.

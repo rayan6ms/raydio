@@ -1,0 +1,22 @@
+{
+  "decoder": "libopus 1.6",
+  "quietIntervals": [
+    {
+      "startSeconds": 212.121542,
+      "durationMs": 938.458333,
+      "atEnd": true
+    }
+  ],
+  "frames": 10653,
+  "seconds": 213.06,
+  "wrongFrameDuration": 0,
+  "tinyPackets": 47,
+  "longestQuietMs": 938.458333,
+  "nearFullScale": 0,
+  "nonFinite": 0,
+  "peak": 0.584290266,
+  "rms": 0.09019673,
+  "failed": false,
+  "inputSha256": "29f1ac2bad421ed974c8276c15943cc6a47cbde931276c8d35f51c874532431b",
+  "scope": "independent system libopus decode of actual Oracle source output, no Discord"
+}
