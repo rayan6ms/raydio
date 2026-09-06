@@ -102,8 +102,9 @@ an actual Oracle instance/network test remains separate from native ARM64 CI.
 On September 6, authenticated inventory still found no instances. Both
 `VM.Standard.A1.Flex` (1 OCPU, 4 GiB) and `VM.Standard.E2.1.Micro` reported
 `OUT_OF_HOST_CAPACITY` in São Paulo. See the [capacity record](../evidence/oracle-capacity-2026-09-06.json).
-The production Discord application has not yet been started on Oracle.
-Discord's developer portal does not host the TypeScript or Rust program:
+The production Discord application is now running on Oracle from the Rust
+package (revision `3c6c2a4`). Discord's developer portal does not host the
+TypeScript or Rust program:
 deploying Rust with the existing production token preserves the bot identity,
 server membership, and permissions. Stop the previous runtime before starting
 that identity on the VM.

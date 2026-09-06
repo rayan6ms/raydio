@@ -25,6 +25,7 @@
   ],
   "instanceCreated": true,
   "botRunningOnOracle": true,
+  "runtime": {"identity": "Raydio", "botId": "1536086112421019729", "revision": "3c6c2a41508f759d813fbafb32769bacdd30071c", "state": "active", "nRestarts": 0, "memoryPeakBytesObserved": 5685248, "tasksCurrentObserved": 6, "note": "Peak/current included temporary UDP tracing run before production switch; tracing override removed before final production restart."},
   "oracleBotResourceMeasurements": null,
   "infrastructureChanged": true,
   "qualification": "Capacity reports initially said OUT_OF_HOST_CAPACITY for both shapes. Actual A1 launch failed; actual Micro launch succeeded. Exactly one instance exists across all accessible compartments and the sole subscribed region. Existing network reused; SSH restricted to the current administrator IPv4 /32. Testbot configuration installed first; production identity switch pending.",
