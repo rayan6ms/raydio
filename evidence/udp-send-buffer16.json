@@ -1,0 +1,19 @@
+{
+  "qualification": "Diagnostic LD_PRELOAD only, no production changes. Local successful sends do not prove arrival at Discord. Window is aligned approximately to receiver capture (within one second).",
+  "packets": 7503,
+  "elapsedSeconds": 150.039982202,
+  "sendFailures": 0,
+  "sequenceSkips": 0,
+  "rtpTimestampDiscontinuities": 0,
+  "intervalMs": {
+    "median": 19.7840265,
+    "p99": 20.847004,
+    "max": 21.040922,
+    "over25ms": 0
+  },
+  "syscallUs": {
+    "median": 15.018,
+    "max": 204.11
+  },
+  "anomalies": []
+}

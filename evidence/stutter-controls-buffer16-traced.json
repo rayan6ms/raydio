@@ -1,0 +1,54 @@
+{
+  "results": [
+    {
+      "action": "Pause",
+      "ms": 1049.8999999985099
+    },
+    {
+      "action": "Resume",
+      "ms": 1270.699999999255
+    },
+    {
+      "action": "Pause",
+      "ms": 1162.2000000029802
+    },
+    {
+      "action": "Resume",
+      "ms": 964.2999999970198
+    },
+    {
+      "action": "Pause",
+      "ms": 1053.3999999985099
+    },
+    {
+      "action": "Resume",
+      "ms": 1354.8999999985099
+    },
+    {
+      "action": "Pause",
+      "ms": 1136
+    },
+    {
+      "action": "Resume",
+      "ms": 1047.300000000745
+    },
+    {
+      "action": "Pause",
+      "ms": 1158.800000000745
+    },
+    {
+      "action": "Resume",
+      "ms": 1005.5
+    },
+    {
+      "action": "Pause",
+      "ms": 1069.300000000745
+    },
+    {
+      "action": "Resume",
+      "ms": 1191.3999999985099
+    }
+  ],
+  "settleMs": 2000,
+  "valid": true
+}

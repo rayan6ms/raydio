@@ -46,7 +46,9 @@ const startRaydioAudioAudit = async () => {
     await context.resume();
     const source = context.createMediaStreamSource(new MediaStream([receiver.track]));
     const processor = context.createScriptProcessor(2048,2,2);
-    const pcm = {samples:0,peak:0,squared:0,nearFullScale:0,nonFinite:0,zeroBlocks:0,blocks:0};
+    const pcm = {samples:0,peak:0,squared:0,nearFullScale:0,nonFinite:0,zeroBlocks:0,blocks:0,
+        longestQuietMs:0,quietRuns:[],quietRunsTruncated:false};
+    let quietMs=0, processedMs=0;
     processor.onaudioprocess = e => {
         let silent = true;
         for (let c=0;c<e.inputBuffer.numberOfChannels;c++) for (const x of e.inputBuffer.getChannelData(c)) {
@@ -56,6 +58,16 @@ const startRaydioAudioAudit = async () => {
             if (v>0.00001) silent=false;
         }
         pcm.blocks++; if (silent) pcm.zeroBlocks++;
+        const blockMs=1000*e.inputBuffer.length/e.inputBuffer.sampleRate;
+        processedMs+=blockMs;
+        if (silent) {
+            quietMs+=blockMs;
+            pcm.longestQuietMs=Math.max(pcm.longestQuietMs,quietMs);
+        } else if (quietMs) {
+            if (pcm.quietRuns.length<200) pcm.quietRuns.push({endMs:processedMs-blockMs,durationMs:quietMs});
+            else pcm.quietRunsTruncated=true;
+            quietMs=0;
+        }
         // Output remains zero: this analysis tap does not duplicate playback.
     };
     source.connect(processor); processor.connect(context.destination);
@@ -102,4 +114,51 @@ const restoreRaydioAudioAudit = async () => {
     if (a.capture) await finishRaydioAudioAudit();
     if (window.RTCPeerConnection===a.Observed) window.RTCPeerConnection=a.Native;
     delete window.__raydioRtcAudit;
+};
+
+// Short-dropout audit. Poll actual receiver counters every 100 ms; retain all
+// anomalies (bounded) and one-second totals. A low packet count alone is not a
+// dropout: correlate it with newly concealed samples and PCM silence runs.
+const fineRaydioAudioAudit = async (seconds=180) => {
+    if (seconds < 1 || seconds > 600) throw Error('Duration must be 1..600 seconds');
+    await startRaydioAudioAudit();
+    const c=window.__raydioRtcAudit.capture;
+    const fine={polls:0,stalePolls:0,maxPollMs:0,concealmentWindows:0,
+        emptyPacketWindows:0,maxConcealedMs:0,anomalies:[],truncated:false};
+    let last=c.initial, windowStart=last, started=performance.now();
+    try {
+        while (performance.now()-started < seconds*1000) {
+            await auditSleep(100);
+            const r=(await c.peer.getStats()).get(c.id);
+            if (!r || c.peer.connectionState !== 'connected') throw Error('Receiver replaced or disconnected');
+            const dt=r.timestamp-last.timestamp;
+            if (dt<=0) { fine.stalePolls++; continue; }
+            fine.polls++; fine.maxPollMs=Math.max(fine.maxPollMs,dt);
+            const packets=r.packetsReceived-last.packetsReceived;
+            const concealed=(r.concealedSamples||0)-(last.concealedSamples||0);
+            if (concealed>0) fine.concealmentWindows++;
+            if (packets===0) fine.emptyPacketWindows++;
+            fine.maxConcealedMs=Math.max(fine.maxConcealedMs,concealed/48);
+            if (concealed>0 || packets===0 || dt>250) {
+                if (fine.anomalies.length<200) fine.anomalies.push({
+                    elapsedMs:r.timestamp-c.initial.timestamp,windowMs:dt,packets,
+                    lost:r.packetsLost-last.packetsLost,concealedMs:concealed/48,
+                    concealmentEvents:(r.concealmentEvents||0)-(last.concealmentEvents||0),jitterMs:r.jitter*1000});
+                else fine.truncated=true;
+            }
+            if (r.timestamp-windowStart.timestamp>=1000) {
+                c.windows.push({elapsedSeconds:(r.timestamp-c.initial.timestamp)/1000,
+                    packetRate:(r.packetsReceived-windowStart.packetsReceived)*1000/(r.timestamp-windowStart.timestamp),
+                    packetsLost:r.packetsLost-windowStart.packetsLost,
+                    concealedMs:((r.concealedSamples||0)-(windowStart.concealedSamples||0))/48,jitter:r.jitter});
+                windowStart=audioCounters(r);
+            }
+            last=audioCounters(r);
+        }
+        return {...await finishRaydioAudioAudit(),fine,
+            qualification:'Counters sampled at 100 ms; source silence and listening quality require independent confirmation. This does not prove gapless playback.'};
+    } catch (error) {
+        if (window.__raydioRtcAudit.capture) await finishRaydioAudioAudit();
+        throw error;
+    }
 };

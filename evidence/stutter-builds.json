@@ -1,0 +1,24 @@
+{
+  "sourceBaselineRevision": "2d612772557730516022ab94b0aeac5bfa85f0a8",
+  "sourceAfterSha256": "aa52d9fa7db00995e7a1328b194cdf1602537c80660a8d2270ed263acbacb92e",
+  "binaries": {
+    "raydio-stutter-before": {
+      "sha256": "3f635151d82b2b350bf9b8268e1aa402d9df3c65debb18999cf84f7e461aa907",
+      "bytes": 18466736
+    },
+    "raydio-stutter-buffer16": {
+      "sha256": "f3e22fde54dcdcfdf47d35281a55d267175cb17759fbed34b7956a89aa16052c",
+      "bytes": 18474832
+    },
+    "source-timing-before": {
+      "sha256": "29fe54721523602cb32b84f5553557a57b3cdf344f35d3ae9c30b71f8ff511a5",
+      "bytes": 6883344
+    }
+  },
+  "checks": [
+    "16 Crust Mantle-adapter unit tests passed (2 opt-in benchmarks not run)",
+    "Crust Mantle-adapter clippy all-targets with warnings denied",
+    "46 Raydio tests passed",
+    "Crust and Raydio formatting and git diff checks passed"
+  ]
+}

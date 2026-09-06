@@ -1,0 +1,82 @@
+{
+  "date": "2026-09-05T21:11:17.853817+00:00",
+  "stack": "stutter-buffer16",
+  "workload": "General, dQw4w9WgXcQ, volume 70, mid-song, loop off, no controls, panel refresh enabled",
+  "limitations": [
+    "Shared host",
+    "7 consecutive windows in one warmed process; not independent process restarts",
+    "Human listening confirmation recorded separately"
+  ],
+  "processCount": 1,
+  "executables": [
+    {
+      "name": "raydio-stutter-buffer16",
+      "sha256": "f3e22fde54dcdcfdf47d35281a55d267175cb17759fbed34b7956a89aa16052c"
+    }
+  ],
+  "trials": [
+    {
+      "trial": 1,
+      "observationSeconds": 20.017,
+      "medianRssKiB": 18868.0,
+      "medianPssKiB": 15804.0,
+      "cpuSeconds": 0.59,
+      "cpuPercentOneCore": 2.947,
+      "maxThreads": 4
+    },
+    {
+      "trial": 2,
+      "observationSeconds": 20.019,
+      "medianRssKiB": 18868.0,
+      "medianPssKiB": 15804.0,
+      "cpuSeconds": 0.59,
+      "cpuPercentOneCore": 2.947,
+      "maxThreads": 4
+    },
+    {
+      "trial": 3,
+      "observationSeconds": 20.021,
+      "medianRssKiB": 18868.0,
+      "medianPssKiB": 15804.0,
+      "cpuSeconds": 0.58,
+      "cpuPercentOneCore": 2.897,
+      "maxThreads": 4
+    },
+    {
+      "trial": 4,
+      "observationSeconds": 20.019,
+      "medianRssKiB": 18868.0,
+      "medianPssKiB": 15804.0,
+      "cpuSeconds": 0.59,
+      "cpuPercentOneCore": 2.947,
+      "maxThreads": 4
+    },
+    {
+      "trial": 5,
+      "observationSeconds": 20.02,
+      "medianRssKiB": 18868.0,
+      "medianPssKiB": 15804.0,
+      "cpuSeconds": 0.6,
+      "cpuPercentOneCore": 2.997,
+      "maxThreads": 4
+    },
+    {
+      "trial": 6,
+      "observationSeconds": 20.018,
+      "medianRssKiB": 18880.0,
+      "medianPssKiB": 15816.0,
+      "cpuSeconds": 0.6,
+      "cpuPercentOneCore": 2.997,
+      "maxThreads": 4
+    },
+    {
+      "trial": 7,
+      "observationSeconds": 20.018,
+      "medianRssKiB": 18880.0,
+      "medianPssKiB": 15816.0,
+      "cpuSeconds": 0.58,
+      "cpuPercentOneCore": 2.897,
+      "maxThreads": 4
+    }
+  ]
+}

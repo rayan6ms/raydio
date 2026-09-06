@@ -1,0 +1,31 @@
+{
+  "date": "2026-09-06",
+  "region": "sa-saopaulo-1",
+  "instances": [],
+  "resourceManagerStack": "ACTIVE",
+  "capacityReports": [
+    {
+      "shape": "VM.Standard.A1.Flex",
+      "ocpus": 1,
+      "memoryGiB": 4,
+      "status": "OUT_OF_HOST_CAPACITY"
+    },
+    {
+      "shape": "VM.Standard.E2.1.Micro",
+      "status": "OUT_OF_HOST_CAPACITY"
+    }
+  ],
+  "instanceCreated": false,
+  "botRunningOnOracle": false,
+  "oracleBotResourceMeasurements": null,
+  "infrastructureChanged": false,
+  "qualification": "Authenticated inventory and capacity reports only. No launch or capacity-retry loop was run. Native CI and local measurements are not Oracle runtime measurements.",
+  "inventoryScope": {
+    "configuredProfiles": 1,
+    "subscribedRegions": [
+      "sa-saopaulo-1"
+    ],
+    "accessibleChildCompartments": 0,
+    "includesRootCompartment": true
+  }
+}

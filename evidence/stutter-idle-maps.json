@@ -1,0 +1,178 @@
+{
+  "scope": "One follow-up idle start each; same arena cap; diagnostic attribution only",
+  "before": {
+    "binary r--p": {
+      "Rss": 2500,
+      "Pss": 2500,
+      "Private_Dirty": 540
+    },
+    "binary r-xp": {
+      "Rss": 7332,
+      "Pss": 7332,
+      "Private_Dirty": 0
+    },
+    "binary rw-p": {
+      "Rss": 24,
+      "Pss": 24,
+      "Private_Dirty": 24
+    },
+    "heap": {
+      "Rss": 1208,
+      "Pss": 1208,
+      "Private_Dirty": 1208
+    },
+    "anonymous": {
+      "Rss": 304,
+      "Pss": 304,
+      "Private_Dirty": 304
+    },
+    "/usr/lib64/libnss_resolve.so.2": {
+      "Rss": 220,
+      "Pss": 46,
+      "Private_Dirty": 16
+    },
+    "/usr/lib64/libnss_myhostname.so.2": {
+      "Rss": 196,
+      "Pss": 47,
+      "Private_Dirty": 24
+    },
+    "/usr/lib64/libc.so.6": {
+      "Rss": 1668,
+      "Pss": 35,
+      "Private_Dirty": 24
+    },
+    "/usr/lib64/libgcc_s-16-20260819.so.1": {
+      "Rss": 96,
+      "Pss": 4,
+      "Private_Dirty": 4
+    },
+    "/usr/lib64/libm.so.6": {
+      "Rss": 608,
+      "Pss": 14,
+      "Private_Dirty": 8
+    },
+    "/usr/lib64/libnss_mdns4_minimal.so.2": {
+      "Rss": 16,
+      "Pss": 4,
+      "Private_Dirty": 4
+    },
+    "[vvar]": {
+      "Rss": 8,
+      "Pss": 0,
+      "Private_Dirty": 0
+    },
+    "[vvar_vclock]": {
+      "Rss": 0,
+      "Pss": 0,
+      "Private_Dirty": 0
+    },
+    "[vdso]": {
+      "Rss": 8,
+      "Pss": 0,
+      "Private_Dirty": 0
+    },
+    "/usr/lib64/ld-linux-x86-64.so.2": {
+      "Rss": 232,
+      "Pss": 12,
+      "Private_Dirty": 12
+    },
+    "[stack]": {
+      "Rss": 144,
+      "Pss": 144,
+      "Private_Dirty": 144
+    },
+    "[vsyscall]": {
+      "Rss": 0,
+      "Pss": 0,
+      "Private_Dirty": 0
+    }
+  },
+  "after": {
+    "binary r--p": {
+      "Rss": 2556,
+      "Pss": 2556,
+      "Private_Dirty": 540
+    },
+    "binary r-xp": {
+      "Rss": 7636,
+      "Pss": 7636,
+      "Private_Dirty": 0
+    },
+    "binary rw-p": {
+      "Rss": 24,
+      "Pss": 24,
+      "Private_Dirty": 24
+    },
+    "heap": {
+      "Rss": 1188,
+      "Pss": 1188,
+      "Private_Dirty": 1188
+    },
+    "anonymous": {
+      "Rss": 296,
+      "Pss": 296,
+      "Private_Dirty": 296
+    },
+    "/usr/lib64/libnss_resolve.so.2": {
+      "Rss": 220,
+      "Pss": 46,
+      "Private_Dirty": 16
+    },
+    "/usr/lib64/libnss_myhostname.so.2": {
+      "Rss": 200,
+      "Pss": 48,
+      "Private_Dirty": 24
+    },
+    "/usr/lib64/libc.so.6": {
+      "Rss": 1724,
+      "Pss": 35,
+      "Private_Dirty": 24
+    },
+    "/usr/lib64/libgcc_s-16-20260819.so.1": {
+      "Rss": 96,
+      "Pss": 4,
+      "Private_Dirty": 4
+    },
+    "/usr/lib64/libm.so.6": {
+      "Rss": 608,
+      "Pss": 13,
+      "Private_Dirty": 8
+    },
+    "/usr/lib64/libnss_mdns4_minimal.so.2": {
+      "Rss": 16,
+      "Pss": 4,
+      "Private_Dirty": 4
+    },
+    "[vvar]": {
+      "Rss": 8,
+      "Pss": 0,
+      "Private_Dirty": 0
+    },
+    "[vvar_vclock]": {
+      "Rss": 0,
+      "Pss": 0,
+      "Private_Dirty": 0
+    },
+    "[vdso]": {
+      "Rss": 8,
+      "Pss": 0,
+      "Private_Dirty": 0
+    },
+    "/usr/lib64/ld-linux-x86-64.so.2": {
+      "Rss": 232,
+      "Pss": 12,
+      "Private_Dirty": 12
+    },
+    "[stack]": {
+      "Rss": 144,
+      "Pss": 144,
+      "Private_Dirty": 144
+    },
+    "[vsyscall]": {
+      "Rss": 0,
+      "Pss": 0,
+      "Private_Dirty": 0
+    }
+  },
+  "interpretation": "Resident executable/readonly pages rose 360 KiB; heap and anonymous PSS fell 28 KiB. No encoded playback buffer exists while no track is active."
+}

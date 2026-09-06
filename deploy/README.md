@@ -98,3 +98,12 @@ Read-only Oracle API verification confirmed the configured image is available:
 `Canonical-Ubuntu-24.04-aarch64-2026.06.29-0`. The configured São Paulo compartment
 has no instances. No cloud instance has been created or modified by this rewrite;
 an actual Oracle instance/network test remains separate from native ARM64 CI.
+
+On September 6, authenticated inventory still found no instances. Both
+`VM.Standard.A1.Flex` (1 OCPU, 4 GiB) and `VM.Standard.E2.1.Micro` reported
+`OUT_OF_HOST_CAPACITY` in São Paulo. See the [capacity record](../evidence/oracle-capacity-2026-09-06.json).
+The production Discord application has not yet been started on Oracle.
+Discord's developer portal does not host the TypeScript or Rust program:
+deploying Rust with the existing production token preserves the bot identity,
+server membership, and permissions. Stop the previous runtime before starting
+that identity on the VM.

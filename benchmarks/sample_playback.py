@@ -35,6 +35,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--pid", type=int, action="append", required=True)
     parser.add_argument("--stack", required=True)
+    parser.add_argument("--workload", default="One live Discord voice session, dQw4w9WgXcQ, volume 70, track loop, panel refresh enabled")
     parser.add_argument("--expected-exe", type=Path)
     parser.add_argument("--seconds", type=int, default=20)
     parser.add_argument("--trials", type=int, default=3)
@@ -43,7 +44,7 @@ def main():
     result = {
         "date": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "stack": args.stack,
-        "workload": "One live Discord voice session, dQw4w9WgXcQ, volume 70, track loop, panel refresh enabled",
+        "workload": args.workload,
         "limitations": ["Shared host", f"{args.trials} consecutive windows in one warmed process; not independent process restarts", "Human listening confirmation recorded separately"],
         "processCount": len(args.pid),
         "executables": [{"name": Path(f"/proc/{pid}/exe").resolve().name,

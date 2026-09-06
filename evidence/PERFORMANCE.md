@@ -1,10 +1,14 @@
-# Final release: 4cdb705
+# v0.2.0 measurements (mid-song stutter investigation remains open)
 
-[Native CI](https://github.com/rayan6ms/raydio/actions/runs/33985944055) passed
-45 bot tests, formatting, Clippy, deployment lifecycle tests, and the unprivileged
-package check on ARM64 and x86-64. A subsequent test-only regression also passed,
-checking that stale paused panels are corrected once and polling stops after
-three status checks. See [artifact hashes](release-validation.json).
+The user subsequently reported repeated mid-song stutters. The coarse receiver
+windows below did not rule them out. See the [current diagnosis](STUTTER-DIAGNOSIS.md)
+for finer measurements and the source-read regression.
+
+[Native CI](https://github.com/rayan6ms/raydio/actions/runs/33987358869) passed
+46 bot tests, formatting, Clippy, deployment lifecycle tests, and the unprivileged
+package check on ARM64 and x86-64. The d8fa46b packages have the same executable
+hashes as the measured 4cdb705 packages and include the two-arena service setting.
+See [artifact hashes](release-validation.json).
 
 The [final matched idle comparison](optimization-final-idle.json) used three
 alternating starts of each binary with no concurrent bot or local compilation.
@@ -14,8 +18,8 @@ and 2,809 ms; no startup or idle CPU speedup is claimed. These figures compare
 the preserved baseline with the portable final package, including toolchain and
 runtime changes, rather than isolating the compiler option.
 
-The ARM64 archive from the tested release is 7,013,232 bytes (**6.69 MiB**), and x86-64 is
-7,398,147 bytes (**7.06 MiB**). Live measurements use x86-64 on the developer
+The ARM64 archive from the tested release is 7,013,294 bytes (**6.69 MiB**), and x86-64 is
+7,398,164 bytes (**7.06 MiB**). Live measurements use x86-64 on the developer
 host. Native ARM64 CI and read-only Oracle image verification do not replace
 an actual Oracle VM/network test.
 
@@ -48,7 +52,7 @@ retention variability from a repeatable average saving. CPU was 3.246% versus
 3.146% of one core in the first comparison; no CPU speedup is claimed.
 The [60-second receiver check](audio-final-two-arenas.json) passed with 3,001
 packets, zero packet loss/full-scale/non-finite samples and 3,465 concealed samples.
-The systemd service sets the allocator limit before process startup. A repeated three-window comparison measured 16,563 KiB default versus
+The systemd service sets the allocator limit before process startup. A repeated three-window comparison measured 16,559 KiB default versus
 16,378 KiB with the limit (about 1.1% in that shorter pair); the five-minute
 run's stable median was 16,407 KiB. The larger initial 20,223→16,155 KiB
 observation is retained as a run-specific result, not an expected fixed delta.

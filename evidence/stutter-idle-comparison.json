@@ -1,0 +1,110 @@
+{
+  "date": "2026-09-05T21:01:17.549690+00:00",
+  "workload": "Authenticated idle, no commands or voice; alternating build order",
+  "warmupSeconds": 5,
+  "trials": [
+    {
+      "stack": "rust",
+      "startupMs": 2857.98,
+      "observationSeconds": 15.011,
+      "medianRssKiB": 15172,
+      "medianPssKiB": 12157,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "variant": "before",
+      "trial": 1
+    },
+    {
+      "stack": "rust",
+      "startupMs": 2807.46,
+      "observationSeconds": 15.011,
+      "medianRssKiB": 15176,
+      "medianPssKiB": 12286,
+      "maxThreads": 4,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.067,
+      "variant": "after",
+      "trial": 1
+    },
+    {
+      "stack": "rust",
+      "startupMs": 3107.99,
+      "observationSeconds": 15.011,
+      "medianRssKiB": 15036,
+      "medianPssKiB": 12088,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "variant": "after",
+      "trial": 2
+    },
+    {
+      "stack": "rust",
+      "startupMs": 2807.16,
+      "observationSeconds": 15.012,
+      "medianRssKiB": 14480,
+      "medianPssKiB": 11664,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "variant": "before",
+      "trial": 2
+    },
+    {
+      "stack": "rust",
+      "startupMs": 2506.5,
+      "observationSeconds": 15.011,
+      "medianRssKiB": 14508,
+      "medianPssKiB": 11692,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "variant": "before",
+      "trial": 3
+    },
+    {
+      "stack": "rust",
+      "startupMs": 2857.15,
+      "observationSeconds": 15.011,
+      "medianRssKiB": 15300,
+      "medianPssKiB": 12154,
+      "maxThreads": 4,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "variant": "after",
+      "trial": 3
+    }
+  ],
+  "binaries": {
+    "before": {
+      "sha256": "3f635151d82b2b350bf9b8268e1aa402d9df3c65debb18999cf84f7e461aa907",
+      "bytes": 18466736
+    },
+    "after": {
+      "sha256": "f3e22fde54dcdcfdf47d35281a55d267175cb17759fbed34b7956a89aa16052c",
+      "bytes": 18474832
+    }
+  },
+  "arenaMaxOverrides": {
+    "before": 2,
+    "after": 2
+  },
+  "limitations": [
+    "Shared host; idle only, no playback or end-to-end latency claim",
+    "Three independent starts per variant; no compilation during sampling"
+  ],
+  "medians": {
+    "before": {
+      "medianPssKiB": 11692,
+      "medianRssKiB": 14508,
+      "startupMs": 2807.16
+    },
+    "after": {
+      "medianPssKiB": 12154,
+      "medianRssKiB": 15176,
+      "startupMs": 2857.15
+    }
+  },
+  "interpretation": "Median PSS increased by 462 KiB (3.95%) in this three-start comparison; four threads for both. Playback buffer allocation is lazy; memory-map follow-up required before attributing the idle difference to queued media."
+}
