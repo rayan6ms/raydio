@@ -85,8 +85,10 @@ async fn run() -> Result<()> {
         level => level,
     };
     // Third-party HTTP/media debug logs may contain signed URLs. Keep those quiet.
+    // The voice adapter emits only bounded, credential-free lifecycle summaries;
+    // retain those counters so normal shutdowns can be correlated with playback.
     tracing_subscriber::fmt()
-        .with_env_filter(format!("warn,raydio={level}"))
+        .with_env_filter(format!("warn,raydio={level},crust_oto_adapter={level}"))
         .init();
     let cancel = CancellationToken::new();
     let run = raydio::runtime::run(config, cancel.clone());

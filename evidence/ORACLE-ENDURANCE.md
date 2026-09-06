@@ -151,3 +151,27 @@ ring candidate still requires live Oracle validation.
 
 The final live result is pending. No finite test guarantees future network
 behavior or proves every audible source defect absent.
+
+## First ring candidate receiver test
+
+Raydio 7bd74dc passed native CI 34056426179 on both architectures. The local
+release binary completed and was deployed only to the temporary Testbot service
+on the existing Oracle VM, SHA256
+`a713cdf00df56e7561ef58982d9d8be36e4cca32874e462a74ad8509753070a6`.
+No SSH sessions, builds, controls, packet probes, or VM resource sampler ran
+during the 241.369-second measured window starting 21:09:24.590 UTC.
+
+The ring did not terminate in this short window, but receiver quality failed:
+715.438 ms and 138.479 ms mid-song quiet intervals with speaking interruptions,
+1,323.750 ms boundary quiet, no positive/net packet loss, no near-full-scale or
+nonfinite PCM, and no missing meter reports. Small concealment events also recur
+at approximately 15-second intervals. The complete stopped report is
+`endurance-ring-diagnostic.json`. This is not a pass or a proved improvement.
+
+After measurement the service was stopped. Its normal shutdown summary was
+missing because Raydio's `warn,raydio=...` filter suppressed the adapter's
+info-level counters. The adapter has exactly two log sites, both bounded
+credential-free lifecycle logs. The application now enables that module at its
+configured log level; HTTP/media debug logs remain suppressed. A new run is
+required to classify the gaps with complete sender counters. No counters can
+be reconstructed for the discarded process.
