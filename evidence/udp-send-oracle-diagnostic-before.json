@@ -1,0 +1,16 @@
+{
+  "scope": "Complete new diagnostic Oracle track with terminal error logging; no terminal failure reproduced in this run",
+  "binarySha256": "3e8925adb04cfefd8d93aa828b57c6d44f0d1c3f066852ca9308851ad8371731",
+  "packets": 10660,
+  "seconds": 214.781216476,
+  "failedSends": 0,
+  "sequenceDiscontinuities": 0,
+  "timestampDiscontinuities": 0,
+  "gapMs": {
+    "median": 19.834289,
+    "p99": 21.03983,
+    "max": 80.867297,
+    "over25": 70,
+    "over40": 39
+  }
+}

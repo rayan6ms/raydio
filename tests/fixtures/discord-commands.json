@@ -1,0 +1,361 @@
+[
+  {
+    "version": "1",
+    "default_member_permissions": null,
+    "type": 1,
+    "name": "play",
+    "description": "Play a YouTube song or add it to the queue",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "options": [
+      {
+        "type": 3,
+        "name": "request",
+        "description": "Search terms or a YouTube video or playlist URL",
+        "required": true,
+        "autocomplete": true
+      }
+    ],
+    "nsfw": false
+  },
+  {
+    "version": "1",
+    "default_member_permissions": null,
+    "type": 1,
+    "name": "nowplaying",
+    "description": "Show the current song and player controls",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "nsfw": false
+  },
+  {
+    "version": "1",
+    "default_member_permissions": null,
+    "type": 1,
+    "name": "queue",
+    "description": "Show the current song and upcoming queue",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "nsfw": false
+  },
+  {
+    "version": "1",
+    "default_member_permissions": null,
+    "type": 1,
+    "name": "pause",
+    "description": "Pause the current song",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "nsfw": false
+  },
+  {
+    "version": "1",
+    "default_member_permissions": null,
+    "type": 1,
+    "name": "resume",
+    "description": "Resume the current song",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "nsfw": false
+  },
+  {
+    "version": "1",
+    "default_member_permissions": null,
+    "type": 1,
+    "name": "previous",
+    "description": "Return to the previous song in this session",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "nsfw": false
+  },
+  {
+    "version": "1",
+    "default_member_permissions": null,
+    "type": 1,
+    "name": "skip",
+    "description": "Skip to the next song",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "nsfw": false
+  },
+  {
+    "version": "1",
+    "default_member_permissions": null,
+    "type": 1,
+    "name": "stop",
+    "description": "Stop playback and clear the queue",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "nsfw": false
+  },
+  {
+    "version": "1",
+    "default_member_permissions": null,
+    "type": 1,
+    "name": "move",
+    "description": "Move an upcoming song to another queue position",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "options": [
+      {
+        "type": 4,
+        "name": "from",
+        "description": "Current queue position",
+        "required": true,
+        "min_value": 1
+      },
+      {
+        "type": 4,
+        "name": "to",
+        "description": "New queue position",
+        "required": true,
+        "min_value": 1
+      }
+    ],
+    "nsfw": false
+  },
+  {
+    "version": "1",
+    "default_member_permissions": null,
+    "type": 1,
+    "name": "jump",
+    "description": "Immediately play a selected upcoming song",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "options": [
+      {
+        "type": 4,
+        "name": "position",
+        "description": "Upcoming queue position",
+        "required": true,
+        "min_value": 1
+      }
+    ],
+    "nsfw": false
+  },
+  {
+    "version": "1",
+    "default_member_permissions": null,
+    "type": 1,
+    "name": "shuffle",
+    "description": "Shuffle the upcoming queue",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "nsfw": false
+  },
+  {
+    "version": "1",
+    "default_member_permissions": null,
+    "type": 1,
+    "name": "remove",
+    "description": "Remove an upcoming song from the queue",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "options": [
+      {
+        "type": 4,
+        "name": "position",
+        "description": "Upcoming queue position",
+        "required": true,
+        "min_value": 1
+      }
+    ],
+    "nsfw": false
+  },
+  {
+    "version": "1",
+    "default_member_permissions": null,
+    "type": 1,
+    "name": "clear",
+    "description": "Clear every upcoming song",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "nsfw": false
+  },
+  {
+    "version": "1",
+    "default_member_permissions": null,
+    "type": 1,
+    "name": "volume",
+    "description": "Show or set the player volume",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "options": [
+      {
+        "type": 4,
+        "name": "level",
+        "description": "Volume from 0 to 100",
+        "min_value": 0,
+        "max_value": 100
+      }
+    ],
+    "nsfw": false
+  },
+  {
+    "version": "1",
+    "default_member_permissions": null,
+    "type": 1,
+    "name": "loop",
+    "description": "Choose how playback should repeat",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "options": [
+      {
+        "type": 3,
+        "name": "mode",
+        "description": "Loop mode",
+        "required": true,
+        "choices": [
+          {
+            "name": "Off",
+            "value": "off"
+          },
+          {
+            "name": "Current song",
+            "value": "track"
+          },
+          {
+            "name": "Entire queue",
+            "value": "queue"
+          }
+        ]
+      }
+    ],
+    "nsfw": false
+  },
+  {
+    "version": "1",
+    "default_member_permissions": null,
+    "type": 1,
+    "name": "leave",
+    "description": "Leave voice and clear the playback session",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "nsfw": false
+  },
+  {
+    "version": "1",
+    "default_member_permissions": "32",
+    "type": 1,
+    "name": "diagnostics",
+    "description": "Show private playback and connection health",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "nsfw": false
+  },
+  {
+    "version": "1",
+    "default_member_permissions": null,
+    "type": 1,
+    "name": "help",
+    "description": "Show Raydio's commands and usage",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "nsfw": false
+  },
+  {
+    "version": "1",
+    "default_member_permissions": null,
+    "type": 1,
+    "name": "ping",
+    "description": "Check Discord latency and music service readiness",
+    "dm_permission": false,
+    "contexts": [
+      0
+    ],
+    "integration_types": [
+      0
+    ],
+    "nsfw": false
+  }
+]

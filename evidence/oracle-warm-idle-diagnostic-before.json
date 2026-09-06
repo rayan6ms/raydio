@@ -1,0 +1,46 @@
+{
+  "date": "2026-09-06T04:34:21.222479+00:00",
+  "stack": "oracle-diagnostic-before",
+  "workload": "Authenticated idle after one complete playback, voice disconnected; diagnostic tracing library loaded. Warm idle, not fresh process idle.",
+  "limitations": [
+    "Shared host",
+    "3 consecutive windows in one warmed process; not independent process restarts",
+    "This sampler does not assess audio quality; automated receiver evidence is recorded separately"
+  ],
+  "processCount": 1,
+  "executables": [
+    {
+      "name": "testbot-diagnostic",
+      "sha256": "3e8925adb04cfefd8d93aa828b57c6d44f0d1c3f066852ca9308851ad8371731"
+    }
+  ],
+  "trials": [
+    {
+      "trial": 1,
+      "observationSeconds": 20.076,
+      "medianRssKiB": 18360.0,
+      "medianPssKiB": 15939.0,
+      "cpuSeconds": 0.02,
+      "cpuPercentOneCore": 0.1,
+      "maxThreads": 3
+    },
+    {
+      "trial": 2,
+      "observationSeconds": 20.027,
+      "medianRssKiB": 18360.0,
+      "medianPssKiB": 15939.0,
+      "cpuSeconds": 0.0,
+      "cpuPercentOneCore": 0.0,
+      "maxThreads": 3
+    },
+    {
+      "trial": 3,
+      "observationSeconds": 20.026,
+      "medianRssKiB": 18360.0,
+      "medianPssKiB": 15939.0,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.05,
+      "maxThreads": 3
+    }
+  ]
+}

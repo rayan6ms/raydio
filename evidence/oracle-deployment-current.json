@@ -1,0 +1,29 @@
+{
+  "verifiedOn": "2026-09-06",
+  "region": "sa-saopaulo-1",
+  "instanceCount": 1,
+  "runningInstances": [
+    {
+      "name": "raydio",
+      "shape": "VM.Standard.E2.1.Micro",
+      "memoryGiB": 1,
+      "os": "Ubuntu 24.04",
+      "architecture": "x86_64",
+      "bootVolumeGiB": 47
+    }
+  ],
+  "constraints": {
+    "alwaysFreeOnly": true,
+    "maximumInstances": 1
+  },
+  "production": {
+    "identity": "Raydio",
+    "runtime": "Rust",
+    "revision": "3c6c2a41508f759d813fbafb32769bacdd30071c",
+    "systemdActive": true,
+    "systemdEnabled": true,
+    "restarts": 0
+  },
+  "localBots": [],
+  "qualification": "Deployed, but audio quality has not passed qualification. Temporary diagnostic Testbot runs on the same VM during testing; it is not another instance."
+}

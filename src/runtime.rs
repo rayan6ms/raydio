@@ -262,12 +262,28 @@ pub async fn run(config: Config, cancel: CancellationToken) -> Result<()> {
     let (node, owner, mut node_events) =
         Node::start(backend.address, backend.password.clone(), user.id.get())?;
     node.wait_ready().await?;
-    timeout(
-        Duration::from_secs(15),
-        http.interaction(app.id)
-            .set_global_commands(&commands::definitions()),
-    )
-    .await??;
+    let wanted = commands::definitions();
+    let registered = timeout(Duration::from_secs(15), async {
+        Ok::<_, anyhow::Error>(
+            http.interaction(app.id)
+                .global_commands()
+                .with_localizations(true)
+                .await?
+                .models()
+                .await?,
+        )
+    })
+    .await
+    .context("Reading Discord commands timed out")??;
+    if !commands::matches_registered(&registered, &wanted) {
+        timeout(
+            Duration::from_secs(45),
+            http.interaction(app.id).set_global_commands(&wanted),
+        )
+        .await
+        .context("Registering changed Discord commands timed out")??;
+    }
+    drop((wanted, registered, app));
     let mut shard = Shard::new(
         ShardId::ONE,
         config.token.clone(),
@@ -288,6 +304,7 @@ pub async fn run(config: Config, cancel: CancellationToken) -> Result<()> {
         autocomplete: Mutex::new(HashMap::new()),
         searches: Semaphore::new(4),
     });
+    drop(user);
     let mut guilds: HashMap<u64, mpsc::Sender<Message>> = HashMap::new();
     let mut actors = JoinSet::new();
     let mut jobs = JoinSet::new();

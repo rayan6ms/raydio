@@ -1,0 +1,15 @@
+{
+  "scope": "Complete traced second Oracle run, including start and end; separate from the 180 s receiver window",
+  "packets": 10658,
+  "seconds": 215.201586446,
+  "failedSends": 0,
+  "sequenceDiscontinuities": 0,
+  "timestampDiscontinuities": 0,
+  "gapMs": {
+    "median": 19.823275,
+    "p99": 22.04187,
+    "max": 81.938416,
+    "over25": 85,
+    "over40": 46
+  }
+}

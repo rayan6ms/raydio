@@ -3,8 +3,24 @@ use raydio::{backend::Backend, config::Config};
 use std::{collections::HashMap, path::PathBuf, time::Duration};
 use tokio_util::sync::CancellationToken;
 
-#[tokio::main(worker_threads = 2)]
-async fn main() -> Result<()> {
+fn main() -> Result<()> {
+    let workers = runtime_workers(std::env::var("RAYDIO_WORKER_THREADS").ok().as_deref())?;
+    tokio::runtime::Builder::new_multi_thread()
+        .worker_threads(workers)
+        .enable_all()
+        .build()?
+        .block_on(run())
+}
+
+fn runtime_workers(value: Option<&str>) -> Result<usize> {
+    match value {
+        None | Some("2") => Ok(2),
+        Some("1") => Ok(1),
+        _ => anyhow::bail!("RAYDIO_WORKER_THREADS must be 1 or 2"),
+    }
+}
+
+async fn run() -> Result<()> {
     let mut testbot = false;
     let mut probe = false;
     let mut check = false;
@@ -83,6 +99,7 @@ async fn main() -> Result<()> {
         }
     }
 }
+
 async fn shutdown_signal() {
     #[cfg(unix)]
     {
@@ -121,4 +138,16 @@ async fn probe_backend() -> Result<()> {
         );
     }
     backend.shutdown().await
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn runtime_workers_are_bounded() {
+        assert_eq!(super::runtime_workers(None).unwrap(), 2);
+        assert_eq!(super::runtime_workers(Some("1")).unwrap(), 1);
+        for invalid in ["", "0", "3", "-1", "1000000"] {
+            assert!(super::runtime_workers(Some(invalid)).is_err());
+        }
+    }
 }

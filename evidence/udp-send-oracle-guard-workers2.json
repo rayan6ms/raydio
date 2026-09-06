@@ -1,0 +1,17 @@
+{
+  "scope": "Complete track, corrected guard and no catch-up; two workers; same VM, trace loaded",
+  "binarySha256": "8490d67a52bf5d9439d897599c42e3327fd97382dca1e48a1dc70437d8695187",
+  "packets": 10660,
+  "seconds": 214.710182556,
+  "failedSends": 0,
+  "sequenceDiscontinuities": 0,
+  "timestampDiscontinuities": 0,
+  "gapMs": {
+    "median": 19.836791,
+    "p99": 21.283805,
+    "max": 100.247586,
+    "over25": 67,
+    "over40": 31,
+    "under10": 24
+  }
+}

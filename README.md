@@ -36,7 +36,9 @@ Crust is embedded on an ephemeral loopback port with a random per-process passwo
 Install Rust 1.97.1, Git, a C/C++ toolchain, CMake, make, and CA certificates.
 All dependencies are pinned to public Git revisions in `Cargo.lock`; sibling
 checkouts are no longer required. Cargo fetches Mantle's pinned codec submodule.
-The runtime uses two Tokio workers; build examples below use one compilation job.
+The runtime defaults to two Tokio workers; `RAYDIO_WORKER_THREADS=1` selects
+one worker for measured small-VM deployments. Set it in the process environment
+before startup. Build examples below use one compilation job.
 
 ```sh
 CARGO_BUILD_JOBS=1 cargo test --locked --all-targets

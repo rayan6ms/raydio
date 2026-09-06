@@ -22,10 +22,11 @@ installation and runtime validation.
 - Put only the **production** token in `/etc/raydio/env` as `DISCORD_TOKEN=...`.
   Never commit this file or pass the token on a command line. Testbot is separate.
 
-The earlier local Terraform bundle selects A1/1 OCPU/4 GiB and already permits
-outbound traffic. Its image ID is region-specific; select a current Ubuntu 24.04
-ARM64 image. Its tenancy, compartment, SSH key, and stack identifiers are personal
-and are intentionally not included in this repository.
+The active deployment uses one Always Free `VM.Standard.E2.1.Micro` instance
+with 1 GiB RAM, Ubuntu 24.04 x86-64, and a 47 GiB boot volume in São Paulo.
+Reuse this instance. The personal local Terraform bundle now matches the Micro launch configuration.
+The old capacity-retry script targets A1 and is obsolete for this deployment;
+application updates use `raydioctl` and need no infrastructure apply. Tenancy, SSH keys, and stack identifiers are not published.
 
 ## First install
 
@@ -94,14 +95,19 @@ initial comparison. For a manual run, prefix the command with
 `MALLOC_ARENA_MAX=2`; putting it in an application-read env file after startup
 does not configure glibc. Recheck contention and memory when scaling to many guilds.
 
-Read-only Oracle API verification confirmed the configured image is available:
-`Canonical-Ubuntu-24.04-aarch64-2026.06.29-0`. The configured São Paulo compartment
-has no instances. No cloud instance has been created or modified by this rewrite;
-an actual Oracle instance/network test remains separate from native ARM64 CI.
+The initial capacity report returned `OUT_OF_HOST_CAPACITY` for both free shapes.
+An actual Micro launch subsequently succeeded on September 6. The verified
+inventory contains exactly one running instance; the capacity report is historical.
+Always Free and one instance are deployment constraints: do not add a paid shape
+or an additional instance as a workaround.
 
-On September 6, authenticated inventory still found no instances. Both
-`VM.Standard.A1.Flex` (1 OCPU, 4 GiB) and `VM.Standard.E2.1.Micro` reported
-`OUT_OF_HOST_CAPACITY` in São Paulo. See the [capacity record](../evidence/oracle-capacity-2026-09-06.json).
+Process memory must be measured with `/proc/PID/smaps_rollup` (PSS and RSS),
+alongside cgroup accounting. `MemoryCurrent` can omit shared file pages charged
+to a different cgroup and is not the bot's total memory footprint. The initial
+Oracle run used about 12 MiB idle PSS and 15.4 MiB playback PSS, with roughly
+4% of one CPU during steady playback. That run suffered a terminal audio failure;
+these resource numbers are not evidence of audio reliability.
+
 The production Discord application is now running on Oracle from the Rust
 package (revision `3c6c2a4`). Discord's developer portal does not host the
 TypeScript or Rust program:

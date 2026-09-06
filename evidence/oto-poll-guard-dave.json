@@ -1,0 +1,42 @@
+{
+  "scope": "Local single-sender release benchmark; actual DAVE, RTP and loopback UDP; 10 seconds after 1 second warmup. Not an Oracle or internet quality result.",
+  "before": {
+    "allocation": {
+      "allocations": 0,
+      "allocationsPerFrame": 0.0,
+      "bytesAllocated": 0,
+      "bytesAllocatedPerFrame": 0.0,
+      "reallocations": 0,
+      "reallocationsPerFrame": 0.0
+    },
+    "benchmarkId": "oto-p08-complete-paced-dave",
+    "boundaryDifference": 1,
+    "frames": 500,
+    "maxSenderLatenessNanos": 1768510,
+    "measurementMs": 10000,
+    "profile": "release",
+    "schemaVersion": 1,
+    "udpPackets": 501,
+    "warmupMs": 1000
+  },
+  "after": {
+    "allocation": {
+      "allocations": 0,
+      "allocationsPerFrame": 0.0,
+      "bytesAllocated": 0,
+      "bytesAllocatedPerFrame": 0.0,
+      "reallocations": 0,
+      "reallocationsPerFrame": 0.0
+    },
+    "benchmarkId": "oto-p08-complete-paced-dave",
+    "boundaryDifference": 0,
+    "frames": 501,
+    "maxSenderLatenessNanos": 1185002,
+    "measurementMs": 10001,
+    "profile": "release",
+    "schemaVersion": 1,
+    "udpPackets": 501,
+    "warmupMs": 1000
+  },
+  "interpretation": "Both retained zero steady allocations and approximately 50 frames/s; latency differences in this one run are not claimed as a speedup."
+}

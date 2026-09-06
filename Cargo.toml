@@ -23,13 +23,13 @@ twilight-gateway = { version = "0.17.1", default-features = false, features = ["
 twilight-http = { version = "0.17.1", default-features = false, features = ["rustls-native-roots"] }
 twilight-model = "0.17.1"
 url = "2.5.8"
-crust = { git = "https://github.com/rayan6ms/crust", rev = "f7d6c69c42db461f26ac8bc81ff3966a888a86b0" }
-crust-server = { git = "https://github.com/rayan6ms/crust", rev = "f7d6c69c42db461f26ac8bc81ff3966a888a86b0" }
-crust-mantle-adapter = { git = "https://github.com/rayan6ms/crust", rev = "f7d6c69c42db461f26ac8bc81ff3966a888a86b0" }
-crust-oto-adapter = { git = "https://github.com/rayan6ms/crust", rev = "f7d6c69c42db461f26ac8bc81ff3966a888a86b0" }
+crust = { git = "https://github.com/rayan6ms/crust", rev = "785b382ed40b283a7c1270d022e574b94035a455" }
+crust-server = { git = "https://github.com/rayan6ms/crust", rev = "785b382ed40b283a7c1270d022e574b94035a455" }
+crust-mantle-adapter = { git = "https://github.com/rayan6ms/crust", rev = "785b382ed40b283a7c1270d022e574b94035a455" }
+crust-oto-adapter = { git = "https://github.com/rayan6ms/crust", rev = "785b382ed40b283a7c1270d022e574b94035a455" }
 
 [patch.crates-io]
-openmls_rust_crypto = { git = "https://github.com/rayan6ms/oto", rev = "efa16faa8a3bd472f0818f65bd89f745f6b97f6d" }
+openmls_rust_crypto = { git = "https://github.com/rayan6ms/oto", rev = "04be4964b2ef1d365a2994b1e93fad5c37585421" }
 
 
 [profile.dev]
@@ -45,8 +45,8 @@ opt-level = "s"
 # dominate resident executable pages on small Oracle instances.
 
 [dev-dependencies]
-crust-testkit = { git = "https://github.com/rayan6ms/crust", rev = "f7d6c69c42db461f26ac8bc81ff3966a888a86b0" }
+crust-testkit = { git = "https://github.com/rayan6ms/crust", rev = "785b382ed40b283a7c1270d022e574b94035a455" }
 axum = { version = "0.8.4", features = ["ws"] }
-oto = { git = "https://github.com/rayan6ms/oto", rev = "efa16faa8a3bd472f0818f65bd89f745f6b97f6d" }
+oto = { git = "https://github.com/rayan6ms/oto", rev = "04be4964b2ef1d365a2994b1e93fad5c37585421" }
 mantle-core = { git = "https://github.com/rayan6ms/mantle", rev = "8be808baf31b667af42da0246d8f1cfaf4d2105d" }
 mantle-media = { git = "https://github.com/rayan6ms/mantle", rev = "8be808baf31b667af42da0246d8f1cfaf4d2105d" }

@@ -1,0 +1,30 @@
+{
+  "scope": "Same prototype binary, six alternating authenticated fresh starts on Oracle; no voice or trace. Production Raydio idle separately.",
+  "rows": [
+    {
+      "trial": 1,
+      "workers": 2,
+      "readyMs": 2590.564446999906,
+      "pssKiB": 11659.0,
+      "rssKiB": 14048.0,
+      "threads": 4
+    },
+    {
+      "trial": 2,
+      "workers": 1,
+      "readyMs": 2388.3767319998697,
+      "pssKiB": 12257.0,
+      "rssKiB": 14728.0,
+      "threads": 3
+    },
+    {
+      "trial": 3,
+      "workers": 1,
+      "readyMs": 2418.374135000249,
+      "pssKiB": 12311.0,
+      "rssKiB": 14776.0,
+      "threads": 3
+    }
+  ],
+  "incomplete": "Fourth restart timed out during startup, systemd recovered automatically. Only three complete samples; no median performance conclusion."
+}
