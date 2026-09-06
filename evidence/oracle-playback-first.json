@@ -1,0 +1,91 @@
+{
+  "date": "2026-09-06T03:52:00.533558+00:00",
+  "stack": "rust-oci-e2-micro",
+  "workload": "One Discord voice session in General, volume 70, loop off, no controls or compilation",
+  "limitations": [
+    "Shared host",
+    "8 consecutive windows in one warmed process; not independent process restarts",
+    "This sampler does not assess audio quality; automated receiver evidence is recorded separately"
+  ],
+  "processCount": 1,
+  "executables": [
+    {
+      "name": "raydio",
+      "sha256": "cc572c6119ae76e2fb93d3e848438589309a47427f09436a375788dea78cf2c8"
+    }
+  ],
+  "trials": [
+    {
+      "trial": 1,
+      "observationSeconds": 20.028,
+      "medianRssKiB": 18232.0,
+      "medianPssKiB": 15844.0,
+      "cpuSeconds": 0.8,
+      "cpuPercentOneCore": 3.994,
+      "maxThreads": 5
+    },
+    {
+      "trial": 2,
+      "observationSeconds": 20.028,
+      "medianRssKiB": 18104.0,
+      "medianPssKiB": 15716.0,
+      "cpuSeconds": 0.81,
+      "cpuPercentOneCore": 4.044,
+      "maxThreads": 5
+    },
+    {
+      "trial": 3,
+      "observationSeconds": 20.026,
+      "medianRssKiB": 18232.0,
+      "medianPssKiB": 15844.0,
+      "cpuSeconds": 0.8,
+      "cpuPercentOneCore": 3.995,
+      "maxThreads": 5
+    },
+    {
+      "trial": 4,
+      "observationSeconds": 20.036,
+      "medianRssKiB": 18232.0,
+      "medianPssKiB": 15844.0,
+      "cpuSeconds": 1.05,
+      "cpuPercentOneCore": 5.241,
+      "maxThreads": 5
+    },
+    {
+      "trial": 5,
+      "observationSeconds": 20.027,
+      "medianRssKiB": 18104.0,
+      "medianPssKiB": 15716.0,
+      "cpuSeconds": 0.8,
+      "cpuPercentOneCore": 3.995,
+      "maxThreads": 5
+    },
+    {
+      "trial": 6,
+      "observationSeconds": 20.027,
+      "medianRssKiB": 18104.0,
+      "medianPssKiB": 15716.0,
+      "cpuSeconds": 0.8,
+      "cpuPercentOneCore": 3.995,
+      "maxThreads": 5
+    },
+    {
+      "trial": 7,
+      "observationSeconds": 20.028,
+      "medianRssKiB": 18104.0,
+      "medianPssKiB": 15716.0,
+      "cpuSeconds": 0.74,
+      "cpuPercentOneCore": 3.695,
+      "maxThreads": 5
+    },
+    {
+      "trial": 8,
+      "observationSeconds": 20.029,
+      "medianRssKiB": 17952.0,
+      "medianPssKiB": 15564.0,
+      "cpuSeconds": 0.01,
+      "cpuPercentOneCore": 0.05,
+      "maxThreads": 5
+    }
+  ]
+}
