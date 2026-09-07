@@ -286,3 +286,28 @@ package smoke checks on x86-64 and ARM64. The x86-64 candidate archive is
 7,432,890 bytes. Candidate receiver binary SHA256:
 `47e954f1c1daa13ae9963bfc1d02ca344c799b74d015b2720e517deade983490`.
 The archive is installed for temporary Testbot only; production remains v0.2.1.
+
+### Receiver attempt failed: source CPU guard
+
+The exact native candidate ran 320.5195 measured seconds before its terminal
+FrameSourceContract failure at 03:52:17.708 UTC. Oto measured 3,327 us wall and
+3,330 us thread CPU for a callback. Sender lifetime: 19,419 audio packets,
+zero unavailable/silence frames, zero send failures, seven skipped deadlines,
+max lateness 38,699 us, one source overrun. The ring callback is therefore not
+qualified; staging fixed no terminal-source CPU guard condition. No gate is
+weakened. This is a failed attempt, not partial six-hour credit.
+
+Before termination the receiver had zero net loss (one late/recovered packet),
+273.688 ms total non-silent concealment, zero silent concealment, clipping,
+nonfinite or empty PCM. The first repeat's 976.250 ms quiet interval is near the
+938.458 ms source tail. The disconnect ended continuous receiver coverage and
+added 241.875 ms quiet at the failed capture's end. No SSH/build/trace ran during
+coverage. See `endurance-staging-terminal-failure.json` and
+`staging-sender-terminal.txt`.
+
+Minute resource samples are in `staging-oracle-resources.json`. Candidate idle
+pre-play PSS was 12,124–12,144 KiB versus 12,350–12,358 KiB before (about 0.20 MiB
+less, a small observational difference). Warm playback PSS was 16,067–16,075 KiB
+plus 3,436,544 bytes of reclaimable cgroup file cache; steady CPU approximately
+5.5% of one core. No cgroup memory-pressure/OOM events occurred. After the
+failure, file cache fell to zero as the player's anonymous input was released.

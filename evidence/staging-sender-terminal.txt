@@ -1,0 +1,6 @@
+2026-09-07T03:52:17.708270Z  WARN crust_oto_adapter: audio sender stopped after a terminal failure failure=Some(FrameSourceContract) source_overruns=1 frames_sent=19419 frames_unavailable=0 max_lateness_us=38699 source_overrun_wall_us=3327 source_overrun_cpu_us=3330 send_failures=0 skipped_deadlines=7
+2026-09-07T03:52:17.708429Z  INFO crust_oto_adapter: audio sender stopped frames_sent=19419 silence_frames_sent=0 frames_unavailable=0 skipped_deadlines=7 send_failures=0 source_overruns=1 max_lateness_us=38699 phase=Failed failure=Some(FrameSourceContract)
+Stopping raydio-six-hour.service - Raydio six-hour receiver qualification Testbot...
+raydio-six-hour.service: Deactivated successfully.
+Stopped raydio-six-hour.service - Raydio six-hour receiver qualification Testbot.
+raydio-six-hour.service: Consumed 21.741s CPU time, 8.2M memory peak, 0B memory swap peak.
