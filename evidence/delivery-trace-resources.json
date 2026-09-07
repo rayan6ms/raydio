@@ -1,0 +1,647 @@
+[
+  {
+    "utc": "2026-09-07T17:32:22.824325+00:00",
+    "elapsedSeconds": 0.0,
+    "pid": 28558,
+    "cpuTicks": [
+      90139,
+      9102,
+      37017,
+      26904419,
+      13377,
+      0,
+      1187,
+      110939,
+      0,
+      0
+    ],
+    "cpuSeconds": 0.13,
+    "threads": 4,
+    "rssKiB": 14832,
+    "pssKiB": 12406,
+    "cgroupBytes": 3022848,
+    "cgroupMemory": {
+      "anon": 2244608,
+      "file": 16384,
+      "file_dirty": 0,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 132837,
+      "user_usec": 57628,
+      "system_usec": 75208,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  },
+  {
+    "utc": "2026-09-07T17:33:22.826075+00:00",
+    "elapsedSeconds": 60.002,
+    "pid": 28558,
+    "cpuTicks": [
+      90300,
+      9102,
+      37076,
+      26916072,
+      13382,
+      0,
+      1190,
+      111032,
+      0,
+      0
+    ],
+    "cpuSeconds": 2.7,
+    "threads": 5,
+    "rssKiB": 18604,
+    "pssKiB": 16134,
+    "cgroupBytes": 8081408,
+    "cgroupMemory": {
+      "anon": 3747840,
+      "file": 3559424,
+      "file_dirty": 20480,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 2703191,
+      "user_usec": 1991985,
+      "system_usec": 711206,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  },
+  {
+    "utc": "2026-09-07T17:34:22.828225+00:00",
+    "elapsedSeconds": 120.004,
+    "pid": 28558,
+    "cpuTicks": [
+      90502,
+      9102,
+      37136,
+      26927671,
+      13383,
+      0,
+      1193,
+      111127,
+      0,
+      0
+    ],
+    "cpuSeconds": 6.09,
+    "threads": 5,
+    "rssKiB": 18620,
+    "pssKiB": 16150,
+    "cgroupBytes": 8450048,
+    "cgroupMemory": {
+      "anon": 3764224,
+      "file": 3710976,
+      "file_dirty": 20480,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 6091307,
+      "user_usec": 4610380,
+      "system_usec": 1480926,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  },
+  {
+    "utc": "2026-09-07T17:35:22.830246+00:00",
+    "elapsedSeconds": 180.006,
+    "pid": 28558,
+    "cpuTicks": [
+      90704,
+      9103,
+      37207,
+      26939257,
+      13384,
+      0,
+      1195,
+      111227,
+      0,
+      0
+    ],
+    "cpuSeconds": 9.55,
+    "threads": 5,
+    "rssKiB": 18632,
+    "pssKiB": 16162,
+    "cgroupBytes": 8683520,
+    "cgroupMemory": {
+      "anon": 3776512,
+      "file": 3854336,
+      "file_dirty": 12288,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 9556879,
+      "user_usec": 7182619,
+      "system_usec": 2374260,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  },
+  {
+    "utc": "2026-09-07T17:36:22.832335+00:00",
+    "elapsedSeconds": 240.008,
+    "pid": 28558,
+    "cpuTicks": [
+      90907,
+      9103,
+      37273,
+      26950852,
+      13385,
+      0,
+      1196,
+      111325,
+      0,
+      0
+    ],
+    "cpuSeconds": 12.94,
+    "threads": 5,
+    "rssKiB": 18684,
+    "pssKiB": 16214,
+    "cgroupBytes": 8749056,
+    "cgroupMemory": {
+      "anon": 3829760,
+      "file": 4001792,
+      "file_dirty": 12288,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 12949165,
+      "user_usec": 9753004,
+      "system_usec": 3196160,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  },
+  {
+    "utc": "2026-09-07T17:37:22.834358+00:00",
+    "elapsedSeconds": 300.01,
+    "pid": 28558,
+    "cpuTicks": [
+      91107,
+      9103,
+      37344,
+      26962440,
+      13386,
+      0,
+      1199,
+      111429,
+      0,
+      0
+    ],
+    "cpuSeconds": 16.4,
+    "threads": 5,
+    "rssKiB": 18692,
+    "pssKiB": 16222,
+    "cgroupBytes": 9027584,
+    "cgroupMemory": {
+      "anon": 3837952,
+      "file": 4149248,
+      "file_dirty": 8192,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 16406378,
+      "user_usec": 12304405,
+      "system_usec": 4101972,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  },
+  {
+    "utc": "2026-09-07T17:38:22.836345+00:00",
+    "elapsedSeconds": 360.012,
+    "pid": 28558,
+    "cpuTicks": [
+      91305,
+      9103,
+      37418,
+      26974035,
+      13386,
+      0,
+      1203,
+      111511,
+      0,
+      0
+    ],
+    "cpuSeconds": 19.81,
+    "threads": 5,
+    "rssKiB": 18692,
+    "pssKiB": 16222,
+    "cgroupBytes": 8941568,
+    "cgroupMemory": {
+      "anon": 3837952,
+      "file": 4292608,
+      "file_dirty": 77824,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 19814641,
+      "user_usec": 14789212,
+      "system_usec": 5025429,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  },
+  {
+    "utc": "2026-09-07T17:39:22.838330+00:00",
+    "elapsedSeconds": 420.014,
+    "pid": 28558,
+    "cpuTicks": [
+      91506,
+      9103,
+      37493,
+      26985637,
+      13387,
+      0,
+      1206,
+      111598,
+      0,
+      0
+    ],
+    "cpuSeconds": 23.19,
+    "threads": 5,
+    "rssKiB": 18696,
+    "pssKiB": 16226,
+    "cgroupBytes": 9236480,
+    "cgroupMemory": {
+      "anon": 3842048,
+      "file": 4444160,
+      "file_dirty": 77824,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 23189583,
+      "user_usec": 17238727,
+      "system_usec": 5950855,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  },
+  {
+    "utc": "2026-09-07T17:40:22.840333+00:00",
+    "elapsedSeconds": 480.016,
+    "pid": 28558,
+    "cpuTicks": [
+      91698,
+      9103,
+      37566,
+      26997237,
+      13391,
+      0,
+      1208,
+      111694,
+      0,
+      0
+    ],
+    "cpuSeconds": 26.49,
+    "threads": 5,
+    "rssKiB": 18704,
+    "pssKiB": 16234,
+    "cgroupBytes": 9502720,
+    "cgroupMemory": {
+      "anon": 3850240,
+      "file": 4591616,
+      "file_dirty": 73728,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 26496263,
+      "user_usec": 19643347,
+      "system_usec": 6852916,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  },
+  {
+    "utc": "2026-09-07T17:41:22.844045+00:00",
+    "elapsedSeconds": 540.02,
+    "pid": 28558,
+    "cpuTicks": [
+      91936,
+      9103,
+      37645,
+      27008737,
+      13391,
+      0,
+      1212,
+      111857,
+      0,
+      0
+    ],
+    "cpuSeconds": 30.01,
+    "threads": 5,
+    "rssKiB": 18712,
+    "pssKiB": 16242,
+    "cgroupBytes": 9523200,
+    "cgroupMemory": {
+      "anon": 3858432,
+      "file": 4734976,
+      "file_dirty": 65536,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 30017856,
+      "user_usec": 22170012,
+      "system_usec": 7847843,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  },
+  {
+    "utc": "2026-09-07T17:42:22.846146+00:00",
+    "elapsedSeconds": 600.022,
+    "pid": 28558,
+    "cpuTicks": [
+      92140,
+      9103,
+      37719,
+      27020337,
+      13392,
+      0,
+      1215,
+      111953,
+      0,
+      0
+    ],
+    "cpuSeconds": 33.38,
+    "threads": 5,
+    "rssKiB": 18712,
+    "pssKiB": 16242,
+    "cgroupBytes": 9621504,
+    "cgroupMemory": {
+      "anon": 3858432,
+      "file": 4882432,
+      "file_dirty": 65536,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 33384397,
+      "user_usec": 24639243,
+      "system_usec": 8745154,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  },
+  {
+    "utc": "2026-09-07T17:43:22.848263+00:00",
+    "elapsedSeconds": 660.024,
+    "pid": 28558,
+    "cpuTicks": [
+      92347,
+      9103,
+      37805,
+      27031928,
+      13392,
+      0,
+      1219,
+      112053,
+      0,
+      0
+    ],
+    "cpuSeconds": 36.83,
+    "threads": 5,
+    "rssKiB": 18712,
+    "pssKiB": 16242,
+    "cgroupBytes": 9719808,
+    "cgroupMemory": {
+      "anon": 3858432,
+      "file": 5025792,
+      "file_dirty": 57344,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 36834012,
+      "user_usec": 27072937,
+      "system_usec": 9761075,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  },
+  {
+    "utc": "2026-09-07T17:44:22.850287+00:00",
+    "elapsedSeconds": 720.026,
+    "pid": 28558,
+    "cpuTicks": [
+      92550,
+      9103,
+      37888,
+      27043513,
+      13393,
+      0,
+      1221,
+      112146,
+      0,
+      0
+    ],
+    "cpuSeconds": 40.33,
+    "threads": 5,
+    "rssKiB": 18712,
+    "pssKiB": 16242,
+    "cgroupBytes": 10027008,
+    "cgroupMemory": {
+      "anon": 3858432,
+      "file": 5173248,
+      "file_dirty": 57344,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 40335261,
+      "user_usec": 29549035,
+      "system_usec": 10786226,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  },
+  {
+    "utc": "2026-09-07T17:45:22.852278+00:00",
+    "elapsedSeconds": 780.028,
+    "pid": 28558,
+    "cpuTicks": [
+      92759,
+      9104,
+      37964,
+      27055107,
+      13393,
+      0,
+      1225,
+      112233,
+      0,
+      0
+    ],
+    "cpuSeconds": 43.75,
+    "threads": 5,
+    "rssKiB": 18716,
+    "pssKiB": 16246,
+    "cgroupBytes": 10100736,
+    "cgroupMemory": {
+      "anon": 3862528,
+      "file": 5316608,
+      "file_dirty": 53248,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 43762302,
+      "user_usec": 32066235,
+      "system_usec": 11696066,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  },
+  {
+    "utc": "2026-09-07T17:46:22.854227+00:00",
+    "elapsedSeconds": 840.03,
+    "pid": 28558,
+    "cpuTicks": [
+      92959,
+      9104,
+      38040,
+      27066722,
+      13394,
+      0,
+      1228,
+      112318,
+      0,
+      0
+    ],
+    "cpuSeconds": 47.01,
+    "threads": 5,
+    "rssKiB": 18716,
+    "pssKiB": 16246,
+    "cgroupBytes": 10346496,
+    "cgroupMemory": {
+      "anon": 3862528,
+      "file": 5459968,
+      "file_dirty": 53248,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 47020862,
+      "user_usec": 34427911,
+      "system_usec": 12592950,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  }
+]

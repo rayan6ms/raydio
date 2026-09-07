@@ -1,0 +1,40 @@
+{
+  "scope": "Same candidate with independent sleeping CPU probes and outgoing header trace; not qualification or measured code improvement",
+  "receiverSeconds": 1099.999387939453,
+  "packets": 54987,
+  "lostNet": 0,
+  "concealmentMs": 676.1041666666666,
+  "silentConcealmentMs": 0.0,
+  "nonTailQuiet": [],
+  "nonTailSpeakingOff": [],
+  "warmPssKiB": {
+    "min": 16480,
+    "max": 16707
+  },
+  "cpuPercentOneCore": 5.552283914265715,
+  "probe": {
+    "cpuSeconds": 3.002167997,
+    "cpuPercentOneCore": 0.25018062042575473,
+    "timers": [
+      [
+        "timer",
+        "0",
+        "59992",
+        "37170681",
+        "0",
+        "0"
+      ],
+      [
+        "timer",
+        "1",
+        "59988",
+        "37136880",
+        "0",
+        "0"
+      ]
+    ],
+    "fromMs": -36832.75341796875,
+    "toMs": 1163167.4670410156
+  },
+  "fileCacheBytesIncludesTrace": 6385664
+}

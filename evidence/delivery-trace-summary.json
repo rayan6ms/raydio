@@ -1,0 +1,11 @@
+{
+  "scope": "Header-traced diagnostic, not memory improvement or qualification",
+  "receiverSeconds": 809.5732888183594,
+  "warmPssKiB": {
+    "min": 16222,
+    "max": 16246
+  },
+  "cpuPercentOneCore": 5.668308581163661,
+  "fileCacheBytesIncludesTrace": 5459968,
+  "traceSha256": "383fcce2fa4385a4ff8191001360f66e20869f61b3a57bb552b3568e6c593152"
+}

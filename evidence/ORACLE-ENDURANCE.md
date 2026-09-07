@@ -460,3 +460,88 @@ concealment should be substituted for the measured quiet duration. Audible
 severity was not assessed by a human during this run. The received gap and
 indicator interruption are sufficient to fail the requested uninterrupted
 playback criterion.
+
+### Outgoing-header correlation reproduced a sender pacing stall
+
+The exact candidate was observed with the bounded `udp_send_trace.c` interposer
+from 17:32 UTC. Observation was deliberately stopped at **809.573 seconds** after
+a non-tail speaking-indicator interruption, rather than counted as a completed
+900-second qualification. The receiver counted 40,446 packets, zero net loss
+(one positive and one recovered), 947.604 ms non-silent concealment, zero silent
+concealment and no >=20 ms non-tail quiet. Clipping, nonfinite/empty PCM,
+long tasks and missing PCM reports were all zero. The indicator went false at
+759,077.2 ms and true at 759,098.1 ms: **20.9 ms**. This indicator event is not
+evidence of a 20.9 ms silent PCM interval.
+
+Within the same measured interval, the outgoing trace counted 40,446 packets,
+zero send failures, zero sequence/timestamp discontinuities, and **13 send gaps
+above 40 ms**. The largest was **159.436 ms**, ending at 758,987.227 ms, just before
+the indicator event. Two nearby gaps were about 80 ms. The earlier receiver
+concealment burst at 454 s also coincided with several 60–79 ms send gaps.
+Smaller periodic concealment events often had normal outgoing timing within
+their surrounding windows, so these observations do not establish a single
+cause for every receiver symptom.
+
+Unlike an older receiver-only delayed batch, this run localizes some timing
+failure to the send side. It does not yet distinguish application work, guest
+scheduling, VM descheduling, or diagnostic overhead. Send completion also does
+not prove downstream arrival. Oracle's existing `sar` report showed 0.85% steal
+averaged across the two vCPUs during 17:30–17:40, too coarse to attribute events.
+An independent low-priority sleeping-timer probe follows to measure that
+hypothesis without changing the candidate or increasing audio buffering.
+
+Warm PSS was 16,222–16,246 KiB, CPU 5.67% of one core. Cgroup file cache reached
+5,459,968 bytes including the growing diagnostic trace. These are diagnostic
+costs, not another memory improvement. Normal shutdown reported 42,374 audio
+frames, six unavailable/silence frames, 29 skipped deadlines, zero source
+overruns/send failures and 128,613 us max lateness; lifetime counters include
+time outside the measured interval. Production remains unchanged.
+
+See `delivery-trace-{receiver,correlation,clock,resources,summary}.json`,
+`delivery-trace-sender.txt`, and compressed header-only trace
+`delivery-trace-headers.csv.gz`. `benchmarks/correlate_delivery.py` regenerates
+correlations after decompressing the trace. Its windows include the preceding
+packet to retain gaps crossing the left boundary and exclude post-measurement
+administrative shutdown.
+
+### Independent vCPU timers support VM descheduling attribution
+
+The same candidate then completed a **1,100-second** receiver window beginning
+17:52:40.998 UTC, with outgoing header tracing plus a separate fixed-buffer
+sleeping-timer probe. Each of two timers was pinned to a different vCPU at nice
+10; the probe also read per-vCPU steal counters once per second. Its full
+1,200-second lifetime used 3.002 CPU seconds (0.250% of one core), had no timer
+errors or truncated events, and included the complete receiver interval.
+
+The receiver counted 54,987 packets, zero net loss (two positive and two
+recovered), 676.104 ms non-silent concealment, zero silent concealment, zero
+non-tail >=20 ms quiet or speaking-off events, and zero clipping/nonfinite/empty
+PCM, missing reports or recorded long tasks. This is a finite diagnostic
+completion, not a code improvement or six-hour pass.
+
+Outgoing timing had seven gaps above 40 ms, maximum **60.338 ms**, and no
+sequence/timestamp discontinuities or send failures. Four roughly 60 ms gaps
+around measured 1,067.2–1,067.5 s coincided with independent timer delays on
+**both** vCPUs (about **37 ms**). Their containing one-second CPU samples
+recorded increments up to **19 and 18 steal ticks**, respectively. The receiver
+then concealed **124.208 ms** in the corresponding one-second window. Another
+59.082 ms send gap at 167.209 s overlapped 36.8 ms wake delays on both vCPUs.
+This supports whole-VM descheduling as a cause of these clusters, beyond
+application-only scheduling. Timer/steal granularity and instrumentation still
+limit attribution; two other >40 ms gaps did not overlap retained >=10 ms probe
+delays. No claim is made that every recorded symptom has the same cause.
+
+Warm PSS was 16,480–16,707 KiB, CPU 5.55% of one core, with growing trace file
+cache included in 6,385,664 bytes of cgroup file accounting. Candidate service
+RuntimeMaxSec stopped it normally after the receiver finished; systemd's
+`timeout` result describes that administrative bound. Sender shutdown had
+59,237 audio frames, five unavailable/silence frames, ten skipped deadlines,
+zero source overruns/send failures and 46,966 us max lateness. The unresolved
+2 ms source-CPU failure did not recur; this does not prove it fixed.
+
+See `scheduler-delivery-{receiver,correlation,clock,resources,summary}.json`,
+`scheduler-delivery-sender.txt`, `scheduler-probe.csv`, and
+`scheduler-delivery-headers.csv.gz`. The correlation tool accepts the probe
+with `--scheduler`. A read-only A1 capacity check at 18:13:41 UTC still returned
+`OUT_OF_HOST_CAPACITY` for 1 OCPU / 1 GiB in São Paulo. No paid resources or
+additional instance were created.

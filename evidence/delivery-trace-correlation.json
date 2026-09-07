@@ -1,0 +1,2339 @@
+{
+  "scope": "Header-only diagnostic correlation; not receiver qualification",
+  "clock": {
+    "realtime_ns": 1788802340110237595,
+    "monotonic_ns": 135942043397945,
+    "sampleUncertaintyNs": 1067
+  },
+  "tracePackets": 42380,
+  "receiverStatus": "stopped",
+  "receiverSeconds": 809.5732888183594,
+  "scheduler": null,
+  "aligned": {
+    "fromMs": 0,
+    "toMs": 809573.2888183594,
+    "packets": 40446,
+    "sendSpanMs": 809558.9650878906,
+    "excessWallTimeVs20MsFrames": 658.965087890625,
+    "firstPacketMs": 9.15673828125,
+    "lastPacketMs": 809568.1218261719,
+    "maxGapMs": 159.436279296875,
+    "gapsAbove40Ms": 13,
+    "maxSendCallMs": 12.82675,
+    "sendFailures": 0,
+    "sequenceDiscontinuities": 0,
+    "timestampDiscontinuities": 0,
+    "largestGaps": [
+      {
+        "endMs": 758987.2270507812,
+        "gapMs": 159.436279296875
+      },
+      {
+        "endMs": 757367.9541015625,
+        "gapMs": 80.08056640625
+      },
+      {
+        "endMs": 758307.994140625,
+        "gapMs": 80.03076171875
+      },
+      {
+        "endMs": 454327.3515625,
+        "gapMs": 79.34033203125
+      },
+      {
+        "endMs": 454227.9060058594,
+        "gapMs": 72.04345703125
+      },
+      {
+        "endMs": 453915.98828125,
+        "gapMs": 60.58984375
+      },
+      {
+        "endMs": 68349.01538085938,
+        "gapMs": 60.5869140625
+      },
+      {
+        "endMs": 453715.9875488281,
+        "gapMs": 60.56982421875
+      },
+      {
+        "endMs": 454115.9655761719,
+        "gapMs": 60.136962890625
+      },
+      {
+        "endMs": 454015.4208984375,
+        "gapMs": 60.01953125
+      }
+    ]
+  },
+  "events": [
+    {
+      "receiver": {
+        "concealedMs": 28.708333333333332,
+        "emittedSamples": 47040,
+        "insertedMs": 0,
+        "jitterMs": 2,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 63.46938775510201,
+        "ms": 3006.5,
+        "packets": 50,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 17
+        },
+        "receivedSamples": 48000,
+        "removedMs": 7.1875,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.717041015625
+      },
+      "sender": {
+        "fromMs": 4.782958984375,
+        "toMs": 5006.5,
+        "packets": 250,
+        "sendSpanMs": 4979.420166015625,
+        "excessWallTimeVs20MsFrames": -0.579833984375,
+        "firstPacketMs": 9.15673828125,
+        "lastPacketMs": 4988.576904296875,
+        "maxGapMs": 22.716796875,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.181873,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 3651.05810546875,
+            "gapMs": 22.716796875
+          },
+          {
+            "endMs": 249.11767578125,
+            "gapMs": 20.9736328125
+          },
+          {
+            "endMs": 2108.9833984375,
+            "gapMs": 20.94970703125
+          },
+          {
+            "endMs": 1209.1904296875,
+            "gapMs": 20.917724609375
+          },
+          {
+            "endMs": 529.032470703125,
+            "gapMs": 20.89453125
+          },
+          {
+            "endMs": 1328.9990234375,
+            "gapMs": 20.8857421875
+          },
+          {
+            "endMs": 708.96337890625,
+            "gapMs": 20.853271484375
+          },
+          {
+            "endMs": 129.078369140625,
+            "gapMs": 20.84765625
+          },
+          {
+            "endMs": 3428.95556640625,
+            "gapMs": 20.844482421875
+          },
+          {
+            "endMs": 2869.086181640625,
+            "gapMs": 20.842041015625
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 9.5,
+        "emittedSamples": 48000,
+        "insertedMs": 0,
+        "jitterMs": 1,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 16,
+        "ms": 70169.69999999925,
+        "packets": 50,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 85
+        },
+        "receivedSamples": 47520,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.3740234375
+      },
+      "sender": {
+        "fromMs": 67168.32597656175,
+        "toMs": 72169.69999999925,
+        "packets": 249,
+        "sendSpanMs": 4999.95361328125,
+        "excessWallTimeVs20MsFrames": 39.95361328125,
+        "firstPacketMs": 67168.521484375,
+        "lastPacketMs": 72168.47509765625,
+        "maxGapMs": 60.5869140625,
+        "gapsAbove40Ms": 1,
+        "maxSendCallMs": 1.333473,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 68349.01538085938,
+            "gapMs": 60.5869140625
+          },
+          {
+            "endMs": 70920.03955078125,
+            "gapMs": 31.76904296875
+          },
+          {
+            "endMs": 71717.64770507812,
+            "gapMs": 29.03857421875
+          },
+          {
+            "endMs": 69130.12036132812,
+            "gapMs": 21.865234375
+          },
+          {
+            "endMs": 68509.09252929688,
+            "gapMs": 20.9287109375
+          },
+          {
+            "endMs": 70729.09008789062,
+            "gapMs": 20.9169921875
+          },
+          {
+            "endMs": 71149.08349609375,
+            "gapMs": 20.865478515625
+          },
+          {
+            "endMs": 71528.97875976562,
+            "gapMs": 20.825927734375
+          },
+          {
+            "endMs": 69848.94091796875,
+            "gapMs": 20.802001953125
+          },
+          {
+            "endMs": 68849.07568359375,
+            "gapMs": 20.79833984375
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 33.958333333333336,
+        "emittedSamples": 46080,
+        "insertedMs": 0,
+        "jitterMs": 3,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 30.416666666666792,
+        "ms": 78182,
+        "packets": 50,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 93
+        },
+        "receivedSamples": 48000,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.428955078125
+      },
+      "sender": {
+        "fromMs": 75180.57104492188,
+        "toMs": 80182,
+        "packets": 250,
+        "sendSpanMs": 4979.88720703125,
+        "excessWallTimeVs20MsFrames": -0.11279296875,
+        "firstPacketMs": 75188.43603515625,
+        "lastPacketMs": 80168.3232421875,
+        "maxGapMs": 26.97314453125,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.118202,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 76375.6787109375,
+            "gapMs": 26.97314453125
+          },
+          {
+            "endMs": 75514.04248046875,
+            "gapMs": 25.553466796875
+          },
+          {
+            "endMs": 77689.3935546875,
+            "gapMs": 21.2509765625
+          },
+          {
+            "endMs": 79709.05224609375,
+            "gapMs": 20.939208984375
+          },
+          {
+            "endMs": 78849.07861328125,
+            "gapMs": 20.888916015625
+          },
+          {
+            "endMs": 79108.97265625,
+            "gapMs": 20.8828125
+          },
+          {
+            "endMs": 77549.07275390625,
+            "gapMs": 20.8779296875
+          },
+          {
+            "endMs": 76529.00512695312,
+            "gapMs": 20.875732421875
+          },
+          {
+            "endMs": 79209.14208984375,
+            "gapMs": 20.84912109375
+          },
+          {
+            "endMs": 78169.05639648438,
+            "gapMs": 20.843994140625
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 13.958333333333334,
+        "emittedSamples": 47040,
+        "insertedMs": 0,
+        "jitterMs": 3,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 55.91836734693927,
+        "ms": 123273.29999999702,
+        "packets": 50,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 137
+        },
+        "receivedSamples": 48000,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.6650390625
+      },
+      "sender": {
+        "fromMs": 120271.63496093452,
+        "toMs": 125273.29999999702,
+        "packets": 250,
+        "sendSpanMs": 4979.463623046875,
+        "excessWallTimeVs20MsFrames": -0.536376953125,
+        "firstPacketMs": 120288.98364257812,
+        "lastPacketMs": 125268.447265625,
+        "maxGapMs": 33.384033203125,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 2.905656,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 120362.021484375,
+            "gapMs": 33.384033203125
+          },
+          {
+            "endMs": 124931.9326171875,
+            "gapMs": 23.58935546875
+          },
+          {
+            "endMs": 121370.30834960938,
+            "gapMs": 21.987548828125
+          },
+          {
+            "endMs": 120429.6845703125,
+            "gapMs": 21.584228515625
+          },
+          {
+            "endMs": 124729.49951171875,
+            "gapMs": 21.276123046875
+          },
+          {
+            "endMs": 121829.2626953125,
+            "gapMs": 21.025390625
+          },
+          {
+            "endMs": 120529.15209960938,
+            "gapMs": 21.018798828125
+          },
+          {
+            "endMs": 120288.98364257812,
+            "gapMs": 20.906494140625
+          },
+          {
+            "endMs": 121108.96362304688,
+            "gapMs": 20.880126953125
+          },
+          {
+            "endMs": 121628.91674804688,
+            "gapMs": 20.876220703125
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 27.375,
+        "emittedSamples": 47040,
+        "insertedMs": 0,
+        "jitterMs": 2,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 55.71428571428547,
+        "ms": 138309.5,
+        "packets": 49,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 153
+        },
+        "receivedSamples": 47520,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.4560546875
+      },
+      "sender": {
+        "fromMs": 135308.0439453125,
+        "toMs": 140309.5,
+        "packets": 251,
+        "sendSpanMs": 4999.84375,
+        "excessWallTimeVs20MsFrames": -0.15625,
+        "firstPacketMs": 135308.42651367188,
+        "lastPacketMs": 140308.27026367188,
+        "maxGapMs": 23.657958984375,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.127029,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 135952.74072265625,
+            "gapMs": 23.657958984375
+          },
+          {
+            "endMs": 138529.13647460938,
+            "gapMs": 21.030029296875
+          },
+          {
+            "endMs": 137049.12719726562,
+            "gapMs": 20.965576171875
+          },
+          {
+            "endMs": 140089.08813476562,
+            "gapMs": 20.860595703125
+          },
+          {
+            "endMs": 140229.11669921875,
+            "gapMs": 20.852783203125
+          },
+          {
+            "endMs": 139288.96948242188,
+            "gapMs": 20.832763671875
+          },
+          {
+            "endMs": 136508.94311523438,
+            "gapMs": 20.824462890625
+          },
+          {
+            "endMs": 138708.94555664062,
+            "gapMs": 20.80615234375
+          },
+          {
+            "endMs": 138288.92407226562,
+            "gapMs": 20.79443359375
+          },
+          {
+            "endMs": 138968.91528320312,
+            "gapMs": 20.775146484375
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 15.958333333333334,
+        "emittedSamples": 47040,
+        "insertedMs": 0,
+        "jitterMs": 3,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 53.06122448979592,
+        "ms": 153356.29999999702,
+        "packets": 50,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 168
+        },
+        "receivedSamples": 48000,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.554931640625
+      },
+      "sender": {
+        "fromMs": 150354.7450683564,
+        "toMs": 155356.29999999702,
+        "packets": 250,
+        "sendSpanMs": 4980.013427734375,
+        "excessWallTimeVs20MsFrames": 0.013427734375,
+        "firstPacketMs": 150368.60864257812,
+        "lastPacketMs": 155348.6220703125,
+        "maxGapMs": 33.287353515625,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.591956,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 153741.96923828125,
+            "gapMs": 33.287353515625
+          },
+          {
+            "endMs": 155010.076171875,
+            "gapMs": 21.7451171875
+          },
+          {
+            "endMs": 151629.96752929688,
+            "gapMs": 21.46826171875
+          },
+          {
+            "endMs": 152709.63061523438,
+            "gapMs": 21.29833984375
+          },
+          {
+            "endMs": 154969.56079101562,
+            "gapMs": 20.94677734375
+          },
+          {
+            "endMs": 151469.02685546875,
+            "gapMs": 20.9033203125
+          },
+          {
+            "endMs": 153309.15063476562,
+            "gapMs": 20.897216796875
+          },
+          {
+            "endMs": 150629.11083984375,
+            "gapMs": 20.8779296875
+          },
+          {
+            "endMs": 152789.05688476562,
+            "gapMs": 20.850830078125
+          },
+          {
+            "endMs": 154168.92797851562,
+            "gapMs": 20.8349609375
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 17.3125,
+        "emittedSamples": 47040,
+        "insertedMs": 0,
+        "jitterMs": 1,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 54.28571428571503,
+        "ms": 183399,
+        "packets": 50,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 198
+        },
+        "receivedSamples": 48000,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.257080078125
+      },
+      "sender": {
+        "fromMs": 180397.74291992188,
+        "toMs": 185399,
+        "packets": 250,
+        "sendSpanMs": 4980.531005859375,
+        "excessWallTimeVs20MsFrames": 0.531005859375,
+        "firstPacketMs": 180408.52807617188,
+        "lastPacketMs": 185389.05908203125,
+        "maxGapMs": 20.92919921875,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.235585,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 184989.10327148438,
+            "gapMs": 20.92919921875
+          },
+          {
+            "endMs": 181929.02416992188,
+            "gapMs": 20.9228515625
+          },
+          {
+            "endMs": 181509.16284179688,
+            "gapMs": 20.92041015625
+          },
+          {
+            "endMs": 185129.0693359375,
+            "gapMs": 20.91796875
+          },
+          {
+            "endMs": 184029.12939453125,
+            "gapMs": 20.91162109375
+          },
+          {
+            "endMs": 182629.13037109375,
+            "gapMs": 20.888916015625
+          },
+          {
+            "endMs": 181809.15283203125,
+            "gapMs": 20.88427734375
+          },
+          {
+            "endMs": 183668.99584960938,
+            "gapMs": 20.8427734375
+          },
+          {
+            "endMs": 183729.10961914062,
+            "gapMs": 20.83349609375
+          },
+          {
+            "endMs": 184449.0732421875,
+            "gapMs": 20.832763671875
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 19.5625,
+        "emittedSamples": 47040,
+        "insertedMs": 0,
+        "jitterMs": 3,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 47.14285714285665,
+        "ms": 198447.69999999925,
+        "packets": 50,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "head",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 0
+        },
+        "receivedSamples": 48000,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1005.786865234375
+      },
+      "sender": {
+        "fromMs": 195441.91313476488,
+        "toMs": 200447.69999999925,
+        "packets": 250,
+        "sendSpanMs": 4979.4482421875,
+        "excessWallTimeVs20MsFrames": -0.5517578125,
+        "firstPacketMs": 195448.900390625,
+        "lastPacketMs": 200428.3486328125,
+        "maxGapMs": 25.066162109375,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.306867,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 195894.00756835938,
+            "gapMs": 25.066162109375
+          },
+          {
+            "endMs": 196369.13525390625,
+            "gapMs": 21.08837890625
+          },
+          {
+            "endMs": 199269.08984375,
+            "gapMs": 21.032958984375
+          },
+          {
+            "endMs": 200249.10009765625,
+            "gapMs": 20.89697265625
+          },
+          {
+            "endMs": 196109.11303710938,
+            "gapMs": 20.87646484375
+          },
+          {
+            "endMs": 196189.08911132812,
+            "gapMs": 20.86572265625
+          },
+          {
+            "endMs": 197949.0576171875,
+            "gapMs": 20.823974609375
+          },
+          {
+            "endMs": 195669.0751953125,
+            "gapMs": 20.823486328125
+          },
+          {
+            "endMs": 199168.99096679688,
+            "gapMs": 20.797119140625
+          },
+          {
+            "endMs": 200148.92578125,
+            "gapMs": 20.784423828125
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 18.395833333333332,
+        "emittedSamples": 47040,
+        "insertedMs": 0,
+        "jitterMs": 4,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 20.81632653061373,
+        "ms": 228497.09999999776,
+        "packets": 50,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 30
+        },
+        "receivedSamples": 47520,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.26611328125
+      },
+      "sender": {
+        "fromMs": 225495.83388671651,
+        "toMs": 230497.09999999776,
+        "packets": 250,
+        "sendSpanMs": 4980.50390625,
+        "excessWallTimeVs20MsFrames": 0.50390625,
+        "firstPacketMs": 225515.16650390625,
+        "lastPacketMs": 230495.67041015625,
+        "maxGapMs": 25.923095703125,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.152227,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 227721.03051757812,
+            "gapMs": 25.923095703125
+          },
+          {
+            "endMs": 227539.08325195312,
+            "gapMs": 22.74755859375
+          },
+          {
+            "endMs": 227516.33569335938,
+            "gapMs": 21.27001953125
+          },
+          {
+            "endMs": 226557.21850585938,
+            "gapMs": 21.135986328125
+          },
+          {
+            "endMs": 227636.5322265625,
+            "gapMs": 21.01318359375
+          },
+          {
+            "endMs": 230056.11596679688,
+            "gapMs": 20.96337890625
+          },
+          {
+            "endMs": 230216.14379882812,
+            "gapMs": 20.93017578125
+          },
+          {
+            "endMs": 228076.0712890625,
+            "gapMs": 20.9208984375
+          },
+          {
+            "endMs": 226816.12158203125,
+            "gapMs": 20.90771484375
+          },
+          {
+            "endMs": 227115.9296875,
+            "gapMs": 20.8837890625
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 7.583333333333333,
+        "emittedSamples": 48000,
+        "insertedMs": 0,
+        "jitterMs": 4,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 75.39999999999903,
+        "ms": 243518.29999999702,
+        "packets": 51,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 45
+        },
+        "receivedSamples": 48480,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.343017578125
+      },
+      "sender": {
+        "fromMs": 240516.9569824189,
+        "toMs": 245518.29999999702,
+        "packets": 251,
+        "sendSpanMs": 4997.506103515625,
+        "excessWallTimeVs20MsFrames": -2.493896484375,
+        "firstPacketMs": 240518.80786132812,
+        "lastPacketMs": 245516.31396484375,
+        "maxGapMs": 25.19873046875,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.924161,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 244320.51586914062,
+            "gapMs": 25.19873046875
+          },
+          {
+            "endMs": 240518.80786132812,
+            "gapMs": 23.378662109375
+          },
+          {
+            "endMs": 245516.31396484375,
+            "gapMs": 21.08837890625
+          },
+          {
+            "endMs": 243756.05908203125,
+            "gapMs": 20.969970703125
+          },
+          {
+            "endMs": 244656.04931640625,
+            "gapMs": 20.917724609375
+          },
+          {
+            "endMs": 242415.98754882812,
+            "gapMs": 20.870361328125
+          },
+          {
+            "endMs": 243916.076171875,
+            "gapMs": 20.85986328125
+          },
+          {
+            "endMs": 244156.06616210938,
+            "gapMs": 20.846923828125
+          },
+          {
+            "endMs": 242815.966796875,
+            "gapMs": 20.813720703125
+          },
+          {
+            "endMs": 242636.05053710938,
+            "gapMs": 20.7939453125
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 0,
+        "emittedSamples": 48000,
+        "insertedMs": 0,
+        "jitterMs": 4,
+        "kind": "receiver",
+        "lost": 1,
+        "meanBufferMs": 79.19999999999952,
+        "ms": 257560.5,
+        "packets": 49,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 59
+        },
+        "receivedSamples": 48000,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.2578125
+      },
+      "sender": {
+        "fromMs": 254559.2421875,
+        "toMs": 259560.5,
+        "packets": 250,
+        "sendSpanMs": 4979.414794921875,
+        "excessWallTimeVs20MsFrames": -0.585205078125,
+        "firstPacketMs": 254575.71875,
+        "lastPacketMs": 259555.13354492188,
+        "maxGapMs": 24.516357421875,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.173166,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 257740.51806640625,
+            "gapMs": 24.516357421875
+          },
+          {
+            "endMs": 255516.13330078125,
+            "gapMs": 21.005615234375
+          },
+          {
+            "endMs": 257336.12841796875,
+            "gapMs": 20.9814453125
+          },
+          {
+            "endMs": 258936.15551757812,
+            "gapMs": 20.978515625
+          },
+          {
+            "endMs": 257416.1337890625,
+            "gapMs": 20.902587890625
+          },
+          {
+            "endMs": 257116.0927734375,
+            "gapMs": 20.8935546875
+          },
+          {
+            "endMs": 258076.09521484375,
+            "gapMs": 20.875244140625
+          },
+          {
+            "endMs": 256516.04711914062,
+            "gapMs": 20.859619140625
+          },
+          {
+            "endMs": 257036.15649414062,
+            "gapMs": 20.8388671875
+          },
+          {
+            "endMs": 256015.97509765625,
+            "gapMs": 20.835693359375
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 14.270833333333334,
+        "emittedSamples": 48960,
+        "insertedMs": 0,
+        "jitterMs": 1,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 74.11764705882447,
+        "ms": 271585.5,
+        "packets": 50,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 73
+        },
+        "receivedSamples": 48000,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.373046875
+      },
+      "sender": {
+        "fromMs": 268584.126953125,
+        "toMs": 273585.5,
+        "packets": 250,
+        "sendSpanMs": 4980.50634765625,
+        "excessWallTimeVs20MsFrames": 0.50634765625,
+        "firstPacketMs": 268595.3693847656,
+        "lastPacketMs": 273575.8757324219,
+        "maxGapMs": 28.7724609375,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.224563,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 273444.06298828125,
+            "gapMs": 28.7724609375
+          },
+          {
+            "endMs": 269844.0354003906,
+            "gapMs": 28.284912109375
+          },
+          {
+            "endMs": 272758.0549316406,
+            "gapMs": 22.286865234375
+          },
+          {
+            "endMs": 273536.2038574219,
+            "gapMs": 21.073974609375
+          },
+          {
+            "endMs": 269496.08984375,
+            "gapMs": 20.9755859375
+          },
+          {
+            "endMs": 272416.0402832031,
+            "gapMs": 20.8994140625
+          },
+          {
+            "endMs": 269216.1115722656,
+            "gapMs": 20.880126953125
+          },
+          {
+            "endMs": 273096.08056640625,
+            "gapMs": 20.834716796875
+          },
+          {
+            "endMs": 272535.94677734375,
+            "gapMs": 20.828125
+          },
+          {
+            "endMs": 272156.0744628906,
+            "gapMs": 20.825439453125
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 9.083333333333334,
+        "emittedSamples": 47040,
+        "insertedMs": 0,
+        "jitterMs": 2,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 68.36734693877551,
+        "ms": 302628.3999999985,
+        "packets": 50,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 104
+        },
+        "receivedSamples": 48000,
+        "removedMs": 9.520833333333334,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.48779296875
+      },
+      "sender": {
+        "fromMs": 299626.91220702976,
+        "toMs": 304628.3999999985,
+        "packets": 250,
+        "sendSpanMs": 4980.695068359375,
+        "excessWallTimeVs20MsFrames": 0.695068359375,
+        "firstPacketMs": 299635.29833984375,
+        "lastPacketMs": 304615.9934082031,
+        "maxGapMs": 22.966552734375,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.194366,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 303318.6271972656,
+            "gapMs": 22.966552734375
+          },
+          {
+            "endMs": 301057.1218261719,
+            "gapMs": 21.439208984375
+          },
+          {
+            "endMs": 301816.21826171875,
+            "gapMs": 21.019775390625
+          },
+          {
+            "endMs": 302816.1682128906,
+            "gapMs": 20.925537109375
+          },
+          {
+            "endMs": 300516.1862792969,
+            "gapMs": 20.858154296875
+          },
+          {
+            "endMs": 301376.0559082031,
+            "gapMs": 20.848876953125
+          },
+          {
+            "endMs": 299935.9377441406,
+            "gapMs": 20.843017578125
+          },
+          {
+            "endMs": 303696.025390625,
+            "gapMs": 20.822021484375
+          },
+          {
+            "endMs": 304556.0634765625,
+            "gapMs": 20.818359375
+          },
+          {
+            "endMs": 303095.9533691406,
+            "gapMs": 20.7919921875
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 20.354166666666668,
+        "emittedSamples": 48000,
+        "insertedMs": 0,
+        "jitterMs": 3,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 68.60000000000097,
+        "ms": 377762,
+        "packets": 50,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 179
+        },
+        "receivedSamples": 48480,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.572998046875
+      },
+      "sender": {
+        "fromMs": 374760.4270019531,
+        "toMs": 379762,
+        "packets": 250,
+        "sendSpanMs": 4980.06591796875,
+        "excessWallTimeVs20MsFrames": 0.06591796875,
+        "firstPacketMs": 374775.9541015625,
+        "lastPacketMs": 379756.02001953125,
+        "maxGapMs": 23.365478515625,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.45063,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 379058.5910644531,
+            "gapMs": 23.365478515625
+          },
+          {
+            "endMs": 376436.0178222656,
+            "gapMs": 20.8857421875
+          },
+          {
+            "endMs": 375216.0400390625,
+            "gapMs": 20.859375
+          },
+          {
+            "endMs": 378516.0739746094,
+            "gapMs": 20.857666015625
+          },
+          {
+            "endMs": 378355.916015625,
+            "gapMs": 20.8408203125
+          },
+          {
+            "endMs": 376315.9948730469,
+            "gapMs": 20.8291015625
+          },
+          {
+            "endMs": 375655.9455566406,
+            "gapMs": 20.8232421875
+          },
+          {
+            "endMs": 378956.0651855469,
+            "gapMs": 20.819091796875
+          },
+          {
+            "endMs": 377215.93017578125,
+            "gapMs": 20.807861328125
+          },
+          {
+            "endMs": 378816.0998535156,
+            "gapMs": 20.80615234375
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 4.145833333333333,
+        "emittedSamples": 48960,
+        "insertedMs": 0,
+        "jitterMs": 3,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 57.05882352940891,
+        "ms": 407818.5,
+        "packets": 51,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 209
+        },
+        "receivedSamples": 48480,
+        "removedMs": 14.416666666666666,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.284912109375
+      },
+      "sender": {
+        "fromMs": 404817.2150878906,
+        "toMs": 409818.5,
+        "packets": 250,
+        "sendSpanMs": 4980.924072265625,
+        "excessWallTimeVs20MsFrames": 0.924072265625,
+        "firstPacketMs": 404835.19580078125,
+        "lastPacketMs": 409816.1198730469,
+        "maxGapMs": 24.115966796875,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.201791,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 407720.0563964844,
+            "gapMs": 24.115966796875
+          },
+          {
+            "endMs": 406697.9797363281,
+            "gapMs": 22.3994140625
+          },
+          {
+            "endMs": 405516.6022949219,
+            "gapMs": 21.50830078125
+          },
+          {
+            "endMs": 408136.13232421875,
+            "gapMs": 21.020263671875
+          },
+          {
+            "endMs": 407536.1359863281,
+            "gapMs": 20.968017578125
+          },
+          {
+            "endMs": 407136.11865234375,
+            "gapMs": 20.90087890625
+          },
+          {
+            "endMs": 408215.98193359375,
+            "gapMs": 20.876953125
+          },
+          {
+            "endMs": 406856.0654296875,
+            "gapMs": 20.8466796875
+          },
+          {
+            "endMs": 407275.9294433594,
+            "gapMs": 20.830322265625
+          },
+          {
+            "endMs": 407335.9794921875,
+            "gapMs": 20.811767578125
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 14.916666666666666,
+        "emittedSamples": 48000,
+        "insertedMs": 0,
+        "jitterMs": 2,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 55.20000000000194,
+        "ms": 422864.19999999925,
+        "packets": 50,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 7
+        },
+        "receivedSamples": 48480,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.375
+      },
+      "sender": {
+        "fromMs": 419862.82499999925,
+        "toMs": 424864.19999999925,
+        "packets": 250,
+        "sendSpanMs": 4980.2744140625,
+        "excessWallTimeVs20MsFrames": 0.2744140625,
+        "firstPacketMs": 419875.1911621094,
+        "lastPacketMs": 424855.4655761719,
+        "maxGapMs": 25.339111328125,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.085622,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 422721.0280761719,
+            "gapMs": 25.339111328125
+          },
+          {
+            "endMs": 424817.76611328125,
+            "gapMs": 21.73291015625
+          },
+          {
+            "endMs": 421516.02392578125,
+            "gapMs": 20.93017578125
+          },
+          {
+            "endMs": 420216.06884765625,
+            "gapMs": 20.907470703125
+          },
+          {
+            "endMs": 422256.0749511719,
+            "gapMs": 20.894287109375
+          },
+          {
+            "endMs": 422416.1145019531,
+            "gapMs": 20.876708984375
+          },
+          {
+            "endMs": 420476.03173828125,
+            "gapMs": 20.848876953125
+          },
+          {
+            "endMs": 424436.0388183594,
+            "gapMs": 20.8310546875
+          },
+          {
+            "endMs": 421915.99560546875,
+            "gapMs": 20.816650390625
+          },
+          {
+            "endMs": 423876.0886230469,
+            "gapMs": 20.785888671875
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 16.3125,
+        "emittedSamples": 47040,
+        "insertedMs": 0,
+        "jitterMs": 2,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 52.653061224490784,
+        "ms": 437884.69999999925,
+        "packets": 50,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 26
+        },
+        "receivedSamples": 48000,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.343994140625
+      },
+      "sender": {
+        "fromMs": 434883.35600585863,
+        "toMs": 439884.69999999925,
+        "packets": 250,
+        "sendSpanMs": 4979.4765625,
+        "excessWallTimeVs20MsFrames": -0.5234375,
+        "firstPacketMs": 434895.91943359375,
+        "lastPacketMs": 439875.39599609375,
+        "maxGapMs": 21.156494140625,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.09556,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 435357.275390625,
+            "gapMs": 21.156494140625
+          },
+          {
+            "endMs": 435756.19677734375,
+            "gapMs": 21.125244140625
+          },
+          {
+            "endMs": 437316.08154296875,
+            "gapMs": 20.968994140625
+          },
+          {
+            "endMs": 439655.91796875,
+            "gapMs": 20.8857421875
+          },
+          {
+            "endMs": 437976.0686035156,
+            "gapMs": 20.79541015625
+          },
+          {
+            "endMs": 436336.10400390625,
+            "gapMs": 20.79248046875
+          },
+          {
+            "endMs": 436156.0417480469,
+            "gapMs": 20.7802734375
+          },
+          {
+            "endMs": 437396.1103515625,
+            "gapMs": 20.777587890625
+          },
+          {
+            "endMs": 439596.05517578125,
+            "gapMs": 20.775390625
+          },
+          {
+            "endMs": 434996.0549316406,
+            "gapMs": 20.774658203125
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 25.645833333333332,
+        "emittedSamples": 47040,
+        "insertedMs": 0,
+        "jitterMs": 3,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 52.448979591835744,
+        "ms": 452906,
+        "packets": 50,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 41
+        },
+        "receivedSamples": 47520,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.301025390625
+      },
+      "sender": {
+        "fromMs": 449904.6989746094,
+        "toMs": 454906,
+        "packets": 234,
+        "sendSpanMs": 4971.9384765625,
+        "excessWallTimeVs20MsFrames": 311.9384765625,
+        "firstPacketMs": 449915.2487792969,
+        "lastPacketMs": 454887.1872558594,
+        "maxGapMs": 79.34033203125,
+        "gapsAbove40Ms": 7,
+        "maxSendCallMs": 0.204745,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 454327.3515625,
+            "gapMs": 79.34033203125
+          },
+          {
+            "endMs": 454227.9060058594,
+            "gapMs": 72.04345703125
+          },
+          {
+            "endMs": 453915.98828125,
+            "gapMs": 60.58984375
+          },
+          {
+            "endMs": 453715.9875488281,
+            "gapMs": 60.56982421875
+          },
+          {
+            "endMs": 454115.9655761719,
+            "gapMs": 60.136962890625
+          },
+          {
+            "endMs": 454015.4208984375,
+            "gapMs": 60.01953125
+          },
+          {
+            "endMs": 453815.5676269531,
+            "gapMs": 59.8837890625
+          },
+          {
+            "endMs": 452050.017578125,
+            "gapMs": 34.781982421875
+          },
+          {
+            "endMs": 453607.1171875,
+            "gapMs": 31.541015625
+          },
+          {
+            "endMs": 453526.294921875,
+            "gapMs": 30.4267578125
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 40.104166666666664,
+        "emittedSamples": 46080,
+        "insertedMs": 0,
+        "jitterMs": 10,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 53.3333333333303,
+        "ms": 453907.8999999985,
+        "packets": 45,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 42
+        },
+        "receivedSamples": 48480,
+        "removedMs": 9.625,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.72900390625
+      },
+      "sender": {
+        "fromMs": 450906.17099609226,
+        "toMs": 455907.8999999985,
+        "packets": 235,
+        "sendSpanMs": 4992.364013671875,
+        "excessWallTimeVs20MsFrames": 312.364013671875,
+        "firstPacketMs": 450915.4367675781,
+        "lastPacketMs": 455907.80078125,
+        "maxGapMs": 79.34033203125,
+        "gapsAbove40Ms": 7,
+        "maxSendCallMs": 0.204745,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 454327.3515625,
+            "gapMs": 79.34033203125
+          },
+          {
+            "endMs": 454227.9060058594,
+            "gapMs": 72.04345703125
+          },
+          {
+            "endMs": 453915.98828125,
+            "gapMs": 60.58984375
+          },
+          {
+            "endMs": 453715.9875488281,
+            "gapMs": 60.56982421875
+          },
+          {
+            "endMs": 454115.9655761719,
+            "gapMs": 60.136962890625
+          },
+          {
+            "endMs": 454015.4208984375,
+            "gapMs": 60.01953125
+          },
+          {
+            "endMs": 453815.5676269531,
+            "gapMs": 59.8837890625
+          },
+          {
+            "endMs": 452050.017578125,
+            "gapMs": 34.781982421875
+          },
+          {
+            "endMs": 453607.1171875,
+            "gapMs": 31.541015625
+          },
+          {
+            "endMs": 453526.294921875,
+            "gapMs": 30.4267578125
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 231.41666666666666,
+        "emittedSamples": 36480,
+        "insertedMs": 0,
+        "jitterMs": 5,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 28.15789473684721,
+        "ms": 454909.3999999985,
+        "packets": 40,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 43
+        },
+        "receivedSamples": 48000,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.8388671875
+      },
+      "sender": {
+        "fromMs": 451907.561132811,
+        "toMs": 456909.3999999985,
+        "packets": 235,
+        "sendSpanMs": 4992.659912109375,
+        "excessWallTimeVs20MsFrames": 312.659912109375,
+        "firstPacketMs": 451915.5078125,
+        "lastPacketMs": 456908.1677246094,
+        "maxGapMs": 79.34033203125,
+        "gapsAbove40Ms": 7,
+        "maxSendCallMs": 0.204745,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 454327.3515625,
+            "gapMs": 79.34033203125
+          },
+          {
+            "endMs": 454227.9060058594,
+            "gapMs": 72.04345703125
+          },
+          {
+            "endMs": 453915.98828125,
+            "gapMs": 60.58984375
+          },
+          {
+            "endMs": 453715.9875488281,
+            "gapMs": 60.56982421875
+          },
+          {
+            "endMs": 454115.9655761719,
+            "gapMs": 60.136962890625
+          },
+          {
+            "endMs": 454015.4208984375,
+            "gapMs": 60.01953125
+          },
+          {
+            "endMs": 453815.5676269531,
+            "gapMs": 59.8837890625
+          },
+          {
+            "endMs": 452050.017578125,
+            "gapMs": 34.781982421875
+          },
+          {
+            "endMs": 453607.1171875,
+            "gapMs": 31.541015625
+          },
+          {
+            "endMs": 453526.294921875,
+            "gapMs": 30.4267578125
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 16.895833333333332,
+        "emittedSamples": 48000,
+        "insertedMs": 0,
+        "jitterMs": 4,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 51.60000000000097,
+        "ms": 573113.299999997,
+        "packets": 50,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 160
+        },
+        "receivedSamples": 48480,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.31689453125
+      },
+      "sender": {
+        "fromMs": 570111.9831054658,
+        "toMs": 575113.299999997,
+        "packets": 250,
+        "sendSpanMs": 4979.70068359375,
+        "excessWallTimeVs20MsFrames": -0.29931640625,
+        "firstPacketMs": 570128.0893554688,
+        "lastPacketMs": 575107.7900390625,
+        "maxGapMs": 29.8759765625,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.131117,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 574537.0168457031,
+            "gapMs": 29.8759765625
+          },
+          {
+            "endMs": 572617.5832519531,
+            "gapMs": 29.615234375
+          },
+          {
+            "endMs": 572548.9196777344,
+            "gapMs": 21.710205078125
+          },
+          {
+            "endMs": 572868.0991210938,
+            "gapMs": 20.910400390625
+          },
+          {
+            "endMs": 570327.9763183594,
+            "gapMs": 20.863037109375
+          },
+          {
+            "endMs": 570988.0390625,
+            "gapMs": 20.8115234375
+          },
+          {
+            "endMs": 570627.8791503906,
+            "gapMs": 20.8056640625
+          },
+          {
+            "endMs": 573027.9958496094,
+            "gapMs": 20.79345703125
+          },
+          {
+            "endMs": 573448.0502929688,
+            "gapMs": 20.791748046875
+          },
+          {
+            "endMs": 570448.0600585938,
+            "gapMs": 20.774169921875
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 23.145833333333332,
+        "emittedSamples": 47040,
+        "insertedMs": 0,
+        "jitterMs": 2,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 54.08163265306123,
+        "ms": 708328,
+        "packets": 51,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 83
+        },
+        "receivedSamples": 48480,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.387939453125
+      },
+      "sender": {
+        "fromMs": 705326.6120605469,
+        "toMs": 710328,
+        "packets": 251,
+        "sendSpanMs": 4999.7275390625,
+        "excessWallTimeVs20MsFrames": -0.2724609375,
+        "firstPacketMs": 705327.9919433594,
+        "lastPacketMs": 710327.7194824219,
+        "maxGapMs": 27.7470703125,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.226697,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 709074.986328125,
+            "gapMs": 27.7470703125
+          },
+          {
+            "endMs": 708609.0051269531,
+            "gapMs": 21.657958984375
+          },
+          {
+            "endMs": 708848.7580566406,
+            "gapMs": 21.3125
+          },
+          {
+            "endMs": 705349.2873535156,
+            "gapMs": 21.29541015625
+          },
+          {
+            "endMs": 709508.140625,
+            "gapMs": 21.1005859375
+          },
+          {
+            "endMs": 707468.0871582031,
+            "gapMs": 20.997314453125
+          },
+          {
+            "endMs": 705428.0461425781,
+            "gapMs": 20.97509765625
+          },
+          {
+            "endMs": 708348.1069335938,
+            "gapMs": 20.951416015625
+          },
+          {
+            "endMs": 710128.0559082031,
+            "gapMs": 20.9482421875
+          },
+          {
+            "endMs": 709728.3696289062,
+            "gapMs": 20.854248046875
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 60.25,
+        "emittedSamples": 45120,
+        "insertedMs": 0,
+        "jitterMs": 1,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 93.82978723404462,
+        "ms": 729390.299999997,
+        "packets": 50,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 103
+        },
+        "receivedSamples": 48000,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.39013671875
+      },
+      "sender": {
+        "fromMs": 726388.9098632783,
+        "toMs": 731390.299999997,
+        "packets": 250,
+        "sendSpanMs": 4974.420166015625,
+        "excessWallTimeVs20MsFrames": -5.579833984375,
+        "firstPacketMs": 726412.9819335938,
+        "lastPacketMs": 731387.4020996094,
+        "maxGapMs": 25.66796875,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.132219,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 726412.9819335938,
+            "gapMs": 25.66796875
+          },
+          {
+            "endMs": 730828.1252441406,
+            "gapMs": 21.00634765625
+          },
+          {
+            "endMs": 727527.9545898438,
+            "gapMs": 20.9306640625
+          },
+          {
+            "endMs": 730328.1293945312,
+            "gapMs": 20.901123046875
+          },
+          {
+            "endMs": 727167.970703125,
+            "gapMs": 20.8564453125
+          },
+          {
+            "endMs": 730367.9079589844,
+            "gapMs": 20.8310546875
+          },
+          {
+            "endMs": 727268.0991210938,
+            "gapMs": 20.81787109375
+          },
+          {
+            "endMs": 730088.0078125,
+            "gapMs": 20.78076171875
+          },
+          {
+            "endMs": 729208.1904296875,
+            "gapMs": 20.77490234375
+          },
+          {
+            "endMs": 727988.1083984375,
+            "gapMs": 20.756103515625
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 19.875,
+        "emittedSamples": 48000,
+        "insertedMs": 0,
+        "jitterMs": 4,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 53.40000000000388,
+        "ms": 753459,
+        "packets": 50,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 129
+        },
+        "receivedSamples": 48480,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.257080078125
+      },
+      "sender": {
+        "fromMs": 750457.7429199219,
+        "toMs": 755459,
+        "packets": 250,
+        "sendSpanMs": 4980.461181640625,
+        "excessWallTimeVs20MsFrames": 0.461181640625,
+        "firstPacketMs": 750467.0480957031,
+        "lastPacketMs": 755447.5092773438,
+        "maxGapMs": 29.91796875,
+        "gapsAbove40Ms": 0,
+        "maxSendCallMs": 0.147378,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 750857.5161132812,
+            "gapMs": 29.91796875
+          },
+          {
+            "endMs": 753689.0363769531,
+            "gapMs": 21.409423828125
+          },
+          {
+            "endMs": 752228.0090332031,
+            "gapMs": 20.91357421875
+          },
+          {
+            "endMs": 753148.08984375,
+            "gapMs": 20.91162109375
+          },
+          {
+            "endMs": 750548.1003417969,
+            "gapMs": 20.856689453125
+          },
+          {
+            "endMs": 754028.0288085938,
+            "gapMs": 20.85009765625
+          },
+          {
+            "endMs": 750808.0778808594,
+            "gapMs": 20.838134765625
+          },
+          {
+            "endMs": 752568.1003417969,
+            "gapMs": 20.823486328125
+          },
+          {
+            "endMs": 754688.0673828125,
+            "gapMs": 20.7978515625
+          },
+          {
+            "endMs": 752667.9304199219,
+            "gapMs": 20.781982421875
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 28.458333333333332,
+        "emittedSamples": 47040,
+        "insertedMs": 0,
+        "jitterMs": 7,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 51.63265306123043,
+        "ms": 757469,
+        "packets": 48,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 132
+        },
+        "receivedSamples": 48000,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.43701171875
+      },
+      "sender": {
+        "fromMs": 754467.5629882812,
+        "toMs": 759469,
+        "packets": 238,
+        "sendSpanMs": 4999.404296875,
+        "excessWallTimeVs20MsFrames": 259.404296875,
+        "firstPacketMs": 754467.9604492188,
+        "lastPacketMs": 759467.3647460938,
+        "maxGapMs": 159.436279296875,
+        "gapsAbove40Ms": 3,
+        "maxSendCallMs": 0.183014,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 758987.2270507812,
+            "gapMs": 159.436279296875
+          },
+          {
+            "endMs": 757367.9541015625,
+            "gapMs": 80.08056640625
+          },
+          {
+            "endMs": 758307.994140625,
+            "gapMs": 80.03076171875
+          },
+          {
+            "endMs": 758128.1455078125,
+            "gapMs": 20.9521484375
+          },
+          {
+            "endMs": 757628.2573242188,
+            "gapMs": 20.939453125
+          },
+          {
+            "endMs": 758608.0126953125,
+            "gapMs": 20.888427734375
+          },
+          {
+            "endMs": 759388.025390625,
+            "gapMs": 20.8427734375
+          },
+          {
+            "endMs": 756567.9296875,
+            "gapMs": 20.801025390625
+          },
+          {
+            "endMs": 754688.0673828125,
+            "gapMs": 20.7978515625
+          },
+          {
+            "endMs": 755967.9711914062,
+            "gapMs": 20.783447265625
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 59.645833333333336,
+        "emittedSamples": 45120,
+        "insertedMs": 0,
+        "jitterMs": 6,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 24.255319148934106,
+        "ms": 758472.299999997,
+        "packets": 47,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 133
+        },
+        "receivedSamples": 48000,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1001.5458984375
+      },
+      "sender": {
+        "fromMs": 755470.7541015595,
+        "toMs": 760472.299999997,
+        "packets": 237,
+        "sendSpanMs": 4979.898193359375,
+        "excessWallTimeVs20MsFrames": 259.898193359375,
+        "firstPacketMs": 755487.4064941406,
+        "lastPacketMs": 760467.3046875,
+        "maxGapMs": 159.436279296875,
+        "gapsAbove40Ms": 3,
+        "maxSendCallMs": 0.183014,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 758987.2270507812,
+            "gapMs": 159.436279296875
+          },
+          {
+            "endMs": 757367.9541015625,
+            "gapMs": 80.08056640625
+          },
+          {
+            "endMs": 758307.994140625,
+            "gapMs": 80.03076171875
+          },
+          {
+            "endMs": 758128.1455078125,
+            "gapMs": 20.9521484375
+          },
+          {
+            "endMs": 757628.2573242188,
+            "gapMs": 20.939453125
+          },
+          {
+            "endMs": 758608.0126953125,
+            "gapMs": 20.888427734375
+          },
+          {
+            "endMs": 760328.1020507812,
+            "gapMs": 20.844970703125
+          },
+          {
+            "endMs": 759388.025390625,
+            "gapMs": 20.8427734375
+          },
+          {
+            "endMs": 756567.9296875,
+            "gapMs": 20.801025390625
+          },
+          {
+            "endMs": 755967.9711914062,
+            "gapMs": 20.783447265625
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "kind": "speaking",
+        "ms": 759077.1999999993,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 133
+        },
+        "speaking": false
+      },
+      "sender": {
+        "fromMs": 757077.1999999993,
+        "toMs": 761077.1999999993,
+        "packets": 187,
+        "sendSpanMs": 3979.862060546875,
+        "excessWallTimeVs20MsFrames": 259.862060546875,
+        "firstPacketMs": 757087.9216308594,
+        "lastPacketMs": 761067.7836914062,
+        "maxGapMs": 159.436279296875,
+        "gapsAbove40Ms": 3,
+        "maxSendCallMs": 0.183014,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 758987.2270507812,
+            "gapMs": 159.436279296875
+          },
+          {
+            "endMs": 757367.9541015625,
+            "gapMs": 80.08056640625
+          },
+          {
+            "endMs": 758307.994140625,
+            "gapMs": 80.03076171875
+          },
+          {
+            "endMs": 758128.1455078125,
+            "gapMs": 20.9521484375
+          },
+          {
+            "endMs": 757628.2573242188,
+            "gapMs": 20.939453125
+          },
+          {
+            "endMs": 760808.0854492188,
+            "gapMs": 20.938720703125
+          },
+          {
+            "endMs": 758608.0126953125,
+            "gapMs": 20.888427734375
+          },
+          {
+            "endMs": 760328.1020507812,
+            "gapMs": 20.844970703125
+          },
+          {
+            "endMs": 759388.025390625,
+            "gapMs": 20.8427734375
+          },
+          {
+            "endMs": 757087.9216308594,
+            "gapMs": 20.782470703125
+          }
+        ]
+      }
+    },
+    {
+      "receiver": {
+        "concealedMs": 170.77083333333334,
+        "emittedSamples": 39360,
+        "insertedMs": 0,
+        "jitterMs": 6,
+        "kind": "receiver",
+        "lost": 0,
+        "meanBufferMs": 39.999999999997634,
+        "ms": 759474.1999999993,
+        "packets": 43,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "middle",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 133
+        },
+        "receivedSamples": 48000,
+        "removedMs": 0,
+        "silentConcealedMs": 0,
+        "windowMs": 1003.43310546875
+      },
+      "sender": {
+        "fromMs": 756470.7668945305,
+        "toMs": 761474.1999999993,
+        "packets": 237,
+        "sendSpanMs": 4979.03271484375,
+        "excessWallTimeVs20MsFrames": 259.03271484375,
+        "firstPacketMs": 756488.0805664062,
+        "lastPacketMs": 761467.11328125,
+        "maxGapMs": 159.436279296875,
+        "gapsAbove40Ms": 3,
+        "maxSendCallMs": 0.183014,
+        "sendFailures": 0,
+        "sequenceDiscontinuities": 0,
+        "timestampDiscontinuities": 0,
+        "largestGaps": [
+          {
+            "endMs": 758987.2270507812,
+            "gapMs": 159.436279296875
+          },
+          {
+            "endMs": 757367.9541015625,
+            "gapMs": 80.08056640625
+          },
+          {
+            "endMs": 758307.994140625,
+            "gapMs": 80.03076171875
+          },
+          {
+            "endMs": 761108.5764160156,
+            "gapMs": 21.343505859375
+          },
+          {
+            "endMs": 761248.3930664062,
+            "gapMs": 21.16552734375
+          },
+          {
+            "endMs": 758128.1455078125,
+            "gapMs": 20.9521484375
+          },
+          {
+            "endMs": 757628.2573242188,
+            "gapMs": 20.939453125
+          },
+          {
+            "endMs": 760808.0854492188,
+            "gapMs": 20.938720703125
+          },
+          {
+            "endMs": 758608.0126953125,
+            "gapMs": 20.888427734375
+          },
+          {
+            "endMs": 760328.1020507812,
+            "gapMs": 20.844970703125
+          }
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "Clock mapping assumes host clocks are UTC-synchronized; sample uncertainty is not inter-host clock accuracy.",
+    "Send completion does not establish NIC transmission, Discord forwarding, or receiver arrival.",
+    "The interposer adds syscall and file-write overhead; a clean trace is not a production quality pass.",
+    "Send-call duration includes the interposer socket-type check before its final timestamp.",
+    "Excess wall time is descriptive and assumes one continuous 20 ms RTP stream; inspect sequence and timestamp continuity first.",
+    "Independent low-priority timers can themselves be delayed by guest scheduling. Correlated steal samples strengthen host attribution but have one-second resolution.",
+    "Events use receiver callback times; PCM timing and network playout add delay.",
+    "No packet payload, key, source URL, or audio is captured."
+  ]
+}

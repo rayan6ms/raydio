@@ -52,6 +52,47 @@ short receiver captures into a six-hour result. Collect final sender logs and
 resource samples after the observation window ends. Save browser checkpoints
 during long runs so tab replacement cannot erase all prior observations.
 
+## Sender/host correlation diagnostics
+
+`scheduler_probe.c` extends the earlier Python scheduler observation with one
+absolute 20 ms sleeping timer pinned to each of two permitted vCPUs, plus
+one-second per-vCPU steal samples. It uses nice 10, no busy waiting, fixed
+buffers (2,048 late events per CPU), and a maximum 1,200 seconds. It prints the
+retained data only when finished; keep it alive until its duration ends.
+The final summary includes its own CPU time. Compile separately from playback:
+
+```sh
+cc -O2 -Wall -Wextra -Werror -pthread benchmarks/scheduler_probe.c -o target/scheduler-probe
+target/scheduler-probe 2 > target/scheduler-probe-smoke.csv
+```
+
+For a separate diagnostic window, start the probe and existing bounded
+header-only sender interposer before playback. Preserve the sender host's
+monotonic-to-UTC clock sample, the receiver report, and the completed probe CSV.
+No new SSH logins or other administration should overlap the observation.
+Afterward, correlate them with:
+
+```sh
+uv run --no-project python benchmarks/correlate_delivery.py \
+  --trace target/sender.csv --clock target/clock.json \
+  --receiver target/receiver.json --scheduler target/scheduler.csv \
+  --output target/correlation.json
+uv run --no-project python benchmarks/test_correlate_delivery.py
+```
+
+The probe's delayed wakeups include guest scheduling effects; overlap with
+CPU-steal increments supports VM descheduling but does not provide subsecond
+steal attribution. Truncation or timer errors reject the probe input. RTP
+wraps, boundary-crossing gaps, and administrative packets outside the receiver
+window are covered by synthetic analysis tests. These are diagnostic checks,
+not passing audio or six-hour tests. Remove instrumentation for qualification.
+
+The browser meter also retains discarded packets and NACK/FEC counters when
+the browser exposes them. `availableCounters` distinguishes missing counters
+from observed zero. These use the existing one-second `getStats()` poll and
+do not change receiver buffering. A zero net-loss counter cannot substitute
+for checking discarded/late packets, concealment and PCM continuity.
+
 ## Whole bot
 
 Preserve separate release binaries before running:

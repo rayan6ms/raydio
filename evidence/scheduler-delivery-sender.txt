@@ -1,0 +1,7 @@
+2026-09-07T17:52:04.182493+00:00 raydio-vnic systemd[1]: Starting raydio-scheduler-delivery.service - Raydio delivery correlation diagnostic Testbot...
+2026-09-07T17:52:06.533968+00:00 raydio-vnic raydio[28923]: 2026-09-07T17:52:06.533914Z  INFO raydio::runtime: Raydio ready bot_id=1544468432907669644
+2026-09-07T17:52:06.534133+00:00 raydio-vnic systemd[1]: Started raydio-scheduler-delivery.service - Raydio delivery correlation diagnostic Testbot.
+2026-09-07T18:12:06.676189+00:00 raydio-vnic systemd[1]: raydio-scheduler-delivery.service: Service reached runtime time limit. Stopping.
+2026-09-07T18:12:06.776764+00:00 raydio-vnic raydio[28923]: 2026-09-07T18:12:06.776687Z  INFO crust_oto_adapter: audio sender stopped frames_sent=59237 silence_frames_sent=5 frames_unavailable=5 skipped_deadlines=10 send_failures=0 source_overruns=0 max_lateness_us=46966 phase=Stopped failure=None
+2026-09-07T18:12:07.137227+00:00 raydio-vnic systemd[1]: raydio-scheduler-delivery.service: Failed with result 'timeout'.
+2026-09-07T18:12:07.137793+00:00 raydio-vnic systemd[1]: raydio-scheduler-delivery.service: Consumed 1min 6.051s CPU time, 2.9M memory peak, 0B memory swap peak.

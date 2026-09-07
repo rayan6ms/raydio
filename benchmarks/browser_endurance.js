@@ -15,6 +15,7 @@
     }
     if (!existing) window.RTCPeerConnection = Observed;
     const fields = ['timestamp', 'packetsReceived', 'packetsLost', 'bytesReceived',
+        'packetsDiscarded', 'nackCount', 'fecPacketsReceived', 'fecPacketsDiscarded',
         'concealedSamples', 'silentConcealedSamples', 'concealmentEvents',
         'totalSamplesReceived', 'jitterBufferDelay', 'jitterBufferEmittedCount',
         'insertedSamplesForDeceleration', 'removedSamplesForAcceleration',
@@ -169,7 +170,9 @@
                 visibilityListener=()=>event('receiver-visibility',{state:document.visibilityState});
                 document.addEventListener('visibilitychange',visibilityListener);
             }
-            let last=counters((await peer.getStats()).get(id));data.initial=last;
+            const initialRaw=(await peer.getStats()).get(id);
+            data.availableCounters=fields.filter(k=>typeof initialRaw[k]==='number');
+            let last=counters(initialRaw);data.initial=last;
             let speaking=true;
             observer=new MutationObserver(()=>{
                 const next=row.className.includes('usernameSpeaking');
@@ -210,8 +213,10 @@
                 data.sampling.polls++;data.sampling.maxPollMs=Math.max(data.sampling.maxPollMs,dt);
                 data.sampling.positiveLossDeltas+=Math.max(0,delta.packetsLost);data.sampling.negativeLossDeltas+=Math.min(0,delta.packetsLost);
                 data.sampling.maxConcealedMsPerPoll=Math.max(data.sampling.maxConcealedMsPerPoll,delta.concealedSamples/48);
-                if(delta.packetsLost||delta.concealedSamples||delta.packetsReceived===0||dt>2000)
+                if(delta.packetsLost||delta.packetsDiscarded||delta.nackCount||delta.concealedSamples||delta.packetsReceived===0||dt>2000)
                     event('receiver',{windowMs:dt,packets:delta.packetsReceived,lost:delta.packetsLost,concealedMs:delta.concealedSamples/48,silentConcealedMs:delta.silentConcealedSamples/48,jitterMs:raw.jitter*1000,
+                        discarded:delta.packetsDiscarded,nacks:delta.nackCount,
+                        fecReceived:delta.fecPacketsReceived,fecDiscarded:delta.fecPacketsDiscarded,
                         insertedMs:delta.insertedSamplesForDeceleration/48,removedMs:delta.removedSamplesForAcceleration/48,
                         emittedSamples:delta.jitterBufferEmittedCount,receivedSamples:delta.totalSamplesReceived,
                         meanBufferMs:delta.jitterBufferEmittedCount?delta.jitterBufferDelay*1000/delta.jitterBufferEmittedCount:null});

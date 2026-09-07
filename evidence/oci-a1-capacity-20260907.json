@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-09-07T18:13:41.131000+00:00",
+  "region": "sa-saopaulo-1",
+  "shapes": [
+    {
+      "availability-status": "OUT_OF_HOST_CAPACITY",
+      "available-count": null,
+      "fault-domain": null,
+      "instance-shape": "VM.Standard.A1.Flex",
+      "instance-shape-config": {
+        "baseline-ocpu-utilization": null,
+        "memory-in-gbs": 1.0,
+        "nvmes": 0,
+        "ocpus": 1.0
+      }
+    }
+  ],
+  "action": "Capacity report only; no instance created or modified"
+}

@@ -1,0 +1,8 @@
+2026-09-07T17:32:20.140569+00:00 raydio-vnic systemd[1]: Starting raydio-delivery-trace.service - Raydio delivery correlation diagnostic Testbot...
+2026-09-07T17:32:22.677611+00:00 raydio-vnic raydio[28558]: 2026-09-07T17:32:22.677562Z  INFO raydio::runtime: Raydio ready bot_id=1544468432907669644
+2026-09-07T17:32:22.677973+00:00 raydio-vnic systemd[1]: Started raydio-delivery-trace.service - Raydio delivery correlation diagnostic Testbot.
+2026-09-07T17:46:47.440984+00:00 raydio-vnic systemd[1]: Stopping raydio-delivery-trace.service - Raydio delivery correlation diagnostic Testbot...
+2026-09-07T17:46:47.523022+00:00 raydio-vnic raydio[28558]: 2026-09-07T17:46:47.522956Z  INFO crust_oto_adapter: audio sender stopped frames_sent=42374 silence_frames_sent=6 frames_unavailable=6 skipped_deadlines=29 send_failures=0 source_overruns=0 max_lateness_us=128613 phase=Stopped failure=None
+2026-09-07T17:46:47.898195+00:00 raydio-vnic systemd[1]: raydio-delivery-trace.service: Deactivated successfully.
+2026-09-07T17:46:47.898557+00:00 raydio-vnic systemd[1]: Stopped raydio-delivery-trace.service - Raydio delivery correlation diagnostic Testbot.
+2026-09-07T17:46:47.899047+00:00 raydio-vnic systemd[1]: raydio-delivery-trace.service: Consumed 48.427s CPU time, 2.8M memory peak, 0B memory swap peak.
