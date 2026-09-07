@@ -1,0 +1,8 @@
+Starting raydio-exact-comparison.service - Raydio exact candidate comparison Testbot...
+2026-09-07T12:50:53.915584Z  INFO raydio::runtime: Raydio ready bot_id=1544468432907669644
+Started raydio-exact-comparison.service - Raydio exact candidate comparison Testbot.
+Stopping raydio-exact-comparison.service - Raydio exact candidate comparison Testbot...
+2026-09-07T13:07:16.451344Z  INFO crust_oto_adapter: audio sender stopped frames_sent=48338 silence_frames_sent=9 frames_unavailable=9 skipped_deadlines=17 send_failures=0 source_overruns=0 max_lateness_us=54804 phase=Stopped failure=None
+raydio-exact-comparison.service: Deactivated successfully.
+Stopped raydio-exact-comparison.service - Raydio exact candidate comparison Testbot.
+raydio-exact-comparison.service: Consumed 54.519s CPU time, 2.8M memory peak, 0B memory swap peak.

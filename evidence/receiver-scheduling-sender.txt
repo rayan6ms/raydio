@@ -1,0 +1,8 @@
+Starting raydio-receiver-scheduling.service - Raydio receiver scheduling diagnostic Testbot...
+2026-09-07T13:10:43.686769Z  INFO raydio::runtime: Raydio ready bot_id=1544468432907669644
+Started raydio-receiver-scheduling.service - Raydio receiver scheduling diagnostic Testbot.
+Stopping raydio-receiver-scheduling.service - Raydio receiver scheduling diagnostic Testbot...
+2026-09-07T13:26:46.736015Z  INFO crust_oto_adapter: audio sender stopped frames_sent=47404 silence_frames_sent=7 frames_unavailable=7 skipped_deadlines=13 send_failures=0 source_overruns=0 max_lateness_us=66903 phase=Stopped failure=None
+raydio-receiver-scheduling.service: Deactivated successfully.
+Stopped raydio-receiver-scheduling.service - Raydio receiver scheduling diagnostic Testbot.
+raydio-receiver-scheduling.service: Consumed 53.358s CPU time, 2.7M memory peak, 0B memory swap peak.

@@ -1,0 +1,50 @@
+{
+  "scope": "unchanged exact candidate repeated 15-minute observation",
+  "candidateSha256": "bb7467d99a570e104e9d9e06934a4ab53cfb0c085a4f6ecf04498e7aef5d0f57",
+  "receiverSeconds": 900.0000270996094,
+  "packetsReceived": 44986,
+  "packetsLost": 0,
+  "positiveLossDeltas": 0,
+  "concealedMs": 1103.7708333333333,
+  "silentConcealedMs": 25.375,
+  "nearFullScale": 0,
+  "nonFinite": 0,
+  "emptyFrames": 0,
+  "pcmReportsMissing": 0,
+  "unexpectedQuietEvents": [
+    {
+      "audioSeconds": 690.9306666666666,
+      "durationMs": 25.395833333333332,
+      "endFrame": 33109032,
+      "kind": "quiet",
+      "ms": 689820.7000000004,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 68
+      }
+    }
+  ],
+  "senderLifetime": {
+    "framesSent": 48338,
+    "framesUnavailable": 9,
+    "silenceFramesSent": 9,
+    "skippedDeadlines": 17,
+    "sendFailures": 0,
+    "sourceOverruns": 0,
+    "maxLatenessUs": 54804,
+    "note": "Includes administrative shutdown; not precisely aligned to receiver window."
+  },
+  "warmPssKiB": {
+    "min": 16220,
+    "median": 16520.0,
+    "max": 16520
+  },
+  "cgroupFileBytes": [
+    3436544
+  ],
+  "sixHourQualified": false,
+  "conclusion": "No terminal failure in this repetition, but 25.396 ms mid-song quiet and 25.375 ms silent concealment. The existing intermittent source guard failure is not fixed."
+}

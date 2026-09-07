@@ -27,6 +27,31 @@ environment used for Mantle; do not compile while measuring. That round's checks
 `cargo test --all-targets` (42 passed), `cargo clippy --all-targets -- -D warnings`,
 `cargo fmt --check`, and `git diff --check`.
 
+## Endurance resource sampler
+
+Start the sampler before playback and verify its first sample. The output path
+is mandatory; an active Testbot service alone does not prove sampling started.
+Run these commands on the VM, choosing a new output path for each attempt:
+
+```sh
+bot_pid=$(systemctl show raydio-six-hour.service --property=MainPID --value)
+test "$bot_pid" -gt 0
+bot_exe=$(sudo readlink -f "/proc/$bot_pid/exe")
+sudo systemd-run --unit=raydio-endurance-resources \
+  /usr/bin/python3 /opt/raydio/diagnostics/endurance-host.py \
+  --pid "$bot_pid" --expected-exe "$bot_exe" --seconds 22200 \
+  --output /var/lib/raydio/endurance-resources.jsonl
+sudo systemctl is-active raydio-endurance-resources
+sudo head -n 1 /var/lib/raydio/endurance-resources.jsonl
+```
+
+Do not begin playback until that first JSON row exists, has the intended PID,
+has PSS/RSS/cgroup counters, and has no `error`. A missing or invalid row is a
+measurement setup failure. Preserve each attempt separately; do not combine
+short receiver captures into a six-hour result. Collect final sender logs and
+resource samples after the observation window ends. Save browser checkpoints
+during long runs so tab replacement cannot erase all prior observations.
+
 ## Whole bot
 
 Preserve separate release binaries before running:

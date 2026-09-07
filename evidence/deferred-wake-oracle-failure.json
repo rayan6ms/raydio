@@ -1,0 +1,23 @@
+{
+  "status": "failed",
+  "candidateSha256": "bb7467d99a570e104e9d9e06934a4ab53cfb0c085a4f6ecf04498e7aef5d0f57",
+  "otoRevision": "3d651c6ecc53a1ac4620eea231b8f9d777038dae",
+  "failureAt": "2026-09-07T04:37:04.540940Z",
+  "failure": "FrameSourceContract",
+  "framesSent": 28316,
+  "framesUnavailable": 0,
+  "silenceFramesSent": 0,
+  "sendFailures": 0,
+  "sourceOverruns": 1,
+  "sourceOverrunWallUs": 7036,
+  "sourceOverrunCpuUs": 7042,
+  "skippedDeadlines": 14,
+  "maxLatenessUs": 69586,
+  "receiverReport": "unavailable after browser tab replacement; no new receiver-quality claims",
+  "resourceSamples": "unavailable: launcher omitted mandatory --output and sampler exited with status 2",
+  "sixHourQualified": false,
+  "notes": [
+    "Service stayed up after terminal audio failure until its seven-hour runtime limit. Service uptime is not playback uptime.",
+    "Deferred source wake did not eliminate the terminal failure. Root cause of this occurrence remains unresolved."
+  ]
+}

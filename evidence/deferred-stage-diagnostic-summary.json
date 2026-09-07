@@ -1,0 +1,150 @@
+{
+  "scope": "15-minute instrumented source callback diagnostic; not six-hour qualification",
+  "binarySha256": "57dcc64429d5b19a6c8f5b2cc1950a56bfdb7b0f8b396afad0bddb4cee596f9f",
+  "diagnosticPatch": "ring-stage-diagnostic.patch",
+  "baseCandidateSha256": "bb7467d99a570e104e9d9e06934a4ab53cfb0c085a4f6ecf04498e7aef5d0f57",
+  "receiverSeconds": 899.9995300292969,
+  "packetsReceived": 44977,
+  "lostNet": 3,
+  "positiveLossDeltas": 4,
+  "concealedMs": 1265.5208333333333,
+  "silentConcealedMs": 0.0,
+  "nearFullScale": 0,
+  "nonFinite": 0,
+  "emptyFrames": 0,
+  "pcmReportsMissing": 0,
+  "quietEvents": [
+    {
+      "audioSeconds": 196.36533333333333,
+      "durationMs": 21.958333333333332,
+      "endFrame": 9369435,
+      "kind": "quiet",
+      "ms": 195254.30000000005,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "tail",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 211
+      }
+    },
+    {
+      "audioSeconds": 197.368,
+      "durationMs": 976.25,
+      "endFrame": 9417400,
+      "kind": "quiet",
+      "ms": 196257.1000000001,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "tail",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 211
+      }
+    },
+    {
+      "audioSeconds": 409.432,
+      "durationMs": 21.958333333333332,
+      "endFrame": 19598973,
+      "kind": "quiet",
+      "ms": 408322.6000000001,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "tail",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 211
+      }
+    },
+    {
+      "audioSeconds": 410.43466666666666,
+      "durationMs": 976.25,
+      "endFrame": 19646938,
+      "kind": "quiet",
+      "ms": 409323.69999999995,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "tail",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 211
+      }
+    },
+    {
+      "audioSeconds": 622.4986666666666,
+      "durationMs": 21.958333333333332,
+      "endFrame": 29823770,
+      "kind": "quiet",
+      "ms": 621387.2,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "tail",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 211
+      }
+    },
+    {
+      "audioSeconds": 623.5013333333334,
+      "durationMs": 976.25,
+      "endFrame": 29871735,
+      "kind": "quiet",
+      "ms": 622389.7,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "tail",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 212
+      }
+    },
+    {
+      "audioSeconds": 835.816,
+      "durationMs": 24.458333333333332,
+      "endFrame": 40059671,
+      "kind": "quiet",
+      "ms": 834700,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "tail",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 211
+      }
+    },
+    {
+      "audioSeconds": 836.8186666666667,
+      "durationMs": 1018.75,
+      "endFrame": 40109676,
+      "kind": "quiet",
+      "ms": 835702.1000000001,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "tail",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 212
+      }
+    }
+  ],
+  "senderLifetime": {
+    "framesSent": 46474,
+    "silenceFramesSent": 8,
+    "framesUnavailable": 8,
+    "skippedDeadlines": 19,
+    "sendFailures": 0,
+    "sourceOverruns": 0,
+    "maxLatenessUs": 52728,
+    "note": "Includes audio before/after receiver window and administrative shutdown; counters are not receiver-aligned."
+  },
+  "warmPssKiB": {
+    "min": 16303,
+    "median": 16611.0,
+    "max": 16611
+  },
+  "cgroupFileBytes": [
+    4452352
+  ],
+  "sixHourQualified": false,
+  "conclusion": "Terminal failure not reproduced with stage timing instrumentation. No source-guard repair or memory improvement demonstrated."
+}

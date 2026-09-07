@@ -76,13 +76,16 @@
     }
     registerProcessor('raydio-endurance-meter',RaydioMeter);`;
     const api = window.raydioEndurance = {peers, report:null, running:false};
-    api.start = async ({seconds=21600, botName='bot1544468432907669644', pcm=true}={}) => {
+    api.start = async ({seconds=21600, botName='bot1544468432907669644', pcm=true, scheduling=false}={}) => {
         if(api.running)throw Error('Audit already running');
         if(!Number.isInteger(seconds)||seconds<10||seconds>21600)throw Error('Duration must be 10..21600 seconds');
         if(typeof pcm!=='boolean')throw Error('pcm must be boolean');
+        if(typeof scheduling!=='boolean')throw Error('scheduling must be boolean');
         api.running=true;
         const data=api.report={version:1,status:'starting',requestedSeconds:seconds,pcmEnabled:pcm,
             requestedAt:new Date().toISOString(),minutes:[],events:[],eventsTruncated:false,
+            receiverScheduling:{enabled:scheduling,longTasksSupported:false,longTasks:0,
+                totalLongTaskMs:0,maxLongTaskMs:0,initialVisibility:document.visibilityState},
             pcm:{samples:0,squared:0,peak:0,nearFullScale:0,nonFinite:0,emptyFrames:0,
                 longestQuietMs:0,ongoingQuietMs:0,reports:0,frames:0},
             sampling:{polls:0,stalePolls:0,maxPollMs:0,positiveLossDeltas:0,negativeLossDeltas:0,
@@ -90,7 +93,7 @@
             limitations:['Finite receiver observation, not a guarantee of future network behavior',
                 'Track phase comes from the once-per-second visible player; silence near track boundaries is retained for review, never silently excluded',
                 'No PCM is recorded; source defects and perceptual quality need separate evidence']};
-        let ctx,source,meter,observer,peer,stateListener,stopped=false;
+        let ctx,source,meter,observer,peer,stateListener,longTaskObserver,visibilityListener,stopped=false;
         const started=performance.now();let audioStarted=started, priorPosition=null,minute,pcmLastAt=started;
         const panel=()=>[...document.querySelectorAll('main article')].filter(e=>e.innerText.includes('Raydio • Now Playing')).at(-1);
         const phase=()=>{
@@ -144,6 +147,28 @@
             }
             audioStarted=performance.now();pcmLastAt=audioStarted;
             data.startedAt=new Date().toISOString();data.status='running';data.sampleRate=ctx?.sampleRate||48000;data.graphWarmupMs=pcm?1100:0;
+            if(scheduling){
+                // Event-driven diagnostic only: no new polling timer, network
+                // interception, raw audio, or changes to WebRTC buffering.
+                const recordLongTasks=entries=>{
+                    for(const entry of entries){
+                        if(entry.startTime<audioStarted)continue;
+                        const s=data.receiverScheduling;
+                        s.longTasks++;s.totalLongTaskMs+=entry.duration;
+                        s.maxLongTaskMs=Math.max(s.maxLongTaskMs,entry.duration);
+                        event('receiver-long-task',{startMs:entry.startTime-audioStarted,
+                            durationMs:entry.duration});
+                    }
+                };
+                if(PerformanceObserver.supportedEntryTypes.includes('longtask')){
+                    data.receiverScheduling.longTasksSupported=true;
+                    longTaskObserver=new PerformanceObserver(list=>recordLongTasks(list.getEntries()));
+                    longTaskObserver.observe({type:'longtask',buffered:false});
+                    api.flushScheduling=()=>recordLongTasks(longTaskObserver.takeRecords());
+                }
+                visibilityListener=()=>event('receiver-visibility',{state:document.visibilityState});
+                document.addEventListener('visibilitychange',visibilityListener);
+            }
             let last=counters((await peer.getStats()).get(id));data.initial=last;
             let speaking=true;
             observer=new MutationObserver(()=>{
@@ -198,6 +223,9 @@
             data.status=stopped?'stopped':'completed';
         }catch(e){data.status='failed';data.error=String(e);}
         finally{
+            api.flushScheduling?.();delete api.flushScheduling;
+            longTaskObserver?.disconnect();
+            if(visibilityListener)document.removeEventListener('visibilitychange',visibilityListener);
             observer?.disconnect();if(peer&&stateListener)peer.removeEventListener('connectionstatechange',stateListener);
             meter?.disconnect();source?.disconnect();if(ctx)await ctx.close();api.running=false;
             data.finishedAt=new Date().toISOString();
@@ -213,7 +241,8 @@
         const d=api.report;if(!d)return {status:'not-started'};
         return {status:d.status,startedAt:d.startedAt,elapsedSeconds:d.elapsedSeconds,lastProgressAt:d.lastProgressAt,
             minutes:d.minutes.length,events:d.events.length,eventsTruncated:d.eventsTruncated,
-            pcmEnabled:d.pcmEnabled,pcm:d.pcmEnabled?d.pcm:null,sampling:d.sampling,currentPhase:d.currentPhase,error:d.error,
+            pcmEnabled:d.pcmEnabled,pcm:d.pcmEnabled?d.pcm:null,sampling:d.sampling,
+            receiverScheduling:d.receiverScheduling,currentPhase:d.currentPhase,error:d.error,
             delta:d.current&&d.initial?Object.fromEntries(fields.map(k=>[k,d.current[k]-d.initial[k]])):null};
     };
 })();

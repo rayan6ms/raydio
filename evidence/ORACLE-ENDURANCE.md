@@ -324,18 +324,6 @@ pass. This provides a bounded callback hypothesis and regression evidence, but
 not a live Oracle causality proof. `oto-deferred-source-wake.json` records the
 comparison. A fresh full receiver run is still required.
 
-### Callback isolation follow-up (not yet qualified)
-
-Oto's source wake path was profiled locally. Before the change, a deliberately
-slow 5 ms scheduler invoked synchronously by a source waker consumed 5,011 us
-of source-wake CPU; after deferral, the same wake consumed 10 us and delivery
-occurred after polling. The complete 10-second encrypted DAVE path remained
-zero-allocation (501 frames/packets); max lateness was 1.538 ms before and
-1.326 ms after. All 81 Oto tests, including a 1,000-iteration poll-exit race,
-pass. This provides a bounded callback hypothesis and regression evidence, but
-not a live Oracle causality proof. `oto-deferred-source-wake.json` records the
-comparison. A fresh full receiver run is still required.
-
 ### Corrected deferred-wake candidate started
 
 After publishing Oto 3d651c6 and updating Raydio's Crust pin to 32dd0fd's
@@ -345,5 +333,106 @@ Oracle at 04:27 UTC. The controlled Discord receiver is connected in General,
 muted, with loop enabled and volume 70%. Initial six-second receiver counters:
 300 packets, 0 loss, 0 concealment, 0 silent concealment, 0 clipping/nonfinite/
 empty frames, and 0 PCM quiet events. This is only startup evidence; the
-six-hour qualification is active and must complete without receiver replacement,
-terminal sender failure, loss, concealment, clipping or silence anomalies.
+six-hour qualification was started; its subsequent failure is recorded below.
+
+
+### Corrected deferred-wake attempt failed (recovered September 7)
+
+The candidate terminated audio at **04:37:04.540940 UTC** with
+`FrameSourceContract`: 7,036 us wall and 7,042 us measured thread CPU.
+It sent 28,316 audio frames with zero unavailable/silence frames and zero send
+failures, but 14 skipped deadlines and 69,586 us maximum lateness. Deferring
+source wakes did not eliminate this terminal failure. The callback operation
+responsible for this occurrence remains unlocalized; do not infer it from the
+previous notifier reproduction.
+
+The service remained up until its seven-hour systemd runtime limit at 11:27 UTC.
+That service uptime is **not** continuous playback. The controlled browser tab
+was replaced before its report could be recovered; the new signed-in tab has no
+prior meter data. There is no six-hour receiver result.
+
+The corrected resource sampler never started collecting: the launch omitted its
+mandatory `--output` argument and argparse exited with status 2 at 04:28:36 UTC.
+Consequently this run has no playback PSS/RSS/file-cache series. Its systemd
+memory peak is incomplete accounting, not a replacement for those samples.
+Future launches must supply the output path and verify a valid first sample
+before playback starts. See `deferred-wake-oracle-failure.json` and
+`deferred-wake-oracle-terminal.txt`.
+
+Production remains on its existing Rust v0.2.1 release; this unqualified
+candidate has not been promoted. The next run must start from zero after the
+failure is diagnosed and corrected.
+
+### Fifteen-minute callback timing diagnostic
+
+The existing temporary ring-stage timing patch was applied to Crust b5fdc90
+and built against the corrected Oto pin. Diagnostic executable SHA256:
+`57dcc64429d5b19a6c8f5b2cc1950a56bfdb7b0f8b396afad0bddb4cee596f9f`.
+The patch was reverted from the worktree after preserving the executable.
+No permanent audio-path change was made. This instrumentation can alter timing;
+its 15-minute completion does not qualify the uninstrumented candidate.
+
+From 12:33:55 UTC the receiver observed approximately 900 seconds and four
+repeats, 44,977 packets, three net lost packets (four positive, one recovered),
+1,265.521 ms non-silent concealment, zero silent concealment, clipping,
+nonfinite/empty PCM, or missing PCM reports. Quiet events >=20 ms occurred near
+track endings; the longest was 1,018.75 ms, versus 938.458 ms source-tail quiet.
+Small concealment events recur roughly every 15 seconds; cause remains open.
+
+After receiver completion, normal administrative shutdown logged 46,474 audio
+frames, eight unavailable/silence frames, 19 skipped deadlines, 52,728 us max
+lateness, zero send failures and zero source overruns. These lifetime counters
+include playback outside the receiver window and the shutdown silence drain.
+No terminal callback was available to localize in this attempt.
+
+The correctly launched sampler produced 19 rows. At elapsed 300–1,020 seconds,
+PSS was 16,303–16,611 KiB (median 16,611), RSS 18,860–19,168 KiB, cgroup file
+cache 4,452,352 bytes, and CPU about 5.55% of one core. No memory pressure/OOM
+events occurred. This is diagnostic-build accounting, not a new memory win.
+See `deferred-stage-diagnostic-summary.json` and its raw receiver, sender and
+resource reports. A paired exact-candidate run follows to check whether the
+instrumented result is representative.
+
+### Exact candidate repetition completed but receiver quality failed
+
+The unchanged `bb7467...f57` candidate completed another 900-second receiver
+window with four repeats: 44,986 packets, zero positive/net loss, 1,103.771 ms
+concealment including **25.375 ms silent concealment**. At measured 689.82 s,
+the PCM meter observed **25.396 ms mid-song quiet**. The corresponding receiver
+poll reported 215.688 ms total concealment, 50 packets, and zero packet loss.
+There was no clipping, nonfinite/empty PCM, or missing PCM report. Successful
+packet counts therefore remain insufficient evidence of uninterrupted audio.
+
+Administrative shutdown logged 48,338 sent, nine unavailable/silence frames,
+17 skipped deadlines, 54,804 us maximum lateness, and zero source overruns or
+send failures. The prior terminal source failure did not recur in either
+15-minute run; neither run proves its cause fixed. Warm PSS was 16,220–16,520
+KiB (median 16,520), with 3,436,544 bytes cgroup file cache and about 5.59% CPU.
+These are observed costs, not a newly implemented memory improvement.
+See `exact-comparison-summary.json` and the raw receiver/sender/resource files.
+
+Receiver main-thread long tasks and visibility transitions were not recorded
+in those runs. An optional event-driven `scheduling:true` meter mode now records
+these for a separate diagnostic, without adding a timer or altering WebRTC
+buffering. This is intended to distinguish receiving-browser interference from
+sender/network symptoms; correlation alone will not establish causality.
+
+### Receiver scheduling diagnostic completed
+
+A third 900-second run used the unchanged `bb7467...f57` candidate while the
+browser meter also observed main-thread long tasks and visibility changes.
+Receiver scheduling reported **zero long tasks**, zero visibility transitions,
+and zero PCM reports missing. It received 44,991 packets with zero packet loss;
+there was no clipping, nonfinite/empty PCM, or mid-song quiet event in the final
+summary, but 596.7 ms head silence and 596 ms silent concealment occurred after
+one loop restart. Non-silent concealment total was 939.8 ms. Sender shutdown
+reported 47,404 frames, seven unavailable/silence frames, 13 skipped deadlines,
+66,903 us max lateness, zero source overruns and zero send failures.
+
+This rules out a browser main-thread stall for the observed receiver events but
+still does not prove whether Discord forwarding, Oracle scheduling, or source
+boundary timing caused them. Warm PSS was 16,456–16,760 KiB (median recorded in
+`receiver-scheduling-resources.json`), with 3,436,544 bytes cgroup file cache,
+about 5.52% CPU and no cgroup pressure/OOM events. The run is diagnostic only,
+not a six-hour qualification. See `receiver-scheduling-diagnostic.json`,
+`receiver-scheduling-sender.txt`, and `receiver-scheduling-resources.json`.

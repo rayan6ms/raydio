@@ -1,0 +1,8 @@
+Starting raydio-callback-diagnostic.service - Raydio callback timing diagnostic Testbot...
+2026-09-07T12:30:19.223921Z  INFO raydio::runtime: Raydio ready bot_id=1544468432907669644
+Started raydio-callback-diagnostic.service - Raydio callback timing diagnostic Testbot.
+Stopping raydio-callback-diagnostic.service - Raydio callback timing diagnostic Testbot...
+2026-09-07T12:49:08.850040Z  INFO crust_oto_adapter: audio sender stopped frames_sent=46474 silence_frames_sent=8 frames_unavailable=8 skipped_deadlines=19 send_failures=0 source_overruns=0 max_lateness_us=52728 phase=Stopped failure=None
+raydio-callback-diagnostic.service: Deactivated successfully.
+Stopped raydio-callback-diagnostic.service - Raydio callback timing diagnostic Testbot.
+raydio-callback-diagnostic.service: Consumed 51.962s CPU time, 3.6M memory peak, 0B memory swap peak.

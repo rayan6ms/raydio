@@ -1,0 +1,14 @@
+Starting raydio-six-hour.service - Raydio six-hour receiver qualification Testbot...
+2026-09-07T04:27:12.978315Z  INFO raydio::runtime: Raydio ready bot_id=1544468432907669644
+Started raydio-six-hour.service - Raydio six-hour receiver qualification Testbot.
+2026-09-07T04:37:04.540940Z  WARN crust_oto_adapter: audio sender stopped after a terminal failure failure=Some(FrameSourceContract) source_overruns=1 frames_sent=28316 frames_unavailable=0 max_lateness_us=69586 source_overrun_wall_us=7036 source_overrun_cpu_us=7042 send_failures=0 skipped_deadlines=14
+2026-09-07T04:37:04.541084Z  INFO crust_oto_adapter: audio sender stopped frames_sent=28316 silence_frames_sent=0 frames_unavailable=0 skipped_deadlines=14 send_failures=0 source_overruns=1 max_lateness_us=69586 phase=Failed failure=Some(FrameSourceContract)
+raydio-six-hour.service: Service reached runtime time limit. Stopping.
+raydio-six-hour.service: Failed with result 'timeout'.
+raydio-six-hour.service: Consumed 41.012s CPU time, 16.1M memory peak, 0B memory swap peak.
+Started raydio-staging-corrected-resources.service - /usr/bin/python3 /opt/raydio/diagnostics/endurance-host.py --pid 20312 --expected-exe /opt/raydio/candidates/41c1cf7/bin/raydio --seconds 22200.
+usage: endurance-host.py [-h] --pid PID --expected-exe EXPECTED_EXE
+                         [--seconds SECONDS] --output OUTPUT
+endurance-host.py: error: the following arguments are required: --output
+raydio-staging-corrected-resources.service: Main process exited, code=exited, status=2/INVALIDARGUMENT
+raydio-staging-corrected-resources.service: Failed with result 'exit-code'.
