@@ -420,19 +420,43 @@ sender/network symptoms; correlation alone will not establish causality.
 ### Receiver scheduling diagnostic completed
 
 A third 900-second run used the unchanged `bb7467...f57` candidate while the
-browser meter also observed main-thread long tasks and visibility changes.
-Receiver scheduling reported **zero long tasks**, zero visibility transitions,
-and zero PCM reports missing. It received 44,991 packets with zero packet loss;
-there was no clipping, nonfinite/empty PCM, or mid-song quiet event in the final
-summary, but 596.7 ms head silence and 596 ms silent concealment occurred after
-one loop restart. Non-silent concealment total was 939.8 ms. Sender shutdown
-reported 47,404 frames, seven unavailable/silence frames, 13 skipped deadlines,
-66,903 us max lateness, zero source overruns and zero send failures.
+browser meter observed main-thread long tasks and visibility changes. It
+recorded zero long tasks (the API reports tasks >=50 ms), no visibility
+transitions, and no missing PCM reports. This excludes recorded main-thread
+long tasks for this run; it does not exclude receiver audio/network-thread
+scheduling, local OS delays, or other browser/host effects, and cannot establish
+the cause of an event in a different run.
 
-This rules out a browser main-thread stall for the observed receiver events but
-still does not prove whether Discord forwarding, Oracle scheduling, or source
-boundary timing caused them. Warm PSS was 16,456–16,760 KiB (median recorded in
-`receiver-scheduling-resources.json`), with 3,436,544 bytes cgroup file cache,
-about 5.52% CPU and no cgroup pressure/OOM events. The run is diagnostic only,
-not a six-hour qualification. See `receiver-scheduling-diagnostic.json`,
-`receiver-scheduling-sender.txt`, and `receiver-scheduling-resources.json`.
+The receiver counted 44,991 packets and zero **net** loss, but 37 positive loss
+increments were subsequently recovered. During the interruption after the
+fourth repeat it counted only 14 packets and +36 lost in one window, then 86
+packets and -36 lost in the next. Recovery of the counters does not undo audio
+already concealed while those packets were unavailable.
+
+At measured 843.724 s the PCM report retained **596.667 ms unexpected quiet**
+after playback resumed at the track head, separate from source-tail silence.
+The speaking indicator went off for **617.8 ms**. Total concealment was
+939.792 ms, comprising 596.479 ms silent and 343.313 ms non-silent concealment.
+There was no clipping, nonfinite/empty PCM, or >=20 ms middle-phase quiet in
+this run. The source of the delayed packet batch remains unlocalized.
+
+Sender shutdown reported 47,404 frames, seven unavailable/silence frames,
+13 skipped deadlines, 66,903 us maximum lateness, zero source overruns and zero
+send failures. These lifetime maxima do not locate an individual receiver
+event. Warm PSS was 16,456–16,760 KiB (16.07–16.37 MiB), with 3,436,544 bytes
+cgroup file cache, about 5.52% CPU and no cgroup pressure/OOM events.
+See `receiver-scheduling-diagnostic.json`, `receiver-scheduling-sender.txt`, and
+`receiver-scheduling-resources.json`. This is a failed quality observation,
+not six-hour qualification or proof of a specific responsible component.
+
+### Speaking-indicator confirmation for the shorter gap
+
+In the earlier exact-candidate run, the **25.396 ms mid-song quiet** event
+coincided with speaking false at 689,727.4 ms and speaking true at 689,791.3 ms:
+a **63.9 ms indicator interruption**. The nearby receiver window recorded
+215.688 ms total concealment, including 25.375 ms silent concealment. These
+are different measurements; neither the indicator duration nor total
+concealment should be substituted for the measured quiet duration. Audible
+severity was not assessed by a human during this run. The received gap and
+indicator interruption are sufficient to fail the requested uninterrupted
+playback criterion.
