@@ -13,6 +13,7 @@ Group=raydio
 WorkingDirectory=/var/lib/raydio
 EnvironmentFile=/etc/raydio/env
 Environment=MALLOC_ARENA_MAX=2
+Environment=TMPDIR=/var/lib/raydio
 ExecStart=/opt/raydio/current/bin/raydio
 Restart=on-failure
 RestartSec=10

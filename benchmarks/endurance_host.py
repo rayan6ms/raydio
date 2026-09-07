@@ -23,6 +23,10 @@ expected = args.expected_exe.resolve(strict=True)
 if (root / 'exe').resolve(strict=True) != expected:
     raise SystemExit('Unexpected executable')
 identity = (root / 'stat').read_text().split(') ', 1)[1].split()[19]
+cgroup = None
+for line in (root / 'cgroup').read_text().splitlines():
+    if line.startswith('0::'):
+        cgroup = Path('/sys/fs/cgroup') / line[3:].lstrip('/')
 os.nice(19)
 started = time.monotonic()
 with args.output.open('x') as output:
@@ -39,6 +43,14 @@ with args.output.open('x') as output:
             for line in (root / 'smaps_rollup').read_text().splitlines():
                 if line.startswith('Rss:'): row['rssKiB'] = int(line.split()[1])
                 elif line.startswith('Pss:'): row['pssKiB'] = int(line.split()[1])
+            if cgroup is not None:
+                row['cgroupBytes'] = int((cgroup / 'memory.current').read_text())
+                memory = dict(line.split() for line in (cgroup / 'memory.stat').read_text().splitlines())
+                row['cgroupMemory'] = {key: int(memory[key]) for key in ('anon', 'file', 'file_dirty', 'file_writeback')}
+                row['cgroupMemoryEvents'] = {key: int(value) for key, value in
+                                           (line.split() for line in (cgroup / 'memory.events').read_text().splitlines())}
+                row['cgroupCpu'] = {key: int(value) for key, value in
+                                   (line.split() for line in (cgroup / 'cpu.stat').read_text().splitlines())}
         except (OSError, RuntimeError) as error:
             row['error'] = type(error).__name__
         output.write(json.dumps(row, separators=(',', ':')) + '\n')

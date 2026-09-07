@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
 use crust::routeplanner::RoutePlanner;
-use crust_mantle_adapter::RealMantleAdapter;
+use crust_mantle_adapter::{MantleAdapterOptions, RealMantleAdapter};
 use crust_oto_adapter::OtoVoiceBackend;
 use crust_server::{CrustServer, config::ServerConfig};
 use std::{
@@ -21,7 +21,16 @@ pub struct Backend {
 
 impl Backend {
     pub async fn start() -> Result<Self> {
-        let media = Arc::new(RealMantleAdapter::with_defaults(RoutePlanner::disabled())?);
+        // Copy small finite compressed tracks to an anonymous file before
+        // playback, so source HTTP stalls cannot interrupt their audio frames.
+        // One completed input per player is reused on a natural repeat.
+        let media = Arc::new(RealMantleAdapter::with_options(
+            RoutePlanner::disabled(),
+            MantleAdapterOptions {
+                staging_max_bytes: 16 * 1024 * 1024,
+                ..MantleAdapterOptions::default()
+            },
+        )?);
         let voice = Arc::new(OtoVoiceBackend::with_defaults(100, 4)?);
         Self::start_with(media, voice).await
     }

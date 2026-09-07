@@ -6,6 +6,7 @@ Wants=network-online.target
 [Service]
 Type=simple
 WorkingDirectory=%h/.local/share/raydio
+Environment=TMPDIR=%h/.local/share/raydio
 ExecStart=%h/.local/bin/raydio --env-file %h/.config/raydio/env
 Restart=on-failure
 RestartSec=5

@@ -1,0 +1,148 @@
+{
+  "scope": "bounded prototype on existing Oracle VM, sequential same-demuxer runs, no Discord",
+  "binarySha256": "6bf05867ad502adee6493305033616d3c3f6ceade6a46563ef8dc8f9d818c968",
+  "runs": [
+    {
+      "copiedBytes": 0,
+      "elapsedSeconds": 213.686105369,
+      "fetchStalls": [],
+      "frames": 10653,
+      "maxReadMs": 244.864474,
+      "scope": "same Mantle compressed input and demuxer; no decode, filtering or Discord",
+      "sourceBytes": 3433755,
+      "staged": false,
+      "stalls": [
+        {
+          "frame": 801,
+          "readMs": 244.864474
+        },
+        {
+          "frame": 3205,
+          "readMs": 149.214073
+        },
+        {
+          "frame": 4796,
+          "readMs": 20.864147
+        },
+        {
+          "frame": 6454,
+          "readMs": 85.215883
+        },
+        {
+          "frame": 7240,
+          "readMs": 193.673881
+        },
+        {
+          "frame": 8017,
+          "readMs": 51.125162
+        }
+      ],
+      "startupMs": 602.620506
+    },
+    {
+      "copiedBytes": 3433755,
+      "elapsedSeconds": 213.103518457,
+      "fetchStalls": [
+        {
+          "offset": 2359296,
+          "readMs": 79.494381
+        },
+        {
+          "offset": 2375680,
+          "readMs": 83.57893800000001
+        },
+        {
+          "offset": 2408448,
+          "readMs": 100.469927
+        },
+        {
+          "offset": 2441216,
+          "readMs": 59.796421
+        },
+        {
+          "offset": 2473984,
+          "readMs": 47.121275999999995
+        },
+        {
+          "offset": 2490368,
+          "readMs": 68.022422
+        },
+        {
+          "offset": 2523136,
+          "readMs": 56.691401
+        },
+        {
+          "offset": 2555904,
+          "readMs": 72.53061500000001
+        },
+        {
+          "offset": 2572288,
+          "readMs": 57.272574999999996
+        },
+        {
+          "offset": 2621440,
+          "readMs": 149.431382
+        },
+        {
+          "offset": 2637824,
+          "readMs": 141.80129
+        },
+        {
+          "offset": 2670592,
+          "readMs": 118.068431
+        },
+        {
+          "offset": 2719744,
+          "readMs": 38.958635
+        },
+        {
+          "offset": 2736128,
+          "readMs": 75.57396399999999
+        },
+        {
+          "offset": 2768896,
+          "readMs": 31.050703
+        },
+        {
+          "offset": 2785280,
+          "readMs": 59.809978
+        },
+        {
+          "offset": 3145728,
+          "readMs": 175.110288
+        },
+        {
+          "offset": 3162112,
+          "readMs": 165.482519
+        },
+        {
+          "offset": 3194880,
+          "readMs": 121.575748
+        },
+        {
+          "offset": 3244032,
+          "readMs": 33.428042
+        },
+        {
+          "offset": 3260416,
+          "readMs": 70.78891499999999
+        },
+        {
+          "offset": 3293184,
+          "readMs": 31.600047999999997
+        },
+        {
+          "offset": 3342336,
+          "readMs": 63.112781000000005
+        }
+      ],
+      "frames": 10653,
+      "maxReadMs": 0.956763,
+      "scope": "same Mantle compressed input and demuxer; no decode, filtering or Discord",
+      "sourceBytes": 3433755,
+      "staged": true,
+      "stalls": [],
+      "startupMs": 2285.6922680000002
+    }
+  ]
+}

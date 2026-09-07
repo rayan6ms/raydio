@@ -144,3 +144,22 @@ then test controls separately. CPU steal is time the guest could not run on the
 host; a low average bot CPU percentage does not rule out short scheduling gaps.
 See [`ORACLE-RELIABILITY.md`](../evidence/ORACLE-RELIABILITY.md) for receiver evidence
 and [`FREE-HOSTING.md`](FREE-HOSTING.md) for the six-hour/day, one-channel budget.
+
+## Compressed source storage
+
+The staging candidate uses a 16 MiB per-track ceiling and retains at most one
+completed compressed object per player for repeat. Bigger sources and live
+streams retain normal streaming behavior. Initial playback waits for staging;
+repeating an eligible track reuses the file without another download. This is
+a reliability candidate pending end-to-end qualification, not a six-hour pass.
+
+Both service units set TMPDIR to their writable state directory, keeping staged
+bytes on the instance disk instead of a possible RAM-backed /tmp. Files are
+private and unlinked before media bytes are written; handles release storage
+on replacement, stop, player cleanup, shutdown or process exit. File cache is
+reclaimable memory and must be measured alongside process PSS and cgroup usage.
+There is one 64 KiB copy buffer per concurrent stage. With one channel the
+retained object is at most 16 MiB; a replacement can temporarily hold two
+objects (32 MiB). The embedded backend's existing 100-player ceiling bounds
+worst-case simultaneous replacement storage to 3.125 GiB. This is not the
+recommended operating load for the one-GiB free VM.

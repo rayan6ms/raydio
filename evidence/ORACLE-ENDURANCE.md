@@ -234,9 +234,30 @@ and is confined to the bounded source-only executable. These repeats are
 variation, not an implemented repair. `source-oracle-paced-audit.json` and
 `source-oracle-independent-decoder.json` retain both findings.
 
-A separate compressed HTTP input experiment (`examples/http_staging.rs`) is
-now comparing streamed versus pre-staged input through the same Mantle demuxer
-on Oracle. It uses an 8 MiB source ceiling, 64 KiB copy buffer, a private file
-unlinked immediately on Linux, bounded duration, and no first-party network
-implementation. This is a diagnostic prototype, not a new bot feature or a
-reliability pass. Its startup, storage and playback numbers are pending.
+A separate compressed HTTP input experiment (`examples/http_staging.rs`) on
+Oracle reduced max read time from **244.864 ms to 0.957 ms**, and reads above
+20 ms from **6 to 0**. Startup increased from **602.621 ms to 2285.692 ms** for
+3,433,755 compressed bytes (3.27 MiB). Both runs produced all 10,653 frames.
+See `http-staging-comparison.json`. This is a source-only prototype result,
+not evidence of repaired Discord delivery or a reduction in total memory.
+
+## Bounded staging integration (qualification pending)
+
+Mantle now supports opt-in anonymous-file staging through the existing HTTP
+validation, routing, cancellation and timeout policies. Raydio enables a
+16 MiB per-object ceiling. Larger objects and live media continue streaming.
+A 64 KiB temporary copy buffer is released before playback. File cache consumes
+reclaimable host memory, so PSS alone cannot represent the storage cost.
+
+Crust retains one completed compressed input per player and opens fresh media
+state on same-track replay. Post-EOF seeking was unsuitable: WebM demuxer seek
+can fail after EOF, and the PCM transcoder releases its consumed session.
+Reopening the retained file avoids both conditions and releases processing
+buffers while idle. Exact Opus/AAC replay tests stop both source servers before
+replay and cancel the original request; new playback must still succeed with
+fresh cancellation. Stop, replacement, shutdown and player cleanup release the
+cache. No new per-frame lock, dependency or change to Oto's CPU gate is added.
+
+The integrated source diagnostic supports `--staged --repeat`, verifies ordered
+sequences, records startup and frame-read times, and cancels the first play
+request before replay. Live receiver and six-hour qualification remain pending.
