@@ -1,0 +1,138 @@
+{
+  "scope": "Oracle integrated source plus volume 70 processing; no Discord transport",
+  "revision": "134e496d950aca1e2a5794b538df5825e6db9686",
+  "binarySha256": "2e3b7d284b4002f0e2e8b8f4fbe912ad03a3ac14943c5d54923ca328a867d79b",
+  "before": {
+    "paced": true,
+    "runs": [
+      {
+        "bytes": 2633918,
+        "elapsedSeconds": 213.060941184,
+        "frames": 10653,
+        "iteration": 0,
+        "maxReadMs": 13.557578000000001,
+        "stalls": [],
+        "startupMs": 400.380426
+      }
+    ],
+    "scope": "integrated source and volume processing, no Discord transport",
+    "staged": false,
+    "volume": 70
+  },
+  "after": {
+    "paced": true,
+    "runs": [
+      {
+        "bytes": 2633918,
+        "elapsedSeconds": 213.072790666,
+        "frames": 10653,
+        "iteration": 0,
+        "maxReadMs": 29.19247,
+        "stalls": [
+          {
+            "elapsedSeconds": 0.050905694,
+            "frame": 1,
+            "readMs": 29.19247
+          }
+        ],
+        "startupMs": 386.782564
+      },
+      {
+        "bytes": 2633918,
+        "elapsedSeconds": 213.061743954,
+        "frames": 10653,
+        "iteration": 1,
+        "maxReadMs": 12.635971,
+        "stalls": [],
+        "startupMs": 0.366782
+      }
+    ],
+    "scope": "integrated source and volume processing, no Discord transport",
+    "staged": true,
+    "volume": 70
+  },
+  "decoded": [
+    {
+      "decoder": "libopus 1.6",
+      "quietIntervals": [
+        {
+          "startSeconds": 212.121542,
+          "durationMs": 938.458333,
+          "atEnd": true
+        }
+      ],
+      "frames": 10653,
+      "seconds": 213.06,
+      "wrongFrameDuration": 0,
+      "tinyPackets": 47,
+      "longestQuietMs": 938.458333,
+      "nearFullScale": 0,
+      "nonFinite": 0,
+      "peak": 0.584290266,
+      "rms": 0.09019673,
+      "failed": false,
+      "run": "before",
+      "iteration": 0,
+      "inputSha256": "29f1ac2bad421ed974c8276c15943cc6a47cbde931276c8d35f51c874532431b"
+    },
+    {
+      "decoder": "libopus 1.6",
+      "quietIntervals": [
+        {
+          "startSeconds": 212.121542,
+          "durationMs": 938.458333,
+          "atEnd": true
+        }
+      ],
+      "frames": 10653,
+      "seconds": 213.06,
+      "wrongFrameDuration": 0,
+      "tinyPackets": 47,
+      "longestQuietMs": 938.458333,
+      "nearFullScale": 0,
+      "nonFinite": 0,
+      "peak": 0.584290266,
+      "rms": 0.09019673,
+      "failed": false,
+      "run": "after",
+      "iteration": 0,
+      "inputSha256": "29f1ac2bad421ed974c8276c15943cc6a47cbde931276c8d35f51c874532431b"
+    },
+    {
+      "decoder": "libopus 1.6",
+      "quietIntervals": [
+        {
+          "startSeconds": 212.121542,
+          "durationMs": 938.458333,
+          "atEnd": true
+        }
+      ],
+      "frames": 10653,
+      "seconds": 213.06,
+      "wrongFrameDuration": 0,
+      "tinyPackets": 47,
+      "longestQuietMs": 938.458333,
+      "nearFullScale": 0,
+      "nonFinite": 0,
+      "peak": 0.584290266,
+      "rms": 0.09019673,
+      "failed": false,
+      "run": "after",
+      "iteration": 1,
+      "inputSha256": "29f1ac2bad421ed974c8276c15943cc6a47cbde931276c8d35f51c874532431b"
+    }
+  ],
+  "beforeResources": {
+    "maxRssKiB": 8532,
+    "userSeconds": 6.53,
+    "systemSeconds": 1.5,
+    "wallSeconds": 213.67
+  },
+  "afterResources": {
+    "maxRssKiB": 8028,
+    "userSeconds": 13.05,
+    "systemSeconds": 3.13,
+    "wallSeconds": 426.69
+  },
+  "repeatPacketsIdentical": true
+}

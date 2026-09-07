@@ -261,3 +261,28 @@ cache. No new per-frame lock, dependency or change to Oto's CPU gate is added.
 The integrated source diagnostic supports `--staged --repeat`, verifies ordered
 sequences, records startup and frame-read times, and cancels the first play
 request before replay. Live receiver and six-hour qualification remain pending.
+
+### Integrated Oracle source result (134e496)
+
+The sequential same-executable source comparison did not reproduce the previous
+network stalls. Streaming: startup 400.380 ms, max frame wait 13.558 ms, no waits
+above 20 ms. Staged first play: startup 386.783 ms, max 29.192 ms at frame 1,
+no later waits above 20 ms. Staged repeat: startup 0.367 ms, max frame wait
+12.636 ms, no waits above 20 ms. Every play delivered 10,653 frames in 213.06 s.
+The new run therefore validates replay and source isolation but does not prove
+an improved worst-case frame wait relative to its own streaming baseline.
+
+All three encoded outputs are byte-identical, SHA256
+`29f1ac2bad421ed974c8276c15943cc6a47cbde931276c8d35f51c874532431b`.
+Independent system libopus 1.6 decoding reports no malformed frame durations,
+clipping, nonfinite PCM, or mid-song silence. The only quiet interval is the
+same 938.458 ms source tail. Source-only max RSS was 8,532 KiB streaming versus
+8,028 KiB for two staged plays; these are not whole-bot PSS or total file-cache
+costs and are not used to claim a bot-memory improvement. Evidence:
+`integrated-source-staging.json`.
+
+Native CI 34079713433 passed tests, Clippy, deployment lifecycle checks and
+package smoke checks on x86-64 and ARM64. The x86-64 candidate archive is
+7,432,890 bytes. Candidate receiver binary SHA256:
+`47e954f1c1daa13ae9963bfc1d02ca344c799b74d015b2720e517deade983490`.
+The archive is installed for temporary Testbot only; production remains v0.2.1.
