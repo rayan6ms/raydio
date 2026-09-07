@@ -1,0 +1,32 @@
+{
+  "seconds": 900.007084,
+  "processCpuSeconds": 41.993463,
+  "copies": 5677056,
+  "maxWallNs": 19052530,
+  "minorFaults": 0,
+  "majorFaults": 0,
+  "events": [
+    {
+      "monoNs": 141682634945890,
+      "wallNs": 19052530,
+      "cpuNs": 19053866,
+      "cycles": 54247,
+      "instructions": 12224,
+      "cyclesEnabledNs": 19065678,
+      "cyclesRunningNs": 19065678,
+      "instructionsEnabledNs": 19058474,
+      "instructionsRunningNs": 19058474
+    },
+    {
+      "monoNs": 142010135137009,
+      "wallNs": 18725755,
+      "cpuNs": 18728515,
+      "cycles": 71600,
+      "instructions": 12790,
+      "cyclesEnabledNs": 18745227,
+      "cyclesRunningNs": 18745227,
+      "instructionsEnabledNs": 18735919,
+      "instructionsRunningNs": 18735919
+    }
+  ]
+}

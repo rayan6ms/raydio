@@ -646,3 +646,24 @@ and configuration alone do not quantify its contribution to this failure.
 A standalone bounded-copy PMU probe follows, recording thread CPU/wall clocks,
 hardware instructions/cycles, multiplexing times and page faults. The source
 guard is not weakened and no kernel change has yet been applied.
+
+### Owned channel integration (September 7)
+
+Oto `8fd22802cba9623164292fe2ecbdefba0f414487` adds a concrete
+capacity-one encoded-frame channel. Only this owned consumer uses the internal
+channel branch; arbitrary `FrameSource` callbacks retain their existing 2 ms
+CPU watchdog. Publication, cancellation, frame ordering, EOF, close, waker
+replacement and maximum-frame DAVE/silence semantics have regression coverage.
+Crust `54ee205f0723151a46c7582fd54409fbfb9afa97` uses this channel and
+removes its duplicate ring/readiness/consumption implementation.
+
+Oto: 89 ordinary tests pass, Clippy passes. Crust: 14 ordinary adapter tests and
+Clippy pass against the published Oto revision. Two sequential local 10-second
+release DAVE benchmarks used identical maximum-size bytes: callback and owned
+channel each sent/received 501 packets with zero allocations/reallocations.
+Maximum sender lateness was 1.148177 ms and 2.001251 ms respectively. These short
+runs establish the allocation target, not a statistically demonstrated speedup,
+memory reduction, receiver quality improvement or Oracle endurance pass.
+The original 900-second PMU evidence is retained in `source-cpu-probe-final.json`.
+
+Fresh Oracle idle and receiver validation is pending; production remains v0.2.1.

@@ -23,13 +23,13 @@ twilight-gateway = { version = "0.17.1", default-features = false, features = ["
 twilight-http = { version = "0.17.1", default-features = false, features = ["rustls-native-roots"] }
 twilight-model = "0.17.1"
 url = "2.5.8"
-crust = { git = "https://github.com/rayan6ms/crust", rev = "b5fdc90" }
-crust-server = { git = "https://github.com/rayan6ms/crust", rev = "b5fdc90" }
-crust-mantle-adapter = { git = "https://github.com/rayan6ms/crust", rev = "b5fdc90" }
-crust-oto-adapter = { git = "https://github.com/rayan6ms/crust", rev = "b5fdc90" }
+crust = { git = "https://github.com/rayan6ms/crust", rev = "54ee205f0723151a46c7582fd54409fbfb9afa97" }
+crust-server = { git = "https://github.com/rayan6ms/crust", rev = "54ee205f0723151a46c7582fd54409fbfb9afa97" }
+crust-mantle-adapter = { git = "https://github.com/rayan6ms/crust", rev = "54ee205f0723151a46c7582fd54409fbfb9afa97" }
+crust-oto-adapter = { git = "https://github.com/rayan6ms/crust", rev = "54ee205f0723151a46c7582fd54409fbfb9afa97" }
 
 [patch.crates-io]
-openmls_rust_crypto = { git = "https://github.com/rayan6ms/oto", rev = "3d651c6ecc53a1ac4620eea231b8f9d777038dae" }
+openmls_rust_crypto = { git = "https://github.com/rayan6ms/oto", rev = "8fd22802cba9623164292fe2ecbdefba0f414487" }
 
 
 [profile.dev]
@@ -45,8 +45,8 @@ opt-level = "s"
 # dominate resident executable pages on small Oracle instances.
 
 [dev-dependencies]
-crust-testkit = { git = "https://github.com/rayan6ms/crust", rev = "b5fdc90" }
+crust-testkit = { git = "https://github.com/rayan6ms/crust", rev = "54ee205f0723151a46c7582fd54409fbfb9afa97" }
 axum = { version = "0.8.4", features = ["ws"] }
-oto = { git = "https://github.com/rayan6ms/oto", rev = "3d651c6ecc53a1ac4620eea231b8f9d777038dae" }
+oto = { git = "https://github.com/rayan6ms/oto", rev = "8fd22802cba9623164292fe2ecbdefba0f414487" }
 mantle-core = { git = "https://github.com/rayan6ms/mantle", rev = "6366cc60a46df7712f1e41219050dedc4cd190cc" }
 mantle-media = { git = "https://github.com/rayan6ms/mantle", rev = "6366cc60a46df7712f1e41219050dedc4cd190cc" }
