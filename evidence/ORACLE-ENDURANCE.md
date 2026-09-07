@@ -335,3 +335,15 @@ zero-allocation (501 frames/packets); max lateness was 1.538 ms before and
 pass. This provides a bounded callback hypothesis and regression evidence, but
 not a live Oracle causality proof. `oto-deferred-source-wake.json` records the
 comparison. A fresh full receiver run is still required.
+
+### Corrected deferred-wake candidate started
+
+After publishing Oto 3d651c6 and updating Raydio's Crust pin to 32dd0fd's
+follow-up b5fdc90 integration, the corrected native executable (SHA256
+`bb7467d99a570e104e9d9e06934a4ab53cfb0c085a4f6ecf04498e7aef5d0f57`) started on
+Oracle at 04:27 UTC. The controlled Discord receiver is connected in General,
+muted, with loop enabled and volume 70%. Initial six-second receiver counters:
+300 packets, 0 loss, 0 concealment, 0 silent concealment, 0 clipping/nonfinite/
+empty frames, and 0 PCM quiet events. This is only startup evidence; the
+six-hour qualification is active and must complete without receiver replacement,
+terminal sender failure, loss, concealment, clipping or silence anomalies.
