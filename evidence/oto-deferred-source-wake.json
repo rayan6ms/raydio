@@ -1,0 +1,48 @@
+{
+  "scope": "local Oto notifier isolation and complete DAVE path; Oracle cause not yet proved",
+  "baselineRevision": "3b770a93453b767e0c399a8e5dc23349205de280",
+  "syntheticNotifier": {
+    "beforeSourceWakeCpuUs": 5011,
+    "afterSourceWakeCpuUs": 10,
+    "slowTestSchedulerMs": 5,
+    "note": "Deliberately slow test scheduler, not a production latency measurement. Work is delivered after source polling; the 2 ms caller CPU gate remains intact."
+  },
+  "before": {
+    "allocation": {
+      "allocations": 0,
+      "allocationsPerFrame": 0.0,
+      "bytesAllocated": 0,
+      "bytesAllocatedPerFrame": 0.0,
+      "reallocations": 0,
+      "reallocationsPerFrame": 0.0
+    },
+    "benchmarkId": "oto-p08-complete-paced-dave",
+    "boundaryDifference": 0,
+    "frames": 501,
+    "maxSenderLatenessNanos": 1537868,
+    "measurementMs": 10000,
+    "profile": "release",
+    "schemaVersion": 1,
+    "udpPackets": 501,
+    "warmupMs": 1000
+  },
+  "after": {
+    "allocation": {
+      "allocations": 0,
+      "allocationsPerFrame": 0.0,
+      "bytesAllocated": 0,
+      "bytesAllocatedPerFrame": 0.0,
+      "reallocations": 0,
+      "reallocationsPerFrame": 0.0
+    },
+    "benchmarkId": "oto-p08-complete-paced-dave",
+    "boundaryDifference": 0,
+    "frames": 501,
+    "maxSenderLatenessNanos": 1326233,
+    "measurementMs": 10000,
+    "profile": "release",
+    "schemaVersion": 1,
+    "udpPackets": 501,
+    "warmupMs": 1000
+  }
+}

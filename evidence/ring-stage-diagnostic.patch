@@ -1,0 +1,78 @@
+diff --git a/crates/crust-oto-adapter/src/lib.rs b/crates/crust-oto-adapter/src/lib.rs
+index 9f6dc16..6ab4912 100644
+--- a/crates/crust-oto-adapter/src/lib.rs
++++ b/crates/crust-oto-adapter/src/lib.rs
+@@ -478,6 +478,7 @@ impl OtoVoiceConnection {
+                         .map(|duration| duration.as_micros() as u64),
+                     send_failures = state.stats().send_failures(),
+                     skipped_deadlines = state.stats().skipped_deadlines(),
++                    poll_stage_ns = ?POLL_STAGES.iter().map(|value| value.load(Ordering::Relaxed)).collect::<Vec<_>>(),
+                     "audio sender stopped after a terminal failure"
+                 );
+                 return Ok(Some(VoiceEvent::Closed(VoiceClose {
+@@ -709,9 +710,20 @@ struct OtoFrameSource {
+     shared: Arc<BridgeShared>,
+ }
+ 
++// Temporary single-Testbot diagnostic, never receiver qualification.
++// Retain last callback stages; no per-frame logs or unbounded buffers.
++static POLL_STAGES: [AtomicU64; 6] = [const { AtomicU64::new(0) }; 6];
++
+ impl OtoFrameSource {
+     fn try_frame(&mut self, output: &mut [u8]) -> Option<FrameStatus> {
+-        match self.frames.pop() {
++        let begin = std::time::Instant::now();
++        let result = self.frames.pop();
++        let popped = std::time::Instant::now();
++        POLL_STAGES[0].fetch_add(
++            popped.duration_since(begin).as_nanos() as u64,
++            Ordering::Relaxed,
++        );
++        match result {
+             Ok(frame) => {
+                 let payload = frame.payload();
+                 if payload.len() > output.len() {
+@@ -723,7 +735,17 @@ impl OtoFrameSource {
+                     return Some(FrameStatus::Ended);
+                 }
+                 output[..payload.len()].copy_from_slice(payload);
++                let copied = std::time::Instant::now();
+                 self.shared.frame_consumed();
++                let consumed = std::time::Instant::now();
++                POLL_STAGES[1].fetch_add(
++                    copied.duration_since(popped).as_nanos() as u64,
++                    Ordering::Relaxed,
++                );
++                POLL_STAGES[2].fetch_add(
++                    consumed.duration_since(copied).as_nanos() as u64,
++                    Ordering::Relaxed,
++                );
+                 Some(FrameStatus::Frame { len: payload.len() })
+             }
+             Err(rtrb::PopError::Empty) => None,
+@@ -733,10 +755,17 @@ impl OtoFrameSource {
+ 
+ impl FrameSource for OtoFrameSource {
+     fn poll_frame(&mut self, cx: &mut Context<'_>, output: &mut [u8]) -> Poll<FrameStatus> {
++        for stage in &POLL_STAGES {
++            stage.store(0, Ordering::Relaxed);
++        }
++        let begin = std::time::Instant::now();
+         if let Some(frame) = self.try_frame(output) {
+             return Poll::Ready(frame);
+         }
++        let registering = std::time::Instant::now();
+         self.shared.consumer_waker.register(cx.waker());
++        POLL_STAGES[3].store(registering.elapsed().as_nanos() as u64, Ordering::Relaxed);
++        POLL_STAGES[4].store(begin.elapsed().as_nanos() as u64, Ordering::Relaxed);
+         if let Some(frame) = self.try_frame(output) {
+             return Poll::Ready(frame);
+         }
+@@ -745,6 +774,7 @@ impl FrameSource for OtoFrameSource {
+             // cancellation racing publication cannot discard its queued frame.
+             return Poll::Ready(self.try_frame(output).unwrap_or(FrameStatus::Ended));
+         }
++        POLL_STAGES[5].store(1, Ordering::Relaxed);
+         Poll::Pending
+     }
+ }

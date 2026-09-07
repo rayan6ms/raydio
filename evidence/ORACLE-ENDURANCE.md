@@ -311,3 +311,27 @@ less, a small observational difference). Warm playback PSS was 16,067–16,075 K
 plus 3,436,544 bytes of reclaimable cgroup file cache; steady CPU approximately
 5.5% of one core. No cgroup memory-pressure/OOM events occurred. After the
 failure, file cache fell to zero as the player's anonymous input was released.
+
+### Callback isolation follow-up (not yet qualified)
+
+Oto's source wake path was profiled locally. Before the change, a deliberately
+slow 5 ms scheduler invoked synchronously by a source waker consumed 5,011 us
+of source-wake CPU; after deferral, the same wake consumed 10 us and delivery
+occurred after polling. The complete 10-second encrypted DAVE path remained
+zero-allocation (501 frames/packets); max lateness was 1.538 ms before and
+1.326 ms after. All 81 Oto tests, including a 1,000-iteration poll-exit race,
+pass. This provides a bounded callback hypothesis and regression evidence, but
+not a live Oracle causality proof. `oto-deferred-source-wake.json` records the
+comparison. A fresh full receiver run is still required.
+
+### Callback isolation follow-up (not yet qualified)
+
+Oto's source wake path was profiled locally. Before the change, a deliberately
+slow 5 ms scheduler invoked synchronously by a source waker consumed 5,011 us
+of source-wake CPU; after deferral, the same wake consumed 10 us and delivery
+occurred after polling. The complete 10-second encrypted DAVE path remained
+zero-allocation (501 frames/packets); max lateness was 1.538 ms before and
+1.326 ms after. All 81 Oto tests, including a 1,000-iteration poll-exit race,
+pass. This provides a bounded callback hypothesis and regression evidence, but
+not a live Oracle causality proof. `oto-deferred-source-wake.json` records the
+comparison. A fresh full receiver run is still required.
