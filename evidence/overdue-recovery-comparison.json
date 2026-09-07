@@ -1,0 +1,43 @@
+{
+  "scope": "Sequential diagnostic observations with unequal VM scheduling conditions, not overall improvement or qualification",
+  "selection": "Probe wake lateness >=20 ms, within each receiver interval, prior send >10 ms before probe wake. Events from both CPUs are retained and may describe the same stall. No causal/statistical speedup claimed.",
+  "runs": {
+    "scheduler": {
+      "receiverSeconds": 1099.999387939453,
+      "receiverStatus": "completed",
+      "concealmentMs": 676.1041666666666,
+      "silentConcealmentMs": 0.0,
+      "delayedProbeEvents": 14,
+      "selectedProbeEvents": 12,
+      "medianNextSendAfterProbeMs": 13.8023681640625,
+      "warmPssKiB": {
+        "min": 16480,
+        "max": 16624
+      },
+      "maxSendGapMs": 60.337646484375,
+      "gapsAbove40Ms": 7
+    },
+    "recovery": {
+      "receiverSeconds": 1046.0905881347655,
+      "receiverStatus": "failed",
+      "concealmentMs": 1562.3958333333333,
+      "silentConcealmentMs": 0.0,
+      "delayedProbeEvents": 98,
+      "selectedProbeEvents": 82,
+      "medianNextSendAfterProbeMs": 0.18505859375,
+      "warmPssKiB": {
+        "min": 16648,
+        "max": 16740
+      },
+      "maxSendGapMs": 70.099609375,
+      "gapsAbove40Ms": 26
+    }
+  },
+  "terminalFailure": {
+    "kind": "FrameSourceContract",
+    "wallUs": 3114,
+    "cpuUs": 3120,
+    "utc": "2026-09-07T18:49:47.726390Z"
+  },
+  "receiverMeasurementLimit": "Recovery report stops before the final disconnection; final ongoing quiet was not measured to completion. Stale UI position 205 mislabels normal source-ending quiet around measured 406 s."
+}

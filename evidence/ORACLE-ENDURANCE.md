@@ -545,3 +545,104 @@ See `scheduler-delivery-{receiver,correlation,clock,resources,summary}.json`,
 with `--scheduler`. A read-only A1 capacity check at 18:13:41 UTC still returned
 `OUT_OF_HOST_CAPACITY` for 1 OCPU / 1 GiB in São Paulo. No paid resources or
 additional instance were created.
+
+### Overdue-opportunity recovery tested; source failure remains terminal
+
+Oto `496d26e` removes the extra wait when a pacing opportunity arrives at least
+20 ms late. It sends one frame, then uses the existing completion-time deadline
+reset and stale-tick drain to prevent catch-up bursts. The 2 ms source CPU
+guard is unchanged. A paused-clock regression failed before and passed after
+for 37/137 ms late opportunities, including the next-frame spacing check.
+82 ordinary Oto tests, Clippy and formatting passed. Paired 10-second release
+DAVE benchmarks retained zero allocations/reallocations and ~50 frames/s;
+1.81 vs 1.36 ms maximum local lateness is not a proved speedup.
+
+Integrated candidate SHA256 `eaf04c8dc2c5c5017026989cb9685d8e7d8bd39ca93d9d905988c8d6bdafe01c`
+passed backend checks locally and on Oracle. Dependency versions were unchanged.
+Its live diagnostic requested 1,100 seconds with the same track/volume/loop,
+header trace and independent vCPU timers. At **18:49:47.726390 UTC** audio failed
+with `FrameSourceContract`: **3,114 us wall / 3,120 us CPU**, one overrun, 53,286
+audio frames, nine unavailable/silence frames, 31 skipped deadlines, zero send
+failures, maximum lateness 51,279 us. The last advancing receiver sample was
+**1,046.091 seconds**. Its meter then failed because the bot row/receiver was
+removed; the browser peer itself stayed connected. This is a failed attempt,
+not a complete comparison or six-hour pass. The terminal gap extends beyond
+the saved advancing counters and must not be hidden by their zero silent count.
+
+Before failure the receiver counted 52,244 packets, zero net loss (one positive
+and recovered), 14 discarded packets, 47 NACKs and 1,562.396 ms non-silent
+concealment. It recorded no clipping/nonfinite/empty PCM or missing meter
+reports. Recorded browser main-thread long tasks are retained in the raw report.
+The natural source-ending quiet around measured 406 s was mislabeled middle
+because the visible player position stalled at 205 seconds. The 21.958/976.25 ms
+quiet pattern immediately before restart matches other source tails; the
+raw label is preserved rather than silently used as a stutter decision.
+
+The patched run had **98** independent >=20 ms delayed-probe events versus
+**14** in the preceding run (both CPU observations retained), so aggregate
+quality numbers are not a matched-host comparison. For events whose prior send
+was >10 ms before the probe wake, median time to the next send was **13.802 ms
+before / 0.185 ms after** (12/82 events, potentially duplicated across CPUs).
+This supports prompt recovery but is not a statistically controlled speedup.
+Outgoing maximum gap was 60.338/70.100 ms and >40 ms gaps numbered 7/26; total
+concealment increased under worse observed host conditions. No overall quality
+or memory improvement is claimed. Warm PSS over resource seconds 300–1,000 was
+16,480–16,624 KiB before / 16,648–16,740 KiB after.
+
+See `oto-overdue-recovery.json`, `overdue-recovery-comparison.json`,
+`recovery-delivery-{receiver,correlation,clock,resources}.json`,
+`recovery-delivery-sender.txt`, `recovery-probe.csv`, and
+`recovery-delivery-headers.csv.gz`. The source callback failure blocks
+qualification; internal callback-stage instrumentation follows. The candidate
+has not been promoted and production Raydio remains v0.2.1.
+
+### PMU probe proves the Oracle source guard can false-positive
+
+The standalone `source_cpu_probe.c` ran for the full 900 seconds on Oracle with
+no bot, networking or stress workload. It executed 5,677,056 fixed 1,304-byte
+copies and stopped after two wall overruns. Hardware counters for those copies
+were only **12,224 instructions / 54,247 cycles** and **12,790 instructions /
+71,600 cycles**, while the source guard-style clocks reported **19,053,866 ns**
+and **18,728,515 ns** CPU respectively (wall 19,052,530 and 18,725,755 ns).
+The complete probe used 41.993 CPU seconds, had zero page faults, and produced
+no other anomalies. At the observed ~2 GHz, the hardware counts are tens of
+microseconds of work, not 19 ms. This independently reproduces the same
+false-positive mechanism seen in Crust's 9.8 ms `rtrb::pop` stage.
+
+The Oracle kernel has `CONFIG_VIRT_CPU_ACCOUNTING_GEN=y` but lacks
+`CONFIG_PARAVIRT_TIME_ACCOUNTING`; the available Ubuntu generic kernel has the
+same configuration. The current Oto 2 ms guard therefore cannot distinguish a
+descheduled callback from a CPU-bound callback on this host using
+`CLOCK_THREAD_CPUTIME_ID`. Raising the limit or ignoring the CPU result would
+weaken the explicit source isolation contract and was not done. Hardware PMU
+access is privileged and cannot be made a portable production dependency.
+
+This is now a concrete blocker to six-hour qualification and deployment of the
+recovery candidate. A safe resolution requires either an Oto design that gives
+the internal, bounded Crust ring adapter a separately audited execution path
+while retaining the 2 ms guard for arbitrary `FrameSource`s, or a host/kernel
+with correct steal-time accounting. No production binary was replaced.
+
+### Callback stage localization and kernel accounting audit
+
+The temporary Crust stage patch on top of recovery failed at 18:58:20.552897 UTC,
+after 6,708 frames with zero unavailable/silence frames. Its measured source
+overrun was 9,798 us wall / 9,805 us CPU. Retained stage nanoseconds were
+`[9796771, 942, 50, 0, 0, 0]`: almost all wall time occurred inside `rtrb::pop`,
+with <1 us copying and a 50 ns consumed-flag store. The register/recheck empty
+path was not entered. The ring pop itself has no allocation, blocking wait or
+loop; the stage proves timing localization, not 9.8 ms of executed instructions.
+Temporary instrumentation was reverted after building the preserved diagnostic
+SHA256 `8af818fe6bcb0730952a49539cc15e05eb30589fc4d8b36fa7327b508cfa2ab7`.
+Raw terminal logs and receiver/resource records are in `recovery-stages-*`.
+
+The running Ubuntu Oracle kernel `6.17.0-1020-oracle` reports
+`CONFIG_VIRT_CPU_ACCOUNTING_GEN=y`, but **CONFIG_PARAVIRT_TIME_ACCOUNTING and
+CONFIG_IRQ_TIME_ACCOUNTING are not set**. Linux v6.17
+`kernel/sched/core.c:update_rq_clock_task` subtracts steal time under the former
+configuration guard. This is a concrete mechanism for scheduler-runtime clock
+attribution differing from actual callback instruction work. The kernel source
+and configuration alone do not quantify its contribution to this failure.
+A standalone bounded-copy PMU probe follows, recording thread CPU/wall clocks,
+hardware instructions/cycles, multiplexing times and page faults. The source
+guard is not weakened and no kernel change has yet been applied.

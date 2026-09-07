@@ -4,6 +4,7 @@ Requires synchronized host UTC clocks. Wide event windows tolerate ordinary
 clock/network delay; they locate send-side anomalies, not downstream causes.
 """
 import argparse
+import bisect
 import csv
 import datetime
 import json
@@ -129,6 +130,24 @@ result = dict(scope='Header-only diagnostic correlation; not receiver qualificat
                   'Independent low-priority timers can themselves be delayed by guest scheduling. Correlated steal samples strengthen host attribution but have one-second resolution.',
                   'Events use receiver callback times; PCM timing and network playout add delay.',
                   'No packet payload, key, source URL, or audio is captured.'])
+if scheduler:
+    # Same-host timestamps need no inter-host alignment to compare wake and
+    # send times. A low-priority probe may wake after the bot; retain the prior
+    # send as well so next-send delay alone cannot imply added bot latency.
+    packet_times = [p['ms'] for p in packets]
+    recovery = []
+    for wake in late_wakes:
+        if not (0 <= wake['atMs'] <= receiver['elapsedSeconds'] * 1000) or wake['lateMs'] < 20:
+            continue
+        i = bisect.bisect_left(packet_times, wake['atMs'])
+        if i == 0 or i == len(packets):
+            continue
+        before, after = packets[i - 1], packets[i]
+        recovery.append(dict(wake=wake, priorSendMs=before['ms'], nextSendMs=after['ms'],
+                             nextSendAfterProbeMs=after['ms'] - wake['atMs'],
+                             priorSendBeforeProbeMs=wake['atMs'] - before['ms'],
+                             sendGapMs=after['ms'] - before['ms']))
+    result['probeRecovery'] = recovery
 args.output.write_text(json.dumps(result, indent=2) + '\n')
 print(json.dumps({k: result[k] for k in ('receiverStatus', 'receiverSeconds', 'tracePackets', 'aligned')}))
 print(json.dumps(dict(correlatedEvents=len(events))))

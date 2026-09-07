@@ -1,0 +1,217 @@
+[
+  {
+    "utc": "2026-09-07T18:55:37.650186+00:00",
+    "elapsedSeconds": 0.0,
+    "pid": 29623,
+    "cpuTicks": [
+      102146,
+      9112,
+      41623,
+      27876792,
+      13542,
+      0,
+      1365,
+      118847,
+      0,
+      0
+    ],
+    "cpuSeconds": 0.17,
+    "threads": 4,
+    "rssKiB": 15044,
+    "pssKiB": 12619,
+    "cgroupBytes": 2945024,
+    "cgroupMemory": {
+      "anon": 2232320,
+      "file": 0,
+      "file_dirty": 0,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 143816,
+      "user_usec": 61642,
+      "system_usec": 82173,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  },
+  {
+    "utc": "2026-09-07T18:56:37.651745+00:00",
+    "elapsedSeconds": 60.002,
+    "pid": 29623,
+    "cpuTicks": [
+      102251,
+      9112,
+      41667,
+      27888548,
+      13549,
+      0,
+      1368,
+      118912,
+      0,
+      0
+    ],
+    "cpuSeconds": 1.89,
+    "threads": 5,
+    "rssKiB": 18544,
+    "pssKiB": 16074,
+    "cgroupBytes": 8237056,
+    "cgroupMemory": {
+      "anon": 3936256,
+      "file": 3436544,
+      "file_dirty": 0,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 1854270,
+      "user_usec": 1337308,
+      "system_usec": 516961,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  },
+  {
+    "utc": "2026-09-07T18:57:37.653728+00:00",
+    "elapsedSeconds": 120.004,
+    "pid": 29623,
+    "cpuTicks": [
+      102480,
+      9112,
+      41741,
+      27900051,
+      13549,
+      0,
+      1371,
+      119075,
+      0,
+      0
+    ],
+    "cpuSeconds": 5.23,
+    "threads": 6,
+    "rssKiB": 18928,
+    "pssKiB": 16458,
+    "cgroupBytes": 8388608,
+    "cgroupMemory": {
+      "anon": 4067328,
+      "file": 3436544,
+      "file_dirty": 0,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 5196701,
+      "user_usec": 3739209,
+      "system_usec": 1457491,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  },
+  {
+    "utc": "2026-09-07T18:58:37.655627+00:00",
+    "elapsedSeconds": 180.006,
+    "pid": 29623,
+    "cpuTicks": [
+      102615,
+      9112,
+      41796,
+      27911747,
+      13550,
+      0,
+      1373,
+      119176,
+      0,
+      0
+    ],
+    "cpuSeconds": 7.61,
+    "threads": 3,
+    "rssKiB": 18572,
+    "pssKiB": 16102,
+    "cgroupBytes": 4165632,
+    "cgroupMemory": {
+      "anon": 3702784,
+      "file": 0,
+      "file_dirty": 0,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 7586421,
+      "user_usec": 5461538,
+      "system_usec": 2124882,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  },
+  {
+    "utc": "2026-09-07T18:59:37.657461+00:00",
+    "elapsedSeconds": 240.007,
+    "pid": 29623,
+    "cpuTicks": [
+      102648,
+      9112,
+      41820,
+      27923619,
+      13551,
+      0,
+      1374,
+      119230,
+      0,
+      0
+    ],
+    "cpuSeconds": 7.64,
+    "threads": 3,
+    "rssKiB": 18572,
+    "pssKiB": 16102,
+    "cgroupBytes": 4104192,
+    "cgroupMemory": {
+      "anon": 3702784,
+      "file": 0,
+      "file_dirty": 0,
+      "file_writeback": 0
+    },
+    "cgroupMemoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroupCpu": {
+      "usage_usec": 7612761,
+      "user_usec": 5478424,
+      "system_usec": 2134336,
+      "nice_usec": 0,
+      "core_sched.force_idle_usec": 0
+    }
+  }
+]

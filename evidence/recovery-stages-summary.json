@@ -1,0 +1,19 @@
+{
+  "scope": "Callback-stage diagnostic, not audio qualification",
+  "sha256": "8af818fe6bcb0730952a49539cc15e05eb30589fc4d8b36fa7327b508cfa2ab7",
+  "utc": "2026-09-07T18:58:20.552897Z",
+  "failure": "FrameSourceContract",
+  "wallUs": 9798,
+  "cpuUs": 9805,
+  "stagesNs": {
+    "ringPop": 9796771,
+    "payloadCopy": 942,
+    "consumedAtomic": 50,
+    "wakerRegister": 0,
+    "emptyPath": 0,
+    "pending": 0
+  },
+  "framesSent": 6708,
+  "framesUnavailable": 0,
+  "note": "Almost all measured callback wall time is in bounded rtrb pop, which has no allocation, loop or blocking wait. This localizes the measured interval but does not establish instruction cost versus host attribution."
+}

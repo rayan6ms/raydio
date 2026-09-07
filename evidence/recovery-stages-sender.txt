@@ -1,0 +1,5 @@
+2026-09-07T18:55:34.702306+00:00 raydio-vnic systemd[1]: Starting raydio-recovery-stages.service - Raydio delivery correlation diagnostic Testbot...
+2026-09-07T18:55:37.541001+00:00 raydio-vnic raydio[29623]: 2026-09-07T18:55:37.540947Z  INFO raydio::runtime: Raydio ready bot_id=1544468432907669644
+2026-09-07T18:55:37.541598+00:00 raydio-vnic systemd[1]: Started raydio-recovery-stages.service - Raydio delivery correlation diagnostic Testbot.
+2026-09-07T18:58:20.553428+00:00 raydio-vnic raydio[29623]: 2026-09-07T18:58:20.552897Z  WARN crust_oto_adapter: audio sender stopped after a terminal failure failure=Some(FrameSourceContract) source_overruns=1 frames_sent=6708 frames_unavailable=0 max_lateness_us=40499 source_overrun_wall_us=9798 source_overrun_cpu_us=9805 send_failures=0 skipped_deadlines=6 poll_stage_ns=[9796771, 942, 50, 0, 0, 0]
+2026-09-07T18:58:20.553428+00:00 raydio-vnic raydio[29623]: 2026-09-07T18:58:20.553026Z  INFO crust_oto_adapter: audio sender stopped frames_sent=6708 silence_frames_sent=0 frames_unavailable=0 skipped_deadlines=6 send_failures=0 source_overruns=1 max_lateness_us=40499 phase=Failed failure=Some(FrameSourceContract)
