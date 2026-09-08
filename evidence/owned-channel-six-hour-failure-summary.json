@@ -1,0 +1,48 @@
+{
+  "candidateSha256": "699272f8f7abfb4c4ac2e038c4b8d08fa277d6f05ba427d30ab889d48975abeb",
+  "result": "failed quality gate; stopped early",
+  "requestedSeconds": 21600,
+  "receiverSeconds": 279.4962067871094,
+  "startedAt": "2026-09-08T06:56:21.536Z",
+  "finishedAt": "2026-09-08T07:01:01.084Z",
+  "concealmentMs": 829.1666666666666,
+  "silentConcealmentMs": 65.75,
+  "packetsReceived": 13941,
+  "netPacketsLost": 0,
+  "packetsDiscarded": 1,
+  "nacks": 4,
+  "unexpectedQuietMs": 70.77083333333333,
+  "unexpectedSpeakingOffMs": 116.8,
+  "previousRestartAtMs": 181365.1,
+  "interruptionAtMs": 212833.9,
+  "receiverLongTasks": 0,
+  "missingPcmReports": 0,
+  "nearFullScale": 0,
+  "emptyPcmFrames": 0,
+  "nonFinitePcmSamples": 0,
+  "senderLifetime": {
+    "frames": 19029,
+    "silenceFrames": 13,
+    "framesUnavailable": 13,
+    "skippedDeadlines": 26,
+    "maxLatenessUs": 54252,
+    "sendFailures": 0,
+    "sourceOverruns": 0,
+    "failure": null
+  },
+  "warmPssKiB": {
+    "min": 16171,
+    "max": 16291,
+    "scope": "minute samples falling inside receiver window"
+  },
+  "hostStealPercent": {
+    "previousMinute": 0.842,
+    "interruptionMinute": 3.543
+  },
+  "limitations": [
+    "Sender lifetime counters include setup and later explicit Stop; no timestamped source-unavailable attribution in this qualification build.",
+    "Minute host steal samples support host contention but cannot attribute individual packet/quiet events.",
+    "This is a failed six-hour attempt, not six-hour coverage.",
+    "The follow-up header/timer diagnostic is separate and cannot qualify production."
+  ]
+}

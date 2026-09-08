@@ -1,0 +1,8 @@
+Starting raydio-owned-diagnostic.service - Raydio owned channel receiver validation Testbot...
+2026-09-08T07:05:31.399538Z  INFO raydio::runtime: Raydio ready bot_id=1544468432907669644
+Started raydio-owned-diagnostic.service - Raydio owned channel receiver validation Testbot.
+2026-09-08T07:24:59.623958Z  INFO crust_oto_adapter: audio sender stopped frames_sent=57359 silence_frames_sent=8 frames_unavailable=8 skipped_deadlines=19 send_failures=0 source_overruns=0 max_lateness_us=59760 phase=Stopped failure=None
+Stopping raydio-owned-diagnostic.service - Raydio owned channel receiver validation Testbot...
+raydio-owned-diagnostic.service: Deactivated successfully.
+Stopped raydio-owned-diagnostic.service - Raydio owned channel receiver validation Testbot.
+raydio-owned-diagnostic.service: Consumed 1min 4.127s CPU time, 8.1M memory peak, 0B memory swap peak.

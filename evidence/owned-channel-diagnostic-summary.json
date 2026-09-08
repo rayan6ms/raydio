@@ -1,0 +1,153 @@
+{
+  "scope": "Bounded header/timer diagnostic; not production qualification or an optimization comparison",
+  "receiverSeconds": 1100.043876953125,
+  "packets": 54981,
+  "concealmentMs": 601.6666666666666,
+  "silentConcealmentMs": 0.0,
+  "netLost": 0,
+  "discarded": 8,
+  "nacks": 26,
+  "unexpectedQuietOrSpeakingEvents": 0,
+  "nearFullScale": 0,
+  "nonFinite": 0,
+  "emptyPcmFrames": 0,
+  "receiverLongTasks": [
+    {
+      "durationMs": 53,
+      "kind": "receiver-long-task",
+      "ms": 63451.79999999702,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 80
+      },
+      "startMs": 63387.20000000298
+    }
+  ],
+  "allSendGapsAbove40Ms": [
+    {
+      "endMs": 78881.03369140625,
+      "durationMs": 45.43896484375,
+      "overlappingLateTimerCpus": []
+    },
+    {
+      "endMs": 138855.15356445312,
+      "durationMs": 53.289306640625,
+      "overlappingLateTimerCpus": [
+        0,
+        1
+      ]
+    },
+    {
+      "endMs": 138955.15942382812,
+      "durationMs": 59.22607421875,
+      "overlappingLateTimerCpus": [
+        0,
+        1
+      ]
+    },
+    {
+      "endMs": 139268.12451171875,
+      "durationMs": 51.7138671875,
+      "overlappingLateTimerCpus": [
+        0,
+        1
+      ]
+    },
+    {
+      "endMs": 750055.107421875,
+      "durationMs": 45.880859375,
+      "overlappingLateTimerCpus": [
+        0,
+        1
+      ]
+    },
+    {
+      "endMs": 750155.0617675781,
+      "durationMs": 59.560791015625,
+      "overlappingLateTimerCpus": [
+        0,
+        1
+      ]
+    },
+    {
+      "endMs": 1038855.0678710938,
+      "durationMs": 59.385009765625,
+      "overlappingLateTimerCpus": [
+        0
+      ]
+    },
+    {
+      "endMs": 1038955.1330566406,
+      "durationMs": 59.29638671875,
+      "overlappingLateTimerCpus": [
+        0,
+        1
+      ]
+    },
+    {
+      "endMs": 1039255.0551757812,
+      "durationMs": 59.4580078125,
+      "overlappingLateTimerCpus": [
+        0,
+        1
+      ]
+    },
+    {
+      "endMs": 1039356.9997558594,
+      "durationMs": 40.95556640625,
+      "overlappingLateTimerCpus": [
+        0,
+        1
+      ]
+    },
+    {
+      "endMs": 1039555.1650390625,
+      "durationMs": 56.753173828125,
+      "overlappingLateTimerCpus": [
+        0,
+        1
+      ]
+    }
+  ],
+  "sendSequenceDiscontinuities": 0,
+  "sendTimestampDiscontinuities": 0,
+  "sendFailures": 0,
+  "independentProbe": {
+    "cpuSeconds": 2.929880948,
+    "cpuPercentOneCore": 0.24415669576836274,
+    "timers": [
+      [
+        "timer",
+        "0",
+        "59929",
+        "73547516",
+        "0",
+        "0"
+      ],
+      [
+        "timer",
+        "1",
+        "59941",
+        "71692412",
+        "0",
+        "0"
+      ]
+    ],
+    "fromMs": -40816.642333984375,
+    "toMs": 1159183.6027832031
+  },
+  "warmPssKiB": {
+    "min": 16085,
+    "max": 16293
+  },
+  "cpuPercentOneCore": 5.537326958532545,
+  "limitations": [
+    "Tracer/probe instrumentation cannot qualify production.",
+    "Clock synchronization and timer sampling limit individual-event attribution.",
+    "Both-vCPU delays and steal correlation establish a host contribution, not sole responsibility for every event.",
+    "The separate uninstrumented six-hour attempt failed with unexpected quiet."
+  ]
+}

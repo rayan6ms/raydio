@@ -720,3 +720,96 @@ on, and an active listener. Keep the browser/machine awake and the peer intact;
 any disconnect, restart or measurement failure invalidates continuity. Record
 all source-tail events and do not silently exclude late-packet concealment.
 The script is syntax-checked but the six-hour run has not started or passed.
+
+### Owned-channel six-hour attempt: interrupted audio (September 8 UTC)
+
+The exact `699272f8...75abeb` release candidate, PID 32067, started under
+`raydio-owned-six-hour.service` with Restart=no and a seven-hour runtime bound.
+The resource sampler was verified before playback. The signed-in browser stayed
+in General, muted and receiving Testbot at volume 70 with Loop on; local sleep
+was inhibited. The receiver window started at 06:56:21.536 UTC. No SSH, builds,
+controls or packet/timer diagnostics occurred during the measured window.
+
+This attempt **failed the audio continuity gate**. At approximately 06:59:54 UTC,
+31 seconds after the observed repeat boundary, the meter recorded 70.771 ms
+unexpected quiet and a 116.8 ms speaking-off interval. Three consecutive receiver
+windows contained 256.333, 245.167 and 245.792 ms concealment, the last including
+65.75 ms silent concealment. Packet counts were 34, 41 and 42 in those one-second
+windows, with zero loss-counter changes. This is not the known source tail.
+There were no receiver long tasks, missing PCM reports, or >2-second sample gaps.
+
+The measurement was explicitly stopped after 279.496 seconds to inspect the
+host. Overall: 13,941 received packets, 829.167 ms concealment, one discarded
+packet, four NACKs, zero net packet loss, zero near-full-scale/nonfinite/empty
+PCM. Warm PSS samples within the window were 16,171–16,291 KiB, with no cgroup
+memory-limit events. The containing minute's host steal fraction was 3.543%,
+versus 0.842% in the preceding minute. No maintenance job start was logged at
+the interruption timestamp; sysstat ran later at 07:00:01. Minute-level steal
+supports a scheduling issue but cannot assign each frame to a host pause.
+
+After preservation, explicit Stop at 07:02:10 produced sender lifetime counters:
+19,029 audio frames, 13 unavailable/silence frames, 26 skipped deadlines,
+54,252 us maximum lateness, zero send failures and no terminal error. These
+counters include setup and the later Stop, so they cannot be directly assigned
+to the receiver window. In particular, source underruns need finer diagnostic
+correlation rather than being silently attributed to the host.
+
+Raw receiver, scoped summary, sender and resources are in
+`owned-channel-six-hour-failure-*`. The service and sampler were stopped;
+production PID 14196 remained running. Preparation now refuses to disturb an
+already active six-hour service and tolerates an expired transient sampler.
+
+Read-only capacity at 07:03:56 UTC reported A1 (1 OCPU / 1 GiB) unavailable and
+Micro available. Micro availability does not prove a different host would be
+better. No instance was created, migrated, stopped or resized. A separate
+bounded header/timer diagnostic on the same candidate follows; it does not
+count as qualification. There is still no six-hour pass.
+
+### Owned-channel host correlation completed (September 8 UTC)
+
+The same candidate ran as PID 32325 with the existing bounded header-only UDP
+interposer and independent nice-10 sleeping timers on both vCPUs. The receiver
+window was 07:06:09.447–07:24:29 UTC, 1,100.044 seconds. Playback was stopped
+after measurement, the diagnostic service shut down, and the 1,200-second probe
+finished normally. The probe consumed 2.930 CPU seconds (0.244% of one core),
+with no truncation or timer errors. Both host clocks reported NTP synchronized.
+
+There were 54,981 packets, 601.667 ms concealment, eight discards, 26 NACKs, zero
+net loss, zero silent concealment and no unexpected >=20 ms quiet or speaking
+interruption. The five source tails each retained the 21.958/976.25 ms pattern.
+PCM near-full-scale, nonfinite and empty counts were zero. The browser recorded
+one 53 ms long task at 63.387 seconds; the large late concealment burst was at
+1,039.808 seconds, so that task does not explain it. Diagnostic completion is
+not qualification and does not overturn the earlier uninstrumented failure.
+
+The sender trace had eleven gaps above 40 ms, maximum 59.561 ms, with continuous
+sequence numbers and RTP timestamps and zero send failures. **Ten of eleven**
+gaps overlapped retained >=10 ms independent timer delays; **nine** overlapped
+delays on both CPUs. At 750.155 seconds, the 59.561 ms send gap coincided with
+51.806/51.575 ms delays on the two CPUs. The containing one-second steal
+increments were 10/9 ticks. Around 1,038.9–1,039.6 seconds, repeated roughly
+59 ms gaps overlapped both-CPU delays around 52 ms, with containing steal
+increments up to 27/24 ticks. The receiver concealed 170.771 ms in the matching
+window. The probe's lifetime maximum wake delays were 73.548/71.692 ms;
+these maxima are not assumed to fall inside the receiver window.
+
+This establishes a host scheduling contribution to the current candidate's
+late audio. It does not prove sole responsibility for every event. One 45.439 ms
+gap lacked an overlapping retained >=10 ms timer event. Packet lengths also
+include a short packet during the 138.855-second stall, consistent with source
+unavailability; encrypted packet size alone is not proof of its contents.
+No application-side bitrate, buffering or scheduling change was made based on
+these observations. A sender cannot execute during whole-VM descheduling.
+
+Warm diagnostic PSS was 16,085–16,293 KiB and average CPU 5.537% of one core.
+These values include diagnostic conditions and are not optimization claims.
+All raw records, the bounded compressed header trace, reproducible correlation
+and scoped summary are retained as `owned-channel-diagnostic-*`.
+
+Production `raydio.service` remained active at PID 14196. Both temporary bot
+services, sampler and probe are inactive; the local test sleep inhibitor was
+removed. Current qualification is blocked by observed audio interruption on
+this shared Micro host. The callback false-termination repair remains intact,
+but another clean short window cannot establish six-hour reliability. A1 still
+has no reported capacity; moving the existing Micro would require maintenance
+and fresh measurement, with no assumed improvement.
