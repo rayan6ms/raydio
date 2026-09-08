@@ -130,3 +130,24 @@ The service was scaled to zero after the screen before attempting Pella,
 preventing duplicate Testbot sessions. Production Oracle was not changed.
 CI/CD follows `rewrite/rust-raydio`: never push during an audio measurement
 unless automatic deployment has first been disabled.
+
+## Corrected worker configuration diagnostic — 2026-09-08
+
+The diagnostic image was rebuilt successfully from commit `1967cfa`. Northflank's
+API showed that the service still had `RAYDIO_WORKER_THREADS=1` despite the
+intended restoration to two workers; the process thread count corroborated this.
+A corrected ten-minute receiver window was run with the one-worker setting and
+Loop enabled. It recorded 29,961 packets, 2 lost, 3 discarded, and 24 NACKs;
+concealment was 650. (The PCM tap recorded 0 silent concealment and no clipping,
+empty or non-finite frames.) The only approximately 975 ms quiet intervals were
+at the known source loop tail. Receiver long tasks totaled 1,860 ms (26 tasks,
+maximum 84 ms). Host samples showed 2.505% of one core, 1,468.9 ms cumulative
+cgroup throttling over the captured host lifetime, maximum observed thread wait
+222.9 ms, and 17,788 KiB peak RSS after startup.
+
+This is a clean short screen but not a proven optimization: it is a corrected
+configuration/measurement, not an audio-code change, and the host trace includes
+startup before the receiver interval. The earlier ten-minute one-worker screen
+had 2,901 ms concealment and a 1,180.6 ms mid-track quiet interval; this run did
+not reproduce that interruption. Two-worker setting has now been restored via
+Northflank API and the service is scaled to zero. No six-hour test is claimed.
