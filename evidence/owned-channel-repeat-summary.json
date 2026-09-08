@@ -1,0 +1,32 @@
+{
+  "candidateSha256": "699272f8f7abfb4c4ac2e038c4b8d08fa277d6f05ba427d30ab889d48975abeb",
+  "receiverSeconds": 1199.9991611328126,
+  "restarts": 6,
+  "concealedMs": 478.2916666666667,
+  "packetsReceived": 59991,
+  "netLost": 0,
+  "discarded": 13,
+  "nacks": 45,
+  "unexpectedQuietOrSpeakingEvents": 0,
+  "sourceTailQuietMs": [
+    976.25,
+    983.75
+  ],
+  "senderLifetime": {
+    "framesSent": 74274,
+    "silenceFramesSent": 6,
+    "framesUnavailable": 6,
+    "skippedDeadlines": 29,
+    "sendFailures": 0,
+    "sourceOverruns": 0,
+    "maxLatenessUs": 60540,
+    "failure": null
+  },
+  "limits": [
+    "Sender counters include warmup, both receiver windows, and post-window controls; they are not restricted to the 20-minute receiver window.",
+    "Owned channel bypasses arbitrary callback accounting by construction; zero source overruns alone does not demonstrate absence of host stalls.",
+    "Near-full-scale PCM test cannot prove absence of clipping already present in the source.",
+    "Different host/network conditions preclude a controlled causal improvement claim.",
+    "Twenty-minute completion is not six-hour qualification."
+  ]
+}

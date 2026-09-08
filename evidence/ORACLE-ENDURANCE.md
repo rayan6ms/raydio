@@ -677,3 +677,46 @@ stale Now Playing panel and no advancing WebRTC inbound audio receiver. The
 `Expected exactly one advancing receiver`; no audio-quality conclusion is drawn.
 The temporary candidate service was stopped; stable `raydio.service` remained
 untouched.
+
+### Owned-channel real receiver retest completed (September 8 UTC)
+
+Pressing Enter restored Discord slash-command input. Testbot PID 31148 ran the
+exact `699272f8...75abeb` candidate on Oracle, playing the same YouTube track at
+volume 70 with Loop on. A 120-second check and then a fresh 1,200-second receiver
+window completed. No SSH, builds or controls occurred during the latter window;
+the minute-resolution resource sampler ran at nice 19.
+
+The 20-minute receiver window covered six restarts and 59,991 packets. It measured
+478.292 ms concealment, 13 discarded packets, 45 NACKs, zero net packet loss, zero
+silent concealment, zero near-full-scale/nonfinite/empty PCM, and no unexpected
+mid-song quiet or speaking interruption. Tail quiet was 976.25 ms five times and
+983.75 ms once, each preceded by the established 21.958 ms pattern. These match
+the independently measured source-tail/repeat pattern, rather than unexpected
+mid-song silence. Receiver peak was 0.5732; this does not rule out clipping
+already encoded in the source.
+
+Warm PSS was 16,318–16,510 KiB and average CPU 5.49% of one core, with no cgroup
+memory-limit events. Sender lifetime counters after explicit Stop: 74,274 frames,
+29 skipped deadlines, maximum lateness 60.540 ms, zero send failures and no
+terminal error. The owned path does not use the callback watchdog, so its zero
+source-overrun counter is expected and must not conceal host scheduling stalls.
+
+Compared with the earlier 1,046-second failed recovery run (1,562.396 ms
+concealment), this window has less concealment and no fatal shutdown. Host
+conditions differ: this is encouraging observational evidence, not proof that
+the entire difference was caused by the code change. Late/discarded audio is
+still a reliability limitation; a flawless-audio claim is unsupported.
+
+Raw receiver and resources: `owned-channel-receiver-repeat.json`,
+`owned-channel-repeat-resources.jsonl`; scoped summary:
+`owned-channel-repeat-summary.json`.
+
+The six-hour preparation script is `benchmarks/prepare_oracle_six_hour.sh`.
+It verifies the exact binary hash, uses Restart=no, sets a seven-hour runtime
+limit, and starts a unique low-priority resource sampler. Execute only outside
+a measurement window. Start the browser's 21,600-second receiver measurement
+only after verifying readiness, one advancing audio receiver, volume 70, Loop
+on, and an active listener. Keep the browser/machine awake and the peer intact;
+any disconnect, restart or measurement failure invalidates continuity. Record
+all source-tail events and do not silently exclude late-packet concealment.
+The script is syntax-checked but the six-hour run has not started or passed.
