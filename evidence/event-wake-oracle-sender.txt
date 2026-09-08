@@ -1,0 +1,8 @@
+Sep 08 13:43:07 raydio-vnic systemd[1]: Starting raydio-event-wake.service - Raydio event wake candidate testbot...
+Sep 08 13:43:10 raydio-vnic raydio[1923]: 2026-09-08T13:43:10.175102Z  INFO raydio::runtime: Raydio ready bot_id=1544468432907669644
+Sep 08 13:43:10 raydio-vnic systemd[1]: Started raydio-event-wake.service - Raydio event wake candidate testbot.
+Sep 08 13:57:38 raydio-vnic raydio[1923]: 2026-09-08T13:57:38.834748Z  INFO crust_oto_adapter: audio sender stopped frames_sent=40760 silence_frames_sent=5 frames_unavailable=5 skipped_deadlines=27 send_failures=0 source_overruns=0 max_lateness_us=61260 phase=Stopped failure=None
+Sep 08 13:57:39 raydio-vnic systemd[1]: Stopping raydio-event-wake.service - Raydio event wake candidate testbot...
+Sep 08 13:57:39 raydio-vnic systemd[1]: raydio-event-wake.service: Deactivated successfully.
+Sep 08 13:57:39 raydio-vnic systemd[1]: Stopped raydio-event-wake.service - Raydio event wake candidate testbot.
+Sep 08 13:57:39 raydio-vnic systemd[1]: raydio-event-wake.service: Consumed 30.576s CPU time, 8.2M memory peak, 0B memory swap peak.

@@ -1,0 +1,51 @@
+{
+  "candidateCommit": "90bef68",
+  "candidateSha256": "4e1deea5c1179edb92f0ec6eb708ed67fdd73ce83ea19750b7b26539b2ad8ac3",
+  "receiverSeconds": 599.9992341308593,
+  "startedAt": "2026-09-08T13:47:02.633Z",
+  "packets": 29981,
+  "concealmentMs": 632.2916666666666,
+  "silentConcealmentMs": 0.0,
+  "packetsDiscarded": 7,
+  "netPacketsLost": 0,
+  "positiveLossDeltas": 1,
+  "negativeLossDeltas": -1,
+  "nacks": 22,
+  "unexpectedMidTrackQuietOrSpeakingEvents": 0,
+  "restarts": 3,
+  "nearFullScale": 0,
+  "emptyPcmFrames": 0,
+  "nonFinite": 0,
+  "receiverLongTasks": {
+    "enabled": true,
+    "initialVisibility": "visible",
+    "longTasks": 13,
+    "longTasksSupported": true,
+    "maxLongTaskMs": 66,
+    "totalLongTaskMs": 741
+  },
+  "warmPssKiB": {
+    "min": 16562,
+    "max": 16810
+  },
+  "cpuPercentOneCore": 3.7313709223430407,
+  "hostStealPercent": 0.3043179751721066,
+  "sixHourQualified": false,
+  "limitations": [
+    "Ten-minute screening run, not six-hour qualification.",
+    "Different duration/time and warm-up versus prior 20-minute FD2 baseline; no causal claim.",
+    "13 receiver long tasks, no missing PCM reports; retained as measurement confounders.",
+    "Source-tail quiet and speaking-off events retained; no unexpected middle-of-track quiet events.",
+    "Sender lifetime includes setup and final Stop outside receiver window."
+  ],
+  "comparison": {
+    "priorConcealmentMsPerMinute": 30.54064497643506,
+    "candidateConcealmentMsPerMinute": 63.22924737554891,
+    "priorCpuPercent": 4.777050509019906,
+    "priorPssKiB": {
+      "min": 16442,
+      "max": 16998
+    },
+    "overallAudioImprovementDemonstrated": false
+  }
+}

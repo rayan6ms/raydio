@@ -1,5 +1,50 @@
 # Free hosting assessment — 2026-09-06
 
+## Expanded checks — 2026-09-08
+
+The earlier provider list was not exhaustive. The additional candidates below
+were checked against official pages; none has a measured Raydio receiver run yet.
+Do not confuse an advertised resource allowance with demonstrated audio quality.
+
+| Additional provider | Current published offer | Remaining requirement or exclusion |
+| --- | --- | --- |
+| alwaysdata | Free for personal use: 1 GB disk, 256 MB RAM, 1/4 CPU. Documentation supports foreground services with automatic restart, Rust, SSH, and unfiltered outgoing ports. | Strong additional candidate. Confirm free-account service access, traffic/fair-use conditions, IPv4 outbound voice access, and source access before measuring. Public services have IPv6-only inbound access, which does not itself establish an outbound IPv4 restriction. No deployment yet. |
+| serv00 | Free 3 GB disk, 512 MB RAM, 15 system processes, unlimited transfer, SSH, Rust and own executables enabled with `devil binexec on`. | Candidate requiring further account/terms and platform checks. The registration and terms URLs returned homepage content in this check. An Oracle Linux executable has not been shown compatible with its environment; confirm OS and process/thread limits first. No deployment yet. |
+| fps.ms | Free bot: 128 MB RAM, 25% CPU, 250 MB storage. | Explicit 24-hour renewal to remain online. No supported unattended renewal established. The separate 28-day period only preserves expired data; it is not 28 days of uptime. |
+| Zeabur | Free dashboard plan manages one server the customer already owns; CI resources are separate from runtime. | Current pricing does not establish a free hosted runtime. |
+| Doprax | Current VM plans start at $5.95/month across the listed providers. | No ongoing free runtime established by the current pricing page. |
+| Pella / Hidencloud | Pella's homepage requires JavaScript; Hidencloud returned HTTP 403. | Unverified candidates, not exclusions based on resource size. Need a usable official offer and renewal policy. |
+| Clawcloud Run | The previously known `run.claw.cloud` and `docs.run.claw.cloud` names failed DNS resolution here. | No current offer verified; do not rely on historical monthly-credit claims. |
+
+Discloud's two previous extensionless-binary ZIP attempts failed with the generic
+`routes.upload.erro.process` response. That does **not** prove the platform cannot
+run Raydio. In particular, its 100 MB **RAM** allowance is not a source archive
+size limit. `deploy/discloud` now supplies an ordinary Cargo entry point that
+executes the packaged native binary, allowing the provider to detect/build Rust
+without rebuilding the full dependency graph. Runtime qualification is pending.
+The packager admits only `DISCORD_TOKEN_TESTBOT`, and the launcher explicitly uses
+`--testbot`; production credentials must never be included in these trials.
+
+A 584-byte ordinary Cargo probe failed through the API too. Sending that same
+probe through the dashboard exposed the real cause: `NO_CLUSTER`, with the
+message that the free bot plan is at high demand and to try later or upgrade.
+This is a provider free-capacity blocker, not a Raydio memory/build failure.
+No Discloud app was created and no premium plan was selected.
+
+Northflank's personal GitHub installation exists under `rayan6ms`; no organisation
+installation is needed. A free `raydio-test` project exists in US Central. The
+service creation form offers 0.1 shared vCPU and 256 MB; these are offered settings,
+not resources already deployed or measured. Team linking and deployment must be
+verified separately from GitHub installation.
+
+Additional official sources:
+
+- [alwaysdata pricing](https://www.alwaysdata.com/en/pricing/), [headless services](https://help.alwaysdata.com/en/docs/web-hosting/services/), [outbound networking](https://help.alwaysdata.com/en/docs/technical-specifications/network/), [legal notices](https://www.alwaysdata.com/en/terms-and-legal/)
+- [serv00 offer](https://serv00.com/), [own executable support](https://docs.serv00.com/Binexec/), [environment](https://docs.serv00.com/Environment/)
+- [fps.ms bot offer and renewal FAQ](https://fps.ms/free-discord-bot-hosting/), [pricing](https://fps.ms/pricing), [terms](https://docs.fps.ms/terms-of-service/)
+- [Zeabur pricing](https://zeabur.com/pricing), [Doprax pricing](https://www.doprax.com/pricing/)
+- [Discloud Rust manifest requirements](https://docs.discloud.com/development-environment/supported-languages/rust/cargo.toml.md)
+
 Raydio needs an always-running process, outbound HTTPS/WebSockets and UDP with
 stateful replies, source access from the host's public IP, and stable 20 ms
 audio delivery. A web service that sleeps without incoming HTTP requests is
