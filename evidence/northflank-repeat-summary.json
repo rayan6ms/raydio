@@ -1,0 +1,38 @@
+{
+  "candidateSha256": "4e1deea5c1179edb92f0ec6eb708ed67fdd73ce83ea19750b7b26539b2ad8ac3",
+  "workerThreads": 2,
+  "seconds": 599.9998139648437,
+  "receiver": {
+    "bytesReceived": 7799610,
+    "concealedSamples": 139525,
+    "concealmentEvents": 25,
+    "fecPacketsDiscarded": 0,
+    "fecPacketsReceived": 0,
+    "insertedSamplesForDeceleration": 39727,
+    "jitterBufferDelay": 3175641.6,
+    "jitterBufferEmittedCount": 28678080,
+    "jitterBufferMinimumDelay": 3506668.8,
+    "jitterBufferTargetDelay": 3506668.8,
+    "nackCount": 38,
+    "packetsDiscarded": 8,
+    "packetsLost": 2,
+    "packetsReceived": 29883,
+    "removedSamplesForAcceleration": 57370,
+    "silentConcealedSamples": 100787,
+    "timestamp": 599999.8139648438,
+    "totalSamplesReceived": 28799520
+  },
+  "concealmentMs": 2906.7708333333335,
+  "silentConcealmentMs": 2099.7291666666665,
+  "senderLifetime": {
+    "framesSent": 33646,
+    "silenceFramesSent": 9,
+    "framesUnavailable": 9,
+    "skippedDeadlines": 108,
+    "sendFailures": 0,
+    "sourceOverruns": 0,
+    "maxLatenessUs": 1640992
+  },
+  "sixHourQualified": false,
+  "senderScope": "Includes warm-up and post-window playback; not exact receiver interval"
+}

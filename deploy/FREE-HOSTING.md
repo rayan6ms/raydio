@@ -9,6 +9,11 @@ Developer Sandbox ($0), 0.1 shared vCPU / 256 MB in US Central. Its initial
 three-minute receiver sample received 9,000 packets with zero loss, discard,
 NACK, concealment or clipping. It did not cover a repeat or qualify six hours.
 See `evidence/NORTHFLANK-RELIABILITY.md` for billing qualifications and evidence.
+The subsequent ten-minute repeat test failed continuity with 2.91 seconds of
+concealment and a 1.44-second unexpected quiet interval. A second ten-minute
+test with one runtime worker still had 2.90 seconds concealment and a 1.18-second
+quiet interval; loss/NACKs increased. Neither configuration is qualified. Sender
+lifetime counters independently recorded >1.4-second scheduling delays.
 Brazil / Osasco is offered but explicitly requires pay-as-you-go; the free
 region choices shown on this account were US Central and Europe West / London.
 
