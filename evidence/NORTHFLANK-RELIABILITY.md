@@ -138,7 +138,7 @@ API showed that the service still had `RAYDIO_WORKER_THREADS=1` despite the
 intended restoration to two workers; the process thread count corroborated this.
 A corrected ten-minute receiver window was run with the one-worker setting and
 Loop enabled. It recorded 29,961 packets, 2 lost, 3 discarded, and 24 NACKs;
-concealment was 650. (The PCM tap recorded 0 silent concealment and no clipping,
+concealment was 651.021 ms. (The PCM tap recorded 0 silent concealment and no clipping,
 empty or non-finite frames.) The only approximately 975 ms quiet intervals were
 at the known source loop tail. Receiver long tasks totaled 1,860 ms (26 tasks,
 maximum 84 ms). Host samples showed 2.505% of one core, 1,468.9 ms cumulative
