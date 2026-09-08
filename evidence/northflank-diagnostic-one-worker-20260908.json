@@ -1,0 +1,1267 @@
+{
+  "availableCounters": [
+    "timestamp",
+    "packetsReceived",
+    "packetsLost",
+    "bytesReceived",
+    "packetsDiscarded",
+    "nackCount",
+    "fecPacketsReceived",
+    "fecPacketsDiscarded",
+    "concealedSamples",
+    "silentConcealedSamples",
+    "concealmentEvents",
+    "totalSamplesReceived",
+    "jitterBufferDelay",
+    "jitterBufferEmittedCount",
+    "insertedSamplesForDeceleration",
+    "removedSamplesForAcceleration",
+    "jitterBufferTargetDelay",
+    "jitterBufferMinimumDelay"
+  ],
+  "current": {
+    "bytesReceived": 8191230,
+    "concealedSamples": 31766,
+    "concealmentEvents": 20,
+    "fecPacketsDiscarded": 0,
+    "fecPacketsReceived": 0,
+    "insertedSamplesForDeceleration": 21299,
+    "jitterBufferDelay": 1739126.4,
+    "jitterBufferEmittedCount": 30116160,
+    "jitterBufferMinimumDelay": 1828339.2,
+    "jitterBufferTargetDelay": 1828339.2,
+    "nackCount": 25,
+    "packetsDiscarded": 3,
+    "packetsLost": 2,
+    "packetsReceived": 31377,
+    "removedSamplesForAcceleration": 13428,
+    "silentConcealedSamples": 0,
+    "timestamp": 1788899635776.362,
+    "totalSamplesReceived": 30155040
+  },
+  "currentPhase": {
+    "durationSeconds": 213,
+    "label": "middle",
+    "loop": true,
+    "playing": true,
+    "positionSeconds": 201
+  },
+  "delta": {
+    "bytesReceived": 7821319,
+    "concealedSamples": 31249,
+    "concealmentEvents": 19,
+    "fecPacketsDiscarded": 0,
+    "fecPacketsReceived": 0,
+    "insertedSamplesForDeceleration": 21299,
+    "jitterBufferDelay": 1664534.4,
+    "jitterBufferEmittedCount": 28759680,
+    "jitterBufferMinimumDelay": 1773504,
+    "jitterBufferTargetDelay": 1773504,
+    "nackCount": 24,
+    "packetsDiscarded": 3,
+    "packetsLost": 2,
+    "packetsReceived": 29961,
+    "removedSamplesForAcceleration": 11500,
+    "silentConcealedSamples": 0,
+    "timestamp": 600000.1220703125,
+    "totalSamplesReceived": 28800000
+  },
+  "elapsedSeconds": 600.0001220703125,
+  "events": [
+    {
+      "concealedMs": 21.729166666666668,
+      "discarded": 1,
+      "emittedSamples": 47040,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 9.645833333333334,
+      "jitterMs": 2,
+      "kind": "receiver",
+      "lost": 0,
+      "meanBufferMs": 40.40816326530618,
+      "ms": 2005.2000000029802,
+      "nacks": 1,
+      "packets": 50,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 29
+      },
+      "receivedSamples": 48000,
+      "removedMs": 0,
+      "silentConcealedMs": 0,
+      "windowMs": 1001.402099609375
+    },
+    {
+      "concealedMs": 3.1875,
+      "discarded": 0,
+      "emittedSamples": 47040,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 0,
+      "jitterMs": 2,
+      "kind": "receiver",
+      "lost": 0,
+      "meanBufferMs": 56.32653061224471,
+      "ms": 17044.20000000298,
+      "nacks": 1,
+      "packets": 50,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 44
+      },
+      "receivedSamples": 48000,
+      "removedMs": 0,
+      "silentConcealedMs": 0,
+      "windowMs": 1001.418212890625
+    },
+    {
+      "concealedMs": 23.208333333333332,
+      "discarded": 1,
+      "emittedSamples": 46080,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 0,
+      "jitterMs": 3,
+      "kind": "receiver",
+      "lost": 0,
+      "meanBufferMs": 43.95833333333346,
+      "ms": 32065.79999999702,
+      "nacks": 1,
+      "packets": 50,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 58
+      },
+      "receivedSamples": 48000,
+      "removedMs": 8.479166666666666,
+      "silentConcealedMs": 0,
+      "windowMs": 1001.43798828125
+    },
+    {
+      "durationMs": 71,
+      "kind": "receiver-long-task",
+      "ms": 33449.39999999106,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 60
+      },
+      "startMs": 33376.89999999106
+    },
+    {
+      "concealedMs": 20.625,
+      "discarded": 1,
+      "emittedSamples": 47040,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 0,
+      "jitterMs": 3,
+      "kind": "receiver",
+      "lost": 0,
+      "meanBufferMs": 59.79591836734731,
+      "ms": 47087.70000000298,
+      "nacks": 1,
+      "packets": 50,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 74
+      },
+      "receivedSamples": 48000,
+      "removedMs": 0,
+      "silentConcealedMs": 0,
+      "windowMs": 1001.244140625
+    },
+    {
+      "concealedMs": 65.79166666666667,
+      "discarded": 0,
+      "emittedSamples": 45120,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 0,
+      "jitterMs": 6,
+      "kind": "receiver",
+      "lost": 0,
+      "meanBufferMs": 42.34042553191541,
+      "ms": 56101.20000000298,
+      "nacks": 0,
+      "packets": 45,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 78
+      },
+      "receivedSamples": 48000,
+      "removedMs": 0,
+      "silentConcealedMs": 0,
+      "windowMs": 1001.399169921875
+    },
+    {
+      "concealedMs": 70.66666666666667,
+      "discarded": 0,
+      "emittedSamples": 45120,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 0,
+      "jitterMs": 3,
+      "kind": "receiver",
+      "lost": 0,
+      "meanBufferMs": 66.17021276595693,
+      "ms": 62110.20000000298,
+      "nacks": 1,
+      "packets": 50,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 89
+      },
+      "receivedSamples": 48000,
+      "removedMs": 0,
+      "silentConcealedMs": 0,
+      "windowMs": 1001.33203125
+    },
+    {
+      "durationMs": 83,
+      "kind": "receiver-long-task",
+      "ms": 101872.20000000298,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 129
+      },
+      "startMs": 101777.09999999404
+    },
+    {
+      "durationMs": 75,
+      "kind": "receiver-long-task",
+      "ms": 131193.09999999404,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 158
+      },
+      "startMs": 131105.5
+    },
+    {
+      "durationMs": 74,
+      "kind": "receiver-long-task",
+      "ms": 137864.79999999702,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 165
+      },
+      "startMs": 137777.5
+    },
+    {
+      "durationMs": 66,
+      "kind": "receiver-long-task",
+      "ms": 157421.79999999702,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 184
+      },
+      "startMs": 157343
+    },
+    {
+      "durationMs": 71,
+      "kind": "receiver-long-task",
+      "ms": 162583.09999999404,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 190
+      },
+      "startMs": 162499.39999999106
+    },
+    {
+      "durationMs": 67,
+      "kind": "receiver-long-task",
+      "ms": 164460.39999999106,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 192
+      },
+      "startMs": 164381.59999999404
+    },
+    {
+      "durationMs": 72,
+      "kind": "receiver-long-task",
+      "ms": 173097.29999999702,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 200
+      },
+      "startMs": 173013.70000000298
+    },
+    {
+      "kind": "speaking",
+      "ms": 183837.20000000298,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "tail",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 210
+      },
+      "speaking": false
+    },
+    {
+      "audioSeconds": 185.08533333333332,
+      "durationMs": 21.520833333333332,
+      "endFrame": 8825936,
+      "kind": "quiet",
+      "ms": 183972.29999999702,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "tail",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 211
+      }
+    },
+    {
+      "kind": "speaking",
+      "ms": 184903.70000000298,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "tail",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 212
+      },
+      "speaking": true
+    },
+    {
+      "audioSeconds": 186.088,
+      "durationMs": 974.9791666666666,
+      "endFrame": 8873901,
+      "kind": "quiet",
+      "ms": 184974.70000000298,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "tail",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 212
+      }
+    },
+    {
+      "kind": "track-restart",
+      "ms": 186307.20000000298,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "head",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 0
+      },
+      "priorPosition": 212
+    },
+    {
+      "concealedMs": 45.020833333333336,
+      "discarded": 0,
+      "emittedSamples": 46080,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 0,
+      "jitterMs": 3,
+      "kind": "receiver",
+      "lost": 0,
+      "meanBufferMs": 35.624999999999496,
+      "ms": 192316.20000000298,
+      "nacks": 0,
+      "packets": 46,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 6
+      },
+      "receivedSamples": 48480,
+      "removedMs": 0,
+      "silentConcealedMs": 0,
+      "windowMs": 1001.3701171875
+    },
+    {
+      "durationMs": 76,
+      "kind": "receiver-long-task",
+      "ms": 199669.20000000298,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 14
+      },
+      "startMs": 199580.29999999702
+    },
+    {
+      "durationMs": 84,
+      "kind": "receiver-long-task",
+      "ms": 238495,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 52
+      },
+      "startMs": 238396.29999999702
+    },
+    {
+      "durationMs": 59,
+      "kind": "receiver-long-task",
+      "ms": 253533.20000000298,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 67
+      },
+      "startMs": 253472.20000000298
+    },
+    {
+      "concealedMs": 17.0625,
+      "discarded": 0,
+      "emittedSamples": 47040,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 0,
+      "jitterMs": 3,
+      "kind": "receiver",
+      "lost": 0,
+      "meanBufferMs": 57.142857142857146,
+      "ms": 256421.09999999404,
+      "nacks": 1,
+      "packets": 51,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 69
+      },
+      "receivedSamples": 48000,
+      "removedMs": 0,
+      "silentConcealedMs": 0,
+      "windowMs": 1001.494140625
+    },
+    {
+      "concealedMs": 25.333333333333332,
+      "discarded": 0,
+      "emittedSamples": 47040,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 0,
+      "jitterMs": 4,
+      "kind": "receiver",
+      "lost": 0,
+      "meanBufferMs": 13.26530612244898,
+      "ms": 283459.39999999106,
+      "nacks": 0,
+      "packets": 50,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 97
+      },
+      "receivedSamples": 48000,
+      "removedMs": 0,
+      "silentConcealedMs": 0,
+      "windowMs": 1001.472900390625
+    },
+    {
+      "durationMs": 79,
+      "kind": "receiver-long-task",
+      "ms": 321072.700000003,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 135
+      },
+      "startMs": 320981.09999999404
+    },
+    {
+      "durationMs": 70,
+      "kind": "receiver-long-task",
+      "ms": 337259.700000003,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 151
+      },
+      "startMs": 337177.700000003
+    },
+    {
+      "durationMs": 70,
+      "kind": "receiver-long-task",
+      "ms": 350260.39999999106,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 164
+      },
+      "startMs": 350178.89999999106
+    },
+    {
+      "durationMs": 76,
+      "kind": "receiver-long-task",
+      "ms": 365463.5,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 179
+      },
+      "startMs": 365373.39999999106
+    },
+    {
+      "concealedMs": 11.458333333333334,
+      "discarded": 0,
+      "emittedSamples": 48000,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 0,
+      "jitterMs": 3,
+      "kind": "receiver",
+      "lost": 0,
+      "meanBufferMs": 10,
+      "ms": 383629.39999999106,
+      "nacks": 0,
+      "packets": 50,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 197
+      },
+      "receivedSamples": 48000,
+      "removedMs": 0,
+      "silentConcealedMs": 0,
+      "windowMs": 1001.406005859375
+    },
+    {
+      "kind": "speaking",
+      "ms": 397098.39999999106,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "tail",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 211
+      },
+      "speaking": false
+    },
+    {
+      "audioSeconds": 398.4026666666667,
+      "durationMs": 21.520833333333332,
+      "endFrame": 19062047,
+      "kind": "quiet",
+      "ms": 397294.700000003,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "tail",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 211
+      }
+    },
+    {
+      "kind": "speaking",
+      "ms": 398154.700000003,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "tail",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 211
+      },
+      "speaking": true
+    },
+    {
+      "audioSeconds": 399.4053333333333,
+      "durationMs": 974.9791666666666,
+      "endFrame": 19110012,
+      "kind": "quiet",
+      "ms": 398297.299999997,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "head",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 0
+      }
+    },
+    {
+      "kind": "track-restart",
+      "ms": 398652.09999999404,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "head",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 0
+      },
+      "priorPosition": 211
+    },
+    {
+      "concealedMs": 84.375,
+      "discarded": 0,
+      "emittedSamples": 44160,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 0,
+      "jitterMs": 6,
+      "kind": "receiver",
+      "lost": 0,
+      "meanBufferMs": 59.78260869565217,
+      "ms": 406663.89999999106,
+      "nacks": 0,
+      "packets": 44,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 7
+      },
+      "receivedSamples": 47520,
+      "removedMs": 0,
+      "silentConcealedMs": 0,
+      "windowMs": 1001.25
+    },
+    {
+      "durationMs": 61,
+      "kind": "receiver-long-task",
+      "ms": 415038.89999999106,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 14
+      },
+      "startMs": 414976.39999999106
+    },
+    {
+      "durationMs": 69,
+      "kind": "receiver-long-task",
+      "ms": 444263.200000003,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 45
+      },
+      "startMs": 444180.89999999106
+    },
+    {
+      "durationMs": 77,
+      "kind": "receiver-long-task",
+      "ms": 451869.299999997,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 53
+      },
+      "startMs": 451779.59999999404
+    },
+    {
+      "concealedMs": 21.854166666666668,
+      "discarded": 0,
+      "emittedSamples": 46080,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 0,
+      "jitterMs": 3,
+      "kind": "receiver",
+      "lost": 1,
+      "meanBufferMs": 61.87499999999899,
+      "ms": 456878.200000003,
+      "nacks": 7,
+      "packets": 49,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 57
+      },
+      "receivedSamples": 48000,
+      "removedMs": 0,
+      "silentConcealedMs": 0,
+      "windowMs": 1001.47021484375
+    },
+    {
+      "concealedMs": 0,
+      "discarded": 0,
+      "emittedSamples": 48000,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 0,
+      "jitterMs": 3,
+      "kind": "receiver",
+      "lost": 0,
+      "meanBufferMs": 70,
+      "ms": 457879.59999999404,
+      "nacks": 1,
+      "packets": 51,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 59
+      },
+      "receivedSamples": 48000,
+      "removedMs": 0,
+      "silentConcealedMs": 0,
+      "windowMs": 1001.6279296875
+    },
+    {
+      "concealedMs": 7.833333333333333,
+      "discarded": 0,
+      "emittedSamples": 47040,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 0,
+      "jitterMs": 3,
+      "kind": "receiver",
+      "lost": 1,
+      "meanBufferMs": 72.24489795918664,
+      "ms": 475905.89999999106,
+      "nacks": 1,
+      "packets": 49,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 77
+      },
+      "receivedSamples": 48000,
+      "removedMs": 0,
+      "silentConcealedMs": 0,
+      "windowMs": 1001.426025390625
+    },
+    {
+      "concealedMs": 9.020833333333334,
+      "discarded": 0,
+      "emittedSamples": 48000,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 0,
+      "jitterMs": 3,
+      "kind": "receiver",
+      "lost": 0,
+      "meanBufferMs": 71.79999999999806,
+      "ms": 476907.299999997,
+      "nacks": 8,
+      "packets": 50,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 77
+      },
+      "receivedSamples": 48000,
+      "removedMs": 0,
+      "silentConcealedMs": 0,
+      "windowMs": 1001.468017578125
+    },
+    {
+      "durationMs": 84,
+      "kind": "receiver-long-task",
+      "ms": 498952.39999999106,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 100
+      },
+      "startMs": 498854.09999999404
+    },
+    {
+      "durationMs": 76,
+      "kind": "receiver-long-task",
+      "ms": 512466.299999997,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 113
+      },
+      "startMs": 512377.700000003
+    },
+    {
+      "durationMs": 63,
+      "kind": "receiver-long-task",
+      "ms": 557165.099999994,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 158
+      },
+      "startMs": 557087.8999999911
+    },
+    {
+      "durationMs": 64,
+      "kind": "receiver-long-task",
+      "ms": 558552.5,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 159
+      },
+      "startMs": 558474.799999997
+    },
+    {
+      "durationMs": 65,
+      "kind": "receiver-long-task",
+      "ms": 559655.299999997,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 161
+      },
+      "startMs": 559577.8999999911
+    },
+    {
+      "concealedMs": 0,
+      "discarded": 0,
+      "emittedSamples": 48000,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 0,
+      "jitterMs": 3,
+      "kind": "receiver",
+      "lost": 0,
+      "meanBufferMs": 49.80000000000291,
+      "ms": 578096.700000003,
+      "nacks": 1,
+      "packets": 51,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 178
+      },
+      "receivedSamples": 48000,
+      "removedMs": 0,
+      "silentConcealedMs": 0,
+      "windowMs": 1003.419921875
+    },
+    {
+      "concealedMs": 190.10416666666666,
+      "discarded": 0,
+      "emittedSamples": 39360,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 0,
+      "jitterMs": 8,
+      "kind": "receiver",
+      "lost": 0,
+      "meanBufferMs": 39.512195121950036,
+      "ms": 584105.5,
+      "nacks": 0,
+      "packets": 39,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 184
+      },
+      "receivedSamples": 48000,
+      "removedMs": 0,
+      "silentConcealedMs": 0,
+      "windowMs": 1001.433837890625
+    },
+    {
+      "concealedMs": 11.604166666666666,
+      "discarded": 0,
+      "emittedSamples": 48000,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 0,
+      "jitterMs": 2,
+      "kind": "receiver",
+      "lost": 0,
+      "meanBufferMs": 12.79999999999806,
+      "ms": 587109.700000003,
+      "nacks": 0,
+      "packets": 50,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 184
+      },
+      "receivedSamples": 48000,
+      "removedMs": 0,
+      "silentConcealedMs": 0,
+      "windowMs": 1001.470947265625
+    },
+    {
+      "durationMs": 67,
+      "kind": "receiver-long-task",
+      "ms": 590852.599999994,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 184
+      },
+      "startMs": 590783.700000003
+    },
+    {
+      "concealedMs": 22.145833333333332,
+      "discarded": 0,
+      "emittedSamples": 46080,
+      "fecDiscarded": 0,
+      "fecReceived": 0,
+      "insertedMs": 0,
+      "jitterMs": 2,
+      "kind": "receiver",
+      "lost": 0,
+      "meanBufferMs": 10.00000000000101,
+      "ms": 591115.700000003,
+      "nacks": 0,
+      "packets": 48,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 184
+      },
+      "receivedSamples": 48000,
+      "removedMs": 0,
+      "silentConcealedMs": 0,
+      "windowMs": 1001.52294921875
+    },
+    {
+      "durationMs": 66,
+      "kind": "receiver-long-task",
+      "ms": 591696.599999994,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 192
+      },
+      "startMs": 591616.299999997
+    },
+    {
+      "durationMs": 75,
+      "kind": "receiver-long-task",
+      "ms": 599865.3999999911,
+      "phase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 201
+      },
+      "startMs": 599778.5
+    }
+  ],
+  "eventsTruncated": false,
+  "finishedAt": "2026-09-08T20:33:55.827Z",
+  "graphWarmupMs": 1100,
+  "initial": {
+    "bytesReceived": 369911,
+    "concealedSamples": 517,
+    "concealmentEvents": 1,
+    "fecPacketsDiscarded": 0,
+    "fecPacketsReceived": 0,
+    "insertedSamplesForDeceleration": 0,
+    "jitterBufferDelay": 74592,
+    "jitterBufferEmittedCount": 1356480,
+    "jitterBufferMinimumDelay": 54835.2,
+    "jitterBufferTargetDelay": 54835.2,
+    "nackCount": 1,
+    "packetsDiscarded": 0,
+    "packetsLost": 0,
+    "packetsReceived": 1416,
+    "removedSamplesForAcceleration": 1928,
+    "silentConcealedSamples": 0,
+    "timestamp": 1788899035776.24,
+    "totalSamplesReceived": 1355040
+  },
+  "lastProgressAt": "2026-09-08T20:33:55.777Z",
+  "limitations": [
+    "Finite receiver observation, not a guarantee of future network behavior",
+    "Track phase comes from the once-per-second visible player; silence near track boundaries is retained for review, never silently excluded",
+    "No PCM is recorded; source defects and perceptual quality need separate evidence"
+  ],
+  "minutes": [
+    {
+      "concealedSamples": 6458,
+      "concealmentEvents": 6,
+      "fromMs": 0,
+      "index": 0,
+      "lostNet": 0,
+      "maxJitterMs": 6,
+      "maxPcmSilenceMs": 0,
+      "maxPollMs": 1015.720947265625,
+      "packets": 2949,
+      "polls": 59,
+      "positiveLoss": 0,
+      "silentConcealedSamples": 0,
+      "toMs": 59104.51611328125
+    },
+    {
+      "concealedSamples": 3392,
+      "concealmentEvents": 1,
+      "fromMs": 59104.51611328125,
+      "index": 1,
+      "lostNet": 0,
+      "maxJitterMs": 8,
+      "maxPcmSilenceMs": 0,
+      "maxPollMs": 1015.568115234375,
+      "packets": 3005,
+      "polls": 60,
+      "positiveLoss": 0,
+      "silentConcealedSamples": 0,
+      "toMs": 119209.53295898438
+    },
+    {
+      "concealedSamples": 0,
+      "concealmentEvents": 0,
+      "fromMs": 119209.53295898438,
+      "index": 2,
+      "lostNet": 0,
+      "maxJitterMs": 10,
+      "maxPcmSilenceMs": 0,
+      "maxPollMs": 1001.89306640625,
+      "packets": 3004,
+      "polls": 60,
+      "positiveLoss": 0,
+      "silentConcealedSamples": 0,
+      "toMs": 179295.22509765625
+    },
+    {
+      "concealedSamples": 2161,
+      "concealmentEvents": 1,
+      "fromMs": 179295.22509765625,
+      "index": 3,
+      "lostNet": 0,
+      "maxJitterMs": 6,
+      "maxPcmSilenceMs": 342.0416666666667,
+      "maxPollMs": 1014.429931640625,
+      "packets": 3002,
+      "polls": 60,
+      "positiveLoss": 0,
+      "silentConcealedSamples": 0,
+      "toMs": 239397.24389648438
+    },
+    {
+      "concealedSamples": 2035,
+      "concealmentEvents": 2,
+      "fromMs": 239397.24389648438,
+      "index": 4,
+      "lostNet": 0,
+      "maxJitterMs": 5,
+      "maxPcmSilenceMs": 0,
+      "maxPollMs": 1022.89599609375,
+      "packets": 3002,
+      "polls": 60,
+      "positiveLoss": 0,
+      "silentConcealedSamples": 0,
+      "toMs": 299506.3630371094
+    },
+    {
+      "concealedSamples": 0,
+      "concealmentEvents": 0,
+      "fromMs": 299506.3630371094,
+      "index": 5,
+      "lostNet": 0,
+      "maxJitterMs": 5,
+      "maxPcmSilenceMs": 0,
+      "maxPollMs": 1001.929931640625,
+      "packets": 3004,
+      "polls": 60,
+      "positiveLoss": 0,
+      "silentConcealedSamples": 0,
+      "toMs": 359591.27294921875
+    },
+    {
+      "concealedSamples": 4600,
+      "concealmentEvents": 2,
+      "fromMs": 359591.27294921875,
+      "index": 6,
+      "lostNet": 0,
+      "maxJitterMs": 6,
+      "maxPcmSilenceMs": 407.0625,
+      "maxPollMs": 1028.360107421875,
+      "packets": 2998,
+      "polls": 60,
+      "positiveLoss": 0,
+      "silentConcealedSamples": 0,
+      "toMs": 419707.412109375
+    },
+    {
+      "concealedSamples": 1858,
+      "concealmentEvents": 2,
+      "fromMs": 419707.412109375,
+      "index": 7,
+      "lostNet": 2,
+      "maxJitterMs": 4,
+      "maxPcmSilenceMs": 0,
+      "maxPollMs": 1065.218994140625,
+      "packets": 3005,
+      "polls": 60,
+      "positiveLoss": 2,
+      "silentConcealedSamples": 0,
+      "toMs": 479910.1970214844
+    },
+    {
+      "concealedSamples": 0,
+      "concealmentEvents": 0,
+      "fromMs": 479910.1970214844,
+      "index": 8,
+      "lostNet": 0,
+      "maxJitterMs": 5,
+      "maxPcmSilenceMs": 0,
+      "maxPollMs": 1015.863037109375,
+      "packets": 2957,
+      "polls": 59,
+      "positiveLoss": 0,
+      "silentConcealedSamples": 0,
+      "toMs": 539037.37890625
+    },
+    {
+      "concealedSamples": 10745,
+      "concealmentEvents": 5,
+      "fromMs": 539037.37890625,
+      "index": 9,
+      "lostNet": 0,
+      "maxJitterMs": 8,
+      "maxPcmSilenceMs": 0,
+      "maxPollMs": 1003.419921875,
+      "packets": 2991,
+      "polls": 60,
+      "positiveLoss": 0,
+      "silentConcealedSamples": 0,
+      "toMs": 599125.6750488281
+    },
+    {
+      "concealedSamples": 0,
+      "concealmentEvents": 0,
+      "fromMs": 599125.6750488281,
+      "index": 10,
+      "lostNet": 0,
+      "maxJitterMs": 3,
+      "maxPcmSilenceMs": 0,
+      "maxPollMs": 874.447021484375,
+      "packets": 44,
+      "polls": 1,
+      "positiveLoss": 0,
+      "silentConcealedSamples": 0,
+      "toMs": 600000.1220703125
+    }
+  ],
+  "observationWallSeconds": 600.051799999997,
+  "pcm": {
+    "audioSeconds": 600.0106666666667,
+    "emptyFrames": 0,
+    "frames": 28800512,
+    "longestQuietMs": 974.9791666666666,
+    "nearFullScale": 0,
+    "nonFinite": 0,
+    "ongoingQuietMs": 0,
+    "peak": 0.5731680989265442,
+    "reports": 2394,
+    "rms": 0.08784240601062054,
+    "samples": 57601024,
+    "squared": 444466.1071983317
+  },
+  "pcmEnabled": true,
+  "receiverScheduling": {
+    "enabled": true,
+    "initialVisibility": "visible",
+    "longTasks": 26,
+    "longTasksSupported": true,
+    "maxLongTaskMs": 84,
+    "totalLongTaskMs": 1860
+  },
+  "requestedAt": "2026-09-08T20:23:53.554Z",
+  "requestedSeconds": 600,
+  "sampleRate": 48000,
+  "sampling": {
+    "maxConcealedMsPerPoll": 190.10416666666666,
+    "maxPollMs": 1065.218994140625,
+    "negativeLossDeltas": 0,
+    "pcmReportsMissing": 0,
+    "polls": 599,
+    "positiveLossDeltas": 2,
+    "stalePolls": 0
+  },
+  "startedAt": "2026-09-08T20:23:55.776Z",
+  "status": "completed",
+  "version": 1
+}
