@@ -31,6 +31,14 @@ message that the free bot plan is at high demand and to try later or upgrade.
 This is a provider free-capacity blocker, not a Raydio memory/build failure.
 No Discloud app was created and no premium plan was selected.
 
+Pella's current public page advertises a free Discord-bot tier with 0.1 CPU,
+100 MB RAM, 5 GB disk, and unmetered bandwidth. Its public signup page offers
+Google authentication and is a viable next no-card candidate, but this session
+did not complete an account or runtime deployment, so uptime, egress, and
+renewal behavior remain unverified. alwaysdata was ruled out for this account
+creation attempt because its registration explicitly requires validation of a
+valid credit/debit card, even though its free plan is advertised as €0.
+
 Northflank's personal GitHub installation exists under `rayan6ms`; no organisation
 installation is needed. A free `raydio-test` project exists in US Central. The
 service creation form offers 0.1 shared vCPU and 256 MB; these are offered settings,
