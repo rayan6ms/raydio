@@ -1,0 +1,4 @@
+Starting raydio-owned-six-hour.service - Raydio owned channel six-hour qualification Testbot...
+2026-09-08T10:53:16.354479Z  INFO raydio::runtime: Raydio ready bot_id=1544468432907669644
+Started raydio-owned-six-hour.service - Raydio owned channel six-hour qualification Testbot.
+2026-09-08T11:14:52.682658Z  INFO crust_oto_adapter: audio sender stopped frames_sent=63831 silence_frames_sent=8 frames_unavailable=8 skipped_deadlines=22 send_failures=0 source_overruns=0 max_lateness_us=60255 phase=Stopped failure=None

@@ -1,0 +1,49 @@
+{
+  "scope": "Same candidate after same-instance fault-domain migration; uninstrumented sender, browser receiver plus minute resource sampler",
+  "receiverSeconds": 1199.9992150878907,
+  "startedAt": "2026-09-08T10:54:27.073Z",
+  "packets": 59989,
+  "concealmentMs": 610.8125,
+  "silentConcealmentMs": 0.0,
+  "packetsDiscarded": 11,
+  "netPacketsLost": 0,
+  "positiveLossDeltas": 0,
+  "nacks": 35,
+  "unexpectedQuietOrSpeakingEvents": 0,
+  "sourceTailQuietMs": 976.25,
+  "restarts": 5,
+  "nearFullScale": 0,
+  "nonFinite": 0,
+  "emptyPcmFrames": 0,
+  "receiverLongTasks": 0,
+  "missingPcmReports": 0,
+  "warmPssKiB": {
+    "min": 16442,
+    "max": 16998
+  },
+  "cpuPercentOneCore": 4.777050509019906,
+  "hostStealPercent": 0.45294724133980735,
+  "senderLifetime": {
+    "framesSent": 63831,
+    "silenceFramesSent": 8,
+    "framesUnavailable": 8,
+    "skippedDeadlines": 22,
+    "maxLatenessUs": 60255,
+    "sendFailures": 0,
+    "sourceOverruns": 0,
+    "failure": null
+  },
+  "comparison": {
+    "prior20MinuteConcealmentMs": 478.2916666666667,
+    "changePercent": 27.707117344716426,
+    "prior20MinuteDiscards": 13,
+    "prior20MinuteNacks": 45,
+    "overallTransmissionImprovementDemonstrated": false
+  },
+  "limitations": [
+    "Different time, VM placement, browser peer and warm-up conditions; not a controlled causal comparison.",
+    "Sender lifetime counters include setup and explicit stop, outside the receiver window.",
+    "Finite short completion cannot establish six-hour quality.",
+    "No new code, bitrate reduction, receiver jitter-buffer manipulation or diagnostic tracer used."
+  ]
+}

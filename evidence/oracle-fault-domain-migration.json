@@ -1,0 +1,16 @@
+{
+  "verifiedAtUtc": "2026-09-08T10:54:05.515880+00:00",
+  "sameInstance": true,
+  "nonTerminatedInstances": 1,
+  "shape": "VM.Standard.E2.1.Micro",
+  "fromFaultDomain": "FAULT-DOMAIN-1",
+  "toFaultDomain": "FAULT-DOMAIN-2",
+  "state": "RUNNING",
+  "candidateSha256": "699272f8f7abfb4c4ac2e038c4b8d08fa277d6f05ba427d30ab889d48975abeb",
+  "oldBootId": "13cfbfbe-69d0-49f3-be42-1c7040a29450",
+  "newBootId": "4098e5eb-e115-4ed1-90e7-4bbfb4dbefc0",
+  "productionPid": 876,
+  "candidatePid": 1332,
+  "performanceResult": "20-minute receiver completed without unexpected silence, but overall transmission improvement not demonstrated; see fd2-repeat-summary.json",
+  "temporaryTestServiceState": "stopped"
+}

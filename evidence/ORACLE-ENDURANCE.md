@@ -813,3 +813,53 @@ this shared Micro host. The callback false-termination repair remains intact,
 but another clean short window cannot establish six-hour reliability. A1 still
 has no reported capacity; moving the existing Micro would require maintenance
 and fresh measurement, with no assumed improvement.
+
+### Existing Micro moved to fault domain 2 (September 8 UTC)
+
+With user authorization, a fresh inventory verified one non-terminated Micro
+instance and capacity in fault domain 2. The production environment and candidate
+unit were copied to a root-only backup on the existing boot volume. OCI
+`instance update --fault-domain FAULT-DOMAIN-2` with ALLOW_DOWNTIME moved that
+same instance; no second instance, shape change or paid resource was created.
+After STOPPING/STARTING, it returned RUNNING with the same public address and
+shape. The new boot ID is retained in `oracle-fault-domain-migration.json`.
+Production Raydio restarted automatically as PID 876. The exact owned-channel
+candidate hash remained unchanged, and NTP synchronization was verified.
+
+The controlled browser reopened already signed in; the meter was installed
+before joining General. Testbot PID 1332 played the same source at volume 70
+with Loop on. After boot/setup, a 1,200-second receiver comparison ran from
+10:54:27.073 UTC, with the low-priority minute sampler and no SSH, builds,
+controls, packet tracing or timer probes during the measured window.
+
+Five repeats completed: 59,989 packets, **610.813 ms concealment**, eleven
+discards, 35 NACKs, zero net/positive loss and zero silent concealment. There
+were no unexpected >=20 ms quiet or speaking-off events; each source tail
+retained the 21.958/976.25 ms pattern. Near-full-scale/nonfinite/empty PCM,
+receiver long tasks and missing PCM reports were all zero.
+
+Warm PSS was 16,442–16,998 KiB, CPU 4.777% of one core, and host steal 0.453%.
+After explicit Stop outside measurement, sender lifetime counters were 63,831
+audio frames, eight unavailable/silence frames, 22 skipped deadlines, maximum
+lateness 60,255 us, zero send failures and no terminal failure. These counters
+include setup and Stop and cannot place individual underruns inside the window.
+
+Against the earlier equal-duration owned-channel window on fault domain 1,
+concealment increased **478.292 to 610.813 ms (+27.7%)**, while discards fell
+13 to eleven and NACKs 45 to 35. Host timing and browser peer conditions differ;
+this is observational, not a controlled causal estimate. Lower steal and a
+completed short window do **not** demonstrate overall transmission improvement
+or six-hour reliability. Another six-hour qualification was not started.
+
+Review also confirms Crust already maintains sixteen encoded frames upstream.
+The remaining capacity-one Oto handoff acknowledges source consumption, which
+preserves position/control ordering. A larger downstream queue would require
+targeted underrun reproduction plus ordering/latency regressions; it is not a
+missing general-purpose source buffer and cannot transmit while the VM is
+descheduled. No speculative buffer or bitrate change was applied.
+
+Raw receiver, resources, current-boot sender and scoped comparison are in
+`fd2-*`. Temporary Testbot and its sampler were stopped; the local sleep
+inhibitor was removed. Production remains active on the single migrated free
+instance. Audio qualification remains unresolved due to residual delivery
+delays; migration alone is not an established fix.
