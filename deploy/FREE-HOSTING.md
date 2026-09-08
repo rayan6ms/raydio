@@ -2,6 +2,30 @@
 
 ## Expanded checks — 2026-09-08
 
+### Deployed alternatives, later the same day
+
+Northflank successfully deployed the pinned native Testbot candidate on its
+Developer Sandbox ($0), 0.1 shared vCPU / 256 MB in US Central. Its initial
+three-minute receiver sample received 9,000 packets with zero loss, discard,
+NACK, concealment or clipping. It did not cover a repeat or qualify six hours.
+See `evidence/NORTHFLANK-RELIABILITY.md` for billing qualifications and evidence.
+Brazil / Osasco is offered but explicitly requires pay-as-you-go; the free
+region choices shown on this account were US Central and Europe West / London.
+
+Pella also ran the same native candidate after deployment fixes. Its free tier
+expires after 24 hours and offers 24/32-hour extensions through daily-changing
+advertising links. Supported unattended renewal was not established. Its
+180-second receiver sample had 80 lost packets, 575 NACKs, 24.847 seconds of
+concealment including 15.208 seconds of silent concealment, and quiet intervals
+up to 995.25 ms. Six browser long tasks totaled 422 ms (maximum 77 ms); there
+were no stale polls or missing PCM reports. No clipping occurred. These are
+end-to-end observations, not a proven attribution to a particular provider
+subsystem. The deployment fails the continuity requirement and was stopped.
+See `evidence/pella-screen-receiver.json` and `deploy/pella/README.md`.
+
+Discloud remains on hold for exhausted free capacity; serv00 remains on hold
+for the user's pending manual account validation. No paid upgrades selected.
+
 The earlier provider list was not exhaustive. The additional candidates below
 were checked against official pages; none has a measured Raydio receiver run yet.
 Do not confuse an advertised resource allowance with demonstrated audio quality.
