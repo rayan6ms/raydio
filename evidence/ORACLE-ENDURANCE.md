@@ -667,3 +667,13 @@ memory reduction, receiver quality improvement or Oracle endurance pass.
 The original 900-second PMU evidence is retained in `source-cpu-probe-final.json`.
 
 Fresh Oracle idle and receiver validation is pending; production remains v0.2.1.
+
+
+### Owned-channel receiver smoke attempt (September 7)
+
+The candidate binary passed Oracle `--check`, but the controlled Discord tab had a
+stale Now Playing panel and no advancing WebRTC inbound audio receiver. The
+120-second receiver meter therefore failed before measurement with
+`Expected exactly one advancing receiver`; no audio-quality conclusion is drawn.
+The temporary candidate service was stopped; stable `raydio.service` remained
+untouched.
