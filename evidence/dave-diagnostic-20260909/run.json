@@ -1,0 +1,28 @@
+{
+  "classification": "six-hour diagnostic reproduction attempt, not fix qualification",
+  "startedAt": "2026-09-09T08:03:56.975Z",
+  "plannedEnd": "2026-09-09T14:03:56.975Z",
+  "requestedSeconds": 21600,
+  "source": "d51c2f2850d3e2649aaeb2778d20788f0ae5cf86",
+  "candidatePid": 5064,
+  "productionPid": 876,
+  "candidateUnit": "raydio-dave-diagnostic.service",
+  "browserTab": "tab_1",
+  "guild": "test",
+  "channel": "General",
+  "track": "https://youtu.be/dQw4w9WgXcQ",
+  "volume": 70,
+  "loop": true,
+  "localReceiver": "target/dave-diagnostic-20260909/receiver.json",
+  "remoteEvidence": "/var/lib/raydio/dave-diagnostic-20260909",
+  "checkpointInitialSave": "passed, 0 errors",
+  "localUnits": [
+    "raydio-dave-receiver-checkpoints",
+    "raydio-dave-receiver-awake"
+  ],
+  "oracleUnits": [
+    "raydio-dave-diagnostic-resources",
+    "raydio-dave-diagnostic-save.timer",
+    "raydio-dave-diagnostic-restore.timer"
+  ]
+}

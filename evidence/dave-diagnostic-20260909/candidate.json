@@ -1,0 +1,12 @@
+{
+  "source": "d51c2f2850d3e2649aaeb2778d20788f0ae5cf86",
+  "oto": "83c6338a0fb788489179f4f00fd703a346da3c2d",
+  "crust": "a5b208d1b646cc00f555ebede08bed4e5719d617",
+  "sha256": "ec63fbaad66836e04a34a7cf3bd97a96dcda9c1e58574979869de12d0f56b831",
+  "binaryBytes": 18572568,
+  "previousBinaryBytes": 18571120,
+  "oracleOfflineCheck": "passed",
+  "pid": 5064,
+  "productionPid": 876,
+  "classification": "diagnostic; no behavior fix yet"
+}

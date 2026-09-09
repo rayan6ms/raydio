@@ -1,0 +1,20 @@
+RuntimeMaxUSec=infinity
+MainPID=5064
+NRestarts=0
+CPUQuotaPerSecUSec=infinity
+Id=raydio-dave-diagnostic.service
+ActiveState=active
+
+RuntimeMaxUSec=infinity
+MainPID=876
+NRestarts=0
+CPUQuotaPerSecUSec=infinity
+Id=raydio.service
+ActiveState=active
+NTPSynchronized=yes
+NEXT                        LEFT LAST PASSED UNIT                                 ACTIVATES
+Wed 2026-09-09 14:30:38 UTC   6h -         - raydio-dave-diagnostic-save.timer    raydio-dave-diagnostic-save.service
+Wed 2026-09-09 15:00:38 UTC   6h -         - raydio-dave-diagnostic-restore.timer raydio-dave-diagnostic-restore.service
+
+2 timers listed.
+Pass --all to see loaded but inactive timers, too.
