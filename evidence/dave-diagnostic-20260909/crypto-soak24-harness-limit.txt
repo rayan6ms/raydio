@@ -1,0 +1,19 @@
+   Compiling oto v1.0.0 (/home/rayan/Documents/Projects/oto-raydio-public/crates/oto)
+    Finished `release` profile [optimized] target(s) in 51.13s
+     Running unittests src/lib.rs (target/release/deps/oto-693325e456c71282)
+
+running 1 test
+test dave::tests::p14_simulated_dave_transport_crypto_soak ... 
+thread 'dave::tests::p14_simulated_dave_transport_crypto_soak' (878956) panicked at crates/oto/src/dave.rs:1587:9:
+assertion failed: increments.wrapping_mul(960) > u64::from(u32::MAX)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    dave::tests::p14_simulated_dave_transport_crypto_soak
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 100 filtered out; finished in 13.71s
+
+error: test failed, to rerun pass `-p oto --lib`

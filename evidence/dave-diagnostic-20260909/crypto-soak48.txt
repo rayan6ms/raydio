@@ -1,0 +1,9 @@
+    Finished `release` profile [optimized] target(s) in 0.16s
+     Running unittests src/lib.rs (target/release/deps/oto-693325e456c71282)
+
+running 1 test
+test dave::tests::p14_simulated_dave_transport_crypto_soak ... P14_SIMULATED_SOAK={"allocations":0,"benchmarkId":"oto-p14-simulated-dave-transport-crypto-soak","bytesAllocated":0,"classification":"simulated frame-count soak; not wall-clock or live Discord evidence","frames":8640000,"layers":["DAVE v1","RTP","AES-256-GCM rtpsize"],"profile":"release","reallocations":0,"schemaVersion":1,"sequenceWrapsMinimum":131,"simulatedHours":48,"timestampWrapsMinimum":1,"transportNonceEnd":8639999,"transportNonceStart":0,"wallSeconds":28.339713092}
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 100 filtered out; finished in 28.35s
+

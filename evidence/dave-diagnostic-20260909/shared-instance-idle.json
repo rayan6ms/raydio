@@ -1,0 +1,25 @@
+{
+  "startUtc": "2026-09-09T07:48:09.640809+00:00",
+  "endUtc": "2026-09-09T07:48:39.710276+00:00",
+  "durationSeconds": 30.069467,
+  "raydio": {
+    "pid": 876,
+    "active": true,
+    "restarts": 0,
+    "pssKiB": 12622,
+    "cpuStartNS": 22266743000,
+    "cpuEndNS": 22275647000
+  },
+  "testbot": {
+    "pid": 3063,
+    "active": true,
+    "playing": false,
+    "restarts": 0,
+    "pssKiB": 12438,
+    "cpuStartNS": 848517838000,
+    "cpuEndNS": 848529515000
+  },
+  "memAvailableKiB": 581208,
+  "productionJournalSince": "2026-09-08T20:55:00Z",
+  "productionJournalEntries": 0
+}

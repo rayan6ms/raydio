@@ -1,0 +1,11 @@
+    Updating git repository `https://github.com/rayan6ms/oto`
+    Updating crates.io index
+     Locking 3 packages to latest Rust 1.97.1 compatible versions
+      Adding davey v0.1.4 (https://github.com/rayan6ms/oto?rev=83c6338a0fb788489179f4f00fd703a346da3c2d#83c6338a)
+      Adding oto v1.0.0 (https://github.com/rayan6ms/oto?rev=83c6338a0fb788489179f4f00fd703a346da3c2d#83c6338a)
+      Adding oto-testkit v1.0.0 (https://github.com/rayan6ms/oto?rev=83c6338a0fb788489179f4f00fd703a346da3c2d#83c6338a)
+    Checking davey v0.1.4 (https://github.com/rayan6ms/oto?rev=83c6338a0fb788489179f4f00fd703a346da3c2d#83c6338a)
+    Checking oto v1.0.0 (https://github.com/rayan6ms/oto?rev=83c6338a0fb788489179f4f00fd703a346da3c2d#83c6338a)
+    Checking oto-testkit v1.0.0 (https://github.com/rayan6ms/oto?rev=83c6338a0fb788489179f4f00fd703a346da3c2d#83c6338a)
+    Checking crust-oto-adapter v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-oto-adapter)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.19s
