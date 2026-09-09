@@ -26,7 +26,7 @@ async function simulate(seconds, disconnect=false) {
 }
 const long=await simulate(21600);
 assert.equal(long.report.status,'completed');
-assert.equal(long.report.diagnosticWindows.length,128);
+assert.equal(long.report.diagnosticWindows.length,256);
 assert.ok(long.report.diagnosticWindowsDropped>0);
 assert.equal(long.report.events.length,4096);
 assert.ok(long.report.eventsDropped>0);

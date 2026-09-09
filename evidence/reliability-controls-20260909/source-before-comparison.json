@@ -1,0 +1,16 @@
+{
+  "scope": "same staged compressed input, first play without controls, second with identical volume every 100 frames; no Discord",
+  "frames": [
+    10653,
+    10653
+  ],
+  "packetDigest": [
+    "5ee41aca5bb4cdff1d4e502906e1da6e004a4471f5db840c9136dc5e08ac064e",
+    "6570486bdfda8fe5cebe314ad09177c7fe8fa10bffd1c70afaf772f129240ed1"
+  ],
+  "differentPackets": 8238,
+  "unmatchedFrames": 0,
+  "bitIdentical": false,
+  "controlUpdates": 106,
+  "controlUpdateMs": 19.295017000000005
+}

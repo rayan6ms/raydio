@@ -19,18 +19,24 @@ async fn main() -> Result<()> {
     let args: Vec<_> = std::env::args().skip(1).collect();
     let path = args.first().context("supply a new output path")?;
     anyhow::ensure!(
-        args[1..]
-            .iter()
-            .all(|arg| matches!(arg.as_str(), "--paced" | "--staged" | "--repeat")),
+        args[1..].iter().all(|arg| matches!(
+            arg.as_str(),
+            "--paced" | "--staged" | "--repeat" | "--redundant-filters"
+        )),
         "unknown audit option"
     );
     let paced = args.iter().any(|arg| arg == "--paced");
     let staged = args.iter().any(|arg| arg == "--staged");
+    let redundant_filters = args.iter().any(|arg| arg == "--redundant-filters");
     let repeats = if args.iter().any(|arg| arg == "--repeat") {
         2
     } else {
         1
     };
+    anyhow::ensure!(
+        !redundant_filters || (staged && repeats == 2),
+        "--redundant-filters requires --staged --repeat"
+    );
     let mut out = BufWriter::new(OpenOptions::new().write(true).create_new(true).open(path)?);
     let adapter = RealMantleAdapter::with_options(
         RoutePlanner::disabled(),
@@ -69,7 +75,19 @@ async fn main() -> Result<()> {
             let started = Instant::now();
             let mut deadline = tokio::time::Instant::now();
             let mut stalls = Vec::new();
+            let mut filter_updates = 0_u64;
+            let mut filter_update_ms = 0_f64;
             loop {
+                // The second play reuses the identical staged compressed input.
+                // Compare it against the first play, without redundant controls.
+                if redundant_filters && iteration == 1 && frames > 0 && frames.is_multiple_of(100) {
+                    let updating = Instant::now();
+                    player.set_filters(crust::filters::FilterConfiguration {
+                        player_volume: Some(70), ..Default::default()
+                    }, cancel.clone()).await?;
+                    filter_update_ms += updating.elapsed().as_secs_f64() * 1000.0;
+                    filter_updates += 1;
+                }
                 let reading = Instant::now();
                 let Some(frame) = player.next_frame(cancel.clone()).await? else { break; };
                 let read_ms = reading.elapsed().as_secs_f64() * 1000.0;
@@ -93,7 +111,7 @@ async fn main() -> Result<()> {
                 }
             }
             out.flush()?;
-            reports.push(serde_json::json!({"iteration":iteration,"startupMs":startup_ms,"frames":frames,"bytes":bytes,"maxReadMs":max_read_ms,"elapsedSeconds":started.elapsed().as_secs_f64(),"stalls":stalls}));
+            reports.push(serde_json::json!({"iteration":iteration,"startupMs":startup_ms,"frames":frames,"bytes":bytes,"maxReadMs":max_read_ms,"elapsedSeconds":started.elapsed().as_secs_f64(),"filterUpdates":filter_updates,"filterUpdateMs":filter_update_ms,"stalls":stalls}));
             // A repeat must rebind cancellation before seeking the retained input.
             play_cancel.cancel();
         }

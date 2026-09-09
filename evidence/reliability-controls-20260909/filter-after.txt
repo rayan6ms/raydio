@@ -1,0 +1,33 @@
+   Compiling crust-mantle-adapter v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-mantle-adapter)
+    Finished `test` profile [unoptimized] target(s) in 1.80s
+     Running unittests src/lib.rs (target/debug/deps/crust_mantle_adapter-b977cafa3250268f)
+
+running 25 tests
+test filters::tests::p09_filter_benchmark_report ... ignored, manual release-profile filter benchmark; run with --ignored --nocapture
+test filters::tests::fixed_filter_golden_vectors_match_lavadsp_formulas ... ok
+test filters::tests::player_volume_matches_frozen_lavaplayer_signed_pcm_oracle_without_allocations ... ok
+test filters::tests::remaining_fixed_filter_golden_vectors_match_lavadsp_formulas ... ok
+test tests::p18_offline_mantle_playback_benchmark_report ... ignored, release-only P18 Mantle full-playback performance gate
+test tests::outbound_policy_preserves_identity_and_rejects_known_family_mismatch ... ok
+test tests::production_source_http_defaults_to_mantles_public_internet_policy ... ok
+test tests::completed_streaming_fallback_does_not_retain_a_decoder_or_source ... ok
+test tests::identical_filters_do_not_wait_for_a_source_read_but_queued_changes_stay_ordered ... ok
+test tests::buffered_audio_remains_available_while_next_read_is_blocked ... ok
+test tests::pause_retains_read_ahead_and_resume_delivers_in_order ... ok
+test tests::staged_input_cleanup_cancellation_and_stopped_controls ... ok
+test filters::tests::timescale_reset_replacement_removal_and_ratio_bounds_are_deterministic ... ok
+test tests::deferred_filters_are_bounded_ordered_and_drained_before_stop ... ok
+test tests::filter_update_waiting_on_a_source_read_does_not_block_buffered_audio ... ok
+test tests::read_ahead_is_bounded_and_eof_waits_for_the_last_delivered_frame ... ok
+test tests::completed_staged_input_repeats_and_resets_sequence_without_reopening_source ... ok
+test tests::seek_and_replacement_discard_frames_from_the_previous_position ... ok
+test tests::real_adapter_passes_the_shared_contract_through_mantle ... ok
+test tests::routed_mantle_requests_bind_the_selected_local_ip_without_cross_route_reuse ... ok
+test tests::disabled_route_planner_reuses_source_http_connection ... ok
+test filters::tests::wsola_finish_flushes_exact_duration_at_speed_boundaries ... ok
+test filters::tests::phase_vocoder_timescale_changes_stream_duration ... ok
+test filters::tests::timescale_speed_pitch_and_rate_are_independent_and_fractionally_paced ... ok
+test filters::tests::crust_timescale_allocates_zero_times_after_construction ... ok
+
+test result: ok. 23 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 1.46s
+

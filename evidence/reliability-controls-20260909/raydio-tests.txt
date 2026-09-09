@@ -1,0 +1,131 @@
+    Updating git repository `https://github.com/rayan6ms/crust`
+     Locking 6 packages to latest Rust 1.97.1 compatible versions
+      Adding crust v0.0.0 (https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c)
+      Adding crust-mantle-adapter v0.0.0 (https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c)
+      Adding crust-oto-adapter v0.0.0 (https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c)
+      Adding crust-protocol v0.0.0 (https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c)
+      Adding crust-server v0.0.0 (https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c)
+      Adding crust-testkit v0.0.0 (https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c)
+   Compiling crust v0.0.0 (https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c)
+   Compiling crust-server v0.0.0 (https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c)
+   Compiling crust-mantle-adapter v0.0.0 (https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c)
+   Compiling crust-oto-adapter v0.0.0 (https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c)
+   Compiling crust-protocol v0.0.0 (https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c)
+   Compiling raydio v0.2.2 (/home/rayan/Documents/Projects/raydio-rust)
+   Compiling crust-testkit v0.0.0 (https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c)
+    Finished `test` profile [unoptimized] target(s) in 47.94s
+     Running unittests src/lib.rs (target/debug/deps/raydio-308adbee9a9d4e5c)
+
+running 46 tests
+test commands::tests::all_nineteen_commands_keep_the_original_options_and_scope ... ok
+test commands::tests::assigned_metadata_and_order_do_not_require_a_command_rewrite ... ok
+test config::tests::defaults_match_counterpart ... ok
+test config::tests::invalid_configuration_never_quotes_the_value ... ok
+test config::tests::testbot_selection_is_explicit ... ok
+test commands::tests::observed_discord_response_defaults_match_the_manifest ... ok
+test node::tests::audio_windows_replace_values_and_ignore_incomplete_samples ... ok
+test playback::tests::current_counts_towards_admission_limit ... ok
+test playback::tests::bounded_history_and_stop_reset ... ok
+test playback::tests::durations_are_stable ... ok
+test playback::tests::empty_enqueue_is_harmless ... ok
+test playback::tests::failures_stop_at_three_without_recording_failed_history ... ok
+test playback::tests::jump_preserves_other_upcoming_tracks ... ok
+test playback::tests::natural_end_records_history_but_track_loop_does_not ... ok
+test playback::tests::positions_are_one_based_and_invalid_operations_are_inert ... ok
+test playback::tests::previous_undoes_queue_loop_duplication ... ok
+test playback::tests::skip_bypasses_all_loops ... ok
+test playback::tests::success_resets_failure_streak ... ok
+test resolver::tests::direct_input_does_not_enqueue_a_whole_search ... ok
+test resolver::tests::invalid_source_cannot_become_a_search_choice ... ok
+test resolver::tests::load_errors_are_distinct_from_empty_results ... ok
+test resolver::tests::malformed_containers_fail_without_panicking ... ok
+test resolver::tests::playlist_limits_count_omitted_and_unsuitable_separately ... ok
+test service::tests::readiness_is_sent_to_service_manager ... ok
+test session::tests::delayed_load_rechecks_caller_voice_before_committing ... ok
+test session::tests::controls_recheck_voice_and_apply_real_backend_volume ... ok
+test session::tests::idle_alone_and_end_deadlines_cleanup_or_advance ... ok
+test session::tests::pause_button_applies_audio_before_progress_finishes_and_edits_in_order ... ok
+test session::tests::paused_panel_reconciliation_corrects_stale_state_and_stops_polling ... ok
+test session::tests::paused_time_does_not_consume_the_end_watchdog ... ok
+test session::tests::queue_controls_drive_crust_and_cleanup_preserves_voice_rules ... ok
+test session::tests::slow_progress_edit_does_not_block_track_restart ... ok
+test session::tests::stale_track_events_cannot_advance_a_repeated_encoded_track ... ok
+test session::tests::stop_button_retires_panel_before_periodic_refresh ... ok
+test session::tests::stop_cancels_inflight_and_waiting_plays_and_stale_completion_cannot_enqueue ... ok
+test session::tests::synchronous_start_failures_skip_bad_tracks_and_stop_after_three ... ok
+test urls::tests::accepted_video_forms_and_searches ... ok
+test urls::tests::media_only_and_no_arbitrary_network_targets ... ok
+test urls::tests::mixed_links_keep_the_full_playlist ... ok
+test views::tests::inactive_panels_have_no_controls ... ok
+test views::tests::metadata_cannot_introduce_markdown_links ... ok
+test views::tests::player_keeps_seven_controls_and_thumbnail ... ok
+test views::tests::utf16_limits_do_not_split_emoji ... ok
+test voice::tests::compact_channels_follow_permission_updates_limits_and_deletes ... ok
+test voice::tests::private_voice_uses_role_aggregation_then_member_overwrites ... ok
+test session::tests::unchanged_panels_skip_http_and_single_page_queue_retires_buttons ... ok
+
+test result: ok. 46 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.53s
+
+     Running unittests src/main.rs (target/debug/deps/raydio-96d69ff117fcb98e)
+
+running 1 test
+test tests::runtime_workers_are_bounded ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/backend.rs (target/debug/deps/backend-b31e4ca0423c8b0c)
+
+running 1 test
+test actual_crust_session_uses_ready_id_for_player_requests_and_shuts_down ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/reconnect.rs (target/debug/deps/reconnect-60ae2883c2302f70)
+
+running 1 test
+test reconnect_preserves_resumed_sessions_and_invalidates_replacements ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.03s
+
+     Running unittests examples/discord_voice_probe.rs (target/debug/examples/discord_voice_probe-d7336dc19a96658b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/http_staging.rs (target/debug/examples/http_staging-31b68eb562b35f8e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/mantle_load_probe.rs (target/debug/examples/mantle_load_probe-85bc2385e343a678)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/media_probe.rs (target/debug/examples/media_probe-2c2ee215786bbdfb)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/memory_workloads.rs (target/debug/examples/memory_workloads-6d049d9008fa3788)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/source_packets.rs (target/debug/examples/source_packets-6a2b8a119962c001)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests examples/source_timing.rs (target/debug/examples/source_timing-4e4f39741cbef555)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

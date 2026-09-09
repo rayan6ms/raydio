@@ -52,6 +52,53 @@ short receiver captures into a six-hour result. Collect final sender logs and
 resource samples after the observation window ends. Save browser checkpoints
 during long runs so tab replacement cannot erase all prior observations.
 
+### Receiver checkpoint preflight
+
+Start `receiver_checkpoint.py --output NEW_DIRECTORY --seconds 25200` before
+the browser audit. It refuses to overwrite an existing observation directory.
+The collector writes `receiver-host.jsonl` immediately and once per minute,
+independently of browser writes; browser disconnection therefore does not remove
+local host pressure, CPU, uptime, UDP and interface evidence. A delayed sample is
+marked `lateMs` and is not replaced with invented catch-up samples.
+
+Install `browser_checkpoint.js` before the receiver audit. It observes replacement
+reports after failed preflights, retries failed writes, and stays armed for seven
+hours. It accepts the same 10–21,600 second durations as the audit so the full
+persistence path can be checked in a short run. After starting the **actual**
+report, call `raydioCheckpoint.save()` and verify `/health` from the Discord tab:
+`lastReceiver.requestedAt` must match `raydioEndurance.report.requestedAt`, with
+an advancing `elapsedSeconds`, and `hostSamples` must increase after one minute.
+A timer handle or zero write errors alone is not proof of working persistence.
+After the first minute, `await raydioCheckpoint.verify()` enforces the matching
+running report, recent saved progress, two independent host samples, and enough
+remaining lifetime in both collectors for the rest of the run plus a minute.
+Do not call a run ready if this check throws.
+Verify the independent Oracle sampler separately before beginning measurement.
+
+The 256-window receiver bound would retain all 168 diagnostic windows from the
+September 9 six-hour observation, instead of discarding 40. It remains bounded;
+`diagnosticWindowsDropped` and event truncation must still be reported. No
+collector can recover missing historical samples, identify the faulty network
+hop from a single receiver, or guarantee that measurement has zero overhead.
+
+Run the harness checks with:
+
+```sh
+bun benchmarks/test_browser_checkpoint.mjs
+bun benchmarks/test_browser_endurance.mjs
+uv run --no-project python benchmarks/test_receiver_checkpoint.py
+```
+
+### Redundant volume regression
+
+`source_packets OUTPUT --staged --repeat --redundant-filters` compares two plays
+of one retained compressed source. The second restates volume 70 every 100
+frames. `compare_source_controls.py OUTPUT REPORT` checks frame counts and
+packet identity. Run this separately from Discord qualification. Identical
+packets establish unchanged source processing for this test, not absence of
+network loss or listener artifacts. Actual gain/filter changes require separate
+control and audio validation.
+
 ## Sender/host correlation diagnostics
 
 `scheduler_probe.c` extends the earlier Python scheduler observation with one

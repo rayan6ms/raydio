@@ -1,0 +1,21 @@
+    Checking ring v0.17.14
+    Checking rustls-webpki v0.103.15
+    Checking rustls v0.23.43
+    Checking tokio-rustls v0.26.5
+    Checking tungstenite v0.30.0
+    Checking crust v0.0.0 (https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c)
+    Checking ureq v3.4.0
+    Checking tokio-tungstenite v0.30.0
+    Checking mantle-media v0.0.0 (https://github.com/rayan6ms/mantle?rev=6366cc60a46df7712f1e41219050dedc4cd190cc#6366cc60)
+    Checking oto v1.0.0 (https://github.com/rayan6ms/oto?rev=1869e671d086386be7ecb5bb58674008d6b7a62f#1869e671)
+    Checking crust-mantle-adapter v0.0.0 (https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c)
+    Checking tokio-websockets v0.13.3
+    Checking crust-oto-adapter v0.0.0 (https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c)
+    Checking hyper-rustls v0.27.9
+    Checking crust-protocol v0.0.0 (https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c)
+    Checking twilight-gateway v0.17.1
+    Checking crust-server v0.0.0 (https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c)
+    Checking twilight-http v0.17.1
+    Checking raydio v0.2.2 (/home/rayan/Documents/Projects/raydio-rust)
+    Checking crust-testkit v0.0.0 (https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c)
+    Finished `dev` profile [unoptimized] target(s) in 21.35s

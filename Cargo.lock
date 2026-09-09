@@ -546,7 +546,7 @@ checksum = "61803da095bee82a81bb1a452ecc25d3b2f1416d1897eb86430c6159ef717c17"
 [[package]]
 name = "crust"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=477d29b9ff3a18f3722561bdadfe153706ed9af3#477d29b9ff3a18f3722561bdadfe153706ed9af3"
+source = "git+https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c69692587faa7f1e4d7cd627037daddc8"
 dependencies = [
  "num-bigint",
  "num-traits",
@@ -559,7 +559,7 @@ dependencies = [
 [[package]]
 name = "crust-mantle-adapter"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=477d29b9ff3a18f3722561bdadfe153706ed9af3#477d29b9ff3a18f3722561bdadfe153706ed9af3"
+source = "git+https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c69692587faa7f1e4d7cd627037daddc8"
 dependencies = [
  "base64 0.22.1",
  "crust",
@@ -576,7 +576,7 @@ dependencies = [
 [[package]]
 name = "crust-oto-adapter"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=477d29b9ff3a18f3722561bdadfe153706ed9af3#477d29b9ff3a18f3722561bdadfe153706ed9af3"
+source = "git+https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c69692587faa7f1e4d7cd627037daddc8"
 dependencies = [
  "crust",
  "futures-util",
@@ -589,7 +589,7 @@ dependencies = [
 [[package]]
 name = "crust-protocol"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=477d29b9ff3a18f3722561bdadfe153706ed9af3#477d29b9ff3a18f3722561bdadfe153706ed9af3"
+source = "git+https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c69692587faa7f1e4d7cd627037daddc8"
 dependencies = [
  "serde",
  "serde_json",
@@ -598,7 +598,7 @@ dependencies = [
 [[package]]
 name = "crust-server"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=477d29b9ff3a18f3722561bdadfe153706ed9af3#477d29b9ff3a18f3722561bdadfe153706ed9af3"
+source = "git+https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c69692587faa7f1e4d7cd627037daddc8"
 dependencies = [
  "axum",
  "base64 0.22.1",
@@ -624,7 +624,7 @@ dependencies = [
 [[package]]
 name = "crust-testkit"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=477d29b9ff3a18f3722561bdadfe153706ed9af3#477d29b9ff3a18f3722561bdadfe153706ed9af3"
+source = "git+https://github.com/rayan6ms/crust?rev=e3a8324c69692587faa7f1e4d7cd627037daddc8#e3a8324c69692587faa7f1e4d7cd627037daddc8"
 dependencies = [
  "crust",
  "serde_json",

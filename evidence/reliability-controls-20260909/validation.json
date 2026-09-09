@@ -1,0 +1,29 @@
+{
+  "crust": {
+    "suites": 22,
+    "passed": 152,
+    "failed": 0,
+    "ignored": 4
+  },
+  "raydio": {
+    "suites": 11,
+    "passed": 49,
+    "failed": 0,
+    "ignored": 0
+  },
+  "beforeSourceBinarySha256": "fcd9ae73bb9d688585245d82489f769eb6a1ee39a4873892a20dc0f37ee05c43",
+  "afterSourceBinarySha256": "68b28dbb1d8c0cded54d823230e41e4eff71f08aaddd4d77837f4f9001f1b1aa",
+  "crustRevision": "e3a8324c69692587faa7f1e4d7cd627037daddc8",
+  "baselineCrustRevision": "477d29b9ff3a18f3722561bdadfe153706ed9af3",
+  "receiverRerun": "blocked: required Browser execution tool absent; no fresh live-audio improvement claimed",
+  "diagnosticSourceSha256": {
+    "browser_checkpoint.js": "9d42a8f167969a344bdacdb3b871c83760323a89ac552543a985d05153dd7379",
+    "browser_endurance.js": "e023c3fe74be9dd12ee05b0ed08d210b4f3c64f78255c6588046cfeea61ca01b",
+    "receiver_checkpoint.py": "dcf1d92b6342bde611d8e273689d1098c6a04c52b3348a435ab0d3c2425a91e7"
+  },
+  "loopbackSmoke": {
+    "hostSamples": 2,
+    "intervalSeconds": 60.35416840299149,
+    "browserWritesDuringSecondSample": 0
+  }
+}

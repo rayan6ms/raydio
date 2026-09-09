@@ -123,7 +123,7 @@
                 const prior=data.diagnosticWindows.at(-1);
                 if(prior&&prior.remaining>0){if(prior.triggers.length<8)prior.triggers.push({ms:at,kind});}
                 else{
-                    if(data.diagnosticWindows.length>=128){data.diagnosticWindows.shift();data.diagnosticWindowsDropped++;}
+                    if(data.diagnosticWindows.length>=256){data.diagnosticWindows.shift();data.diagnosticWindowsDropped++;}
                     data.diagnosticWindows.push({ms:at,triggers:[{ms:at,kind}],samples:history.slice(),remaining:5});
                 }
             }

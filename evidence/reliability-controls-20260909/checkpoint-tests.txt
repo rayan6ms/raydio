@@ -1,0 +1,7 @@
+PASS: failed preflight -> new run -> progress/retry -> final save; deduplication and bounded lifetime
+PASS: six-hour simulated receiver, bounded before/after windows, truncation accounting, disconnect detection and listener cleanup
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.003s
+
+OK

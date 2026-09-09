@@ -1,0 +1,15 @@
+   Compiling crust-server v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-server)
+    Finished `test` profile [unoptimized] target(s) in 3.70s
+     Running tests/p10_voice.rs (target/debug/deps/p10_voice-7a8b9fb6e01aa295)
+
+running 7 tests
+test non_snowflake_session_identity_fails_before_credentials_reach_the_backend ... ok
+test player_volume_reaches_media_and_survives_filter_replacement_without_wire_leaks ... ok
+test natural_source_end_publishes_track_end_without_another_rest_command ... ok
+test asynchronous_frame_failure_publishes_exception_and_load_failed_end ... ok
+test volume_and_filters_preserve_voice_source_and_terminal_delivery ... ok
+test player_routes_voice_updates_and_media_discontinuities_through_one_backend_pacer ... ok
+test server_shutdown_deadline_includes_voice_backend_teardown ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
