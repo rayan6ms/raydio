@@ -1,0 +1,2 @@
+Original checkpoint implementation: regression FAILS (timer is cleared after failed preflight).
+Patched implementation: PASS: failed preflight -> new run -> progress/retry -> final save; deduplication and bounded lifetime

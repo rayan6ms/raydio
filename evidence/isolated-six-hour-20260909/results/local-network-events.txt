@@ -1,0 +1,35 @@
+2026-09-09T05:34:27.950358-03:00 fedora tailscaled[1260]: portmapper: PMP probe failed due result code: {OpCode:128 ResultCode:NetworkFailure SecondsSinceEpoch:159613 MappingValidSeconds:0 InternalPort:0 ExternalPort:0 PublicAddr:invalid IP}
+2026-09-09T05:34:28.804136-03:00 fedora tailscaled[1260]: netcheck: DetectCaptivePortal(found=false)
+2026-09-09T05:34:28.804677-03:00 fedora tailscaled[1260]: magicsock: endpoints changed: 216.234.209.67:61210 (stun), [2803:9810:4b22:8300:9cdc:1880:7836:30a0]:41641 (stun), 192.168.0.104:41641 (local)
+2026-09-09T05:34:28.806320-03:00 fedora tailscaled[1260]: portmapper: saw UPnP type WANIPConnection1 at http://192.168.0.1:1900/nntnc/rootDesc.xml; Archer AX53 (TP-Link), method=single
+2026-09-09T05:34:29.542706-03:00 fedora tailscaled[1260]: magicsock: disco: node [SrBTp] d:4bf3738501b59153 now using [2804:8aa4:f123:df00:e4a2:a260:1d9e:cfec]:42307 mtu=1360 tx=6c709eff6716
+2026-09-09T05:37:58.484454-03:00 fedora tailscaled[1260]: magicsock: disco: node [SrBTp] d:4bf3738501b59153 now using [2804:8aa4:f123:df00:e4a2:a260:1d9e:cfec]:42307 mtu=1360 tx=d1d87f625f09
+2026-09-09T05:39:31.008481-03:00 fedora tailscaled[1260]: magicsock: disco: node [SrBTp] d:4bf3738501b59153 now using 167.250.14.75:55540 mtu=1360 tx=110376cebc3e
+2026-09-09T05:39:31.008481-03:00 fedora tailscaled[1260]: magicsock: disco: node [SrBTp] d:4bf3738501b59153 now using [2804:8aa4:f123:df00:e4a2:a260:1d9e:cfec]:42307 mtu=1360 tx=88d61ada9a66
+2026-09-09T05:39:31.082194-03:00 fedora tailscaled[1260]: portmapper: PMP probe failed due result code: {OpCode:128 ResultCode:NetworkFailure SecondsSinceEpoch:159916 MappingValidSeconds:0 InternalPort:0 ExternalPort:0 PublicAddr:invalid IP}
+2026-09-09T05:39:32.376612-03:00 fedora tailscaled[1260]: netcheck: DetectCaptivePortal(found=false)
+2026-09-09T05:39:32.380252-03:00 fedora tailscaled[1260]: portmapper: saw UPnP type WANIPConnection1 at http://192.168.0.1:1900/nntnc/rootDesc.xml; Archer AX53 (TP-Link), method=single
+2026-09-09T05:40:34.033183-03:00 fedora tailscaled[1260]: magicsock: disco: node [SrBTp] d:4bf3738501b59153 now using 167.250.14.75:55540 mtu=1360 tx=670c8a5f6ef6
+2026-09-09T05:40:34.043733-03:00 fedora tailscaled[1260]: magicsock: disco: node [SrBTp] d:4bf3738501b59153 now using [2804:8aa4:f123:df00:e4a2:a260:1d9e:cfec]:42307 mtu=1360 tx=9c8b9778cbc3
+2026-09-09T05:43:37.114351-03:00 fedora tailscaled[1260]: magicsock: disco: node [SrBTp] d:4bf3738501b59153 now using 167.250.14.75:55540 mtu=1360 tx=d2dec57c2e84
+2026-09-09T05:43:37.119615-03:00 fedora tailscaled[1260]: magicsock: disco: node [SrBTp] d:4bf3738501b59153 now using [2804:8aa4:f123:df00:e4a2:a260:1d9e:cfec]:42307 mtu=1360 tx=31a642578661
+2026-09-09T05:44:31.807249-03:00 fedora tailscaled[1260]: portmapper: PMP probe failed due result code: {OpCode:128 ResultCode:NetworkFailure SecondsSinceEpoch:160216 MappingValidSeconds:0 InternalPort:0 ExternalPort:0 PublicAddr:invalid IP}
+2026-09-09T05:44:33.041826-03:00 fedora tailscaled[1260]: netcheck: DetectCaptivePortal(found=false)
+2026-09-09T05:44:33.044466-03:00 fedora tailscaled[1260]: portmapper: saw UPnP type WANIPConnection1 at http://192.168.0.1:1900/nntnc/rootDesc.xml; Archer AX53 (TP-Link), method=single
+2026-09-09T09:08:22.021540-03:00 fedora tailscaled[1260]: portmapper: PMP probe failed due result code: {OpCode:128 ResultCode:NetworkFailure SecondsSinceEpoch:172446 MappingValidSeconds:0 InternalPort:0 ExternalPort:0 PublicAddr:invalid IP}
+2026-09-09T09:08:22.895312-03:00 fedora tailscaled[1260]: netcheck: DetectCaptivePortal(found=false)
+2026-09-09T09:08:22.895988-03:00 fedora tailscaled[1260]: magicsock: endpoints changed: 216.234.209.67:32060 (stun), [2803:9810:4b22:8300:9cdc:1880:7836:30a0]:41641 (stun), 192.168.0.104:41641 (local)
+2026-09-09T09:08:22.898291-03:00 fedora tailscaled[1260]: portmapper: saw UPnP type WANIPConnection1 at http://192.168.0.1:1900/nntnc/rootDesc.xml; Archer AX53 (TP-Link), method=single
+2026-09-09T09:08:23.817961-03:00 fedora tailscaled[1260]: magicsock: disco: node [SrBTp] d:4bf3738501b59153 now using [2804:8aa4:f123:df00:e4a2:a260:1d9e:cfec]:42307 mtu=1360 tx=db589a546eed
+2026-09-09T09:18:39.063456-03:00 fedora tailscaled[1260]: c2n: GET /update received
+2026-09-09T09:18:39.364114-03:00 fedora tailscaled[1260]: control: controlhttp: forcing port 443 dial due to recent noise dial
+2026-09-09T09:18:39.843597-03:00 fedora tailscaled[1260]: c2n: POST /update received
+2026-09-09T09:18:39.894078-03:00 fedora tailscaled[1260]: c2n: running "systemd-run --wait --pipe --collect /usr/bin/tailscale update --yes"
+2026-09-09T09:18:39.898058-03:00 fedora tailscaled[1260]: c2n: update command failed: exit status 1, output: Failed to start transient service unit: Connection reset by peer
+2026-09-09T09:59:59.136191-03:00 fedora tailscaled[1260]: magicsock: disco: node [SrBTp] d:4bf3738501b59153 now using [2804:8aa4:f123:df00:e4a2:a260:1d9e:cfec]:42307 mtu=1360 tx=f84f4b633fbe
+2026-09-09T09:59:59.229211-03:00 fedora tailscaled[1260]: portmapper: PMP probe failed due result code: {OpCode:128 ResultCode:NetworkFailure SecondsSinceEpoch:175544 MappingValidSeconds:0 InternalPort:0 ExternalPort:0 PublicAddr:invalid IP}
+2026-09-09T09:59:59.806963-03:00 fedora tailscaled[1260]: netcheck: DetectCaptivePortal(found=false)
+2026-09-09T09:59:59.807331-03:00 fedora tailscaled[1260]: magicsock: endpoints changed: 216.234.209.67:46987 (stun), [2803:9810:4b22:8300:9cdc:1880:7836:30a0]:41641 (stun), 192.168.0.104:41641 (local)
+2026-09-09T09:59:59.809435-03:00 fedora tailscaled[1260]: portmapper: saw UPnP type WANIPConnection1 at http://192.168.0.1:1900/nntnc/rootDesc.xml; Archer AX53 (TP-Link), method=single
+2026-09-09T10:01:02.158457-03:00 fedora tailscaled[1260]: magicsock: disco: node [SrBTp] d:4bf3738501b59153 now using 167.250.14.75:56040 mtu=1360 tx=012124303a6f
+2026-09-09T10:01:02.159475-03:00 fedora tailscaled[1260]: magicsock: disco: node [SrBTp] d:4bf3738501b59153 now using [2804:8aa4:f123:df00:e4a2:a260:1d9e:cfec]:42307 mtu=1360 tx=1383f4d20209

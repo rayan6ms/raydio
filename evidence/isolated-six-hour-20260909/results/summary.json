@@ -1,0 +1,210 @@
+{
+  "classification": "six-hour observation completed; continuity failed; DAVE failure did not recur",
+  "receiverSeconds": 21600.000119140626,
+  "pcmSeconds": 21600.010666666665,
+  "packetsReceived": 1078736,
+  "lostNet": 79,
+  "positiveLoss": 229,
+  "recoveredLoss": 150,
+  "packetsDiscarded": 696,
+  "nacks": 1289,
+  "concealmentMs": 46273.979166666664,
+  "silentConcealmentMs": 19119.145833333332,
+  "concealmentMsPerMinute": 128.53883101851852,
+  "concealmentExcludingOutageMinute": {
+    "excludedMinute": 213,
+    "concealmentMsPerMinute": 87.23630454967503,
+    "silentMs": 4929.75
+  },
+  "pcm": {
+    "samples": 2073601024,
+    "squared": 15556365.283263355,
+    "peak": 0.684600830078125,
+    "nearFullScale": 0,
+    "nonFinite": 0,
+    "emptyFrames": 0,
+    "longestQuietMs": 14184.083333333334,
+    "ongoingQuietMs": 0,
+    "reports": 86171,
+    "frames": 1036800512,
+    "audioSeconds": 21600.010666666665,
+    "rms": 0.08661467235165983
+  },
+  "coverage": {
+    "receiverSeconds": 21600.000119140626,
+    "pcmSeconds": 21600.010666666665,
+    "completePollCoverage": true,
+    "completePcmCoverage": true,
+    "completeEventHistory": true,
+    "retainedDiagnosticWindows": 128,
+    "droppedDiagnosticWindows": 40
+  },
+  "receiverNetworkInterruptions": [
+    {
+      "ms": 12799464.200000018,
+      "kind": "ice",
+      "phase": {
+        "positionSeconds": 41,
+        "durationSeconds": 213,
+        "label": "middle",
+        "playing": true,
+        "loop": true
+      },
+      "state": "disconnected"
+    },
+    {
+      "ms": 12799466.700000018,
+      "kind": "connection",
+      "phase": {
+        "positionSeconds": 41,
+        "durationSeconds": 213,
+        "label": "middle",
+        "playing": true,
+        "loop": true
+      },
+      "state": "disconnected"
+    },
+    {
+      "ms": 12809202.600000024,
+      "kind": "ice",
+      "phase": {
+        "positionSeconds": 41,
+        "durationSeconds": 213,
+        "label": "middle",
+        "playing": true,
+        "loop": true
+      },
+      "state": "connected"
+    },
+    {
+      "ms": 12809210.700000018,
+      "kind": "connection",
+      "phase": {
+        "positionSeconds": 41,
+        "durationSeconds": 213,
+        "label": "middle",
+        "playing": true,
+        "loop": true
+      },
+      "state": "connected"
+    }
+  ],
+  "host": {
+    "samples": 360,
+    "pssMiBMin": 15.404296875,
+    "pssMiBMax": 16.751953125,
+    "pssFirst5MedianKiB": 16150,
+    "pssLast5MedianKiB": 17154,
+    "cpuPercentOneCore": 3.9813410557911864,
+    "stealPercent": 0.3166818807276522,
+    "memoryEvents": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "udpErrorDeltas": {
+      "InErrors": 0,
+      "RcvbufErrors": 0,
+      "SndbufErrors": 0,
+      "InCsumErrors": 0,
+      "MemErrors": 0
+    }
+  },
+  "senderWindowCheckpoints": {
+    "first": {
+      "utc": "2026-09-09T08:35:23.803348+00:00",
+      "frames_sent": 2984,
+      "silence_frames_sent": 1,
+      "frames_unavailable": 1,
+      "skipped_deadlines": 6,
+      "send_failures": 0,
+      "source_overruns": 0
+    },
+    "last": {
+      "utc": "2026-09-09T14:34:23.803064+00:00",
+      "frames_sent": 1079539,
+      "silence_frames_sent": 4,
+      "frames_unavailable": 4,
+      "skipped_deadlines": 209,
+      "send_failures": 0,
+      "source_overruns": 0
+    },
+    "framesDelta": 1076555,
+    "skippedDelta": 203
+  },
+  "caveats": [
+    "Receiver checkpoints stopped after preflight; full report recovered from browser after run. Local-host interval samples missing.",
+    "40 older diagnostic windows dropped, all 1943 events retained.",
+    "Quiet-repeat alignment uses \u00b12-second tolerance including receiver delay; not source waveform proof.",
+    "No before/after causal attribution to production removal."
+  ],
+  "quietAtLeast100msAwayFromRepeat": [
+    {
+      "utc": "2026-09-09T08:52:11.919400+00:00",
+      "ms": 122.64583333333333,
+      "position": 0,
+      "nearestRepeatOffsetSeconds": 2.023668,
+      "repeatAlignedWithin2Seconds": false
+    },
+    {
+      "utc": "2026-09-09T08:52:12.921400+00:00",
+      "ms": 126.10416666666667,
+      "position": 2,
+      "nearestRepeatOffsetSeconds": 3.025668,
+      "repeatAlignedWithin2Seconds": false
+    },
+    {
+      "utc": "2026-09-09T11:26:28.036200+00:00",
+      "ms": 543.4791666666666,
+      "position": 85,
+      "nearestRepeatOffsetSeconds": 91.797837,
+      "repeatAlignedWithin2Seconds": false
+    },
+    {
+      "utc": "2026-09-09T11:29:27.759400+00:00",
+      "ms": 330.1041666666667,
+      "position": 55,
+      "nearestRepeatOffsetSeconds": 58.461557,
+      "repeatAlignedWithin2Seconds": false
+    },
+    {
+      "utc": "2026-09-09T12:08:27.244500+00:00",
+      "ms": 14184.083333333334,
+      "position": 41,
+      "nearestRepeatOffsetSeconds": 53.365976,
+      "repeatAlignedWithin2Seconds": false
+    },
+    {
+      "utc": "2026-09-09T12:09:28.398900+00:00",
+      "ms": 592.2708333333334,
+      "position": 105,
+      "nearestRepeatOffsetSeconds": -98.539867,
+      "repeatAlignedWithin2Seconds": false
+    },
+    {
+      "utc": "2026-09-09T12:18:58.660500+00:00",
+      "ms": 1130.8333333333333,
+      "position": 41,
+      "nearestRepeatOffsetSeconds": 45.505224,
+      "repeatAlignedWithin2Seconds": false
+    },
+    {
+      "utc": "2026-09-09T12:22:58.052400+00:00",
+      "ms": 465.9583333333333,
+      "position": 68,
+      "nearestRepeatOffsetSeconds": 71.811518,
+      "repeatAlignedWithin2Seconds": false
+    },
+    {
+      "utc": "2026-09-09T12:48:41.903100+00:00",
+      "ms": 1014.75,
+      "position": 115,
+      "nearestRepeatOffsetSeconds": -89.358818,
+      "repeatAlignedWithin2Seconds": false
+    }
+  ],
+  "sourceRepeatAlignedQuietCount": 202
+}

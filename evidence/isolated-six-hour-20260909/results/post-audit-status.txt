@@ -1,0 +1,11 @@
+MainPID=0
+NRestarts=0
+Id=raydio.service
+ActiveState=inactive
+UnitFileState=disabled
+
+MainPID=5601
+NRestarts=0
+Id=raydio-isolated-six-hour.service
+ActiveState=active
+UnitFileState=disabled

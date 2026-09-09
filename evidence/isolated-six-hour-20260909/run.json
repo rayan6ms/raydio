@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "observation_completed_continuity_failed",
   "startedAt": "2026-09-09T08:34:57.932Z",
   "plannedEnd": "2026-09-09T14:34:57.932Z",
   "requestedSeconds": 21600,
@@ -12,5 +12,7 @@
   "channel": "test/General",
   "volume": 70,
   "loop": true,
-  "checkpointErrors": 0
+  "checkpointErrors": 0,
+  "results": "RESULTS.md",
+  "checkpointCaveat": "Timer stopped after failed preflight; successful run recovered from browser manually at 14:49:55Z. Zero errors was misleading because timer was inactive."
 }

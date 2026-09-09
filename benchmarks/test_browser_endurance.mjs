@@ -33,10 +33,14 @@ assert.ok(long.report.eventsDropped>0);
 assert.ok(long.report.diagnosticWindows.every(w=>w.samples.length<=11&&w.triggers.length<=8));
 assert.ok(long.report.diagnosticWindows.some(w=>w.remaining===0));
 assert.ok(JSON.stringify(long.report).length < 4*1024*1024);
+assert.equal(long.report.coverage.uninterruptedConnection,false); // dropped history cannot prove continuity
 assert.equal(long.listeners.size,0);
 assert.ok(long.removed>=7);
 const failed=await simulate(10,true);
 assert.equal(failed.report.status,'failed');
 assert.match(failed.report.error,/replaced\/disconnected/);
 assert.equal(failed.listeners.size,0);
+assert.equal(failed.report.coverage.uninterruptedConnection,false);
+const short=await simulate(10);
+assert.equal(short.report.coverage.uninterruptedConnection,true);
 console.log('PASS: six-hour simulated receiver, bounded before/after windows, truncation accounting, disconnect detection and listener cleanup');

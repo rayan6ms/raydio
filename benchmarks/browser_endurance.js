@@ -287,6 +287,11 @@
                     && data.sampling.stalePolls===0 && data.sampling.maxPollMs<=2000,
                 completePcmCoverage:pcm ? data.pcm.audioSeconds>=seconds-.1
                     && data.sampling.pcmReportsMissing===0 && data.pcm.emptyFrames===0 : null,
+                // Completing the observation does not imply uninterrupted
+                // transport: a peer can disconnect and recover during the run.
+                uninterruptedConnection:data.status==='completed' && !data.eventsTruncated
+                    && !data.events.some(e=>['ice','connection'].includes(e.kind)
+                        && ['disconnected','failed','closed'].includes(e.state)),
                 completeEventHistory:!data.eventsTruncated,
                 retainedDiagnosticWindows:data.diagnosticWindows.length,
                 droppedDiagnosticWindows:data.diagnosticWindowsDropped,
