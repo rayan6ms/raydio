@@ -1,0 +1,21 @@
+MainPID=3063
+Result=success
+NRestarts=0
+Id=raydio-event-wake-six-hour.service
+ActiveState=active
+
+MainPID=876
+Result=success
+NRestarts=0
+Id=raydio.service
+ActiveState=active
+active
+active
+active
+total 216K
+-rw-r--r-- 1 root root  107 Sep  9 03:15 final-service.txt
+-rw-r--r-- 1 root root  157 Sep  9 03:15 kernel.log
+-rw-r--r-- 1 root root  164 Sep  8 20:59 maintenance.json
+-rw-r--r-- 1 root root  229 Sep  8 20:59 manifest.json
+-rw-r--r-- 1 root root 192K Sep  9 03:17 resources.jsonl
+-rw-r--r-- 1 root root 1.1K Sep  9 03:15 service.log

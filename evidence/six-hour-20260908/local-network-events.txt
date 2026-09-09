@@ -1,0 +1,15 @@
+2026-09-08T19:35:42-03:00 fedora tailscaled[1260]: portmapper: PMP probe failed due result code: {OpCode:128 ResultCode:NetworkFailure SecondsSinceEpoch:123688 MappingValidSeconds:0 InternalPort:0 ExternalPort:0 PublicAddr:invalid IP}
+2026-09-08T19:35:45-03:00 fedora tailscaled[1260]: netcheck: netcheck: UDP is blocked, trying HTTPS
+2026-09-08T19:35:45-03:00 fedora tailscaled[1260]: netcheck: UDP is blocked, trying ICMP
+2026-09-08T19:35:48-03:00 fedora tailscaled[1260]: control: NetInfo: NetInfo{varies= ipv6=false ipv6os=true udp=false icmpv4=false derp=#11 portmap= link="" firewallmode="nft"}
+2026-09-08T19:35:48-03:00 fedora tailscaled[1260]: magicsock: endpoints changed: 192.168.0.104:41641 (local), [2803:9810:4b22:8300:9cdc:1880:7836:30a0]:41641 (local)
+2026-09-08T19:35:51-03:00 fedora tailscaled[1260]: netcheck: netcheck: UDP is blocked, trying HTTPS
+2026-09-08T19:35:51-03:00 fedora tailscaled[1260]: netcheck: UDP is blocked, trying ICMP
+2026-09-08T19:35:53-03:00 fedora tailscaled[1260]: control: NetInfo: NetInfo{varies= ipv6=false ipv6os=true udp=false icmpv4=false derp=#11 portmap=U link="" firewallmode="nft"}
+2026-09-08T19:36:19-03:00 fedora tailscaled[1260]: netcheck: netcheck: UDP is blocked, trying HTTPS
+2026-09-08T19:36:19-03:00 fedora tailscaled[1260]: netcheck: UDP is blocked, trying ICMP
+2026-09-08T19:36:21-03:00 fedora tailscaled[1260]: control: NetInfo: NetInfo{varies= ipv6=false ipv6os=true udp=false icmpv4=false derp=#11 portmap=active-UM link="" firewallmode="nft"}
+2026-09-08T19:36:21-03:00 fedora tailscaled[1260]: magicsock: endpoints changed: 206.214.239.194:41641 (portmap), 192.168.0.104:41641 (local), [2803:9810:4b22:8300:9cdc:1880:7836:30a0]:41641 (local)
+2026-09-08T19:36:24-03:00 fedora tailscaled[1260]: netcheck: netcheck: UDP is blocked, trying HTTPS
+2026-09-08T19:36:24-03:00 fedora tailscaled[1260]: netcheck: UDP is blocked, trying ICMP
+2026-09-08T19:36:46-03:00 fedora tailscaled[1260]: magicsock: endpoints changed: 206.214.239.194:41641 (portmap), 179.64.43.24:1517 (stun), [2803:9810:4b22:8300:9cdc:1880:7836:30a0]:41641 (stun), 192.168.0.104:41641 (local)

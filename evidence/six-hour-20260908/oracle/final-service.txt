@@ -1,0 +1,6 @@
+MainPID=3063
+Result=success
+NRestarts=0
+MemoryCurrent=4628480
+CPUUsageNSec=841944739000
+ActiveState=active

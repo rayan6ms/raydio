@@ -1,7 +1,8 @@
 # Oracle latest-candidate six-hour attempt
 
-Status: started, **not yet qualified**. Read `receiver.json` for current/final
-status and elapsed duration; this file is a setup record, not a pass result.
+Status: **not qualified**. Receiver disconnected after 94 minutes; the sender
+later failed with DaveTransition. See [RESULTS.md](RESULTS.md). The remaining
+contents below preserve the original setup record, not a pass result.
 
 - Receiver start: 2026-09-08T21:01:42.948Z (18:01:42 Sao Paulo).
 - Expected end: 2026-09-09T03:01:42.948Z (00:01:42 Sao Paulo).

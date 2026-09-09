@@ -1,0 +1,1 @@
+2026-09-09T02:19:19.027380+00:00 raydio-vnic kernel: workqueue: drm_fb_helper_damage_work hogged CPU for >13333us 19 times, consider switching to WQ_UNBOUND

@@ -1,0 +1,131 @@
+{
+  "qualified": false,
+  "receiverStatus": "failed",
+  "receiverStart": "2026-09-08T21:01:42.948Z",
+  "receiverEnd": "2026-09-08T22:35:49.047Z",
+  "receiverSeconds": 5645.096108154297,
+  "receiverError": "Error: Receiver or voice row was replaced/disconnected",
+  "checkpointSaves": 96,
+  "checkpointErrors": 0,
+  "receivedPackets": 281291,
+  "netLost": 13,
+  "positiveLoss": 23,
+  "recoveredLoss": 10,
+  "discarded": 77,
+  "nacks": 315,
+  "concealmentMsIncludingDisconnect": 22360.729166666668,
+  "silentConcealmentMsIncludingDisconnect": 16396.25,
+  "completePrefix": {
+    "seconds": 5579.968384033203,
+    "concealmentMs": 5970.854166666667,
+    "silentConcealmentMs": 221.95833333333334,
+    "packets": 278857,
+    "netLost": 13
+  },
+  "sourcePatternQuietEvents": 52,
+  "terminalQuietMs": 17066.75,
+  "repeatsObserved": 26,
+  "clipping": 0,
+  "nonFinite": 0,
+  "emptyPcmFrames": 0,
+  "polling": {
+    "polls": 5632,
+    "stalePolls": 0,
+    "maxPollMs": 1084.7861328125,
+    "positiveLossDeltas": 23,
+    "negativeLossDeltas": -10,
+    "maxConcealedMsPerPoll": 1010,
+    "pcmReportsMissing": 0
+  },
+  "receiverScheduling": {
+    "enabled": true,
+    "longTasksSupported": true,
+    "longTasks": 185,
+    "totalLongTaskMs": 14018,
+    "maxLongTaskMs": 109,
+    "initialVisibility": "visible"
+  },
+  "senderFailureAt": "2026-09-09T02:58:17.176461Z",
+  "senderFailureKind": "DaveTransition",
+  "senderLifetime": {
+    "framesSent": 1074019,
+    "unavailable": 5,
+    "silenceFrames": 5,
+    "missedDeadlines": 224,
+    "maxLatenessMs": 61.448,
+    "sendFailures": 0,
+    "sourceOverruns": 0
+  },
+  "warmPlayback": {
+    "samples": 357,
+    "from": "2026-09-08T21:02:07.802794+00:00",
+    "to": "2026-09-09T02:58:08.542189+00:00",
+    "pssKiBMin": 16067,
+    "pssKiBMax": 16711,
+    "firstFiveMedianPssKiB": 16251,
+    "lastFiveMedianPssKiB": 16711,
+    "cpuPercentOneCore": 3.913488126724037,
+    "stealPercent": 0.2946598443473736,
+    "maxCgroupBytes": 9146368,
+    "memoryEventsLast": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    }
+  },
+  "limitations": [
+    "Browser receiver disconnected after 94 minutes; no receiver coverage afterward.",
+    "One 216.75 ms mid-track silence remains unexplained.",
+    "DAVE error kind does not preserve underlying cause; do not infer a specific key-rotation bug.",
+    "Minute resource data and lifetime sender counters cannot localize subsecond stalls."
+  ],
+  "sourceTailVariants": [
+    {
+      "ms": 1822593.299999997,
+      "kind": "quiet",
+      "phase": {
+        "positionSeconds": 212,
+        "durationSeconds": 213,
+        "label": "tail",
+        "playing": true,
+        "loop": true
+      },
+      "durationMs": 968.75,
+      "endFrame": 87481049,
+      "audioSeconds": 1823.6933333333334
+    },
+    {
+      "ms": 3315062.399999991,
+      "kind": "quiet",
+      "phase": {
+        "positionSeconds": 212,
+        "durationSeconds": 213,
+        "label": "tail",
+        "playing": true,
+        "loop": true
+      },
+      "durationMs": 969.0625,
+      "endFrame": 159113429,
+      "audioSeconds": 3316.1626666666666
+    }
+  ],
+  "unexpectedMidTrackQuiet": [
+    {
+      "ms": 3840203.599999994,
+      "kind": "quiet",
+      "phase": {
+        "positionSeconds": 95,
+        "durationSeconds": 213,
+        "label": "middle",
+        "playing": true,
+        "loop": true
+      },
+      "durationMs": 216.75,
+      "endFrame": 184328714,
+      "audioSeconds": 3841.309333333333
+    }
+  ]
+}

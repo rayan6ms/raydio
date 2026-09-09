@@ -1,0 +1,7 @@
+{
+  "pid": 3063,
+  "sha256": "4e1deea5c1179edb92f0ec6eb708ed67fdd73ce83ea19750b7b26539b2ad8ac3",
+  "candidateCommit": "90bef68",
+  "unit": "raydio-event-wake-six-hour.service",
+  "preparedAt": "2026-09-08T20:59:07.630686+00:00"
+}

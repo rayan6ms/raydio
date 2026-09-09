@@ -1,0 +1,5 @@
+2026-09-08T20:59:05.003804+00:00 raydio-vnic systemd[1]: Starting raydio-event-wake-six-hour.service - Raydio latest candidate six-hour Testbot...
+2026-09-08T20:59:07.595120+00:00 raydio-vnic raydio[3063]: 2026-09-08T20:59:07.595063Z  INFO raydio::runtime: Raydio ready bot_id=1544468432907669644
+2026-09-08T20:59:07.595287+00:00 raydio-vnic systemd[1]: Started raydio-event-wake-six-hour.service - Raydio latest candidate six-hour Testbot.
+2026-09-09T02:58:17.176525+00:00 raydio-vnic raydio[3063]: 2026-09-09T02:58:17.176461Z  WARN crust_oto_adapter: audio sender stopped after a terminal failure failure=Some(DaveTransition) source_overruns=0 frames_sent=1074019 frames_unavailable=5 max_lateness_us=61448 source_overrun_wall_us=0 send_failures=0 skipped_deadlines=224
+2026-09-09T02:58:17.191550+00:00 raydio-vnic raydio[3063]: 2026-09-09T02:58:17.176626Z  INFO crust_oto_adapter: audio sender stopped frames_sent=1074019 silence_frames_sent=5 frames_unavailable=5 skipped_deadlines=224 send_failures=0 source_overruns=0 max_lateness_us=61448 phase=Failed failure=Some(DaveTransition)
