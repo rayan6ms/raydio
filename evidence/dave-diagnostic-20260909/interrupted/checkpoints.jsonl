@@ -1,0 +1,17 @@
+{"savedAt": 1788940832.8885531, "status": "preflight", "elapsedSeconds": 0, "bytes": 78}
+{"savedAt": 1788941046.040941, "status": "running", "elapsedSeconds": 9.00976416015625, "bytes": 2911}
+{"savedAt": 1788941094.492155, "status": "running", "elapsedSeconds": 57.09408813476563, "bytes": 3108}
+{"savedAt": 1788941154.4983861, "status": "running", "elapsedSeconds": 117.16763208007812, "bytes": 4654}
+{"savedAt": 1788941214.4929385, "status": "running", "elapsedSeconds": 177.24325708007814, "bytes": 5324}
+{"savedAt": 1788941274.493925, "status": "running", "elapsedSeconds": 237.3554990234375, "bytes": 6418}
+{"savedAt": 1788941334.4954453, "status": "running", "elapsedSeconds": 297.4398200683594, "bytes": 7578}
+{"savedAt": 1788941394.4938903, "status": "running", "elapsedSeconds": 356.54090209960935, "bytes": 8429}
+{"savedAt": 1788941454.494213, "status": "running", "elapsedSeconds": 416.6234912109375, "bytes": 8677}
+{"savedAt": 1788941514.4951608, "status": "running", "elapsedSeconds": 476.74901000976564, "bytes": 9335}
+{"savedAt": 1788941574.4947467, "status": "running", "elapsedSeconds": 536.8350971679688, "bytes": 12591}
+{"savedAt": 1788941634.4955854, "status": "running", "elapsedSeconds": 596.9440390625, "bytes": 15489}
+{"savedAt": 1788941694.4953299, "status": "running", "elapsedSeconds": 657.0238862304687, "bytes": 17013}
+{"savedAt": 1788941754.495654, "status": "running", "elapsedSeconds": 717.1319169921875, "bytes": 19600}
+{"savedAt": 1788941814.494269, "status": "running", "elapsedSeconds": 777.2078649902344, "bytes": 21130}
+{"savedAt": 1788941840.2729306, "status": "stopped", "elapsedSeconds": 803.2375910644531, "bytes": 23731}
+{"savedAt": 1788941840.2794604, "status": "stopped", "elapsedSeconds": 803.2375910644531, "bytes": 23731}

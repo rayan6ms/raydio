@@ -1,0 +1,109 @@
+   Compiling oto v1.0.0 (/home/rayan/Documents/Projects/oto-raydio-public/crates/oto)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 14.01s
+     Running unittests src/lib.rs (target/debug/deps/oto-5f46aee1c2becd06)
+
+running 101 tests
+test audio::tests::complete_paced_path_dave_encrypts_maximum_opus_and_all_terminal_silence ... ok
+test audio::tests::dave_encryption_failure_emits_no_plaintext_udp_and_clears_speaking ... ok
+test audio::tests::failed_speaking_write_never_crosses_the_first_udp_packet_barrier ... ok
+test audio::tests::overdue_opportunity_recovers_one_frame_without_waiting_or_catchup ... ok
+test audio::tests::owned_channel_preserves_dave_and_exact_terminal_silence ... ok
+test audio::tests::p08_complete_paced_dave_path_benchmark ... ignored, release-only P08 complete paced DAVE path performance evidence
+test audio::tests::source_wake_racing_poll_exit_is_never_lost ... ok
+test audio::tests::source_waker_defers_notifier_work_until_callback_finishes ... ok
+test audio::tests::transport_invalidation_waits_for_inflight_send_and_refuses_new_sends ... ok
+test connection::tests::cancelled_audio_admission_releases_its_reservation ... ok
+test dave::tests::cancelled_media_response_cannot_block_owner_and_last_handle_drop_closes_lane ... ok
+test dave::tests::deterministic_malformed_control_mutations_are_contained_and_fail_closed ... ok
+test dave::tests::disconnected_member_is_removed_from_proposal_allowlist ... ok
+test dave::tests::epoch_one_replaces_active_and_pending_group_state ... ok
+test dave::tests::initial_commit_zero_activates_without_ready_round_trip ... ok
+test dave::tests::invalid_commit_and_welcome_reset_group_and_emit_fresh_package ... ok
+test dave::tests::later_epoch_retains_old_sender_until_new_transition_is_prepared ... ok
+test dave::tests::malformed_backend_input_is_typed_and_never_ready ... ok
+test dave::tests::media_diagnostics_distinguish_queue_and_response_deadlines ... ok
+test dave::tests::owner_orders_media_across_execute_without_partial_visibility ... ok
+test dave::tests::p08_dave_adapter_benchmark ... ignored, release-only P08 DAVE adapter performance evidence
+test dave::tests::p14_simulated_dave_transport_crypto_soak ... ignored, release-only simulated 48-hour DAVE/RTP/transport-crypto frame-count soak
+test dave::tests::pinned_mls_fixture_reaches_execute_and_encrypts_participant_silence ... ok
+test dave::tests::rejected_external_sender_replacement_preserves_active_group ... ok
+test dave::tests::rejected_versions_preserve_active_encrypted_sender ... ok
+test dave::tests::roster_controls_cannot_remove_local_identity ... ok
+test dave::tests::successful_commit_stages_sender_and_clears_blocked_output ... ok
+test dave::tests::transition_zero_executes_immediately_only_when_already_prepared ... ok
+test dave::tests::valid_external_sender_produces_fresh_bounded_key_packages ... ok
+test dave::tests::vendored_backend_source_does_not_log_dave_security_material ... ok
+test dave::tests::versions_and_transition_order_fail_closed ... ok
+test dave::tests::wrong_transition_ids_preserve_the_prepared_transition ... ok
+test error::diagnostic_tests::arbitrary_backend_source_is_not_exposed_by_diagnostics ... ok
+test error::diagnostic_tests::durable_dave_cause_survives_failure_and_resets_with_source_generation ... ok
+test frame_channel::tests::benchmark_owned_consumption_wakes ... ignored, bounded real-time owned handoff benchmark
+test frame_channel::tests::cancellation_retains_frame_and_next_send_waits_without_overwrite ... ok
+test frame_channel::tests::concurrent_publication_preserves_bytes_order_and_eof ... ok
+test frame_channel::tests::dropping_reader_releases_pending_and_future_sends ... ok
+test frame_channel::tests::dropping_writer_delivers_queued_frame_before_eof ... ok
+test frame_channel::tests::invalid_length_publishes_nothing_and_undersized_output_fails_without_copy ... ok
+test frame_channel::tests::latest_waker_receives_readiness_and_abort_before_start_receives_eof ... ok
+test frame_channel::tests::ordinary_callback_read_does_not_wake_producer_scheduler ... ok
+test frame_channel::tests::owned_consumption_releases_producer_without_a_timer_tick ... ok
+test frame_channel::tests::owned_waiter_replacement_and_close_are_not_lost ... ok
+test gateway::tests::active_playback_survives_resumable_websocket_loss_without_catch_up ... ok
+test gateway::tests::buffered_replay_sequence_wrap_and_failed_resume_fall_back_to_identify ... ok
+test gateway::tests::buffered_resume_replays_messages_after_last_ack_without_new_generation ... ok
+test gateway::tests::cancelled_connect_and_last_handle_drop_leave_no_live_connection_owner ... ok
+test gateway::tests::close_during_dave_setup_is_terminal_and_never_starts_media ... ok
+test gateway::tests::command_saturation_and_slow_observer_never_hide_durable_final_state ... ok
+test gateway::tests::connected_transport_continuously_drains_bounded_inbound_udp ... ok
+test gateway::tests::current_voice_close_policy_is_data_driven_and_typed ... ok
+test gateway::tests::dave_binary_envelope_decoder_enforces_structure_opcode_and_body_bound ... ok
+test gateway::tests::dave_binary_envelope_decoder_exhausts_short_lengths_opcodes_and_bounds ... ok
+test gateway::tests::dave_epoch_reset_during_playback_pauses_without_plaintext_or_sender_failure ... ok
+test gateway::tests::dave_json_control_decoder_enforces_integer_types_and_widths ... ok
+test gateway::tests::dave_outbound_binary_limit_accepts_edge_and_rejects_one_byte_over ... ok
+test gateway::tests::dave_required_transport_refuses_audio_without_plaintext_packet ... ok
+test gateway::tests::dave_resume_restores_connected_when_retained_sender_context_is_ready ... ok
+test gateway::tests::dave_resume_retains_session_but_fresh_identify_and_replacement_reset_it ... ok
+test gateway::tests::dave_roster_decoder_bounds_cardinality_before_parsing ... ok
+test gateway::tests::dave_roster_limit_accepts_edge_and_rejects_one_member_over ... ok
+test gateway::tests::dave_transport_replacement_pauses_attached_sender_until_dave_is_ready ... ok
+test gateway::tests::dropped_and_delayed_heartbeat_ack_trigger_bounded_resume_and_rtt ... ok
+test gateway::tests::fresh_voice_info_during_playback_invalidates_old_transport_before_replacement_media ... ok
+test gateway::tests::gateway_v8_identify_numbered_heartbeat_ping_and_unknown_payloads ... ok
+test gateway::tests::invalid_dave_commit_and_welcome_recover_with_fresh_packages_end_to_end ... ok
+test gateway::tests::malformed_dave_binary_controls_fail_before_backend_end_to_end ... ok
+test gateway::tests::malformed_dave_json_controls_fail_before_backend_end_to_end ... ok
+test gateway::tests::malformed_dave_membership_controls_fail_before_backend_end_to_end ... ok
+test gateway::tests::needs_fresh_voice_info_waits_without_spinning_and_accepts_replacement ... ok
+test gateway::tests::nonce_exhaustion_renews_the_full_transport_before_another_media_packet ... ok
+test gateway::tests::off_cpu_poll_delay_does_not_permanently_kill_valid_audio ... ok
+test gateway::tests::oversized_generated_dave_output_fails_before_any_partial_response ... ok
+test gateway::tests::p07_complete_non_dave_path_benchmark ... ignored, release-only P07 production-path performance gate
+test gateway::tests::p14_simulated_24_hour_connected_lifecycle_soak ... ignored, release-only simulated 24-hour connected lifecycle soak
+test gateway::tests::paced_sender_waits_for_readiness_then_sends_audio_and_exact_silence_drain ... ok
+test gateway::tests::pending_ping_waiters_are_bounded_and_shutdown_is_typed ... ok
+test gateway::tests::real_audio_resumes_during_silence_drain_then_requires_a_fresh_five_frames ... ok
+test gateway::tests::rejected_dave_versions_are_typed_transitions_end_to_end ... ok
+test gateway::tests::replacement_cancels_stale_udp_discovery_without_crossing_generations ... ok
+test gateway::tests::replacement_storm_rejects_stale_generation_even_on_same_endpoint_new_token ... ok
+test gateway::tests::resource_and_voice_info_bounds_fail_before_any_task_starts ... ok
+test gateway::tests::shutdown_during_resume_cancels_reconnect_without_new_generation ... ok
+test gateway::tests::source_replacement_rejects_old_wakes_and_slow_source_isolated_failure ... ok
+test gateway::tests::stale_slow_endpoint_completion_cannot_overwrite_new_generation ... ok
+test gateway::tests::terminal_close_is_typed_at_every_gateway_handshake_stage ... ok
+test gateway::tests::text_and_binary_message_limits_accept_edge_and_reject_one_byte_over ... ok
+test gateway::tests::transport_mode_preference_fallback_and_rejection_are_end_to_end ... ok
+test gateway::tests::udp_send_failure_is_typed_and_emits_no_partial_media_packet ... ok
+test gateway::tests::unnegotiated_dave_controls_cannot_activate_dave_lazily ... ok
+test gateway::tests::unsupported_initial_dave_version_is_typed_before_transport_installation ... ok
+test pacer::tests::delayed_executor_gets_one_signal_and_never_a_catch_up_burst ... ok
+test pacer::tests::full_sender_slot_cannot_block_an_unrelated_sender_on_the_same_shard ... ok
+test transport::tests::both_modes_match_the_independent_oracle_and_reuse_buffers ... ok
+test transport::tests::discovery_exhausts_exactly_three_attempts_without_accepting_malformed_input ... ok
+test transport::tests::discovery_ignores_malformed_and_oversized_datagrams_with_bounded_retries ... ok
+test transport::tests::discovery_wire_is_exact_and_parser_rejects_every_structural_error ... ok
+test transport::tests::mode_selection_is_preference_ordered_and_exact ... ok
+test transport::tests::nonce_maximum_is_used_once_then_refused_for_both_modes ... ok
+test transport::tests::production_encoder_matches_frozen_raw_golden_packets ... ok
+
+test result: ok. 95 passed; 0 failed; 6 ignored; 0 measured; 0 filtered out; finished in 16.90s
+

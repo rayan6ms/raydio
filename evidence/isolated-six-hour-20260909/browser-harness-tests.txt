@@ -1,0 +1,1 @@
+PASS: six-hour simulated receiver, bounded before/after windows, truncation accounting, disconnect detection and listener cleanup

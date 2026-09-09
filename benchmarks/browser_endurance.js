@@ -84,7 +84,10 @@
         if(typeof scheduling!=='boolean')throw Error('scheduling must be boolean');
         api.running=true;
         const data=api.report={version:1,status:'starting',requestedSeconds:seconds,pcmEnabled:pcm,
-            requestedAt:new Date().toISOString(),minutes:[],events:[],eventsTruncated:false,
+            requestedAt:new Date().toISOString(),minutes:[],events:[],eventsTruncated:false,eventsDropped:0,
+            network:{onlineAtStart:navigator.onLine},
+            diagnosticWindows:[],diagnosticWindowsDropped:0,
+            diagnosticSampleFields:['elapsedMs','windowMs','packets','lost','discarded','concealedMs','silentMs','jitterMs','meanBufferMs','rttMs'],
             receiverScheduling:{enabled:scheduling,longTasksSupported:false,longTasks:0,
                 totalLongTaskMs:0,maxLongTaskMs:0,initialVisibility:document.visibilityState},
             pcm:{samples:0,squared:0,peak:0,nearFullScale:0,nonFinite:0,emptyFrames:0,
@@ -95,6 +98,8 @@
                 'Track phase comes from the once-per-second visible player; silence near track boundaries is retained for review, never silently excluded',
                 'No PCM is recorded; source defects and perceptual quality need separate evidence']};
         let ctx,source,meter,observer,peer,stateListener,longTaskObserver,visibilityListener,stopped=false;
+        const listeners=[];const history=[];
+        const listen=(target,type,handler)=>{target.addEventListener(type,handler);listeners.push(()=>target.removeEventListener(type,handler));};
         const started=performance.now();let audioStarted=started, priorPosition=null,minute,pcmLastAt=started;
         const panel=()=>[...document.querySelectorAll('main article')].filter(e=>e.innerText.includes('Raydio • Now Playing')).at(-1);
         const phase=()=>{
@@ -107,8 +112,21 @@
                 playing:text.includes('Playing •'),loop:text.includes('Loop: ON')};
         };
         const event=(kind,detail={})=>{
-            if(data.events.length>=12000){data.eventsTruncated=true;return;}
-            data.events.push({ms:performance.now()-audioStarted,kind,phase:phase(),...detail});
+            if(data.events.length>=4096){data.eventsTruncated=true;data.eventsDropped++;data.events.shift();}
+            const at=performance.now()-audioStarted, trackPhase=phase();
+            data.events.push({ms:at,kind,phase:trackPhase,...detail});
+            const trigger=(kind==='speaking'&&!detail.speaking)
+                ||(kind==='quiet'&&detail.durationMs>=100&&trackPhase.label==='middle')
+                ||(kind==='receiver'&&(detail.packets===0||detail.windowMs>2000||detail.concealedMs>=40))
+                ||['connection','ice','network-offline','audio-context','track-ended','track-muted'].includes(kind);
+            if(trigger){
+                const prior=data.diagnosticWindows.at(-1);
+                if(prior&&prior.remaining>0){if(prior.triggers.length<8)prior.triggers.push({ms:at,kind});}
+                else{
+                    if(data.diagnosticWindows.length>=128){data.diagnosticWindows.shift();data.diagnosticWindowsDropped++;}
+                    data.diagnosticWindows.push({ms:at,triggers:[{ms:at,kind}],samples:history.slice(),remaining:5});
+                }
+            }
         };
         api.stop=()=>{stopped=true;};
         try {
@@ -147,7 +165,7 @@
                 });
             }
             audioStarted=performance.now();pcmLastAt=audioStarted;
-            data.startedAt=new Date().toISOString();data.status='running';data.sampleRate=ctx?.sampleRate||48000;data.graphWarmupMs=pcm?1100:0;
+            data.startedAt=new Date().toISOString();data.clock={wallStartMs:Date.now(),monotonicStartMs:audioStarted,timeOrigin:performance.timeOrigin};data.status='running';data.sampleRate=ctx?.sampleRate||48000;data.graphWarmupMs=pcm?1100:0;
             if(scheduling){
                 // Event-driven diagnostic only: no new polling timer, network
                 // interception, raw audio, or changes to WebRTC buffering.
@@ -181,6 +199,19 @@
             observer.observe(row.parentElement.parentElement.parentElement,{subtree:true,attributes:true,attributeFilter:['class']});
             stateListener=()=>event('connection',{state:peer.connectionState});
             peer.addEventListener('connectionstatechange',stateListener);
+            listen(peer,'iceconnectionstatechange',()=>event('ice',{state:peer.iceConnectionState}));
+            listen(window,'online',()=>event('network-online'));
+            listen(window,'offline',()=>event('network-offline'));
+            listen(receiver.track,'mute',()=>event('track-muted'));
+            listen(receiver.track,'unmute',()=>event('track-unmuted'));
+            listen(receiver.track,'ended',()=>event('track-ended'));
+            if(ctx){
+                data.audioContext={sampleRate:ctx.sampleRate,baseLatency:ctx.baseLatency,outputLatency:ctx.outputLatency};
+                listen(ctx,'statechange',()=>event('audio-context',{state:ctx.state}));
+            }
+            if(navigator.mediaDevices)listen(navigator.mediaDevices,'devicechange',()=>event('audio-device-change'));
+            const codec=initialRaw.codecId?(await peer.getStats()).get(initialRaw.codecId):null;
+            if(codec)data.codec={mimeType:codec.mimeType,clockRate:codec.clockRate,channels:codec.channels};
             if(meter)meter.port.onmessage=({data:m})=>{
                 pcmLastAt=performance.now();const p=data.pcm;
                 p.samples+=m.samples;p.squared+=m.squared;p.peak=Math.max(p.peak,m.peak);
@@ -193,13 +224,24 @@
             };
             while(performance.now()-audioStarted<seconds*1000&&!stopped){
                 await sleep(Math.min(1000,Math.max(1,seconds*1000-(performance.now()-audioStarted))));
-                const raw=(await peer.getStats()).get(id);
-                if(!raw||peer.connectionState==='closed'||!row.isConnected)throw Error('Receiver or voice row was replaced/disconnected');
+                const report=await peer.getStats();
+                const raw=report.get(id);
+                // Read only safe connection metrics, never candidate addresses.
+                const transport=[...report.values()].find(r=>r.type==='transport'&&r.selectedCandidatePairId);
+                const pair=transport?report.get(transport.selectedCandidatePairId):null;
+                if(pair)data.network.current={rttMs:pair.currentRoundTripTime*1000,state:pair.state,
+                    bytesReceived:pair.bytesReceived,bytesSent:pair.bytesSent};
+                if(!raw||['closed','failed'].includes(peer.connectionState)||!row.isConnected)throw Error('Receiver or voice row was replaced/disconnected');
                 if(ctx&&ctx.state!=='running')throw Error('Audio context stopped running');
                 const now=counters(raw),dt=now.timestamp-last.timestamp;
                 if(dt<=0){data.sampling.stalePolls++;continue;}
                 const delta=Object.fromEntries(fields.map(k=>[k,now[k]-last[k]]));
                 const elapsedMs=now.timestamp-data.initial.timestamp;
+                const sample=[elapsedMs,dt,delta.packetsReceived,delta.packetsLost,delta.packetsDiscarded,
+                    delta.concealedSamples/48,delta.silentConcealedSamples/48,raw.jitter*1000,
+                    delta.jitterBufferEmittedCount?delta.jitterBufferDelay*1000/delta.jitterBufferEmittedCount:null, data.network.current?.rttMs??null];
+                for(const window of data.diagnosticWindows)if(window.remaining>0){window.samples.push(sample);window.remaining--;}
+                history.push(sample);if(history.length>6)history.shift();
                 const p=phase();
                 if(p.positionSeconds!==null&&priorPosition!==null&&p.positionSeconds+5<priorPosition)event('track-restart',{priorPosition});
                 if(p.positionSeconds!==null)priorPosition=p.positionSeconds;
@@ -231,6 +273,7 @@
             api.flushScheduling?.();delete api.flushScheduling;
             longTaskObserver?.disconnect();
             if(visibilityListener)document.removeEventListener('visibilitychange',visibilityListener);
+            for(const remove of listeners)remove();
             observer?.disconnect();if(peer&&stateListener)peer.removeEventListener('connectionstatechange',stateListener);
             meter?.disconnect();source?.disconnect();if(ctx)await ctx.close();api.running=false;
             data.finishedAt=new Date().toISOString();
@@ -238,6 +281,16 @@
             data.pcm.audioSeconds=data.pcm.frames/(data.sampleRate||48000);
             if(data.current&&data.initial)data.delta=Object.fromEntries(fields.map(k=>[k,data.current[k]-data.initial[k]]));
             data.pcm.rms=Math.sqrt(data.pcm.squared/Math.max(1,data.pcm.samples));
+            data.coverage={
+                receiverSeconds:data.elapsedSeconds||0,pcmSeconds:data.pcm.audioSeconds,
+                completePollCoverage:data.status==='completed' && data.elapsedSeconds>=seconds-.1
+                    && data.sampling.stalePolls===0 && data.sampling.maxPollMs<=2000,
+                completePcmCoverage:pcm ? data.pcm.audioSeconds>=seconds-.1
+                    && data.sampling.pcmReportsMissing===0 && data.pcm.emptyFrames===0 : null,
+                completeEventHistory:!data.eventsTruncated,
+                retainedDiagnosticWindows:data.diagnosticWindows.length,
+                droppedDiagnosticWindows:data.diagnosticWindowsDropped,
+            };
             if(data.pcm.ongoingQuietMs>=20)event('quiet-at-end',{durationMs:data.pcm.ongoingQuietMs});
         }
         return {status:data.status,elapsedSeconds:data.elapsedSeconds,error:data.error};

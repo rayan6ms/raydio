@@ -75,6 +75,21 @@ with args.output.open('x') as output:
                 row['peer'] = dict(pid=args.peer_pid, error=type(error).__name__)
         row['pressure'] = {name: (Path('/proc/pressure') / name).read_text().strip()
                            for name in ('cpu', 'memory', 'io') if (Path('/proc/pressure') / name).exists()}
+        row['hostMemoryKiB'] = {line.split(':')[0]: int(line.split()[1])
+                                for line in Path('/proc/meminfo').read_text().splitlines()
+                                if line.startswith(('MemAvailable:', 'SwapFree:', 'SwapTotal:', 'Dirty:', 'Writeback:'))}
+        row['load'] = Path('/proc/loadavg').read_text().split()[:3]
+        row['networkDevices'] = {}
+        for line in Path('/proc/net/dev').read_text().splitlines()[2:]:
+            name, values = line.split(':', 1); values = list(map(int, values.split()))
+            row['networkDevices'][name.strip()] = dict(rxBytes=values[0], rxPackets=values[1],
+                rxErrors=values[2], rxDrops=values[3], txBytes=values[8], txPackets=values[9],
+                txErrors=values[10], txDrops=values[11])
+        snmp = Path('/proc/net/snmp').read_text().splitlines()
+        row['udp'] = {}
+        for index in range(0, len(snmp)-1, 2):
+            if snmp[index].startswith('Udp:'):
+                row['udp'] = dict(zip(snmp[index].split()[1:], map(int, snmp[index+1].split()[1:])))
         output.write(json.dumps(row, separators=(',', ':')) + '\n')
         output.flush()
         if 'error' in row or time.monotonic() - started >= args.seconds:

@@ -1,0 +1,40 @@
+    Updating git repository `https://github.com/rayan6ms/oto`
+    Updating crates.io index
+     Locking 4 packages to latest Rust 1.97.1 compatible versions
+      Adding davey v0.1.4 (https://github.com/rayan6ms/oto?rev=1869e671d086386be7ecb5bb58674008d6b7a62f#1869e671)
+      Adding openmls_rust_crypto v0.5.1 (https://github.com/rayan6ms/oto?rev=1869e671d086386be7ecb5bb58674008d6b7a62f#1869e671)
+      Adding oto v1.0.0 (https://github.com/rayan6ms/oto?rev=1869e671d086386be7ecb5bb58674008d6b7a62f#1869e671)
+      Adding oto-testkit v1.0.0 (https://github.com/rayan6ms/oto?rev=1869e671d086386be7ecb5bb58674008d6b7a62f#1869e671)
+   Compiling openmls_rust_crypto v0.5.1 (https://github.com/rayan6ms/oto?rev=1869e671d086386be7ecb5bb58674008d6b7a62f#1869e671)
+   Compiling davey v0.1.4 (https://github.com/rayan6ms/oto?rev=1869e671d086386be7ecb5bb58674008d6b7a62f#1869e671)
+   Compiling oto v1.0.0 (https://github.com/rayan6ms/oto?rev=1869e671d086386be7ecb5bb58674008d6b7a62f#1869e671)
+   Compiling oto-testkit v1.0.0 (https://github.com/rayan6ms/oto?rev=1869e671d086386be7ecb5bb58674008d6b7a62f#1869e671)
+   Compiling crust-oto-adapter v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-oto-adapter)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 31.95s
+     Running unittests src/lib.rs (target/debug/deps/crust_oto_adapter-a49b3f8267e50a5e)
+
+running 15 tests
+test tests::abort_before_producer_starts_wakes_pending_consumer ... ok
+test tests::backend_shutdown_polls_all_connections_concurrently ... ok
+test tests::bridge_is_capacity_one_and_pulls_again_only_after_consumption ... ok
+test tests::concurrent_publication_preserves_every_frame_and_terminal_order ... ok
+test tests::empty_path_replaces_the_waker_and_wakes_on_nonempty_transition ... ok
+test tests::p10_bridge_target_scale_benchmark_report ... ignored, manual release-profile voice bridge benchmark; run with --ignored --nocapture
+test tests::pending_consumer_wakes_when_the_producer_is_cancelled ... ok
+test tests::ready_ring_frame_does_not_depend_on_tokio_cooperative_budget ... ok
+test tests::real_adapter_connects_idles_sends_replaces_stops_and_shuts_down ... ok
+test tests::real_adapter_maps_ping_resume_fresh_info_and_terminal_close ... ok
+test tests::real_adapter_never_starts_plaintext_audio_when_dave_is_required ... ok
+test tests::source_failure_is_retained_for_typed_event_delivery ... ok
+test tests::terminal_audio_failure_is_reported_instead_of_leaving_a_playing_zombie ... ok
+test tests::terminal_transition_wakes_pending_consumer_without_polling ... ok
+test tests::undersized_oto_output_fails_instead_of_emitting_an_empty_frame ... ok
+
+test result: ok. 14 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 9.64s
+
+   Doc-tests crust_oto_adapter
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

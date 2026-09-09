@@ -47,15 +47,27 @@ class Handler(BaseHTTPRequestHandler):
             if data.get('version') != 1 or data.get('requestedSeconds') != 21600:
                 self.answer(400)
                 return
+            save_started = time.monotonic()
             temporary = a.output / 'receiver.next.json'
             with temporary.open('w') as f:
                 json.dump(data, f, separators=(',', ':'))
                 f.flush()
                 os.fsync(f.fileno())
             temporary.replace(a.output / 'receiver.json')
+            # Low-frequency receiver-host evidence, piggybacked on persistence.
+            # No sockets/packets are intercepted and no subprocess is spawned.
+            host = {}
+            for name in ('cpu', 'memory', 'io'):
+                path = Path('/proc/pressure') / name
+                if path.exists(): host[name + 'Pressure'] = path.read_text().strip()
+            if Path('/proc/stat').exists():
+                host['cpuTicks'] = list(map(int, Path('/proc/stat').read_text().splitlines()[0].split()[1:]))
+                host['networkDevices'] = Path('/proc/net/dev').read_text().splitlines()[2:]
+                host['udpCounters'] = [line for line in Path('/proc/net/snmp').read_text().splitlines() if line.startswith('Udp:')]
             with (a.output / 'checkpoints.jsonl').open('a') as f:
                 f.write(json.dumps({'savedAt': time.time(), 'status': data.get('status'),
-                    'elapsedSeconds': data.get('elapsedSeconds'), 'bytes': size}) + '\n')
+                    'elapsedSeconds': data.get('elapsedSeconds'), 'bytes': size,
+                    'saveDurationMs': (time.monotonic()-save_started)*1000, 'host': host}) + '\n')
             self.answer(204)
         except (ValueError, OSError):
             self.answer(400)

@@ -1037,6 +1037,12 @@ impl GuildSession {
         }
         let kind = payload["type"].as_str().unwrap_or("");
         if kind == "WebSocketClosedEvent" {
+            tracing::warn!(
+                code = payload["code"].as_u64(),
+                generation = self.generation,
+                position_ms = self.position_ms,
+                "voice closed; cleaning up playback"
+            );
             self.cleanup(Some(
                 "The voice connection closed. Use `/play` to reconnect.",
             ))
@@ -1050,18 +1056,36 @@ impl GuildSession {
         }
         match kind {
             "TrackStartEvent" => {
+                tracing::info!(generation = self.generation, "track started");
                 self.started = true;
                 self.position_at = Instant::now();
                 self.schedule_end();
                 self.events[2] = self.events[2].saturating_add(1);
             }
             "TrackEndEvent" if payload["reason"] == "finished" => {
+                tracing::info!(
+                    generation = self.generation,
+                    position_ms = self.position_ms,
+                    "track finished"
+                );
                 self.queue.finish();
                 self.events[3] = self.events[3].saturating_add(1);
                 let _ = self.start_current().await;
             }
-            "TrackEndEvent" if payload["reason"] == "loadFailed" => self.track_failure().await,
-            "TrackExceptionEvent" | "TrackStuckEvent" => self.track_failure().await,
+            "TrackEndEvent" if payload["reason"] == "loadFailed" => {
+                tracing::warn!(generation = self.generation, "track load failed");
+                self.track_failure().await;
+            }
+            "TrackExceptionEvent" | "TrackStuckEvent" => {
+                // Never log exception text, encoded tracks or source URLs.
+                tracing::warn!(
+                    event = kind,
+                    generation = self.generation,
+                    position_ms = self.position_ms,
+                    "track source failed or stalled"
+                );
+                self.track_failure().await;
+            }
             _ => return,
         }
         self.refresh().await;

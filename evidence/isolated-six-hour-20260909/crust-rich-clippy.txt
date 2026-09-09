@@ -1,0 +1,7 @@
+    Checking openmls_rust_crypto v0.5.1 (https://github.com/rayan6ms/oto?rev=1869e671d086386be7ecb5bb58674008d6b7a62f#1869e671)
+    Checking davey v0.1.4 (https://github.com/rayan6ms/oto?rev=1869e671d086386be7ecb5bb58674008d6b7a62f#1869e671)
+    Checking oto v1.0.0 (https://github.com/rayan6ms/oto?rev=1869e671d086386be7ecb5bb58674008d6b7a62f#1869e671)
+    Checking crust v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust)
+    Checking oto-testkit v1.0.0 (https://github.com/rayan6ms/oto?rev=1869e671d086386be7ecb5bb58674008d6b7a62f#1869e671)
+    Checking crust-oto-adapter v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-oto-adapter)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.18s

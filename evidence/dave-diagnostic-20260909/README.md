@@ -88,3 +88,9 @@ Use `run.json` for retrieval locations. The bot stays running after the window.
 Do not reload the Discord tab or change playback/listener controls. The previous
 run's local internet outage remains a possible receiver limitation; an outage
 will fail the receiver measurement even if Oracle's sender continues.
+
+## Superseded at user request
+
+The shared-instance run was intentionally stopped at 08:17:20Z after 803.238s;
+its evidence is in `interrupted/`. Production Raydio was then stopped and disabled.
+The replacement isolated diagnostic is documented in ../isolated-six-hour-20260909/.
