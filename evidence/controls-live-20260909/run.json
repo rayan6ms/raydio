@@ -1,0 +1,29 @@
+{
+  "status": "completed",
+  "requestedSeconds": 600,
+  "startedAt": "2026-09-09T17:41:49.763Z",
+  "plannedEnd": "2026-09-09T17:51:49.763Z",
+  "candidatePid": 6744,
+  "candidateSha256": "a508ce2113cf32f8ba537da3a00000dfe461f9d5da61c95edbfcbfe1e1cad23e",
+  "candidatePath": "/opt/raydio/candidates/controls-a291b81/bin/raydio",
+  "production": "inactive and disabled",
+  "receiverPath": "target/receiver-controls-20260909",
+  "oraclePath": "/var/lib/raydio/controls-live-20260909",
+  "track": "https://youtu.be/dQw4w9WgXcQ",
+  "volume": 70,
+  "loop": true,
+  "channel": "test/General",
+  "preflight": {
+    "verified": true,
+    "hostSamples": 3,
+    "savedElapsedSeconds": 9.010375
+  },
+  "setupCaveats": [
+    "Keyboard tool required user to submit play; candidate restart interrupted their first attempt before measurement",
+    "First nohup local collector did not survive shell; replaced with bounded systemd user service before the measured interval",
+    "One checkpoint fetch failed before persistent collector started; preflight passed against actual running report",
+    "No second independent network receiver; downstream fault location remains limited"
+  ],
+  "oracleSshDuringMeasurement": false,
+  "interposer": false
+}

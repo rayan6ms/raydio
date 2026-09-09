@@ -1,0 +1,52 @@
+{
+  "status": "running",
+  "requestedAt": "2026-09-09T17:55:54.983Z",
+  "startedAt": "2026-09-09T17:55:57.192Z",
+  "plannedEnd": "2026-09-09T23:55:57.192000+00:00",
+  "requestedSeconds": 21600,
+  "candidateCommit": "efaaf66034c8f6b6963712f103aa4465b024f887",
+  "candidateSha256": "a508ce2113cf32f8ba537da3a00000dfe461f9d5da61c95edbfcbfe1e1cad23e",
+  "candidatePath": "/opt/raydio/candidates/controls-a291b81/bin/raydio",
+  "candidatePid": 6744,
+  "production": "inactive and disabled",
+  "channel": "test/General",
+  "track": "https://youtu.be/dQw4w9WgXcQ",
+  "volume": 70,
+  "loop": true,
+  "checkpointErrorsAtStart": 1,
+  "checkpointErrorsAtFirstVerification": 1,
+  "initialPreflight": {
+    "verified": true,
+    "hostSamples": 17,
+    "savedElapsedSeconds": 7.008033935546875,
+    "remainingSeconds": 24223.954381841002
+  },
+  "receiverDirectory": "/home/rayan/Documents/Projects/raydio-rust/target/receiver-controls-20260909",
+  "oracleSamplerPath": "/var/lib/raydio/controls-live-20260909/resources.jsonl",
+  "oracleFinalSnapshotDirectory": "/var/lib/raydio/controls-six-hour-20260909",
+  "oracleSnapshotUtc": "2026-09-10T00:10:42Z",
+  "oracleMaintenanceRestoreUtc": "2026-09-10T00:15:42Z",
+  "localCollectorUnit": "raydio-receiver-controls-20260909.service",
+  "localInhibitUnit": "raydio-receiver-inhibit-20260909.service",
+  "samplerSeconds": 25200,
+  "oracleAdminDuringMeasurement": false,
+  "noRestartsPlanned": true,
+  "limitations": [
+    "One receiver cannot isolate downstream network faults",
+    "Cannot guarantee absence of external network or host disturbances; correlate independent diagnostics",
+    "Known source-tail silence must not be classified as a bot interruption",
+    "A running report is not a six-hour pass"
+  ],
+  "automaticCheckpointVerification": {
+    "hostSamples": 18,
+    "lastReceiver": {
+      "savedAt": 1788976638.949483,
+      "requestedAt": "2026-09-09T17:55:54.983Z",
+      "status": "running",
+      "elapsedSeconds": 81.09085888671875,
+      "bytes": 5423,
+      "saveDurationMs": 4.802065999683691
+    },
+    "remainingSeconds": 24129.483458296
+  }
+}

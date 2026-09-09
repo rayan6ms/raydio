@@ -1,5 +1,10 @@
 # Control continuity improved; fresh receiver test still required
 
+Update: the candidate is now live on Oracle, native CI passed, and the fresh
+ten-minute receiver qualification completed. See
+[the live results and six-hour run record](../controls-live-20260909/RESULTS.md).
+The deployment/browser status below is retained as the earlier checkpoint.
+
 Crust `e3a8324c69692587faa7f1e4d7cd627037daddc8` fixes two reproduced
 control-path problems. Raydio pins this revision. These changes do not establish
 that the network incidents in the previous six-hour run are fixed.
