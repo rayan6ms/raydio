@@ -25,5 +25,15 @@
     "hostSamples": 2,
     "intervalSeconds": 60.35416840299149,
     "browserWritesDuringSecondSample": 0
-  }
+  },
+  "raydioRevision": "a291b8132a833b5ee92ea910cf80b2a8a6178a60",
+  "candidate": {
+    "sha256": "a508ce2113cf32f8ba537da3a00000dfe461f9d5da61c95edbfcbfe1e1cad23e",
+    "bytes": 18592480,
+    "localBackendCheck": "passed",
+    "oraclePath": "/opt/raydio/candidates/controls-a291b81/bin/raydio",
+    "activated": false,
+    "oracleBackendCheck": "passed"
+  },
+  "releaseBuild": "passed, local one-job optimized release"
 }

@@ -103,3 +103,17 @@ Consequently a fresh receiver/control test cannot yet be performed. Restore the
 supported tool, verify the signed-in Discord tab and collector preflight, then
 switch only Testbot to the new candidate and measure a short control window and
 a quiet multi-loop window before the next six-hour attempt.
+
+The Raydio integration is committed as `a291b81`; Crust as `e3a8324`. The local
+one-job release build and offline backend check passed. The candidate binary is
+18,592,480 bytes (2,152 bytes more than the prior local binary), SHA-256
+`a508ce2113cf32f8ba537da3a00000dfe461f9d5da61c95edbfcbfe1e1cad23e`.
+The native GitHub x86-64/ARM64 build workflow was triggered by the push; its
+result is pending at this report's checkpoint.
+
+The same candidate was staged at
+`/opt/raydio/candidates/controls-a291b81/bin/raydio` on Oracle. SHA-256 matched
+and `--check` passed as the unprivileged raydio user at nice 19. No service was
+restarted: the original Testbot PID is still 5601 with zero restarts; production
+Raydio remains inactive/disabled. This validates candidate startup compatibility,
+not live playback. Activate it only when the fresh receiver test is ready.
