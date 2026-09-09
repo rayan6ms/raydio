@@ -1,0 +1,16 @@
+{
+  "status": "running",
+  "startedAt": "2026-09-09T08:34:57.932Z",
+  "plannedEnd": "2026-09-09T14:34:57.932Z",
+  "requestedSeconds": 21600,
+  "candidatePid": 5601,
+  "production": "stopped and disabled",
+  "candidateSha256": "ba9d9a72467b37b3fbecfb6ccae3176d0490403560c9532ca3cb392155e80aee",
+  "oracleEvidence": "/var/lib/raydio/isolated-six-hour-20260909",
+  "localReceiverEvidence": "target/isolated-six-hour-20260909",
+  "track": "https://youtu.be/dQw4w9WgXcQ",
+  "channel": "test/General",
+  "volume": 70,
+  "loop": true,
+  "checkpointErrors": 0
+}
