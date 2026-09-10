@@ -146,6 +146,7 @@
     "collectedEvidence": "results/raw-evidence.tar.gz",
     "production": "inactive and disabled",
     "testbot": "same PID 8963 online, playback cleaned up after terminal audio failure",
-    "newRunStarted": false
+    "newRunStarted": false,
+    "userConfirmedReceiverOutage": "User reports Starlink dish rebooted for an update during the run. This supports the local network disruption diagnosis; the later DAVE playback failure is separate."
   }
 }

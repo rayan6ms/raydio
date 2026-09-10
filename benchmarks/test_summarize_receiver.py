@@ -19,6 +19,10 @@ class SummaryTests(unittest.TestCase):
                            concealedSamples=0,silentConcealedSamples=0))
             (root/'receiver.json').write_text(json.dumps(receiver))
             (root/'service.log').write_text(
+                '2026-09-09T00:02:40Z connection_generation=1 opcode=24 '
+                'before=DaveContext { active_version: 1, transition_pending: false, ready: true } '
+                'after=DaveContext { active_version: 0, transition_pending: false, ready: false } '
+                'DAVE lifecycle transition\n'
                 '2026-09-09T00:02:42Z audio sender stopped after a terminal failure '
                 'failure=Some(DaveTransition) dave_failure=Some(InvalidState) '
                 'dave_context=Some(DaveContext { active_version: 0, transition_pending: false, ready: false }) '
@@ -32,11 +36,14 @@ class SummaryTests(unittest.TestCase):
                 check=True,capture_output=True)
             summary=json.loads((root/'summary.json').read_text())
             events=summary['senderEventsThroughPlannedEnd']
-            self.assertEqual(len(events),2)
+            self.assertEqual(len(events),3)
             self.assertTrue(all(e['afterReceiverEnd'] for e in events))
-            self.assertEqual(events[0]['dave_failure'],'InvalidState')
-            self.assertEqual(events[0]['frames_sent'],8000)
-            self.assertFalse(events[0]['ready'])
+            self.assertEqual(events[0]['opcode'],24)
+            self.assertTrue(events[0]['before']['ready'])
+            self.assertFalse(events[0]['after']['ready'])
+            self.assertEqual(events[1]['dave_failure'],'InvalidState')
+            self.assertEqual(events[1]['frames_sent'],8000)
+            self.assertFalse(events[1]['ready'])
             self.assertEqual(summary['receiverError'],'receiver disconnected')
             self.assertEqual(summary['unobservedRequestedSeconds'],21480)
             self.assertEqual(summary['hostCollectionCoverage']['samples'],2)

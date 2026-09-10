@@ -1,0 +1,11 @@
+    Blocking waiting for file lock on build directory
+    Checking crust v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust)
+    Checking oto v1.0.0 (https://github.com/rayan6ms/oto?rev=352fa9a277377dbeb4f44513961c34f0785d870a#352fa9a2)
+    Checking rcgen v0.14.10
+    Checking crust-oto-adapter v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-oto-adapter)
+   Compiling crust-server v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-server)
+    Checking oto-testkit v1.0.0 (https://github.com/rayan6ms/oto?rev=352fa9a277377dbeb4f44513961c34f0785d870a#352fa9a2)
+    Checking crust-mantle-adapter v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-mantle-adapter)
+    Checking crust-protocol v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-protocol)
+    Checking crust-testkit v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-testkit)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2m 03s

@@ -1,0 +1,2 @@
+    Checking oto v1.0.0 (/home/rayan/Documents/Projects/oto-rust-fix/crates/oto)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.62s

@@ -1,0 +1,11 @@
+
+running 6 tests
+test audio::tests::dave_epoch_reset_during_speaking_preserves_sender_and_accepts_stop ... ok
+test audio::tests::dave_epoch_reset_during_terminal_drain_finishes_exact_silence_tail ... ok
+test audio::tests::dave_epoch_reset_queued_ahead_of_inflight_media_retains_frame ... ok
+test audio::tests::dave_epoch_reset_resumes_retained_frame_without_gateway_phase_update ... ok
+test audio::tests::dave_epoch_reset_source_replacement_discards_old_staged_frame ... ok
+test gateway::tests::dave_epoch_reset_during_playback_pauses_without_plaintext_or_sender_failure ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 103 filtered out; finished in 1.49s
+

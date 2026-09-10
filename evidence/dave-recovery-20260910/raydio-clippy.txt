@@ -1,0 +1,11 @@
+    Checking crust v0.0.0 (https://github.com/rayan6ms/crust?rev=4a05a7db7500884eee30f0d32041a55ab26b1ce1#4a05a7db)
+    Checking openmls_rust_crypto v0.5.1 (https://github.com/rayan6ms/oto?rev=352fa9a277377dbeb4f44513961c34f0785d870a#352fa9a2)
+    Checking davey v0.1.4 (https://github.com/rayan6ms/oto?rev=352fa9a277377dbeb4f44513961c34f0785d870a#352fa9a2)
+    Checking oto v1.0.0 (https://github.com/rayan6ms/oto?rev=352fa9a277377dbeb4f44513961c34f0785d870a#352fa9a2)
+    Checking crust-mantle-adapter v0.0.0 (https://github.com/rayan6ms/crust?rev=4a05a7db7500884eee30f0d32041a55ab26b1ce1#4a05a7db)
+    Checking crust-oto-adapter v0.0.0 (https://github.com/rayan6ms/crust?rev=4a05a7db7500884eee30f0d32041a55ab26b1ce1#4a05a7db)
+    Checking crust-protocol v0.0.0 (https://github.com/rayan6ms/crust?rev=4a05a7db7500884eee30f0d32041a55ab26b1ce1#4a05a7db)
+    Checking crust-server v0.0.0 (https://github.com/rayan6ms/crust?rev=4a05a7db7500884eee30f0d32041a55ab26b1ce1#4a05a7db)
+    Checking raydio v0.2.2 (/home/rayan/Documents/Projects/raydio-rust)
+    Checking crust-testkit v0.0.0 (https://github.com/rayan6ms/crust?rev=4a05a7db7500884eee30f0d32041a55ab26b1ce1#4a05a7db)
+    Finished `dev` profile [unoptimized] target(s) in 11.97s

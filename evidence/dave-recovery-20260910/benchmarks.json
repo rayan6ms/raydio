@@ -1,0 +1,97 @@
+{
+  "scope": "local release owned-channel/DAVE/UDP, ABBA order, no parallel builds during timing; synthetic maximum frames",
+  "runs": [
+    {
+      "allocation": {
+        "allocations": 0,
+        "allocationsPerFrame": 0.0,
+        "bytesAllocated": 0,
+        "bytesAllocatedPerFrame": 0.0,
+        "reallocations": 0,
+        "reallocationsPerFrame": 0.0
+      },
+      "benchmarkId": "oto-p08-complete-paced-dave",
+      "boundaryDifference": 0,
+      "frames": 501,
+      "maxSenderLatenessNanos": 2037049,
+      "measurementMs": 10001,
+      "profile": "release",
+      "schemaVersion": 1,
+      "source": "owned-channel",
+      "udpPackets": 501,
+      "warmupMs": 1000,
+      "label": "before",
+      "testBinarySha256": "557e23877ab145dc782fd1b1db23c7cea352f3e0af191980da8c405e7bd9d918"
+    },
+    {
+      "allocation": {
+        "allocations": 0,
+        "allocationsPerFrame": 0.0,
+        "bytesAllocated": 0,
+        "bytesAllocatedPerFrame": 0.0,
+        "reallocations": 0,
+        "reallocationsPerFrame": 0.0
+      },
+      "benchmarkId": "oto-p08-complete-paced-dave",
+      "boundaryDifference": 0,
+      "frames": 501,
+      "maxSenderLatenessNanos": 1956628,
+      "measurementMs": 10000,
+      "profile": "release",
+      "schemaVersion": 1,
+      "source": "owned-channel",
+      "udpPackets": 501,
+      "warmupMs": 1000,
+      "label": "after",
+      "testBinarySha256": "824a0d4eada4cef474a39b14b27f675e0e6bbd3a8f548e2bbebf832dd9d4030f"
+    },
+    {
+      "allocation": {
+        "allocations": 0,
+        "allocationsPerFrame": 0.0,
+        "bytesAllocated": 0,
+        "bytesAllocatedPerFrame": 0.0,
+        "reallocations": 0,
+        "reallocationsPerFrame": 0.0
+      },
+      "benchmarkId": "oto-p08-complete-paced-dave",
+      "boundaryDifference": 0,
+      "frames": 501,
+      "maxSenderLatenessNanos": 1903979,
+      "measurementMs": 10000,
+      "profile": "release",
+      "schemaVersion": 1,
+      "source": "owned-channel",
+      "udpPackets": 501,
+      "warmupMs": 1000,
+      "label": "after",
+      "testBinarySha256": "824a0d4eada4cef474a39b14b27f675e0e6bbd3a8f548e2bbebf832dd9d4030f"
+    },
+    {
+      "allocation": {
+        "allocations": 0,
+        "allocationsPerFrame": 0.0,
+        "bytesAllocated": 0,
+        "bytesAllocatedPerFrame": 0.0,
+        "reallocations": 0,
+        "reallocationsPerFrame": 0.0
+      },
+      "benchmarkId": "oto-p08-complete-paced-dave",
+      "boundaryDifference": 0,
+      "frames": 501,
+      "maxSenderLatenessNanos": 1677537,
+      "measurementMs": 10000,
+      "profile": "release",
+      "schemaVersion": 1,
+      "source": "owned-channel",
+      "udpPackets": 501,
+      "warmupMs": 1000,
+      "label": "before",
+      "testBinarySha256": "557e23877ab145dc782fd1b1db23c7cea352f3e0af191980da8c405e7bd9d918"
+    }
+  ],
+  "limitations": [
+    "No memory RSS/PSS or CPU regression claim from allocation counters",
+    "Short local timings do not establish Discord latency or long-session quality"
+  ]
+}

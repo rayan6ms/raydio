@@ -1,0 +1,21 @@
+   Compiling oto v1.0.0 (/home/rayan/Documents/Projects/oto-rust-fix/crates/oto)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.99s
+     Running unittests src/lib.rs (target/debug/deps/oto-5f46aee1c2becd06)
+
+running 1 test
+
+thread 'audio::tests::dave_epoch_reset_during_speaking_preserves_sender_and_accepts_stop' (490556) panicked at crates/oto/src/audio.rs:1947:9:
+assertion `left != right` failed: an epoch reset is temporary, not a terminal encryption failure: AudioSnapshot { generation: SourceGeneration(1), phase: Failed, failure: Some(DaveTransition), dave_failure: Some(InvalidState), dave_context: Some(DaveContext { active_version: 0, transition_pending: false, ready: false }), stats: AudioStats { frames_sent: 0, silence_frames_sent: 0, frames_unavailable: 0, skipped_deadlines: 0, send_failures: 0, source_overruns: 0, max_lateness: 0ns, last_source_overrun_wall: 0ns, last_source_overrun_cpu: 0ns, active_send_gaps_40ms: 0, active_send_gaps_100ms: 0, active_send_gaps_1s: 0, max_active_send_gap: 0ns, last_active_send_gap: 0ns, last_active_send_gap_unix_ms: 0 } }
+  left: Failed
+ right: Failed
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test audio::tests::dave_epoch_reset_during_speaking_preserves_sender_and_accepts_stop ... FAILED
+
+failures:
+
+failures:
+    audio::tests::dave_epoch_reset_during_speaking_preserves_sender_and_accepts_stop
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 104 filtered out; finished in 0.12s
+
+error: test failed, to rerun pass `-p oto --lib`

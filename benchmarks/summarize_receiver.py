@@ -43,6 +43,7 @@ for line in log.splitlines():
     # separate from the counters measured during the receiver window.
     if start <= date <= planned_end:
         kind = next((kind for text,kind in (
+            ('DAVE lifecycle transition','dave-lifecycle-transition'),
             ('audio sender stopped after a terminal failure','audio-terminal-failure'),
             ('voice connection failure','connection-failure'),
             ('voice closed; cleaning up playback','session-cleanup'),
@@ -55,6 +56,14 @@ for line in log.splitlines():
                 r'\b(code|generation|position_ms|frames_sent|frames_unavailable|skipped_deadlines|send_failures|source_overruns|active_version)[=:] ?(\d+)',line)})
             fields.update({key:value=='true' for key,value in re.findall(
                 r'\b(transition_pending|ready): (true|false)',line)})
+            if kind=='dave-lifecycle-transition':
+                # Keep the old/new contexts distinct. Never copy opaque gateway
+                # payloads or crypto material into the analysis output.
+                fields={key:int(value) for key,value in re.findall(
+                    r'\b(connection_generation|opcode)=(\d+)',line)}
+                for label,context in re.findall(r'\b(before|after)=DaveContext \{([^}]+)\}',line):
+                    fields[label]={key:int(value) if key=='active_version' else value=='true'
+                        for key,value in re.findall(r'\b(active_version|transition_pending|ready): (\d+|true|false)',context)}
             sender_events.append({'utc':date.isoformat(),'kind':kind,
                 'afterReceiverEnd':date>end,**fields})
     if 'track started generation=' in line: repeats.append(date)
