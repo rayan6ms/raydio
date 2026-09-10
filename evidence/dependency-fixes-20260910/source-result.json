@@ -1,0 +1,1 @@
+{"paced":false,"runs":[{"bytes":2633918,"elapsedSeconds":23.48730875,"filterUpdateMs":0.0,"filterUpdates":0,"frames":10653,"iteration":0,"maxReadMs":13.961395,"stalls":[],"startupMs":496.691331}],"scope":"integrated source and volume processing, no Discord transport","staged":true,"volume":70}

@@ -1,0 +1,30 @@
+{
+  "raydio": {
+    "passed": 49,
+    "failed": 0,
+    "ignored": 0
+  },
+  "crust": {
+    "passed": 160,
+    "failed": 0,
+    "ignored": 4
+  },
+  "mantle": {
+    "passed": 99,
+    "failed": 0,
+    "ignored": 4
+  },
+  "oto": {
+    "passed": 98,
+    "failed": 0,
+    "ignored": 6
+  },
+  "diagnosticHarness": {
+    "pythonTests": 11,
+    "bunSuites": [
+      "endurance simulation",
+      "checkpoint recovery",
+      "actual audio worklet"
+    ]
+  }
+}

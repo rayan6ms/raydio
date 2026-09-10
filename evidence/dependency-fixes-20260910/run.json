@@ -1,0 +1,139 @@
+{
+  "revision": "373c656",
+  "binarySha256": "e62fb82176d81ea35b4fdc54626ff0f40f9563d340d1369d57c338edf3699a23",
+  "binaryBytes": 18619248,
+  "packageBytes": 7568087,
+  "oracle": {
+    "service": "raydio-isolated-six-hour.service",
+    "pid": 8963,
+    "production": "inactive and disabled",
+    "resourceUnit": "dependency-six-hour-20260910-resources.service",
+    "output": "/var/lib/raydio/dependency-six-hour-20260910",
+    "collectorEndsAt": "2026-09-10T10:03:42Z"
+  },
+  "receiver": {
+    "availableCounters": [
+      "timestamp",
+      "packetsReceived",
+      "packetsLost",
+      "bytesReceived",
+      "packetsDiscarded",
+      "nackCount",
+      "fecPacketsReceived",
+      "fecPacketsDiscarded",
+      "concealedSamples",
+      "silentConcealedSamples",
+      "concealmentEvents",
+      "totalSamplesReceived",
+      "jitterBufferDelay",
+      "jitterBufferEmittedCount",
+      "insertedSamplesForDeceleration",
+      "removedSamplesForAcceleration",
+      "jitterBufferTargetDelay",
+      "jitterBufferMinimumDelay"
+    ],
+    "clock": {
+      "monotonicStartMs": 9208115.700000003,
+      "pcmEpochUncertaintyMs": 0.20000000298023224,
+      "pcmResetAckDelayMs": 0.20000000298023224,
+      "pcmWallDriftMaxMs": 2.5666666651768537,
+      "pcmWallDriftMinMs": -8.033333336313717,
+      "timeOrigin": 1789001456041.2,
+      "wallStartMs": 1789010664157
+    },
+    "codec": {
+      "channels": 2,
+      "clockRate": 48000,
+      "mimeType": "audio/opus"
+    },
+    "identity": {
+      "id": "IT01A23715",
+      "ssrc": 23715,
+      "trackIdentifier": "a4b67730-ce96-4549-b85d-08217c9d503e"
+    },
+    "missingCounters": [],
+    "requestedAt": "2026-09-10T03:24:21.947Z",
+    "startedAt": "2026-09-10T03:24:24.157Z",
+    "status": "running",
+    "summary": {
+      "currentPhase": {
+        "durationSeconds": 213,
+        "label": "middle",
+        "loop": true,
+        "playing": true,
+        "positionSeconds": 110
+      },
+      "delta": {
+        "bytesReceived": 196153,
+        "concealedSamples": 2732,
+        "concealmentEvents": 2,
+        "fecPacketsDiscarded": 0,
+        "fecPacketsReceived": 0,
+        "insertedSamplesForDeceleration": 769,
+        "jitterBufferDelay": 69964.79999999999,
+        "jitterBufferEmittedCount": 716160,
+        "jitterBufferMinimumDelay": 141331.19999999995,
+        "jitterBufferTargetDelay": 141331.19999999995,
+        "nackCount": 2,
+        "packetsDiscarded": 0,
+        "packetsLost": 0,
+        "packetsReceived": 751,
+        "removedSamplesForAcceleration": 0,
+        "silentConcealedSamples": 0,
+        "timestamp": 15019.032958984375,
+        "totalSamplesReceived": 720960
+      },
+      "elapsedSeconds": 15.019032958984376,
+      "events": 2,
+      "eventsTruncated": false,
+      "lastProgressAt": "2026-09-10T03:24:39.177Z",
+      "minutes": 1,
+      "pcm": {
+        "emptyFrames": 0,
+        "endWallMs": 15032.29999999702,
+        "frames": 721920,
+        "longestQuietMs": 10,
+        "nearFullScale": 0,
+        "nonFinite": 0,
+        "ongoingQuietMs": 0,
+        "peak": 0.5424360036849976,
+        "reports": 60,
+        "samples": 1443840,
+        "squared": 17299.919403184915
+      },
+      "pcmEnabled": true,
+      "receiverScheduling": {
+        "enabled": true,
+        "initialVisibility": "visible",
+        "longTasks": 0,
+        "longTasksSupported": true,
+        "maxLongTaskMs": 0,
+        "totalLongTaskMs": 0
+      },
+      "sampling": {
+        "maxConcealedMsPerPoll": 51.083333333333336,
+        "maxPollMs": 1002.18798828125,
+        "negativeLossDeltas": 0,
+        "pcmReportsMissing": 0,
+        "polls": 15,
+        "positiveLossDeltas": 0,
+        "stalePolls": 0
+      },
+      "startedAt": "2026-09-10T03:24:24.157Z",
+      "status": "running"
+    },
+    "expectedEndAt": "2026-09-10T09:24:24.157Z",
+    "tabId": "tab_3",
+    "collector": "raydio-dependency-receiver-20260910.service",
+    "sleepInhibitor": "raydio-dependency-inhibit-20260910.service",
+    "output": "target/dependency-six-hour-20260910/receiver"
+  },
+  "scope": "one Oracle Testbot, test/General, Rick Astley dQw4w9WgXcQ, volume70, loop on",
+  "qualification": "six-hour run started directly per user's latest request; first five minutes observed as qualification within same continuous run",
+  "sourceReference": "source-reference.json",
+  "remainingLimits": [
+    "single-receiver path cannot attribute every packet to a particular network hop",
+    "source boundary classification is conservative temporal agreement, not captured-waveform alignment",
+    "the setup interval was stopped after enabling Loop and is separate from this run"
+  ]
+}

@@ -1,0 +1,1 @@
+{"decoder":"libopus 1.6","quietIntervals":[{"startSeconds":212.121542,"durationMs":938.458333,"atEnd":true}],"frames":10653,"seconds":213.060000,"wrongFrameDuration":0,"tinyPackets":47,"longestQuietMs":938.458333,"nearFullScale":0,"nonFinite":0,"peak":0.584290266,"rms":0.090196730,"failed":false}
