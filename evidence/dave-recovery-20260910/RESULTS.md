@@ -75,9 +75,74 @@ exact running-binary hash and `--check` passed. Build revision 20f1cec has an
 18,625,168-byte binary (+5,920 bytes versus the prior release) and a 7,570,715-byte
 archive (+2,628 bytes). No runtime helper, codec setting or dependency was added.
 
-Live receiver validation is pending manual submission of `/play` in Discord:
-the controlled browser is authenticated and joined to General, but automated Enter
-still does not submit. A separate five-minute recording and both host samplers are
-prepared; no new six-hour observation is running. Local deterministic recovery
-and release performance evidence above is complete; a live recovery or quality
-pass is not claimed before the receiver test.
+## Five-minute live receiver result
+
+Completed 12:13:10.171–12:18:10.223 UTC on September 10. Receiver coverage
+299.999631 s; decoded PCM 300.010667 s. All 300 polls, PCM reports and event
+history are complete, with no peer replacement, disconnect, checkpoint error or
+incident-window overwrite. Checkpoint serialization peaked at 3.5 ms. Playback
+controls were untouched during observation. No builds or benchmarks ran during
+the measurement. Production Raydio remained stopped; Testbot PID 10564 did not
+restart. The checked apt, firmware-refresh and man-db maintenance units logged
+no activity in the observation window. These checks cannot exclude every external
+network or host disturbance.
+
+- 14,956 received packets, 30 net/positive lost packets, zero discarded packets,
+  and 28 NACKs. Total concealment was 950.354 ms, including 442.542 ms silent
+  concealment. Concealment is reconstructed audio, not necessarily silence.
+- No full-scale clipping or nonfinite samples; PCM peak 0.573168.
+- Two natural loop handoffs took 1.885 and 1.461 ms in sender event timestamps.
+  Both had 976.25 ms receiver quiet, consistent with the prior 938.458 ms source
+  tail plus the documented 100 ms tolerance. Four quiet fragments near these
+  two boundaries remain preserved as source-tail candidates, not proven causes.
+  The reference came from the previous build; this patch changes DAVE ownership
+  and scheduling, not source decoding or volume. It is not fresh waveform proof.
+- One actual off-boundary quiet interval lasted **441.771 ms**, ending at
+  **12:15:22.216646 UTC**, about 85.6 s after a loop restart. It coincided with a
+  speaking-indicator interruption and a one-second receiver sample containing
+  20 received / 30 lost packets and 605.667 ms concealment. It is not song-ending
+  silence, and the uninterrupted-audio acceptance criterion did not pass.
+- PSS over five in-window host samples: **15.798–16.045 MiB**, median
+  **16.045 MiB**; bot CPU **3.558% of one core**, host steal **0.200%**.
+  Prior long-run median was 16.321 MiB, but different durations and conditions
+  prevent attributing this small difference to the patch. No memory-saving claim.
+
+## What the remaining incident tells us
+
+The 12:14:23.495–12:15:23.495 sender checkpoint interval brackets the incident.
+It contains exactly 3,000 sent frames and no new skipped deadlines, unavailable
+frames, source overruns, send failures or active send gaps above 40 ms. No DAVE
+transition, terminal failure, track transition or session cleanup occurred during
+the entire receiver test. Sender UDP errors and memory-pressure events remained
+zero; the local receiver's interface drop count and UDP error counters also did
+not increase across the incident. Polling stayed around one second and no recorded
+browser long task overlaps the interruption. Minute host samples cannot rule out
+short native-thread or network disturbances.
+
+This supports a packet-delivery interruption downstream of successful bot sends,
+not the previously reproduced DAVE terminal failure or source EOF bug. It does
+**not** identify whether packets were lost between Oracle and Discord, inside
+Discord, on the receiver path (including Starlink), or inside unobserved receiver
+processing. Successful UDP sends do not prove delivery. Do not change the codec,
+add arbitrary buffering, or blame a particular host based on this single receiver.
+
+There were also five additional sender gaps above 40 ms and eight missed deadlines
+in the interior 240 s checkpoint span; none reached 100 ms, and all occurred before
+12:14:23, separately from the 12:15:22 packet-loss incident. Early receiver
+concealment is compatible with these scheduling disturbances, but minute
+checkpoints cannot establish a one-to-one cause. The sender span omits 13.325 s
+at the head and 46.675 s at the tail; those limits are explicit in summary.json.
+
+Next targeted diagnostic: simultaneous independent receivers on different network
+paths, plus bounded packet-header timing/sequence observation on the Oracle voice
+socket. Compare matched incidents before selecting a transport fix. Avoid payload
+capture, flooding, per-packet application logging, and changing controls during a
+measurement. This would distinguish shared upstream loss from a receiver-specific
+outage; a single receiver and aggregate counters cannot do that conclusively.
+
+The DAVE race fix is committed, deployed and validated by deterministic debug and
+release recovery regressions. This live smoke check demonstrates continued
+playback across two loops, but no live rekey occurred, so it does not independently
+exercise that rare recovery path. No new six-hour test was started. Testbot stays
+playing on Oracle; production stays off. Temporary collectors and sleep inhibitor
+were stopped after saving the evidence in live/raw-evidence.tar.gz.

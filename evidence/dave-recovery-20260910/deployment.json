@@ -10,7 +10,7 @@
   "testbotPid": 10564,
   "unit": "raydio-isolated-six-hour.service",
   "production": "inactive and disabled",
-  "liveReceiver": "pending manual Discord command submission; automated Enter did not submit",
+  "liveReceiver": "completed 300-second observation; one 441.77 ms off-boundary packet-loss interruption; see live/summary.json",
   "collectorEndsInSecondsAtLaunch": 3600,
   "newSixHourRun": false
 }

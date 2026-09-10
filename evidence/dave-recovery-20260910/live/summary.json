@@ -1,0 +1,394 @@
+{
+  "status": "completed",
+  "startedAt": "2026-09-10T12:13:10.171Z",
+  "receiverSeconds": 299.99963110351564,
+  "coverage": {
+    "receiverSeconds": 299.99963110351564,
+    "pcmSeconds": 300.0106666666667,
+    "completePollCoverage": true,
+    "completePcmCoverage": true,
+    "uninterruptedConnection": true,
+    "completeEventHistory": true,
+    "retainedDiagnosticWindows": 5,
+    "droppedDiagnosticWindows": 0
+  },
+  "requestedSeconds": 300,
+  "plannedEndAt": "2026-09-10T12:18:10.171000+00:00",
+  "receiverFinishedAt": "2026-09-10T12:18:10.223Z",
+  "receiverError": null,
+  "unobservedRequestedSeconds": 0.000369,
+  "senderEventsThroughPlannedEnd": [],
+  "senderLogExtent": {
+    "first": "2026-09-10T12:05:44.525657+00:00",
+    "last": "2026-09-10T12:18:23.495823+00:00"
+  },
+  "packetsReceived": 14956,
+  "lostNet": 30,
+  "positiveLoss": 30,
+  "negativeLossDeltas": 0,
+  "discarded": 0,
+  "nacks": 28,
+  "concealmentMs": 950.3541666666666,
+  "silentConcealmentMs": 442.5416666666667,
+  "concealmentMsPerMinute": 190.07106705516136,
+  "pcm": {
+    "samples": 28801024,
+    "squared": 203150.68148783813,
+    "peak": 0.5731680989265442,
+    "nearFullScale": 0,
+    "nonFinite": 0,
+    "emptyFrames": 0,
+    "longestQuietMs": 976.25,
+    "ongoingQuietMs": 0,
+    "reports": 1197,
+    "frames": 14400512,
+    "endWallMs": 300000.900000006,
+    "audioSeconds": 300.0106666666667,
+    "rms": 0.08398566730593535
+  },
+  "quietIntervals": [
+    {
+      "utc": "2026-09-10T12:13:55.786492+00:00",
+      "startMs": 45593.53333333631,
+      "endMs": 45615.491666669644,
+      "durationMs": 21.958333333333332,
+      "timestampBasis": "pcm-frame-clock",
+      "nearestStartOffsetSeconds": -0.8287473333303569,
+      "classification": "source-tail-candidate",
+      "naturalHandoff": {
+        "endMs": 46442.354,
+        "startMs": 46444.239,
+        "previousGeneration": 1,
+        "generation": 2,
+        "eventHandoffMs": 1.8850000000020373
+      },
+      "sourceBoundaryReferenceMs": 938.458333,
+      "excessOverReferenceAndToleranceMs": 0,
+      "overlappingAnomalies": [],
+      "causeProven": false
+    },
+    {
+      "utc": "2026-09-10T12:13:56.785496+00:00",
+      "startMs": 45638.24583334227,
+      "endMs": 46614.49583334227,
+      "durationMs": 976.25,
+      "timestampBasis": "pcm-frame-clock",
+      "nearestStartOffsetSeconds": 0.1702568333422678,
+      "classification": "source-tail-candidate",
+      "naturalHandoff": {
+        "endMs": 46442.354,
+        "startMs": 46444.239,
+        "previousGeneration": 1,
+        "generation": 2,
+        "eventHandoffMs": 1.8850000000020373
+      },
+      "sourceBoundaryReferenceMs": 938.458333,
+      "excessOverReferenceAndToleranceMs": 0,
+      "overlappingAnomalies": [],
+      "causeProven": false
+    },
+    {
+      "utc": "2026-09-10T12:15:22.216646+00:00",
+      "startMs": 131603.87499999997,
+      "endMs": 132045.6458333333,
+      "durationMs": 441.7708333333333,
+      "timestampBasis": "pcm-frame-clock",
+      "nearestStartOffsetSeconds": 85.60140683333331,
+      "classification": "off-boundary-quiet",
+      "naturalHandoff": null,
+      "sourceBoundaryReferenceMs": 938.458333,
+      "excessOverReferenceAndToleranceMs": null,
+      "overlappingAnomalies": [
+        "receiver"
+      ],
+      "causeProven": false
+    },
+    {
+      "utc": "2026-09-10T12:17:28.806150+00:00",
+      "startMs": 258613.19166667265,
+      "endMs": 258635.150000006,
+      "durationMs": 21.958333333333332,
+      "timestampBasis": "pcm-frame-clock",
+      "nearestStartOffsetSeconds": -0.8693049999940268,
+      "classification": "source-tail-candidate",
+      "naturalHandoff": {
+        "endMs": 259502.994,
+        "startMs": 259504.45500000002,
+        "previousGeneration": 2,
+        "generation": 3,
+        "eventHandoffMs": 1.4610000000102445
+      },
+      "sourceBoundaryReferenceMs": 938.458333,
+      "excessOverReferenceAndToleranceMs": 0,
+      "overlappingAnomalies": [],
+      "causeProven": false
+    },
+    {
+      "utc": "2026-09-10T12:17:29.805354+00:00",
+      "startMs": 258658.1041666667,
+      "endMs": 259634.3541666667,
+      "durationMs": 976.25,
+      "timestampBasis": "pcm-frame-clock",
+      "nearestStartOffsetSeconds": 0.12989916666666976,
+      "classification": "source-tail-candidate",
+      "naturalHandoff": {
+        "endMs": 259502.994,
+        "startMs": 259504.45500000002,
+        "previousGeneration": 2,
+        "generation": 3,
+        "eventHandoffMs": 1.4610000000102445
+      },
+      "sourceBoundaryReferenceMs": 938.458333,
+      "excessOverReferenceAndToleranceMs": 0,
+      "overlappingAnomalies": [],
+      "causeProven": false
+    }
+  ],
+  "quietRequiringReviewAtLeast100Ms": [
+    {
+      "utc": "2026-09-10T12:15:22.216646+00:00",
+      "startMs": 131603.87499999997,
+      "endMs": 132045.6458333333,
+      "durationMs": 441.7708333333333,
+      "timestampBasis": "pcm-frame-clock",
+      "nearestStartOffsetSeconds": 85.60140683333331,
+      "classification": "off-boundary-quiet",
+      "naturalHandoff": null,
+      "sourceBoundaryReferenceMs": 938.458333,
+      "excessOverReferenceAndToleranceMs": null,
+      "overlappingAnomalies": [
+        "receiver"
+      ],
+      "causeProven": false
+    }
+  ],
+  "networkEvents": [],
+  "receiverScheduling": {
+    "enabled": true,
+    "longTasksSupported": true,
+    "longTasks": 3,
+    "totalLongTaskMs": 173,
+    "maxLongTaskMs": 63,
+    "initialVisibility": "visible"
+  },
+  "sampling": {
+    "polls": 300,
+    "stalePolls": 0,
+    "maxPollMs": 1027.569091796875,
+    "positiveLossDeltas": 30,
+    "negativeLossDeltas": 0,
+    "maxConcealedMsPerPoll": 605.6666666666666,
+    "pcmReportsMissing": 0
+  },
+  "senderCheckpointDelta": {
+    "active_send_gaps_100ms": 0,
+    "active_send_gaps_1s": 0,
+    "active_send_gaps_40ms": 5,
+    "frames_sent": 11986,
+    "frames_unavailable": 0,
+    "send_failures": 0,
+    "silence_frames_sent": 0,
+    "skipped_deadlines": 8,
+    "source_overruns": 0
+  },
+  "senderCheckpoints": [
+    {
+      "utc": "2026-09-10T12:13:23.495696+00:00",
+      "frames_sent": 9011,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 3,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 2,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-10T12:14:23.495096+00:00",
+      "frames_sent": 11997,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 11,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 7,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-10T12:15:23.494960+00:00",
+      "frames_sent": 14997,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 11,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 7,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-10T12:16:23.495238+00:00",
+      "frames_sent": 17997,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 11,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 7,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-10T12:17:23.495787+00:00",
+      "frames_sent": 20997,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 11,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 7,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    }
+  ],
+  "senderCoverage": {
+    "from": "2026-09-10T12:13:23.495696+00:00",
+    "to": "2026-09-10T12:17:23.495787+00:00",
+    "unobservedHeadSeconds": 13.324696,
+    "unobservedTailSeconds": 46.674844,
+    "maximumCheckpointGapSeconds": 60.000549
+  },
+  "resourceSamples": 5,
+  "pssMiB": {
+    "min": 15.7978515625,
+    "max": 16.044921875,
+    "median": 16.044921875
+  },
+  "sourceTailReferenceMs": 938.458333,
+  "sourceTailToleranceMs": 100,
+  "limitations": [
+    "one receiver cannot isolate network hop",
+    "short window is not six-hour guarantee",
+    "source-tail-candidate means temporal and duration agreement, not fresh decoded waveform alignment",
+    "negative cumulative loss deltas can include corrections to losses predating this observation",
+    "sender/resource deltas cover only the interior minute samples; exact uncovered head/tail are reported; active send gap counts exclude a paused timeline",
+    "Natural boundaries require a logged finish followed by a later generation start; all PCM quiet, including candidates, remains in the report. Coincidence never proves source-only silence."
+  ],
+  "botCpuPercentOfOneCore": 3.558166292251604,
+  "hostStealPercent": 0.20036734012355986,
+  "udpCounterDelta": {
+    "InDatagrams": 274,
+    "NoPorts": 0,
+    "InErrors": 0,
+    "OutDatagrams": 12024,
+    "RcvbufErrors": 0,
+    "SndbufErrors": 0,
+    "InCsumErrors": 0,
+    "IgnoredMulti": 0,
+    "MemErrors": 0
+  },
+  "cgroupMemoryEventsDelta": {
+    "low": 0,
+    "high": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0,
+    "oom_group_kill": 0
+  },
+  "checkpointSavesForThisRun": 7,
+  "checkpointSavesInCollectedFile": 7,
+  "sourceHeadReferenceMs": 0.0,
+  "quietClassificationCounts": {
+    "off-boundary-quiet": 1,
+    "source-tail-candidate": 4
+  },
+  "evidenceWarnings": [],
+  "hostCollectionCoverage": {
+    "samples": 13,
+    "first": "2026-09-10T12:05:44.816038+00:00",
+    "last": "2026-09-10T12:17:44.849704+00:00",
+    "errors": 0,
+    "note": "Host collection after playback stops is not audio coverage; PSS and CPU above use only the receiver window."
+  },
+  "persistedEventHistoryComplete": true,
+  "clock": {
+    "wallStartMs": 1789042390171,
+    "monotonicStartMs": 40934130.4,
+    "timeOrigin": 1789001456041.2,
+    "pcmResetAckDelayMs": 0.20000000298023224,
+    "pcmEpochUncertaintyMs": 0.20000000298023224,
+    "pcmWallDriftMinMs": -18.466666663691285,
+    "pcmWallDriftMaxMs": -2.933333327369837
+  },
+  "availableCounters": [
+    "timestamp",
+    "packetsReceived",
+    "packetsLost",
+    "bytesReceived",
+    "packetsDiscarded",
+    "nackCount",
+    "fecPacketsReceived",
+    "fecPacketsDiscarded",
+    "concealedSamples",
+    "silentConcealedSamples",
+    "concealmentEvents",
+    "totalSamplesReceived",
+    "jitterBufferDelay",
+    "jitterBufferEmittedCount",
+    "insertedSamplesForDeceleration",
+    "removedSamplesForAcceleration",
+    "jitterBufferTargetDelay",
+    "jitterBufferMinimumDelay"
+  ],
+  "sourceReference": {
+    "collectedAt": "2026-09-10T03:23:48.309980+00:00",
+    "source": "https://youtu.be/dQw4w9WgXcQ",
+    "volume": 70,
+    "sourcePacketsSha256": "29f1ac2bad421ed974c8276c15943cc6a47cbde931276c8d35f51c874532431b",
+    "sourceHeadMs": 0,
+    "sourceTailMs": 938.458333,
+    "decoder": {
+      "decoder": "libopus 1.6",
+      "quietIntervals": [
+        {
+          "startSeconds": 212.121542,
+          "durationMs": 938.458333,
+          "atEnd": true
+        }
+      ],
+      "frames": 10653,
+      "seconds": 213.06,
+      "wrongFrameDuration": 0,
+      "tinyPackets": 47,
+      "longestQuietMs": 938.458333,
+      "nearFullScale": 0,
+      "nonFinite": 0,
+      "peak": 0.584290266,
+      "rms": 0.09019673,
+      "failed": false
+    },
+    "sourcePull": {
+      "paced": false,
+      "runs": [
+        {
+          "bytes": 2633918,
+          "elapsedSeconds": 23.48730875,
+          "filterUpdateMs": 0.0,
+          "filterUpdates": 0,
+          "frames": 10653,
+          "iteration": 0,
+          "maxReadMs": 13.961395,
+          "stalls": [],
+          "startupMs": 496.691331
+        }
+      ],
+      "scope": "integrated source and volume processing, no Discord transport",
+      "staged": true,
+      "volume": 70
+    },
+    "candidateSha256": "e62fb82176d81ea35b4fdc54626ff0f40f9563d340d1369d57c338edf3699a23",
+    "limitation": "separate source fetch using identical candidate revision and volume, not waveform alignment of every loop"
+  }
+}
