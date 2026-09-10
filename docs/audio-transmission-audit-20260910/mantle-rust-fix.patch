@@ -1,0 +1,49 @@
+--- a/crates/mantle-media/src/youtube_playback.rs
++++ b/crates/mantle-media/src/youtube_playback.rs
+@@ -1470,6 +1470,21 @@
+     }
+ 
+     #[test]
++    fn audit_transcoder_loses_seekable_session_at_eof() {
++        for name in ["tone-aac-lc.m4a", "tone-flac.flac", "tone-pcm-s16le-mono-8k.wav"] {
++            let session = MediaSession::open_file(fixture(name), MediaLimits::default()).unwrap();
++            let mut playback = YoutubePlaybackSession::from_probed_media_session(session).unwrap();
++            let mut frame = EncodedFrameSlot::new();
++            assert!(playback.read_frame(&mut frame).unwrap());
++            playback.seek(std::time::Duration::ZERO).unwrap();
++            while playback.read_frame(&mut frame).unwrap() {}
++            let err = playback.seek(std::time::Duration::ZERO).unwrap_err();
++            println!("{name}: seek before EOF succeeded; seek after EOF={:?}", err.kind());
++            assert_eq!(err.kind(), super::YoutubePlaybackErrorKind::AudioPipeline);
++        }
++    }
++
++    #[test]
+     fn filter_changes_preserve_exact_audio_for_decoded_and_resampled_input() {
+         for name in [
+             "tone-flac.flac",
+--- a/crates/mantle-media/tests/phase6_http.rs
++++ b/crates/mantle-media/tests/phase6_http.rs
+@@ -1052,3 +1052,22 @@
+     stream.flush()?;
+     stream.shutdown(Shutdown::Both)
+ }
++
++#[test]
++fn audit_midbody_disconnect_does_not_use_range_retry_budget() {
++    let bytes = vec![5_u8; 96];
++    let server = ReplayServer::start(move |request, count| {
++        let mut response = partial_response(&request, &bytes, Some("\"stable\""));
++        if count == 0 {
++            response.declared_length = Some(response.body.len());
++            response.body.truncate(8);
++        }
++        response
++    });
++    let options = HttpRangeOptions { range_window_bytes: 32, max_retries: 3, ..private_test_options() };
++    let mut input = HttpRangeInput::open(server.url("audit-body-retry"), options).unwrap();
++    let mut body = Vec::new();
++    let error = input.read_to_end(&mut body).unwrap_err();
++    assert_eq!(server.requests().len(), 1);
++    println!("body disconnect: read {} of 96 bytes; requests=1 despite max_retries=3; error={:?}", body.len(), error.kind());
++}

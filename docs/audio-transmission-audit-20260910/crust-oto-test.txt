@@ -1,0 +1,19 @@
+   Compiling rustls v0.23.43
+   Compiling tungstenite v0.30.0
+   Compiling tokio-rustls v0.26.5
+   Compiling openmls_rust_crypto v0.5.1 (https://github.com/rayan6ms/oto?rev=352fa9a277377dbeb4f44513961c34f0785d870a#352fa9a2)
+   Compiling tokio-tungstenite v0.30.0
+   Compiling davey v0.1.4 (https://github.com/rayan6ms/oto?rev=352fa9a277377dbeb4f44513961c34f0785d870a#352fa9a2)
+   Compiling rcgen v0.14.10
+   Compiling oto v1.0.0 (https://github.com/rayan6ms/oto?rev=352fa9a277377dbeb4f44513961c34f0785d870a#352fa9a2)
+   Compiling oto-testkit v1.0.0 (https://github.com/rayan6ms/oto?rev=352fa9a277377dbeb4f44513961c34f0785d870a#352fa9a2)
+   Compiling crust-oto-adapter v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-oto-adapter)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 29.70s
+     Running unittests src/lib.rs (target/debug/deps/crust_oto_adapter-7375dbc65a9839db)
+
+running 1 test
+test tests::audit_dropped_stop_future_leaves_audio_slot_busy ... dropped stop: replacement=Overloaded, shutdown still blocked after 50 ms
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 15 filtered out; finished in 0.14s
+

@@ -1,0 +1,10 @@
+   Compiling mantle-media v0.0.0 (/home/rayan/Documents/Projects/mantle-rust-fix/crates/mantle-media)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.83s
+     Running tests/phase6_http.rs (target/debug/deps/phase6_http-0c517f537d7c354e)
+
+running 1 test
+test audit_midbody_disconnect_does_not_use_range_retry_budget ... body disconnect: read 8 of 96 bytes; requests=1 despite max_retries=3; error=UnexpectedEof
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 16 filtered out; finished in 0.00s
+

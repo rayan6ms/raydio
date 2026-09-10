@@ -1,0 +1,14 @@
+   Compiling oto v1.0.0 (/home/rayan/Documents/Projects/oto-rust-fix/crates/oto)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.25s
+     Running unittests src/lib.rs (target/debug/deps/oto-5f46aee1c2becd06)
+
+running 3 tests
+test audio::tests::audit_midplay_dave_reset_without_successor_stays_silent ... midplay DAVE reset + 300 virtual seconds: phase=Starting, sent=1, failure=None
+ok
+test audio::tests::audit_single_transient_udp_failure_permanently_stops_sender ... one SendIo/RetryingInternally error: still Failed after clearing injection; zero frames sent
+ok
+test audio::tests::audit_unready_dave_has_no_progress_deadline ... DAVE unready after 300 virtual seconds: phase=WaitingForSource, frames=0, failure=None
+ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 109 filtered out; finished in 0.21s
+
