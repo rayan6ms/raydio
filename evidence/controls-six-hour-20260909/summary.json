@@ -1,0 +1,1473 @@
+{
+  "status": "completed",
+  "startedAt": "2026-09-09T17:55:57.192Z",
+  "receiverSeconds": 21599.99960888672,
+  "coverage": {
+    "receiverSeconds": 21599.99960888672,
+    "pcmSeconds": 21600.010666666665,
+    "completePollCoverage": true,
+    "completePcmCoverage": true,
+    "uninterruptedConnection": false,
+    "completeEventHistory": true,
+    "retainedDiagnosticWindows": 155,
+    "droppedDiagnosticWindows": 0
+  },
+  "packetsReceived": 1078155,
+  "lostNet": -7,
+  "positiveLoss": 64,
+  "negativeLossDeltas": -71,
+  "discarded": 380,
+  "nacks": 1161,
+  "concealmentMs": 51615.354166666664,
+  "silentConcealmentMs": 32234.208333333332,
+  "concealmentMsPerMinute": 143.3759863924191,
+  "pcm": {
+    "samples": 2073601024,
+    "squared": 15543454.84595564,
+    "peak": 0.6603595018386841,
+    "nearFullScale": 0,
+    "nonFinite": 0,
+    "emptyFrames": 0,
+    "longestQuietMs": 15623.75,
+    "ongoingQuietMs": 0,
+    "reports": 86171,
+    "frames": 1036800512,
+    "audioSeconds": 21600.010666666665,
+    "rms": 0.08657872354927235
+  },
+  "quietIntervals": [
+    {
+      "utc": "2026-09-09T17:59:01.923000+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.852799,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T17:59:02.925600+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.149801,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:02:34.989200+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.846762,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:02:35.991700+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.155738,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:06:08.055800+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.843394,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:06:09.058500+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.159306,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:06:28.610300+00:00",
+      "durationMs": 1154.2083333333333,
+      "nearestStartOffsetSeconds": 19.711106,
+      "classification": "off-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T18:09:41.122800+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.855911,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:09:42.125400+00:00",
+      "durationMs": 991.25,
+      "nearestStartOffsetSeconds": 0.146689,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:13:14.434300+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.641385,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:13:15.437400+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.361715,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:16:47.256500+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.880005,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:16:48.258200+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.121695,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:20:20.322900+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.873014,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:20:21.324700+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.128786,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:23:53.389600+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.866071,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:23:54.391800+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.136129,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:27:26.455600+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.860437,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:27:27.458300+00:00",
+      "durationMs": 978.75,
+      "nearestStartOffsetSeconds": 0.142263,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:30:59.522200+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.85453,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:31:00.524800+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.14807,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:34:32.589000+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.846747,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:34:33.591800+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.156053,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:38:05.656500+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.843569,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:38:06.659100+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.159031,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:41:38.968100+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.860888,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:41:39.971000+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.142012,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:45:12.035000+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.854109,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:45:13.039400+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.150291,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:48:45.100900+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.873302,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:48:46.104100+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.129898,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:50:19.106700+00:00",
+      "durationMs": 365.3541666666667,
+      "nearestStartOffsetSeconds": 93.132498,
+      "classification": "off-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T18:52:18.669400+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.645818,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:52:19.672200+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.356982,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:55:51.991900+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.703845,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:55:52.994300+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.298555,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:59:25.058500+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.700997,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T18:59:26.061500+00:00",
+      "durationMs": 963.75,
+      "nearestStartOffsetSeconds": 0.302003,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:02:58.125900+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.690385,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:02:59.128300+00:00",
+      "durationMs": 963.75,
+      "nearestStartOffsetSeconds": 0.312015,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:04:12.823700+00:00",
+      "durationMs": 60,
+      "nearestStartOffsetSeconds": 74.007415,
+      "classification": "off-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T19:04:12.824000+00:00",
+      "durationMs": 25.3125,
+      "nearestStartOffsetSeconds": 74.007715,
+      "classification": "off-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T19:06:31.191700+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.684123,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:06:32.194900+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.319077,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:10:04.258600+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.780896,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:10:05.261500+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.222004,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:13:37.325500+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.770719,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:13:38.328200+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.231981,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:17:10.392300+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.763297,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:17:11.394100+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.238503,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:20:43.458300+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.761982,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:20:44.468700+00:00",
+      "durationMs": 973.75,
+      "nearestStartOffsetSeconds": 0.248418,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:24:16.525200+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.820412,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:24:17.527800+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.182188,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:27:49.837400+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.651834,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:27:50.839900+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.350666,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:31:22.903700+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.646363,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:31:23.906300+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.356237,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:34:55.970500+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.639234,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:34:56.973700+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.363966,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:38:28.792300+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.877701,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:38:29.794600+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.124599,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:42:02.104300+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.651686,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:42:03.106700+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.350714,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:45:35.170300+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.645512,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:45:36.173600+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.357788,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:49:07.991600+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.888379,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:49:08.995100+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.115121,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:52:11.725800+00:00",
+      "durationMs": 89.25,
+      "nearestStartOffsetSeconds": -30.812033,
+      "classification": "off-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T19:52:41.805500+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.732333,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:52:42.807900+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.270067,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:56:15.373200+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.841807,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:56:16.376300+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.161293,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:59:48.440300+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.863689,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T19:59:49.442200+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.138211,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:03:21.506900+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.848863,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:03:22.510000+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.154237,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:06:54.573100+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.86273,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:06:55.576200+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.14037,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:10:27.895700+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.759763,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:10:28.898700+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.243237,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:14:00.963000+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.751902,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:14:01.964800+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.249898,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:17:34.029600+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.745888,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:17:35.032100+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.256612,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:21:07.096400+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.738834,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:21:08.098100+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.262866,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:24:40.162500+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.734707,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:24:41.165600+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.268393,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:28:13.474500+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.741005,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:28:14.477100+00:00",
+      "durationMs": 973.75,
+      "nearestStartOffsetSeconds": 0.261595,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:29:44.717600+00:00",
+      "durationMs": 330.3333333333333,
+      "nearestStartOffsetSeconds": 90.502095,
+      "classification": "off-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T20:31:46.541500+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.733531,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:31:47.543900+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.268869,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:35:19.607800+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.72767,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:35:20.610600+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.27513,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:38:52.674500+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.720596,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:38:53.677200+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.282104,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:42:25.741900+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.834266,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:42:26.744400+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.168234,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:45:58.807900+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.827742,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:45:59.810200+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.174558,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:49:31.874400+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.825329,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:49:32.884200+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.184471,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:51:12.150900+00:00",
+      "durationMs": 14825.916666666666,
+      "nearestStartOffsetSeconds": 99.451171,
+      "classification": "off-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T20:53:05.197400+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.737911,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:53:06.199800+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.264489,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:56:38.509600+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.745592,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:56:39.511500+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.256308,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T20:58:28.556800+00:00",
+      "durationMs": 300.5833333333333,
+      "nearestStartOffsetSeconds": -103.802209,
+      "classification": "off-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T21:00:11.576500+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.782509,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:00:12.578900+00:00",
+      "durationMs": 979.6458333333334,
+      "nearestStartOffsetSeconds": 0.219891,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:03:44.642600+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.772936,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:03:45.645800+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.230264,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:07:17.709300+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.815536,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:07:18.711800+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.186964,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:10:50.776100+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.808619,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:10:51.779000+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.194281,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:14:23.842800+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.873657,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:14:24.845200+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.128743,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:17:56.909400+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.867291,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:17:57.911900+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.135209,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:21:30.231800+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.633446,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:21:31.235100+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.369854,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:25:03.042900+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.879568,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:25:04.044900+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.122432,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:28:36.365500+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.850401,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:28:37.368300+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.152399,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:32:09.431900+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.843351,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:32:10.434500+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.159249,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:35:42.499100+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.836971,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:35:43.501000+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.164929,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:39:15.565000+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.831236,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:39:16.573500+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.177264,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:42:48.631900+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.824922,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:42:49.634900+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.178078,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:46:22.200000+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.656802,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:46:23.202400+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.345598,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:49:55.267100+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.64902,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:49:56.269500+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.35338,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:53:28.578500+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -1.015302,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:53:29.836900+00:00",
+      "durationMs": 1136.25,
+      "nearestStartOffsetSeconds": 0.243098,
+      "classification": "extended-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T21:57:01.901400+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.793292,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T21:57:02.904100+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.209408,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:00:34.967800+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.811511,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:00:35.970800+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.191489,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:04:08.034400+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.824476,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:04:09.037400+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.178524,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:07:27.810600+00:00",
+      "durationMs": 481,
+      "nearestStartOffsetSeconds": -14.108711,
+      "classification": "off-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T22:07:41.100900+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.818411,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:07:42.104300+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.184989,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:11:14.168200+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.8112,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:11:15.170300+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.1909,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:14:47.234600+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.860791,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:14:48.237000+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.141609,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:18:20.301800+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.85348,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:18:21.303600+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.14832,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:21:53.367500+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.847901,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:21:54.370300+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.154899,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:25:26.434100+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.840505,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:25:27.437000+00:00",
+      "durationMs": 981.25,
+      "nearestStartOffsetSeconds": 0.162395,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:28:59.501800+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.892954,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:29:00.504200+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.109446,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:32:32.813400+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.641561,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:32:33.816300+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.361339,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:36:05.880100+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.635395,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:36:06.883000+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.367505,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:39:38.701700+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.873769,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:39:39.704300+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.128831,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:43:12.268700+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.606738,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:43:13.271700+00:00",
+      "durationMs": 946.25,
+      "nearestStartOffsetSeconds": 0.396262,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:46:45.080200+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.855551,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:46:46.083500+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.147749,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:50:18.146900+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.849009,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:50:19.149100+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.153191,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:53:51.970800+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.705658,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:53:52.973300+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.296842,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:57:25.037400+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.699441,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T22:57:26.040400+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.303559,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:00:58.103600+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.771722,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:00:59.106700+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.231378,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:04:31.170800+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.766184,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:04:32.173100+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.236116,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:08:04.236800+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.758261,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:08:05.240100+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.245039,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:11:37.548900+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.633291,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:11:38.306800+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.124609,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:15:10.872100+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.778069,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:15:11.874900+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.224731,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:18:43.938400+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.771919,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:18:44.941400+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.231081,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:22:17.005300+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.765671,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:22:18.007700+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.236729,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:25:50.072400+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.757411,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:25:51.074400+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.244589,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:29:23.384200+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.613823,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:29:24.141900+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.143877,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:32:56.205400+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.87192,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:32:57.207700+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.13038,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:36:29.271700+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.864823,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:36:30.274100+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.137577,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:40:02.338200+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.857842,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:40:03.341800+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.145758,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:43:35.405500+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.85142,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:43:36.407700+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.15078,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:47:08.717500+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -15.579127,
+      "classification": "off-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T23:47:24.514500+00:00",
+      "durationMs": 15623.75,
+      "nearestStartOffsetSeconds": 0.217873,
+      "classification": "extended-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T23:50:56.578200+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.760649,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:50:57.581700+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.242851,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:54:30.146200+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.8119,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-09T23:54:31.149400+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.1913,
+      "classification": "source-tail-candidate"
+    }
+  ],
+  "quietRequiringReviewAtLeast100Ms": [
+    {
+      "utc": "2026-09-09T18:06:28.610300+00:00",
+      "durationMs": 1154.2083333333333,
+      "nearestStartOffsetSeconds": 19.711106,
+      "classification": "off-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T18:50:19.106700+00:00",
+      "durationMs": 365.3541666666667,
+      "nearestStartOffsetSeconds": 93.132498,
+      "classification": "off-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T20:29:44.717600+00:00",
+      "durationMs": 330.3333333333333,
+      "nearestStartOffsetSeconds": 90.502095,
+      "classification": "off-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T20:51:12.150900+00:00",
+      "durationMs": 14825.916666666666,
+      "nearestStartOffsetSeconds": 99.451171,
+      "classification": "off-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T20:58:28.556800+00:00",
+      "durationMs": 300.5833333333333,
+      "nearestStartOffsetSeconds": -103.802209,
+      "classification": "off-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T21:53:29.836900+00:00",
+      "durationMs": 1136.25,
+      "nearestStartOffsetSeconds": 0.243098,
+      "classification": "extended-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T22:07:27.810600+00:00",
+      "durationMs": 481,
+      "nearestStartOffsetSeconds": -14.108711,
+      "classification": "off-boundary-quiet"
+    },
+    {
+      "utc": "2026-09-09T23:47:24.514500+00:00",
+      "durationMs": 15623.75,
+      "nearestStartOffsetSeconds": 0.217873,
+      "classification": "extended-boundary-quiet"
+    }
+  ],
+  "networkEvents": [
+    {
+      "ms": 10506021.299999999,
+      "kind": "ice",
+      "phase": {
+        "positionSeconds": 80,
+        "durationSeconds": 213,
+        "label": "middle",
+        "playing": true,
+        "loop": true
+      },
+      "state": "disconnected"
+    },
+    {
+      "ms": 10506023.1,
+      "kind": "connection",
+      "phase": {
+        "positionSeconds": 80,
+        "durationSeconds": 213,
+        "label": "middle",
+        "playing": true,
+        "loop": true
+      },
+      "state": "disconnected"
+    },
+    {
+      "ms": 10514888.299999999,
+      "kind": "ice",
+      "phase": {
+        "positionSeconds": 92,
+        "durationSeconds": 213,
+        "label": "middle",
+        "playing": true,
+        "loop": true
+      },
+      "state": "connected"
+    },
+    {
+      "ms": 10514894.9,
+      "kind": "connection",
+      "phase": {
+        "positionSeconds": 92,
+        "durationSeconds": 213,
+        "label": "middle",
+        "playing": true,
+        "loop": true
+      },
+      "state": "connected"
+    }
+  ],
+  "receiverScheduling": {
+    "enabled": true,
+    "longTasksSupported": true,
+    "longTasks": 0,
+    "totalLongTaskMs": 0,
+    "maxLongTaskMs": 0,
+    "initialVisibility": "visible"
+  },
+  "sampling": {
+    "polls": 21566,
+    "stalePolls": 0,
+    "maxPollMs": 1063.056884765625,
+    "positiveLossDeltas": 64,
+    "negativeLossDeltas": -71,
+    "maxConcealedMsPerPoll": 1010,
+    "pcmReportsMissing": 0
+  },
+  "senderCheckpointDelta": {
+    "frames_sent": 1075890,
+    "silence_frames_sent": 7,
+    "frames_unavailable": 7,
+    "skipped_deadlines": 153,
+    "send_failures": 0,
+    "source_overruns": 0
+  },
+  "senderCoverage": {
+    "from": "2026-09-09T17:56:15.594479+00:00",
+    "to": "2026-09-09T23:55:15.594969+00:00"
+  },
+  "resourceSamples": 360,
+  "pssMiB": {
+    "min": 16.041015625,
+    "max": 17.041015625,
+    "median": 16.396484375
+  },
+  "sourceTailReferenceMs": 938.458,
+  "sourceTailToleranceMs": 100,
+  "limitations": [
+    "one receiver cannot isolate network hop",
+    "short window is not six-hour guarantee",
+    "source-tail-candidate means temporal and duration agreement, not fresh decoded waveform alignment",
+    "negative cumulative loss deltas can include corrections to losses predating this observation",
+    "sender/resource counters use bracketing minute samples and cannot prove per-packet send timing"
+  ],
+  "botCpuPercentOfOneCore": 3.980415169674899,
+  "hostStealPercent": 0.36560445697210625,
+  "udpCounterDelta": {
+    "InDatagrams": 24470,
+    "NoPorts": 0,
+    "InErrors": 0,
+    "OutDatagrams": 1078875,
+    "RcvbufErrors": 0,
+    "SndbufErrors": 0,
+    "InCsumErrors": 0,
+    "IgnoredMulti": 0,
+    "MemErrors": 0
+  },
+  "cgroupMemoryEventsDelta": {
+    "low": 0,
+    "high": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0,
+    "oom_group_kill": 0
+  },
+  "checkpointSavesForThisRun": 362,
+  "checkpointSavesInCollectedFile": 375
+}

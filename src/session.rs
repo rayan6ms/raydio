@@ -1049,9 +1049,24 @@ impl GuildSession {
             .await;
             return;
         }
-        if self.queue.current.is_none()
-            || payload["track"]["userData"]["raydioGeneration"].as_u64() != Some(self.generation)
-        {
+        if self.queue.current.is_none() {
+            return;
+        }
+        let event_generation = payload["track"]["userData"]["raydioGeneration"].as_u64();
+        if event_generation != Some(self.generation) {
+            if event_generation.is_none()
+                && matches!(
+                    kind,
+                    "TrackEndEvent" | "TrackExceptionEvent" | "TrackStuckEvent"
+                )
+            {
+                tracing::warn!(
+                    event = kind,
+                    generation = self.generation,
+                    position_ms = self.position_ms,
+                    "ignoring terminal event without track generation"
+                );
+            }
             return;
         }
         match kind {
@@ -1178,6 +1193,12 @@ impl GuildSession {
             && self.end_deadline.is_some_and(|at| Instant::now() >= at)
         {
             self.events[5] = self.events[5].saturating_add(1);
+            tracing::warn!(
+                generation = self.generation,
+                position_ms = self.position_ms,
+                duration_ms = self.queue.current.as_ref().map(|track| track.duration_ms),
+                "track end watchdog advancing playback"
+            );
             self.queue.finish();
             let _ = self.start_current().await;
         }

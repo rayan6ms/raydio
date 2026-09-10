@@ -23,10 +23,10 @@ twilight-gateway = { version = "0.17.1", default-features = false, features = ["
 twilight-http = { version = "0.17.1", default-features = false, features = ["rustls-native-roots"] }
 twilight-model = "0.17.1"
 url = "2.5.8"
-crust = { git = "https://github.com/rayan6ms/crust", rev = "e3a8324c69692587faa7f1e4d7cd627037daddc8" }
-crust-server = { git = "https://github.com/rayan6ms/crust", rev = "e3a8324c69692587faa7f1e4d7cd627037daddc8" }
-crust-mantle-adapter = { git = "https://github.com/rayan6ms/crust", rev = "e3a8324c69692587faa7f1e4d7cd627037daddc8" }
-crust-oto-adapter = { git = "https://github.com/rayan6ms/crust", rev = "e3a8324c69692587faa7f1e4d7cd627037daddc8" }
+crust = { git = "https://github.com/rayan6ms/crust", rev = "dba892f8e12dca582db6848acae9f37b8a1ffc5e" }
+crust-server = { git = "https://github.com/rayan6ms/crust", rev = "dba892f8e12dca582db6848acae9f37b8a1ffc5e" }
+crust-mantle-adapter = { git = "https://github.com/rayan6ms/crust", rev = "dba892f8e12dca582db6848acae9f37b8a1ffc5e" }
+crust-oto-adapter = { git = "https://github.com/rayan6ms/crust", rev = "dba892f8e12dca582db6848acae9f37b8a1ffc5e" }
 
 [patch.crates-io]
 openmls_rust_crypto = { git = "https://github.com/rayan6ms/oto", rev = "1869e671d086386be7ecb5bb58674008d6b7a62f" }
@@ -45,7 +45,7 @@ opt-level = "s"
 # dominate resident executable pages on small Oracle instances.
 
 [dev-dependencies]
-crust-testkit = { git = "https://github.com/rayan6ms/crust", rev = "e3a8324c69692587faa7f1e4d7cd627037daddc8" }
+crust-testkit = { git = "https://github.com/rayan6ms/crust", rev = "dba892f8e12dca582db6848acae9f37b8a1ffc5e" }
 axum = { version = "0.8.4", features = ["ws"] }
 oto = { git = "https://github.com/rayan6ms/oto", rev = "1869e671d086386be7ecb5bb58674008d6b7a62f" }
 mantle-core = { git = "https://github.com/rayan6ms/mantle", rev = "6366cc60a46df7712f1e41219050dedc4cd190cc" }

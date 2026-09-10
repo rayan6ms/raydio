@@ -57,7 +57,6 @@
     "oracleRestarts": 0,
     "productionActive": false,
     "resourcesCollected": 360,
-    "checkpointCount": 375,
     "checkpointErrorDelta": 0,
     "receiverStatus": "completed",
     "receiverCoverage": {
@@ -71,6 +70,8 @@
       "droppedDiagnosticWindows": 0
     },
     "oracleSamplerStillActiveAtCollection": true,
-    "maintenanceTimersRestoreScheduled": "2026-09-10T00:15:42Z"
+    "maintenanceTimersRestoreScheduled": "2026-09-10T00:15:42Z",
+    "checkpointCountInCollectedFile": 375,
+    "checkpointCountForThisRun": 362
   }
 }

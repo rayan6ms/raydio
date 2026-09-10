@@ -1,0 +1,350 @@
+   Compiling mantle-xaac v0.0.0 (https://github.com/rayan6ms/mantle?rev=6366cc60a46df7712f1e41219050dedc4cd190cc#6366cc60)
+   Compiling rubato v5.0.0
+   Compiling mantle-opus v0.0.0 (https://github.com/rayan6ms/mantle?rev=6366cc60a46df7712f1e41219050dedc4cd190cc#6366cc60)
+   Compiling symphonia-codec-aac v0.6.1
+   Compiling symphonia-codec-vorbis v0.6.1
+   Compiling symphonia-format-mkv v0.6.1
+   Compiling symphonia-format-ogg v0.6.1
+   Compiling symphonia-format-isomp4 v0.6.1
+   Compiling symphonia-bundle-flac v0.6.1
+   Compiling ureq-proto v0.6.1
+   Compiling symphonia-bundle-mp3 v0.6.1
+   Compiling symphonia-codec-pcm v0.6.1
+   Compiling webpki-roots v1.0.9
+   Compiling utf8-zero v0.8.1
+   Compiling ureq v3.4.0
+   Compiling symphonia v0.6.1
+   Compiling mantle-audio v0.0.0 (https://github.com/rayan6ms/mantle?rev=6366cc60a46df7712f1e41219050dedc4cd190cc#6366cc60)
+   Compiling oto v1.0.0 (https://github.com/rayan6ms/oto?rev=1869e671d086386be7ecb5bb58674008d6b7a62f#1869e671)
+   Compiling md-5 v0.11.0
+   Compiling quick-xml v0.41.0
+   Compiling cbc v0.2.1
+   Compiling static_assertions v1.1.0
+   Compiling mantle-core v0.0.0 (https://github.com/rayan6ms/mantle?rev=6366cc60a46df7712f1e41219050dedc4cd190cc#6366cc60)
+   Compiling mantle-media v0.0.0 (https://github.com/rayan6ms/mantle?rev=6366cc60a46df7712f1e41219050dedc4cd190cc#6366cc60)
+   Compiling microfft v0.6.0
+   Compiling micromath v2.1.0
+   Compiling tungstenite v0.29.0
+   Compiling crust-oto-adapter v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-oto-adapter)
+   Compiling axum-core v0.5.6
+   Compiling oto-testkit v1.0.0 (https://github.com/rayan6ms/oto?rev=1869e671d086386be7ecb5bb58674008d6b7a62f#1869e671)
+   Compiling tokio-tungstenite v0.29.0
+   Compiling tower v0.5.3
+   Compiling crust-mantle-adapter v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-mantle-adapter)
+   Compiling crust-testkit v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-testkit)
+   Compiling tracing-log v0.2.0
+   Compiling crust-server v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-server)
+   Compiling tracing-subscriber v0.3.23
+   Compiling axum v0.8.9
+   Compiling tower-http v0.6.11
+   Compiling crust v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust)
+   Compiling crust-protocol v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-protocol)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2m 55s
+     Running unittests src/lib.rs (target/debug/deps/crust-b65cb5104951bdb7)
+
+running 21 tests
+test filters::tests::reference_enablement_predicates_ignore_identity_values ... ok
+test overload::tests::coalescing_is_limited_to_an_explicit_latest_value_slot ... ok
+test extensions::tests::deterministic_registry_reports_and_looks_up_in_tree_extensions ... ok
+test resources::tests::all_limits_are_explicit_and_nonzero ... ok
+test resources::tests::zero_is_rejected_with_the_exact_field ... ok
+test overload::tests::best_effort_drop_is_counted_and_queue_recovers ... ok
+test lifecycle::tests::failures_are_reported_and_cancel_owner_policy_propagates ... ok
+test overload::tests::must_deliver_saturation_rejects_without_loss_or_waiting_and_recovers ... ok
+test lifecycle::tests::cancellation_propagates_and_completion_is_tracked ... ok
+test routeplanner::tests::cidr_arithmetic_keeps_huge_ipv6_ranges_compact ... ok
+test routeplanner::tests::p13_routeplanner_selection_benchmark_report ... ignored, manual release-profile route benchmark; run with --ignored --nocapture
+test routeplanner::tests::failure_eviction_refresh_and_identity_index_wrap_remain_ordered ... ok
+test routeplanner::tests::failure_state_is_bounded_expires_and_never_causes_unbound_fallback ... ok
+test routeplanner::tests::invalid_mixed_and_too_small_nano_configuration_is_rejected ... ok
+test routeplanner::tests::balancing_and_nano_strategies_advance_without_enumerating_ranges ... ok
+test routeplanner::tests::rotate_on_ban_is_stable_skips_exclusions_and_frees_failures ... ok
+test voice::tests::only_nonempty_bounded_twenty_millisecond_opus_frames_cross_the_boundary ... ok
+test voice::tests::voice_credentials_are_redacted_from_debug_output ... ok
+test routeplanner::tests::configuration_bounds_overlap_exclusions_and_full_ipv6_space_are_explicit ... ok
+test lifecycle::tests::capacity_rejects_an_unowned_extra_task ... ok
+test routeplanner::tests::search_failure_policy_family_checks_and_concurrency_are_explicit ... ok
+
+test result: ok. 20 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/overload_manifest.rs (target/debug/deps/overload_manifest-0dac7e1ff04f112e)
+
+running 2 tests
+test only_current_primitives_claim_p03_implementation ... ok
+test resource_keys_and_overload_points_are_complete_and_explicit ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/crust_mantle_adapter-c06a0c3775c1a847)
+
+running 25 tests
+test filters::tests::p09_filter_benchmark_report ... ignored, manual release-profile filter benchmark; run with --ignored --nocapture
+test filters::tests::fixed_filter_golden_vectors_match_lavadsp_formulas ... ok
+test filters::tests::player_volume_matches_frozen_lavaplayer_signed_pcm_oracle_without_allocations ... ok
+test filters::tests::remaining_fixed_filter_golden_vectors_match_lavadsp_formulas ... ok
+test tests::p18_offline_mantle_playback_benchmark_report ... ignored, release-only P18 Mantle full-playback performance gate
+test tests::production_source_http_defaults_to_mantles_public_internet_policy ... ok
+test tests::outbound_policy_preserves_identity_and_rejects_known_family_mismatch ... ok
+test tests::completed_streaming_fallback_does_not_retain_a_decoder_or_source ... ok
+test tests::identical_filters_do_not_wait_for_a_source_read_but_queued_changes_stay_ordered ... ok
+test tests::pause_retains_read_ahead_and_resume_delivers_in_order ... ok
+test tests::completed_staged_input_repeats_and_resets_sequence_without_reopening_source ... ok
+test tests::staged_input_cleanup_cancellation_and_stopped_controls ... ok
+test tests::filter_update_waiting_on_a_source_read_does_not_block_buffered_audio ... ok
+test tests::buffered_audio_remains_available_while_next_read_is_blocked ... ok
+test tests::read_ahead_is_bounded_and_eof_waits_for_the_last_delivered_frame ... ok
+test filters::tests::timescale_reset_replacement_removal_and_ratio_bounds_are_deterministic ... ok
+test tests::deferred_filters_are_bounded_ordered_and_drained_before_stop ... ok
+test tests::seek_and_replacement_discard_frames_from_the_previous_position ... ok
+test tests::real_adapter_passes_the_shared_contract_through_mantle ... ok
+test tests::routed_mantle_requests_bind_the_selected_local_ip_without_cross_route_reuse ... ok
+test tests::disabled_route_planner_reuses_source_http_connection ... ok
+test filters::tests::wsola_finish_flushes_exact_duration_at_speed_boundaries ... ok
+test filters::tests::phase_vocoder_timescale_changes_stream_duration ... ok
+test filters::tests::timescale_speed_pitch_and_rate_are_independent_and_fractionally_paced ... ok
+test filters::tests::crust_timescale_allocates_zero_times_after_construction ... ok
+
+test result: ok. 23 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 1.74s
+
+     Running unittests src/lib.rs (target/debug/deps/crust_oto_adapter-4f23bd44505207f3)
+
+running 15 tests
+test tests::p10_bridge_target_scale_benchmark_report ... ignored, manual release-profile voice bridge benchmark; run with --ignored --nocapture
+test tests::backend_shutdown_polls_all_connections_concurrently ... ok
+test tests::pending_consumer_wakes_when_the_producer_is_cancelled ... ok
+test tests::empty_path_replaces_the_waker_and_wakes_on_nonempty_transition ... ok
+test tests::source_failure_is_retained_for_typed_event_delivery ... ok
+test tests::terminal_transition_wakes_pending_consumer_without_polling ... ok
+test tests::abort_before_producer_starts_wakes_pending_consumer ... ok
+test tests::ready_ring_frame_does_not_depend_on_tokio_cooperative_budget ... ok
+test tests::bridge_is_capacity_one_and_pulls_again_only_after_consumption ... ok
+test tests::undersized_oto_output_fails_instead_of_emitting_an_empty_frame ... ok
+test tests::terminal_audio_failure_is_reported_instead_of_leaving_a_playing_zombie ... ok
+test tests::real_adapter_never_starts_plaintext_audio_when_dave_is_required ... ok
+test tests::real_adapter_connects_idles_sends_replaces_stops_and_shuts_down ... ok
+test tests::real_adapter_maps_ping_resume_fresh_info_and_terminal_close ... ok
+test tests::concurrent_publication_preserves_every_frame_and_terminal_order ... ok
+
+test result: ok. 14 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 8.55s
+
+     Running unittests src/lib.rs (target/debug/deps/crust_protocol-8006c670d8b328e3)
+
+running 8 tests
+test tests::direct_omitted_serialization_fails_closed ... ok
+test tests::session_patch_preserves_reference_null_rejections_for_later_validation ... ok
+test tests::filter_patch_preserves_nullable_and_non_nullable_nulls_for_validation ... ok
+test tests::player_patch_distinguishes_omitted_null_and_value_recursively ... ok
+test tests::serialization_omits_absent_members_but_emits_null ... ok
+test tests::voice_state_debug_redacts_transport_credentials ... ok
+test tests::arbitrary_plugin_and_user_json_round_trips_semantically ... ok
+test tests::filter_subobjects_apply_frozen_defaults_and_serialize_them_explicitly ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/crust_server-a77db4465ff18910)
+
+running 28 tests
+test config::tests::debug_redacts_password_and_proxy_secret ... ok
+test config::tests::production_resource_policy_is_validated_and_centralized ... ok
+test json_limits::tests::parsing_rejects_duplicate_depth_and_element_ambiguity ... ok
+test json_limits::tests::retained_object_is_checked_without_allocating_a_serialized_copy ... ok
+test security_tests::password_verifier_compares_fixed_length_digests ... ok
+test config::tests::p12_stats_interval_is_bounded_and_configurable ... ok
+test config::tests::p08_media_limits_load_from_yaml_and_reject_zero ... ok
+test session::tests::concurrent_resume_admission_is_bounded_without_mutating_the_second_session ... ok
+test config::tests::precedence_is_defaults_then_yaml_then_environment_then_cli ... ok
+test session::tests::creation_update_resume_and_player_survival_are_owned ... ok
+test session::tests::critical_backlog_is_bounded_and_state_updates_coalesce ... ok
+test session::tests::acknowledged_critical_publish_waits_for_websocket_delivery ... ok
+test session::tests::expiry_cross_user_and_simultaneous_attempts_cannot_steal_a_session ... ok
+test config::tests::routeplanner_yaml_is_typed_and_family_checked ... ok
+test config::tests::strict_yaml_rejects_unknown_security_keys ... ok
+test session::tests::per_session_player_admission_recovers_without_consuming_global_capacity ... ok
+test session::tests::session_debug_representations_never_disclose_session_ids ... ok
+test session::tests::shutdown_invalidates_an_in_flight_handshake_without_panicking ... ok
+test stats::tests::frame_windows_are_per_player_averages_and_survive_counter_reset ... ok
+test config::tests::p11_player_update_interval_supports_lavalink_seconds_and_crust_milliseconds ... ok
+test stats::tests::linux_probe_parsers_reject_malformed_or_unbounded_values ... ok
+test stats::tests::runtime_probe_is_cached_for_the_bounded_refresh_interval ... ok
+test stats::tests::unavailable_runtime_values_and_wire_overflow_degrade_safely ... ok
+test stats::tests::runtime_sampler_maps_rss_and_bounded_cpu_deltas ... ok
+test config::tests::representative_lavalink_config_maps ... ok
+test security_tests::websocket_sink_writes_are_deadline_and_cancellation_bounded ... ok
+test config::tests::frozen_representative_fixture_loads_with_opaque_sections ... ok
+test session::tests::thousand_slow_session_backlogs_saturate_at_fixed_bounds_and_recover ... ok
+
+test result: ok. 28 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running unittests src/main.rs (target/debug/deps/crust_server-563c299e3592b8e7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/p05_server.rs (target/debug/deps/p05_server-e9fdd65cbd33a5a7)
+
+running 2 tests
+test http_auth_version_info_stats_and_owned_errors_match_v4_shapes ... ok
+test websocket_validates_headers_emits_ready_and_reconnects ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/p06_sessions.rs (target/debug/deps/p06_sessions-4b1e605216dbe11a)
+
+running 2 tests
+test session_patch_and_resume_match_the_frozen_v4_shapes ... ok
+test cross_user_and_expired_resume_attempts_create_fresh_sessions ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/p07_players.rs (target/debug/deps/p07_players-679ff5c835c2e06b)
+
+running 5 tests
+test filter_replacements_apply_defaults_null_removal_and_validation ... ok
+test player_crud_and_patch_null_semantics_match_the_frozen_corpus ... ok
+test playback_no_replace_controls_and_track_start_order_use_fake_mantle ... ok
+test player_survives_resume_and_replays_its_latest_state_snapshot ... ok
+test one_slow_guild_does_not_block_its_shard_and_same_guild_commands_serialize ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/p08_load_tracks.rs (target/debug/deps/p08_load_tracks-fb021740c08bedab)
+
+running 7 tests
+test decode_batch_obeys_the_configured_body_limit ... ok
+test decode_batch_rejects_too_many_tracks_before_adapter_work ... ok
+test media_routes_fail_closed_when_no_adapter_is_installed ... ok
+test source_request_admission_is_an_independent_nonblocking_bound ... ok
+test media_admission_is_bounded_and_recovers_after_request_cancellation ... ok
+test single_and_batch_decode_match_alias_precedence_and_error_contracts ... ok
+test load_result_variants_match_lavalink_shapes_and_preserve_opaque_json ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/p10_voice.rs (target/debug/deps/p10_voice-9bdd62f3fd87246c)
+
+running 9 tests
+test non_snowflake_session_identity_fails_before_credentials_reach_the_backend ... ok
+test natural_source_end_publishes_track_end_without_another_rest_command ... ok
+test player_volume_reaches_media_and_survives_filter_replacement_without_wire_leaks ... ok
+test asynchronous_frame_failure_publishes_exception_and_load_failed_end ... ok
+test snapshot_at_eof_preserves_terminal_generation ... ok
+test player_routes_voice_updates_and_media_discontinuities_through_one_backend_pacer ... ok
+test volume_and_filters_preserve_voice_source_and_terminal_delivery ... ok
+test server_shutdown_deadline_includes_voice_backend_teardown ... ok
+test controls_overtaking_eof_keep_old_and_new_generations_separate ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/p11_playback_events.rs (target/debug/deps/p11_playback_events-f19af2ab28c132a7)
+
+running 10 tests
+test non_resumable_client_disconnect_explicitly_shuts_down_player_voice ... ok
+test player_destroy_delivers_cleanup_before_tearing_down_voice ... ok
+test exception_and_stuck_payloads_follow_track_start_in_exact_order ... ok
+test terminal_voice_close_emits_exact_event_then_disconnected_player_state ... ok
+test replacement_stop_finish_and_frame_failure_keep_causal_event_order ... ok
+test audio_attachment_is_deferred_until_the_voice_generation_is_ready ... ok
+test terminal_voice_loss_during_resumable_disconnect_replays_once_in_order ... ok
+test idle_players_do_not_create_periodic_refresh_work ... ok
+test periodic_player_updates_refresh_latest_state_without_overlapping_a_player ... ok
+test production_oto_backend_carries_mantle_opus_through_rest_controls_to_udp ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.35s
+
+     Running tests/p12_stats_identity.rs (target/debug/deps/p12_stats_identity-dd8a9078eb8718fe)
+
+running 3 tests
+test standard_and_crust_identity_are_compatible_truthful_and_separate ... ok
+test resumable_sessions_preserve_their_frame_window_without_duplicate_initial_stats ... ok
+test rest_and_websocket_stats_report_real_player_state_and_frame_windows ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/p13_routeplanner.rs (target/debug/deps/p13_routeplanner-7d4a636c67f28894)
+
+running 5 tests
+test literal_free_address_input_never_performs_dns_resolution ... ok
+test configured_status_and_free_operations_use_the_lavalink_wire_shape ... ok
+test free_address_rejects_dns_names_malformed_json_and_oversized_bodies ... ok
+test disabled_endpoints_match_lavalink_status_and_error_semantics ... ok
+test every_declared_strategy_has_its_exact_discriminator_and_detail_fields ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/p15_operations.rs (target/debug/deps/p15_operations-3a881f127d8af22d)
+
+running 4 tests
+test disabled_prometheus_endpoint_is_not_registered ... ok
+test info_reports_only_enabled_admitted_sources_and_filters ... ok
+test prometheus_endpoint_is_public_bounded_and_low_cardinality ... ok
+test health_probes_are_public_and_readiness_flips_during_shutdown ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/p16_extensions.rs (target/debug/deps/p16_extensions-d6efc98a893fec50)
+
+running 1 test
+test in_tree_extensions_are_bounded_sorted_and_reported_separately ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/p17_security_resources.rs (target/debug/deps/p17_security_resources-077e2a6fad56c83a)
+
+running 4 tests
+test typed_resource_policy_is_the_server_diagnostic_and_bind_gate ... ok
+test malformed_ambiguous_and_unbounded_json_is_rejected_before_player_creation ... ok
+test per_session_and_global_player_overload_recover_without_partial_state ... ok
+test player_identifier_loads_share_source_and_outbound_admission_and_recover ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/lib.rs (target/debug/deps/crust_testkit-93c28ada1a869e38)
+
+running 7 tests
+test fake_mantle::tests::held_load_is_cancellable_without_a_hidden_retry ... ok
+test fake_mantle::tests::full_critical_event_backlog_rejects_without_mutating_player ... ok
+test fake_mantle::tests::source_route_is_preserved_for_the_future_real_adapter ... ok
+test fake_mantle::tests::held_load_resumes_only_after_explicit_release ... ok
+test fake_mantle::tests::manual_clock_controls_position_exactly ... ok
+test fake_voice::tests::connection_and_record_bounds_fail_explicitly ... ok
+test conformance::tests::fake_mantle_passes_the_shared_adapter_suite ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests crust
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests crust_mantle_adapter
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests crust_oto_adapter
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests crust_protocol
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests crust_server
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests crust_testkit
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
