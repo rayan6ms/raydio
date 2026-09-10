@@ -1,0 +1,51 @@
+{
+  "scope": "sequential local release owned-channel, DAVE and UDP; synthetic maximum-size frames; no Discord",
+  "seconds": 10,
+  "before": {
+    "allocation": {
+      "allocations": 0,
+      "allocationsPerFrame": 0.0,
+      "bytesAllocated": 0,
+      "bytesAllocatedPerFrame": 0.0,
+      "reallocations": 0,
+      "reallocationsPerFrame": 0.0
+    },
+    "benchmarkId": "oto-p08-complete-paced-dave",
+    "boundaryDifference": 0,
+    "frames": 500,
+    "maxSenderLatenessNanos": 2139371,
+    "measurementMs": 10000,
+    "profile": "release",
+    "schemaVersion": 1,
+    "source": "owned-channel",
+    "udpPackets": 500,
+    "warmupMs": 1000,
+    "testBinarySha256": "07aed47762c08b0db45ba8ab7b182eb9b114506087111a5b4cd5eb9967a6d361"
+  },
+  "after": {
+    "allocation": {
+      "allocations": 0,
+      "allocationsPerFrame": 0.0,
+      "bytesAllocated": 0,
+      "bytesAllocatedPerFrame": 0.0,
+      "reallocations": 0,
+      "reallocationsPerFrame": 0.0
+    },
+    "benchmarkId": "oto-p08-complete-paced-dave",
+    "boundaryDifference": 0,
+    "frames": 501,
+    "maxSenderLatenessNanos": 1836502,
+    "measurementMs": 10001,
+    "profile": "release",
+    "schemaVersion": 1,
+    "source": "owned-channel",
+    "udpPackets": 501,
+    "warmupMs": 1000,
+    "testBinarySha256": "557e23877ab145dc782fd1b1db23c7cea352f3e0af191980da8c405e7bd9d918"
+  },
+  "limitations": [
+    "one short pair cannot establish a latency improvement",
+    "501/500 is a measurement-boundary difference, not a throughput gain",
+    "shared Cargo release output was explicitly rebuilt; candidate-only gap regression passed before measurement"
+  ]
+}

@@ -8,6 +8,22 @@ import unittest
 
 
 class SummaryTests(unittest.TestCase):
+    def test_counter_reset_is_not_reported_as_negative_error_count(self):
+        # Exercise the real command with complete data, then a reset in every sender field.
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            receiver=dict(status='completed', requestedAt='r', startedAt='2026-09-09T00:00:00Z', elapsedSeconds=180,
+                          coverage={},pcm={},receiverScheduling={},events=[],sampling={'positiveLossDeltas':0,'negativeLossDeltas':0},
+                          delta=dict(packetsReceived=9000,packetsLost=0,packetsDiscarded=0,nackCount=0,concealedSamples=0,silentConcealedSamples=0))
+            (root/'receiver.json').write_text(json.dumps(receiver))
+            keys=('frames_sent','silence_frames_sent','frames_unavailable','skipped_deadlines','send_failures','source_overruns')
+            (root/'service.log').write_text('\n'.join(f'2026-09-09T00:0{i}:00Z voice diagnostic checkpoint '+', '.join(f'{k}: {n}' for k in keys) for i,n in [(1,100),(2,0)]))
+            (root/'resources.jsonl').write_text('')
+            subprocess.run([sys.executable,str(Path(__file__).with_name('summarize_receiver.py')),'--input',str(root),'--output',str(root/'summary.json'),'--source-tail-ms','938'],check=True,capture_output=True)
+            summary=json.loads((root/'summary.json').read_text())
+            self.assertIsNone(summary['senderCheckpointDelta'])
+            self.assertTrue(any('reset' in warning for warning in summary['evidenceWarnings']))
+
     def test_boundary_duration_and_run_specific_checkpoints(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -25,8 +41,9 @@ class SummaryTests(unittest.TestCase):
             }
             (root / 'receiver.json').write_text(json.dumps(receiver))
             (root / 'service.log').write_text(''.join(
-                f'2026-09-09T00:00:{second:02d}Z INFO track started generation=1\n'
-                for second in (20, 30, 40)))
+                f'2026-09-09T00:00:{second-1:02d}.999Z INFO track finished generation={generation}\n'
+                f'2026-09-09T00:00:{second:02d}Z INFO track started generation={generation+1}\n'
+                for generation, second in enumerate((20, 30, 40), 1)))
             (root / 'resources.jsonl').write_text('')
             (root / 'checkpoints.jsonl').write_text('\n'.join(
                 json.dumps({'requestedAt': run}) for run in

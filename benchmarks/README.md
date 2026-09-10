@@ -109,6 +109,42 @@ intervals are retained; this classification is not waveform matching. Checkpoint
 counts are matched to the receiver's `requestedAt`, and negative loss-counter
 changes are retained as signed corrections rather than attributed recoveries.
 
+### Evidence integrity for the next six-hour run
+
+Quiet interval endpoints use the audio worklet frame clock, reanchored to the
+AudioContext clock at each report. The report retains reset delay, wall/monotonic
+start, clock drift bounds, codec rate and receiver identity. Required quality
+counters must be available; a replacement peer, disappearing counter or
+cumulative reset fails the observation instead of creating a misleading delta.
+Optional unsupported counters remain explicitly listed.
+
+Natural-boundary candidates require consecutive, matching finish/start
+generations, a handoff within 100 ms and head/tail duration agreement. Transport,
+concealment, scheduling and missing-PCM overlap prevents a clean source-only
+candidate. The source reference must include packet SHA-256, volume, independent
+decoder output and collection time in `source-reference.json`. This is bounded
+source evidence, not a waveform match of every six-hour loop.
+
+`receiver_checkpoint.py` archives new sequenced events to `receiver-events.jsonl`
+on each successful save. The archive is capped at 64 MiB and reports missing
+sequences; retries deduplicate events. The final summary merges the archive with
+the final report and preserves warnings about overwritten incident windows.
+The Oracle preparation script preserves journals every five minutes throughout
+the seven-hour collector lifetime, so delayed final collection does not rely on
+journal retention alone. Confirm remaining collector/inhibitor lifetimes exceed
+the actual receiver end time, after the short qualification and all controls.
+
+Oto snapshots retain cumulative active-send gaps at 40/100/1000 ms, the largest
+gap, and the latest gap's wall timestamp. Only successful sends during one
+active pacing timeline are compared; inactive source/connection periods remain
+visible through phase changes, unavailability counters and receiver events.
+Multiple gaps per minute retain counts but only the latest gap's exact time.
+No per-packet log, trace, extra worker or polling timer was added.
+
+Run `bun benchmarks/test_audio_meter.mjs` for exact synthetic silence, clipping,
+nonfinite and empty-input checks on the actual worklet. The six-hour simulated
+harness tests bounded diagnostics and failure handling; it is not a network test.
+
 ### Redundant volume regression
 
 `source_packets OUTPUT --staged --repeat --redundant-filters` compares two plays

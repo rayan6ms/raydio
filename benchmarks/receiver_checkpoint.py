@@ -40,6 +40,11 @@ class Collector:
         self.host_samples = 0
         self.last_receiver = None
         self.expires_at = expires_at
+        self.archive_run = None
+        self.archived_sequence = 0
+        self.archive_missing_events = 0
+        self.archive_bytes = 0
+        self.archive_limit_bytes = 64 * 1024 * 1024
 
     def tick(self, now):
         if now < self.next_sample:
@@ -71,10 +76,37 @@ class Collector:
                       'bytes': size, 'saveDurationMs': (time.monotonic() - started) * 1000}
         with (self.output / 'checkpoints.jsonl').open('a') as f:
             f.write(json.dumps(checkpoint, separators=(',', ':')) + '\n')
+        self.archive_events(data)
         self.last_receiver = checkpoint
+
+    def archive_events(self, data):
+        run = data.get('requestedAt')
+        if run != self.archive_run:
+            self.archive_run = run
+            self.archived_sequence = 0
+            self.archive_missing_events = 0
+        events = [event for event in data.get('events', [])
+                  if isinstance(event.get('sequence'), int) and event['sequence'] > self.archived_sequence]
+        if not events:
+            return
+        payload = ''.join(json.dumps({'requestedAt': run, **event}, separators=(',', ':')) + '\n'
+                          for event in events)
+        size = len(payload.encode())
+        if self.archive_bytes + size > self.archive_limit_bytes:
+            raise ValueError('event archive reached its 64 MiB bound')
+        with (self.output / 'receiver-events.jsonl').open('a') as output:
+            output.write(payload)
+            output.flush()
+            os.fsync(output.fileno())
+        for event in events:
+            self.archive_missing_events += max(0, event['sequence'] - self.archived_sequence - 1)
+            self.archived_sequence = event['sequence']
+        self.archive_bytes += size
 
     def health(self):
         return {'hostSamples': self.host_samples, 'lastReceiver': self.last_receiver,
+                'archivedSequence': self.archived_sequence, 'archiveMissingEvents': self.archive_missing_events,
+                'archiveBytes': self.archive_bytes,
                 'remainingSeconds': max(0, self.expires_at - time.monotonic()) if self.expires_at is not None else None}
 
 

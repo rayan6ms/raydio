@@ -27,7 +27,7 @@
         constructor() {
             super(); this.reset();
             this.port.onmessage=({data})=>{
-                if(data==='reset'){this.reset();this.port.postMessage({ready:true});}
+                if(data==='reset'){this.reset();this.port.postMessage({ready:true,contextTime:currentTime});}
                 else this.report();
             };
         }
@@ -100,7 +100,7 @@
         let ctx,source,meter,observer,peer,stateListener,longTaskObserver,visibilityListener,stopped=false;
         const listeners=[];const history=[];
         const listen=(target,type,handler)=>{target.addEventListener(type,handler);listeners.push(()=>target.removeEventListener(type,handler));};
-        const started=performance.now();let audioStarted=started, priorPosition=null,minute,pcmLastAt=started;
+        const started=performance.now();let audioStarted=started, priorPosition=null,minute,pcmLastAt=started,resetSent=started,resetAck=started,eventSequence=0;
         const panel=()=>[...document.querySelectorAll('main article')].filter(e=>e.innerText.includes('Raydio • Now Playing')).at(-1);
         const phase=()=>{
             const text=panel()?.innerText||'';
@@ -114,7 +114,7 @@
         const event=(kind,detail={})=>{
             if(data.events.length>=4096){data.eventsTruncated=true;data.eventsDropped++;data.events.shift();}
             const at=performance.now()-audioStarted, trackPhase=phase();
-            data.events.push({ms:at,kind,phase:trackPhase,...detail});
+            data.events.push({sequence:++eventSequence,ms:at,kind,phase:trackPhase,...detail});
             const trigger=(kind==='speaking'&&!detail.speaking)
                 ||(kind==='quiet'&&detail.durationMs>=100&&trackPhase.label==='middle')
                 ||(kind==='receiver'&&(detail.packets===0||detail.windowMs>2000||detail.concealedMs>=40))
@@ -160,12 +160,12 @@
                 await sleep(1100);
                 await new Promise((resolve,reject)=>{
                     const timer=setTimeout(()=>reject(Error('Audio meter reset timed out')),2000);
-                    meter.port.onmessage=({data:m})=>{if(m.ready){clearTimeout(timer);resolve();}};
-                    meter.port.postMessage('reset');
+                    meter.port.onmessage=({data:m})=>{if(m.ready){resetAck=performance.now();data.pcmResetContextTime=m.contextTime;clearTimeout(timer);resolve();}};
+                    resetSent=performance.now();meter.port.postMessage('reset');
                 });
             }
             audioStarted=performance.now();pcmLastAt=audioStarted;
-            data.startedAt=new Date().toISOString();data.clock={wallStartMs:Date.now(),monotonicStartMs:audioStarted,timeOrigin:performance.timeOrigin};data.status='running';data.sampleRate=ctx?.sampleRate||48000;data.graphWarmupMs=pcm?1100:0;
+            data.startedAt=new Date().toISOString();data.clock={wallStartMs:Date.now(),monotonicStartMs:audioStarted,timeOrigin:performance.timeOrigin};data.clock.pcmResetAckDelayMs=pcm?resetAck-resetSent:null;data.clock.pcmEpochUncertaintyMs=pcm?audioStarted-resetSent:null;data.status='running';data.sampleRate=ctx?.sampleRate||48000;data.graphWarmupMs=pcm?1100:0;
             if(scheduling){
                 // Event-driven diagnostic only: no new polling timer, network
                 // interception, raw audio, or changes to WebRTC buffering.
@@ -175,7 +175,7 @@
                         const s=data.receiverScheduling;
                         s.longTasks++;s.totalLongTaskMs+=entry.duration;
                         s.maxLongTaskMs=Math.max(s.maxLongTaskMs,entry.duration);
-                        event('receiver-long-task',{startMs:entry.startTime-audioStarted,
+                        event('receiver-long-task',{ms:entry.startTime-audioStarted+entry.duration,startMs:entry.startTime-audioStarted,
                             durationMs:entry.duration});
                     }
                 };
@@ -190,6 +190,11 @@
             }
             const initialRaw=(await peer.getStats()).get(id);
             data.availableCounters=fields.filter(k=>typeof initialRaw[k]==='number');
+            if(!initialRaw)throw Error('Receiver disappeared before baseline');
+            if(['timestamp','packetsReceived','packetsLost','concealedSamples','silentConcealedSamples','totalSamplesReceived'].some(k=>typeof initialRaw[k]!=='number'))
+                throw Error('Required receiver quality counters unavailable');
+            data.receiverIdentity={id,ssrc:initialRaw.ssrc,trackIdentifier:initialRaw.trackIdentifier};
+            data.missingCounters=fields.filter(k=>typeof initialRaw[k]!=='number');
             let last=counters(initialRaw);data.initial=last;
             let speaking=true;
             observer=new MutationObserver(()=>{
@@ -212,14 +217,30 @@
             if(navigator.mediaDevices)listen(navigator.mediaDevices,'devicechange',()=>event('audio-device-change'));
             const codec=initialRaw.codecId?(await peer.getStats()).get(initialRaw.codecId):null;
             if(codec)data.codec={mimeType:codec.mimeType,clockRate:codec.clockRate,channels:codec.channels};
+            const samplesPerMs=(codec?.clockRate||48000)/1000;
             if(meter)meter.port.onmessage=({data:m})=>{
                 pcmLastAt=performance.now();const p=data.pcm;
+                // Re-anchor the audio clock on each report. This accounts for
+                // long-run device-clock drift without using delayed receipt as
+                // the quiet interval's timestamp. Accuracy is limited by one
+                // AudioContext render quantum plus the measured reset delay.
+                const contextNow=ctx.currentTime;
+                const audioMs=frame=>(pcmLastAt-audioStarted)-(contextNow-data.pcmResetContextTime-frame/ctx.sampleRate)*1000;
+                const drift=audioMs(m.frames)-m.frames*1000/ctx.sampleRate;
+                data.clock.pcmWallDriftMinMs=Math.min(data.clock.pcmWallDriftMinMs??drift,drift);
+                data.clock.pcmWallDriftMaxMs=Math.max(data.clock.pcmWallDriftMaxMs??drift,drift);
+                p.endWallMs=audioMs(m.frames);
                 p.samples+=m.samples;p.squared+=m.squared;p.peak=Math.max(p.peak,m.peak);
                 p.nearFullScale+=m.clipped;p.nonFinite+=m.nonFinite;p.emptyFrames+=m.empty;
                 p.longestQuietMs=Math.max(p.longestQuietMs,m.longestQuietFrames*1000/ctx.sampleRate);
                 p.ongoingQuietMs=m.ongoingQuietFrames*1000/ctx.sampleRate;p.reports++;p.frames=m.frames;
                 if(m.clipped||m.nonFinite||m.empty)event('pcm-anomaly',{clipped:m.clipped,nonFinite:m.nonFinite,emptyFrames:m.empty});
-                for(const q of m.quietRuns)event('quiet',{durationMs:q.frames*1000/ctx.sampleRate,endFrame:q.endFrame,audioSeconds:m.audioSeconds});
+                // endFrame is measured on the audio thread from reset. A report
+                // can arrive up to 250 ms later, or later still if UI work stalls.
+                for(const q of m.quietRuns)event('quiet',{durationMs:q.frames*1000/ctx.sampleRate,
+                    endFrame:q.endFrame,audioEndMs:audioMs(q.endFrame),
+                    reportDelayMs:pcmLastAt-audioStarted-audioMs(q.endFrame),
+                    audioSeconds:m.audioSeconds});
                 if(m.truncated){data.eventsTruncated=true;event('pcm-events-truncated');}
             };
             while(performance.now()-audioStarted<seconds*1000&&!stopped){
@@ -233,12 +254,17 @@
                     bytesReceived:pair.bytesReceived,bytesSent:pair.bytesSent};
                 if(!raw||['closed','failed'].includes(peer.connectionState)||!row.isConnected)throw Error('Receiver or voice row was replaced/disconnected');
                 if(ctx&&ctx.state!=='running')throw Error('Audio context stopped running');
+                if(raw.ssrc!==data.receiverIdentity.ssrc||raw.trackIdentifier!==data.receiverIdentity.trackIdentifier)
+                    throw Error('Receiver identity changed');
+                if(data.availableCounters.some(k=>typeof raw[k]!=='number'))throw Error('Receiver counter disappeared');
                 const now=counters(raw),dt=now.timestamp-last.timestamp;
+                if(data.availableCounters.filter(k=>k!=='packetsLost'&&k!=='timestamp').some(k=>now[k]<last[k]))
+                    throw Error('Receiver cumulative counter reset');
                 if(dt<=0){data.sampling.stalePolls++;continue;}
                 const delta=Object.fromEntries(fields.map(k=>[k,now[k]-last[k]]));
                 const elapsedMs=now.timestamp-data.initial.timestamp;
                 const sample=[elapsedMs,dt,delta.packetsReceived,delta.packetsLost,delta.packetsDiscarded,
-                    delta.concealedSamples/48,delta.silentConcealedSamples/48,raw.jitter*1000,
+                    delta.concealedSamples/samplesPerMs,delta.silentConcealedSamples/samplesPerMs,raw.jitter*1000,
                     delta.jitterBufferEmittedCount?delta.jitterBufferDelay*1000/delta.jitterBufferEmittedCount:null, data.network.current?.rttMs??null];
                 for(const window of data.diagnosticWindows)if(window.remaining>0){window.samples.push(sample);window.remaining--;}
                 history.push(sample);if(history.length>6)history.shift();
@@ -254,12 +280,12 @@
                 minute.maxPollMs=Math.max(minute.maxPollMs,dt);minute.maxPcmSilenceMs=Math.max(minute.maxPcmSilenceMs,data.pcm.ongoingQuietMs);
                 data.sampling.polls++;data.sampling.maxPollMs=Math.max(data.sampling.maxPollMs,dt);
                 data.sampling.positiveLossDeltas+=Math.max(0,delta.packetsLost);data.sampling.negativeLossDeltas+=Math.min(0,delta.packetsLost);
-                data.sampling.maxConcealedMsPerPoll=Math.max(data.sampling.maxConcealedMsPerPoll,delta.concealedSamples/48);
+                data.sampling.maxConcealedMsPerPoll=Math.max(data.sampling.maxConcealedMsPerPoll,delta.concealedSamples/samplesPerMs);
                 if(delta.packetsLost||delta.packetsDiscarded||delta.nackCount||delta.concealedSamples||delta.packetsReceived===0||dt>2000)
-                    event('receiver',{windowMs:dt,packets:delta.packetsReceived,lost:delta.packetsLost,concealedMs:delta.concealedSamples/48,silentConcealedMs:delta.silentConcealedSamples/48,jitterMs:raw.jitter*1000,
+                    event('receiver',{windowMs:dt,packets:delta.packetsReceived,lost:delta.packetsLost,concealedMs:delta.concealedSamples/samplesPerMs,silentConcealedMs:delta.silentConcealedSamples/samplesPerMs,jitterMs:raw.jitter*1000,
                         discarded:delta.packetsDiscarded,nacks:delta.nackCount,
                         fecReceived:delta.fecPacketsReceived,fecDiscarded:delta.fecPacketsDiscarded,
-                        insertedMs:delta.insertedSamplesForDeceleration/48,removedMs:delta.removedSamplesForAcceleration/48,
+                        insertedMs:delta.insertedSamplesForDeceleration/samplesPerMs,removedMs:delta.removedSamplesForAcceleration/samplesPerMs,
                         emittedSamples:delta.jitterBufferEmittedCount,receivedSamples:delta.totalSamplesReceived,
                         meanBufferMs:delta.jitterBufferEmittedCount?delta.jitterBufferDelay*1000/delta.jitterBufferEmittedCount:null});
                 if(pcm&&performance.now()-pcmLastAt>2000){data.sampling.pcmReportsMissing++;event('pcm-report-gap');}
@@ -281,6 +307,7 @@
             data.pcm.audioSeconds=data.pcm.frames/(data.sampleRate||48000);
             if(data.current&&data.initial)data.delta=Object.fromEntries(fields.map(k=>[k,data.current[k]-data.initial[k]]));
             data.pcm.rms=Math.sqrt(data.pcm.squared/Math.max(1,data.pcm.samples));
+            if(data.pcm.ongoingQuietMs>=20)event('quiet-at-end',{durationMs:data.pcm.ongoingQuietMs,audioEndMs:data.pcm.endWallMs??data.pcm.frames*1000/data.sampleRate});
             data.coverage={
                 receiverSeconds:data.elapsedSeconds||0,pcmSeconds:data.pcm.audioSeconds,
                 completePollCoverage:data.status==='completed' && data.elapsedSeconds>=seconds-.1
@@ -296,7 +323,6 @@
                 retainedDiagnosticWindows:data.diagnosticWindows.length,
                 droppedDiagnosticWindows:data.diagnosticWindowsDropped,
             };
-            if(data.pcm.ongoingQuietMs>=20)event('quiet-at-end',{durationMs:data.pcm.ongoingQuietMs});
         }
         return {status:data.status,elapsedSeconds:data.elapsedSeconds,error:data.error};
     };

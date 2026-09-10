@@ -35,6 +35,23 @@ class Checkpoints(unittest.TestCase):
             self.assertEqual(rows[-1]['lateMs'], 160000)
             self.assertEqual(collector.health()['hostSamples'], 5)
 
+    def test_event_archive_deduplicates_and_detects_missing_history(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            collector = Collector(root)
+            data = dict(version=1, requestedSeconds=21600, status='running', requestedAt='run',
+                        events=[dict(sequence=i, kind='quiet', ms=i) for i in (1, 2)])
+            collector.save(data, 100)
+            collector.save(data, 100)
+            data['events'] = [dict(sequence=i, kind='receiver', ms=i) for i in (2, 3, 5)]
+            collector.save(data, 150)
+            archived = [json.loads(line) for line in (root / 'receiver-events.jsonl').read_text().splitlines()]
+            self.assertEqual([row['sequence'] for row in archived], [1, 2, 3, 5])
+            self.assertEqual(collector.health()['archiveMissingEvents'], 1)
+            collector.archive_limit_bytes = collector.archive_bytes
+            data['events'] = [dict(sequence=6, kind='quiet', ms=6)]
+            with self.assertRaises(ValueError): collector.save(data, 100)
+
     def test_bad_reports_do_not_replace_evidence(self):
         with TemporaryDirectory() as directory:
             collector = Collector(Path(directory))

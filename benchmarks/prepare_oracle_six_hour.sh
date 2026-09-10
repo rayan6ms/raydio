@@ -43,8 +43,10 @@ systemd-run --unit="$run_id-resources" --property=MemoryMax=64M --property=Tasks
 systemctl show "$unit.service" raydio.service -p Id -p MainPID -p ActiveState -p UnitFileState -p NRestarts -p CPUQuotaPerSecUSec -p RuntimeMaxUSec > "$out/preflight.txt"
 sha256sum "$binary" > "$out/binary.sha256"
 timedatectl show -p NTPSynchronized >> "$out/preflight.txt"
-systemd-run --unit="$run_id-restore" --on-active=7h /usr/bin/systemctl start apt-daily.timer apt-daily-upgrade.timer fwupd-refresh.timer
-systemctl stop apt-daily.timer apt-daily-upgrade.timer fwupd-refresh.timer
+date -u +%FT%TZ > "$out/prepared-at.txt"
+cat /proc/sys/kernel/random/boot_id > "$out/boot-id.txt"
+systemd-run --unit="$run_id-restore" --on-active=7h /usr/bin/systemctl start apt-daily.timer apt-daily-upgrade.timer fwupd-refresh.timer motd-news.timer
+systemctl stop apt-daily.timer apt-daily-upgrade.timer fwupd-refresh.timer motd-news.timer
 python3 - "$out" "$started" "$run_id" <<'PY'
 from pathlib import Path
 import sys,shlex
@@ -56,5 +58,6 @@ script.write_text('#!/bin/sh\nset -eu\n'+
     'systemctl show raydio-isolated-six-hour.service raydio.service -p Id -p ActiveState -p MainPID -p NRestarts -p MemoryCurrent -p CPUUsageNSec -p Result > '+shlex.quote(out+'/final-service.txt')+'\n')
 script.chmod(0o700)
 PY
-systemd-run --unit="$run_id-save" --on-active=6h30m "/opt/raydio/diagnostics/$run_id-save.sh"
+systemd-run --unit="$run_id-save" --property=Nice=19 --property=MemoryMax=64M --property=TasksMax=8 --on-active=60s --on-unit-active=5m "/opt/raydio/diagnostics/$run_id-save.sh"
+systemd-run --unit="$run_id-save-stop" --on-active=7h /usr/bin/systemctl stop "$run_id-save.timer"
 printf 'candidate_pid=%s run_id=%s\n' "$pid" "$run_id"

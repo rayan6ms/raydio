@@ -57,7 +57,7 @@ Fix source reads with a cancellation-aware bounded operation, and carry the comm
 
 **Path:** Crust adapter `AdapterInner::players` and `create_player` around lines 189–194 and 363–382. `create_player` appends a `Weak` and only adapter shutdown clears the vector.
 
-**Reproduction:** Creating, shutting down, and dropping 1,000 players leaves `entries=1000`, `live=0`, vector capacity 1024. On this build a `Weak<RealMantlePlayer>` is 8 bytes, so this is about 8 KiB per 1,000 churned players (plus vector growth), not a retained player/task. It is not a six-hour single-player leak, but reconnect/guild churn makes it monotonic. Prune dead entries during insertion or replace the vector with a bounded registry keyed by live handles.
+**Reproduction:** Creating, shutting down, and dropping 1,000 players leaves `entries=1000`, `live=0`, vector capacity 1024. On this build a `Weak<RealMantlePlayer>` is 8 bytes, so the vector alone retains about 8 KiB per 1,000 churned players. Correction after the audit: each dead Weak also retains the Arc allocation even though the player value and task are dropped. The measured 32-byte player plus 16-byte Arc counters add approximately 48 KiB per 1,000 entries, for at least about 56 KiB total before allocator overhead. This is allocation accounting, not a measured process-PSS delta. It is not a six-hour single-player leak, but reconnect/guild churn makes it monotonic. Prune dead entries during insertion or replace the vector with a bounded registry keyed by live handles.
 
 ### C5 — dropped direct adapter loads leave a watcher until cancellation (low API hygiene)
 

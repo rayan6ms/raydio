@@ -44,6 +44,7 @@
             !(saved.elapsedSeconds > 0) || saved.elapsedSeconds < data.elapsedSeconds - 5)
             throw Error('Collector has not saved this running report recently');
         const remaining = data.requestedSeconds - data.elapsedSeconds + 60;
+        if (health.archiveMissingEvents > 0)throw Error('Collector event history has gaps');
         if (!(health.hostSamples >= 2) || !(health.remainingSeconds >= remaining) ||
             !state.timer || (state.deadlineMonotonic - performance.now()) / 1000 < remaining)
             throw Error('Collector samples or remaining lifetime are insufficient');
