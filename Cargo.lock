@@ -546,7 +546,7 @@ checksum = "61803da095bee82a81bb1a452ecc25d3b2f1416d1897eb86430c6159ef717c17"
 [[package]]
 name = "crust"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=4a05a7db7500884eee30f0d32041a55ab26b1ce1#4a05a7db7500884eee30f0d32041a55ab26b1ce1"
+source = "git+https://github.com/rayan6ms/crust?rev=10e3d7f#10e3d7f95d8591e968b3aee183bf2904f12dc18f"
 dependencies = [
  "num-bigint",
  "num-traits",
@@ -559,13 +559,13 @@ dependencies = [
 [[package]]
 name = "crust-mantle-adapter"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=4a05a7db7500884eee30f0d32041a55ab26b1ce1#4a05a7db7500884eee30f0d32041a55ab26b1ce1"
+source = "git+https://github.com/rayan6ms/crust?rev=10e3d7f#10e3d7f95d8591e968b3aee183bf2904f12dc18f"
 dependencies = [
  "base64 0.22.1",
  "crust",
- "mantle-audio",
- "mantle-core",
- "mantle-media",
+ "mantle-audio 0.0.0 (git+https://github.com/rayan6ms/mantle?rev=c9186c1)",
+ "mantle-core 0.0.0 (git+https://github.com/rayan6ms/mantle?rev=c9186c1)",
+ "mantle-media 0.0.0 (git+https://github.com/rayan6ms/mantle?rev=c9186c1)",
  "microfft",
  "micromath",
  "serde_json",
@@ -576,7 +576,7 @@ dependencies = [
 [[package]]
 name = "crust-oto-adapter"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=4a05a7db7500884eee30f0d32041a55ab26b1ce1#4a05a7db7500884eee30f0d32041a55ab26b1ce1"
+source = "git+https://github.com/rayan6ms/crust?rev=10e3d7f#10e3d7f95d8591e968b3aee183bf2904f12dc18f"
 dependencies = [
  "crust",
  "futures-util",
@@ -589,7 +589,7 @@ dependencies = [
 [[package]]
 name = "crust-protocol"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=4a05a7db7500884eee30f0d32041a55ab26b1ce1#4a05a7db7500884eee30f0d32041a55ab26b1ce1"
+source = "git+https://github.com/rayan6ms/crust?rev=10e3d7f#10e3d7f95d8591e968b3aee183bf2904f12dc18f"
 dependencies = [
  "serde",
  "serde_json",
@@ -598,7 +598,7 @@ dependencies = [
 [[package]]
 name = "crust-server"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=4a05a7db7500884eee30f0d32041a55ab26b1ce1#4a05a7db7500884eee30f0d32041a55ab26b1ce1"
+source = "git+https://github.com/rayan6ms/crust?rev=10e3d7f#10e3d7f95d8591e968b3aee183bf2904f12dc18f"
 dependencies = [
  "axum",
  "base64 0.22.1",
@@ -624,7 +624,7 @@ dependencies = [
 [[package]]
 name = "crust-testkit"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=4a05a7db7500884eee30f0d32041a55ab26b1ce1#4a05a7db7500884eee30f0d32041a55ab26b1ce1"
+source = "git+https://github.com/rayan6ms/crust?rev=10e3d7f#10e3d7f95d8591e968b3aee183bf2904f12dc18f"
 dependencies = [
  "crust",
  "serde_json",
@@ -729,7 +729,7 @@ checksum = "4583a4551df46e2792f82ceeac45e850d2e2d5debba0b91f102385cda5b11f06"
 [[package]]
 name = "davey"
 version = "0.1.4"
-source = "git+https://github.com/rayan6ms/oto?rev=352fa9a277377dbeb4f44513961c34f0785d870a#352fa9a277377dbeb4f44513961c34f0785d870a"
+source = "git+https://github.com/rayan6ms/oto?rev=e1d3792#e1d379249b8c41175ae8653172b5982f22d65d18"
 dependencies = [
  "aead 0.5.2",
  "aes 0.8.4",
@@ -1851,9 +1851,19 @@ checksum = "0ceec5bc11778974d1bcb055b18002eba7f4b3518b6a0081b3af5f21666da9ad"
 [[package]]
 name = "mantle-audio"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/mantle?rev=88fbed2e6f32e5b3d021ede3cf9a279fecd54e98#88fbed2e6f32e5b3d021ede3cf9a279fecd54e98"
+source = "git+https://github.com/rayan6ms/mantle?rev=c9186c1#c9186c1daea2cc6524aa61ff38a2d7a7869c0ae3"
 dependencies = [
- "mantle-opus",
+ "mantle-opus 0.0.0 (git+https://github.com/rayan6ms/mantle?rev=c9186c1)",
+ "rtrb",
+ "rubato",
+]
+
+[[package]]
+name = "mantle-audio"
+version = "0.0.0"
+source = "git+https://github.com/rayan6ms/mantle?rev=dbd3802#dbd3802a82d33f539644e1cac5ab02c605af6f9a"
+dependencies = [
+ "mantle-opus 0.0.0 (git+https://github.com/rayan6ms/mantle?rev=dbd3802)",
  "rtrb",
  "rubato",
 ]
@@ -1861,20 +1871,48 @@ dependencies = [
 [[package]]
 name = "mantle-core"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/mantle?rev=88fbed2e6f32e5b3d021ede3cf9a279fecd54e98#88fbed2e6f32e5b3d021ede3cf9a279fecd54e98"
+source = "git+https://github.com/rayan6ms/mantle?rev=c9186c1#c9186c1daea2cc6524aa61ff38a2d7a7869c0ae3"
+
+[[package]]
+name = "mantle-core"
+version = "0.0.0"
+source = "git+https://github.com/rayan6ms/mantle?rev=dbd3802#dbd3802a82d33f539644e1cac5ab02c605af6f9a"
 
 [[package]]
 name = "mantle-media"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/mantle?rev=88fbed2e6f32e5b3d021ede3cf9a279fecd54e98#88fbed2e6f32e5b3d021ede3cf9a279fecd54e98"
+source = "git+https://github.com/rayan6ms/mantle?rev=c9186c1#c9186c1daea2cc6524aa61ff38a2d7a7869c0ae3"
 dependencies = [
  "aes 0.9.2",
  "cbc",
  "form_urlencoded",
  "log",
- "mantle-audio",
- "mantle-core",
- "mantle-xaac",
+ "mantle-audio 0.0.0 (git+https://github.com/rayan6ms/mantle?rev=c9186c1)",
+ "mantle-core 0.0.0 (git+https://github.com/rayan6ms/mantle?rev=c9186c1)",
+ "mantle-symphonia-isomp4 0.6.1 (git+https://github.com/rayan6ms/mantle?rev=c9186c1)",
+ "mantle-xaac 0.0.0 (git+https://github.com/rayan6ms/mantle?rev=c9186c1)",
+ "md-5",
+ "quick-xml",
+ "serde",
+ "serde_json",
+ "socket2",
+ "symphonia",
+ "ureq",
+]
+
+[[package]]
+name = "mantle-media"
+version = "0.0.0"
+source = "git+https://github.com/rayan6ms/mantle?rev=dbd3802#dbd3802a82d33f539644e1cac5ab02c605af6f9a"
+dependencies = [
+ "aes 0.9.2",
+ "cbc",
+ "form_urlencoded",
+ "log",
+ "mantle-audio 0.0.0 (git+https://github.com/rayan6ms/mantle?rev=dbd3802)",
+ "mantle-core 0.0.0 (git+https://github.com/rayan6ms/mantle?rev=dbd3802)",
+ "mantle-symphonia-isomp4 0.6.1 (git+https://github.com/rayan6ms/mantle?rev=dbd3802)",
+ "mantle-xaac 0.0.0 (git+https://github.com/rayan6ms/mantle?rev=dbd3802)",
  "md-5",
  "quick-xml",
  "serde",
@@ -1887,15 +1925,50 @@ dependencies = [
 [[package]]
 name = "mantle-opus"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/mantle?rev=88fbed2e6f32e5b3d021ede3cf9a279fecd54e98#88fbed2e6f32e5b3d021ede3cf9a279fecd54e98"
+source = "git+https://github.com/rayan6ms/mantle?rev=c9186c1#c9186c1daea2cc6524aa61ff38a2d7a7869c0ae3"
 dependencies = [
  "opus-head-sys",
 ]
 
 [[package]]
+name = "mantle-opus"
+version = "0.0.0"
+source = "git+https://github.com/rayan6ms/mantle?rev=dbd3802#dbd3802a82d33f539644e1cac5ab02c605af6f9a"
+dependencies = [
+ "opus-head-sys",
+]
+
+[[package]]
+name = "mantle-symphonia-isomp4"
+version = "0.6.1"
+source = "git+https://github.com/rayan6ms/mantle?rev=c9186c1#c9186c1daea2cc6524aa61ff38a2d7a7869c0ae3"
+dependencies = [
+ "log",
+ "symphonia-common",
+ "symphonia-core",
+ "symphonia-metadata",
+]
+
+[[package]]
+name = "mantle-symphonia-isomp4"
+version = "0.6.1"
+source = "git+https://github.com/rayan6ms/mantle?rev=dbd3802#dbd3802a82d33f539644e1cac5ab02c605af6f9a"
+dependencies = [
+ "log",
+ "symphonia-common",
+ "symphonia-core",
+ "symphonia-metadata",
+]
+
+[[package]]
 name = "mantle-xaac"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/mantle?rev=88fbed2e6f32e5b3d021ede3cf9a279fecd54e98#88fbed2e6f32e5b3d021ede3cf9a279fecd54e98"
+source = "git+https://github.com/rayan6ms/mantle?rev=c9186c1#c9186c1daea2cc6524aa61ff38a2d7a7869c0ae3"
+
+[[package]]
+name = "mantle-xaac"
+version = "0.0.0"
+source = "git+https://github.com/rayan6ms/mantle?rev=dbd3802#dbd3802a82d33f539644e1cac5ab02c605af6f9a"
 
 [[package]]
 name = "matchers"
@@ -2105,7 +2178,7 @@ dependencies = [
 [[package]]
 name = "openmls_rust_crypto"
 version = "0.5.1"
-source = "git+https://github.com/rayan6ms/oto?rev=352fa9a277377dbeb4f44513961c34f0785d870a#352fa9a277377dbeb4f44513961c34f0785d870a"
+source = "git+https://github.com/rayan6ms/oto?rev=e1d3792#e1d379249b8c41175ae8653172b5982f22d65d18"
 dependencies = [
  "aes-gcm 0.10.3",
  "chacha20poly1305 0.10.1",
@@ -2163,7 +2236,7 @@ dependencies = [
 [[package]]
 name = "oto"
 version = "1.0.0"
-source = "git+https://github.com/rayan6ms/oto?rev=352fa9a277377dbeb4f44513961c34f0785d870a#352fa9a277377dbeb4f44513961c34f0785d870a"
+source = "git+https://github.com/rayan6ms/oto?rev=e1d3792#e1d379249b8c41175ae8653172b5982f22d65d18"
 dependencies = [
  "aes-gcm 0.11.1",
  "chacha20poly1305 0.11.0",
@@ -2500,8 +2573,8 @@ dependencies = [
  "crust-testkit",
  "dotenvy",
  "futures-util",
- "mantle-core",
- "mantle-media",
+ "mantle-core 0.0.0 (git+https://github.com/rayan6ms/mantle?rev=dbd3802)",
+ "mantle-media 0.0.0 (git+https://github.com/rayan6ms/mantle?rev=dbd3802)",
  "oto",
  "rand 0.9.5",
  "reqwest",
@@ -3082,7 +3155,6 @@ dependencies = [
  "symphonia-codec-pcm",
  "symphonia-codec-vorbis",
  "symphonia-core",
- "symphonia-format-isomp4",
  "symphonia-format-mkv",
  "symphonia-format-ogg",
  "symphonia-format-riff",
@@ -3168,18 +3240,6 @@ dependencies = [
  "log",
  "num-complex",
  "smallvec",
-]
-
-[[package]]
-name = "symphonia-format-isomp4"
-version = "0.6.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0e681a70e1870d34e02abf1dbc51e4267c3f1827801474e8870be8c689fc4dc3"
-dependencies = [
- "log",
- "symphonia-common",
- "symphonia-core",
- "symphonia-metadata",
 ]
 
 [[package]]
