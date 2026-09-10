@@ -1,0 +1,7 @@
+   Compiling crust-server v0.0.0 (<projects>/crust-raydio-public/crates/crust-server)
+    Checking crust-oto-adapter v0.0.0 (<projects>/crust-raydio-public/crates/crust-oto-adapter)
+    Checking crust v0.0.0 (<projects>/crust-raydio-public/crates/crust)
+    Checking crust-mantle-adapter v0.0.0 (<projects>/crust-raydio-public/crates/crust-mantle-adapter)
+    Checking crust-testkit v0.0.0 (<projects>/crust-raydio-public/crates/crust-testkit)
+    Checking crust-protocol v0.0.0 (<projects>/crust-raydio-public/crates/crust-protocol)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 13.71s

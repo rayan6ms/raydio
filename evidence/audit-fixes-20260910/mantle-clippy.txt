@@ -1,0 +1,12 @@
+    Checking mantle-media v0.0.0 (<projects>/mantle-rust-fix/crates/mantle-media)
+    Checking mantle-jvm v0.0.0 (<projects>/mantle-rust-fix/crates/mantle-jvm)
+    Checking mantle-worker-bench v0.0.0 (<projects>/mantle-rust-fix/tools/worker-bench)
+    Checking mantle-media-bench v0.0.0 (<projects>/mantle-rust-fix/tools/media-bench)
+    Checking mantle-audio v0.0.0 (<projects>/mantle-rust-fix/crates/mantle-audio)
+    Checking mantle-xaac v0.0.0 (<projects>/mantle-rust-fix/crates/mantle-xaac)
+    Checking mantle-core v0.0.0 (<projects>/mantle-rust-fix/crates/mantle-core)
+    Checking mantle-opus v0.0.0 (<projects>/mantle-rust-fix/crates/mantle-opus)
+    Checking mantle-symphonia-isomp4 v0.6.1 (<projects>/mantle-rust-fix/third_party/symphonia-format-isomp4)
+    Checking mantle-audio-layout-bench v0.0.0 (<projects>/mantle-rust-fix/tools/audio-layout-bench)
+    Checking mantle-oracle v0.0.0 (<projects>/mantle-rust-fix/tools/oracle)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 17.80s

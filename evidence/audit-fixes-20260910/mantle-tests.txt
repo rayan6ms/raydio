@@ -1,0 +1,693 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+   Compiling log v0.4.33
+   Compiling symphonia-core v0.6.1
+   Compiling syn v2.0.119
+   Compiling symphonia-metadata v0.6.1
+   Compiling once_cell v1.21.4
+   Compiling syn v3.0.3
+   Compiling symphonia-common v0.6.1
+   Compiling serde_derive v1.0.229
+   Compiling serde v1.0.229
+   Compiling visibility v0.1.1
+   Compiling rubato v5.0.0
+   Compiling ureq-proto v0.6.1
+   Compiling rustls v0.23.43
+   Compiling symphonia-format-riff v0.6.1
+   Compiling mantle-audio v0.0.0 (<projects>/mantle-rust-fix/crates/mantle-audio)
+   Compiling mantle-symphonia-isomp4 v0.6.1 (<projects>/mantle-rust-fix/third_party/symphonia-format-isomp4)
+   Compiling symphonia-codec-vorbis v0.6.1
+   Compiling symphonia-bundle-flac v0.6.1
+   Compiling symphonia-format-mkv v0.6.1
+   Compiling symphonia-format-ogg v0.6.1
+   Compiling symphonia-codec-aac v0.6.1
+   Compiling symphonia-codec-pcm v0.6.1
+   Compiling symphonia-bundle-mp3 v0.6.1
+   Compiling ureq v3.4.0
+   Compiling symphonia v0.6.1
+   Compiling mantle-media v0.0.0 (<projects>/mantle-rust-fix/crates/mantle-media)
+   Compiling semver v1.0.28
+   Compiling thiserror v2.0.20
+   Compiling rustc_version v0.4.1
+   Compiling thiserror-impl v2.0.20
+   Compiling same-file v1.0.6
+   Compiling rustversion v1.0.23
+   Compiling walkdir v2.5.0
+   Compiling jni-macros v0.22.4
+   Compiling simdutf8 v0.1.5
+   Compiling simd_cesu8 v1.2.0
+   Compiling jni v0.22.4
+   Compiling tracing-core v0.1.36
+   Compiling jni-sys-macros v0.4.1
+   Compiling getrandom v0.3.4
+   Compiling zerocopy v0.8.56
+   Compiling version_check v0.9.5
+   Compiling regex-syntax v0.8.11
+   Compiling foldhash v0.2.0
+   Compiling allocator-api2 v0.2.21
+   Compiling glob v0.3.4
+   Compiling equivalent v1.0.2
+   Compiling hashbrown v0.17.1
+   Compiling java-locator v0.1.9
+   Compiling regex-automata v0.4.18
+   Compiling ahash v0.8.12
+   Compiling jni-sys v0.4.1
+   Compiling generator v0.7.5
+   Compiling combine v4.6.7
+   Compiling tracing-attributes v0.1.31
+   Compiling libloading v0.8.9
+   Compiling pin-project-lite v0.2.17
+   Compiling crc32fast v1.5.0
+   Compiling tracing v0.1.44
+   Compiling matchers v0.2.0
+   Compiling indexmap v2.14.0
+   Compiling tracing-log v0.2.0
+   Compiling sharded-slab v0.1.7
+   Compiling thread_local v1.1.10
+   Compiling nu-ansi-term v0.50.3
+   Compiling zlib-rs v0.6.7
+   Compiling flate2 v1.1.9
+   Compiling tracing-subscriber v0.3.23
+   Compiling byteorder v1.5.0
+   Compiling typed-path v0.12.3
+   Compiling scoped-tls v1.0.1
+   Compiling loom v0.5.6
+   Compiling zip v8.6.0
+   Compiling ristretto_classfile v0.32.1
+   Compiling mantle-jvm v0.0.0 (<projects>/mantle-rust-fix/crates/mantle-jvm)
+   Compiling sha2 v0.11.0
+   Compiling mantle-reference v0.0.0 (<projects>/mantle-rust-fix/tools/reference)
+   Compiling mantle-jvm-gate v0.0.0 (<projects>/mantle-rust-fix/tools/jvm-gate)
+   Compiling mantle-media-bench v0.0.0 (<projects>/mantle-rust-fix/tools/media-bench)
+   Compiling mantle-worker-bench v0.0.0 (<projects>/mantle-rust-fix/tools/worker-bench)
+   Compiling mantle-xaac v0.0.0 (<projects>/mantle-rust-fix/crates/mantle-xaac)
+   Compiling mantle-core v0.0.0 (<projects>/mantle-rust-fix/crates/mantle-core)
+   Compiling mantle-oracle v0.0.0 (<projects>/mantle-rust-fix/tools/oracle)
+   Compiling mantle-audio-layout-bench v0.0.0 (<projects>/mantle-rust-fix/tools/audio-layout-bench)
+   Compiling mantle-opus v0.0.0 (<projects>/mantle-rust-fix/crates/mantle-opus)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2m 23s
+     Running unittests src/lib.rs (target/debug/deps/mantle_audio-a25079943bd6698c)
+
+running 34 tests
+test filter::tests::equalizer_is_live_clamped_resettable_and_48khz_only ... ok
+test filter::tests::factory_order_limit_and_atomic_replacement_are_explicit ... ok
+test filter::tests::pipeline_rejects_wrong_or_uninitialized_frame_format ... ok
+test filter::tests::finish_emits_terminal_samples_before_one_final_padding ... ok
+test filter::tests::first_absent_timestamp_keeps_stream_clocks_absent ... ok
+test opus::tests::quality_clamps_like_lavaplayer ... ok
+test filter::tests::replacement_preserves_partial_frame_without_padding_at_rate_boundary ... ok
+test filter::tests::reset_replacement_drop_and_capacity_failures_are_deterministic ... ok
+test passthrough::tests::compatible_packets_transition_to_exact_direct_delivery ... ok
+test passthrough::tests::duration_and_packet_bounds_are_checked_without_mutating_output ... ok
+test passthrough::tests::volume_filters_and_geometry_force_explicit_transcode_transitions ... ok
+test queue::tests::configuration_is_hard_bounded ... ok
+test filter::tests::surplus_is_retained_across_reads_and_fixed_filters_keep_graph_order ... ok
+test opus::tests::encodes_compatible_pcm_into_stable_inline_storage ... ok
+test queue::tests::full_empty_fifo_and_clear_contracts_are_explicit ... ok
+test resample::tests::configuration_format_finish_and_input_bounds_are_enforced ... ok
+test resample::tests::first_block_without_timestamp_keeps_stream_timestamps_absent ... ok
+test tests::fixed_encoded_slot_rejects_oversize_before_mutation ... ok
+test tests::format_rejects_zero_rate_and_out_of_scope_channels ... ok
+test tests::pcm_storage_never_grows_and_rejects_invalid_geometry_before_mutation ... ok
+test resample::tests::reset_reproduces_output_and_clears_finished_state ... ok
+test tests::signed_pcm_conversion_matches_the_reference_scale ... ok
+test transform::tests::channel_mapping_is_reference_compatible_and_allocation_stable ... ok
+test transform::tests::channel_mapping_rejects_capacity_before_mutation ... ok
+test transform::tests::sample_conversion_and_volume_match_reference_integer_semantics ... ok
+test transform::tests::sample_conversion_rejects_small_output_before_mutation ... ok
+test opus::tests::reset_reproduces_output_volume_is_applied_and_bad_geometry_preserves_the_slot ... ok
+test allocation_tests::passthrough_and_spsc_delivery_allocate_zero_times_after_construction ... ok
+test filter::tests::variable_rate_changes_paced_duration_and_keeps_both_clocks_monotonic ... ok
+test queue::tests::endpoints_transfer_fifty_thousand_frames_in_order_across_threads ... ok
+test resample::tests::streams_irregular_chunks_to_exact_length_without_reallocation ... ok
+test allocation_tests::streaming_pcm_assembly_allocates_zero_times_after_construction ... ok
+test allocation_tests::pcm_opus_encoding_and_spsc_delivery_allocate_zero_times_after_construction ... ok
+test allocation_tests::opus_decode_filter_encode_allocates_zero_times_after_construction ... ok
+
+test result: ok. 34 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.72s
+
+     Running unittests src/main.rs (target/debug/deps/mantle_audio_layout_bench-989b8b3beba6ff1e)
+
+running 2 tests
+test tests::layouts_produce_equal_results_for_every_workload ... ok
+test tests::parses_required_layout_workload_and_bounds_iterations ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/mantle_core-4d1ed3120d604d47)
+
+running 20 tests
+test clock::tests::manual_clock_is_shared_and_monotonic_when_advanced ... ok
+test engine::tests::defaults_match_reference_and_resources_are_bounded ... ok
+test engine::tests::internal_track_adapter_can_consume_its_queued_frame ... ok
+test engine::tests::manual_time_proves_one_shot_stuck_cleanup_and_shutdown ... ok
+test engine::tests::marker_states_cover_late_overwrite_remove_seek_playback_and_stop ... ok
+test engine::tests::pause_resume_volume_user_data_and_frame_delivery_are_deterministic ... ok
+test load::tests::cancellation_promotes_the_next_equal_key_and_shutdown_rejects_work ... ok
+test engine::tests::play_no_interrupt_replace_stop_and_listener_order_match_reference ... ok
+test load::tests::cancelling_queued_work_keeps_the_running_channel_head ... ok
+test load::tests::every_configured_bound_is_enforced ... ok
+test load::tests::equal_keys_are_serial_and_other_keys_are_independent ... ok
+test load::tests::terminal_state_history_is_bounded ... ok
+test serialization::tests::configured_limits_fail_before_oversized_fields_are_accepted ... ok
+test serialization::tests::full_track_round_trip_preserves_metadata_position_and_modified_utf8 ... ok
+test serialization::tests::generic_source_details_preserve_modified_utf_name_and_opaque_payload ... ok
+test serialization::tests::malformed_details_have_stable_error_categories ... ok
+test serialization::tests::synthetic_details_match_the_lavaplayer_2_2_6_golden ... ok
+test serialization::tests::version_one_records_default_newer_nullable_metadata ... ok
+test serialization::tests::every_truncation_and_a_deterministic_malformed_corpus_are_panic_free ... ok
+test engine::tests::operation_sequence_invariants_hold_exhaustively ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/phase11_async_loading.rs (target/debug/deps/phase11_async_loading-977485a1eba0afa8)
+
+running 7 tests
+test synchronous_dispatch_reports_each_terminal_shape_exactly_once ... ok
+test executor_accepts_source_registration_after_loading_has_started ... ok
+test registration_does_not_wait_for_a_running_source_callback ... ok
+test rejection_reports_one_failure_returns_a_completed_handle_and_releases_the_lease ... ok
+test pending_and_running_cancellation_suppress_selection_or_callbacks_and_release_leases ... ok
+test shutdown_cancels_pending_and_running_work_and_rejects_future_submissions ... ok
+test async_equal_keys_are_fifo_while_unequal_keys_can_run_concurrently ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/phase11_load_ordering.rs (target/debug/deps/phase11_load_ordering-6601f504d4f35756)
+
+running 2 tests
+test native_equality_keys_serialize_equal_values_and_keep_other_values_independent ... ok
+test opaque_boundary_tokens_preserve_fifo_cancellation_and_capacity ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/phase11_source_registry.rs (target/debug/deps/phase11_source_registry-950b775d31223772)
+
+running 6 tests
+test descriptor_references_only_call_probing_sources_and_failures_do_not_fall_through ... ok
+test every_bound_and_ordered_idempotent_shutdown_are_enforced ... ok
+test encoding_uses_the_owner_but_duplicate_name_decoding_uses_the_first_registration ... ok
+test full_wire_records_use_the_owner_for_encoding_and_first_name_match_for_decoding ... ok
+test referrals_restart_at_the_first_source_and_are_bounded_to_five_passes ... ok
+test registration_is_append_only_and_first_non_null_result_wins ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/mantle_jvm-846a696ebf0e00de)
+
+running 13 tests
+test load_bridge::tests::gate_source_distinguishes_track_pending_and_missing ... ok
+test ordering_key::tests::comparison_failure_is_transactional_and_shutdown_releases_and_rejects ... ok
+test load_bridge::tests::yandex_gate_source_preserves_native_result_and_empty_detail_contracts ... ok
+test load_bridge::tests::youtube_gate_source_preserves_native_result_and_empty_detail_contracts ... ok
+test ordering_key::tests::equal_objects_share_one_token_and_reference_until_the_last_lease ... ok
+test ordering_key::tests::hash_collisions_stay_distinct_and_capacity_is_bounded ... ok
+test ordering_key::tests::terminal_hooks_use_a_bounded_release_handoff_and_fire_once ... ok
+test playback_bridge::tests::appends_stereo_and_expands_mono_without_crossing_frame_bounds ... ok
+test playback_bridge::tests::rejects_misaligned_or_unsupported_pcm ... ok
+test registry::tests::wrong_type_and_double_release_are_safe ... ok
+test registry::tests::generation_rejects_stale_handle_after_slot_reuse ... ok
+test ordering_key::tests::phase15_bounded_release_queue_survives_concurrent_workers_and_shutdown ... ok
+test ordering_key::tests::phase15_loom_terminal_release_is_exactly_once ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/main.rs (target/debug/deps/mantle_jvm_gate-c13bedf0dadc57d3)
+
+running 2 tests
+test emitter::tests::abi_body_has_success_and_failure_paths ... ok
+test tests::generated_java_consumers_require_encoding_portable_source ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/mantle_media-cc74e46bfd001b76)
+
+running 26 tests
+test beam::tests::canonical_url_uses_the_legacy_source_host ... ok
+test getyarn::tests::canonical_url_upgrades_historical_http_pages ... ok
+test bandcamp::tests::decoder_handles_named_and_numeric_entities_once ... ok
+test http_input::tests::dependency_trace_logging_is_compile_time_disabled ... ok
+test http_input::tests::public_address_policy_denies_special_ranges ... ok
+test http_input::tests::request_count_configuration_has_hard_ceilings ... ok
+test http_input::tests::content_range_parser_rejects_duplicates_and_inconsistent_numbers ... ok
+test http_input::tests::staging_storage_is_private_and_anonymous ... ok
+test niconico::tests::sequence_iv_places_the_media_sequence_in_the_low_64_bits ... ok
+test soundcloud::tests::routes_and_rejects_strict_inputs ... ok
+test source::tests::probe_details_match_lavaplayer_ascii_modified_utf_records ... ok
+test niconico::tests::playlist_and_origin_failures_are_bounded_and_explicit ... ok
+test source::tests::schemes_playlist_hints_and_extensions_are_strict_and_deterministic ... ok
+test tests::derives_bounded_opus_packet_durations_from_the_toc ... ok
+test tests::parses_lc_and_explicit_he_audio_specific_configs ... ok
+test youtube::live_player_script_tests::current_player_script_matches_native_cipher_grammar ... ignored, requires MANTLE_YOUTUBE_PLAYER_SCRIPT_PATH from the bounded live validator
+test twitch::tests::routing_normalizes_current_mobile_and_go_hosts ... ok
+test vimeo::tests::routing_keeps_unlisted_hashes_but_discards_tracking_queries ... ok
+test youtube_cipher_process::tests::deno_profile_is_self_contained_and_grants_no_permissions ... ok
+test youtube_playback::tests::repeated_opus_bypass_transitions_preserve_packet_order_and_source_clock ... ok
+test youtube_playback::tests::fallback_duplicates_mono_and_emits_one_padded_final_frame ... ok
+test youtube_playback::tests::fallback_resamples_low_rate_pcm_into_monotonic_fixed_opus_frames ... ok
+test youtube_playback::tests::variable_rate_stage_changes_pcm_transcoder_paced_duration ... ok
+test youtube_playback::tests::pcm_seek_after_eof_resets_decoder_history ... ok
+test youtube_playback::tests::seek_after_eof_reproduces_fresh_transcoded_audio ... ok
+test youtube_playback::tests::filter_changes_preserve_exact_audio_for_decoded_and_resampled_input ... ok
+
+test result: ok. 25 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 3.48s
+
+     Running tests/mp4_packet_preflight.rs (target/debug/deps/mp4_packet_preflight-6f05697dd65a8b14)
+
+running 2 tests
+test rejects_oversized_constant_sample_size_before_backend_probe ... ok
+test rejects_oversized_per_sample_size_before_backend_probe ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/phase10_hls.rs (target/debug/deps/phase10_hls-c3220b5ed9ae8985)
+
+running 10 tests
+test every_hls_limit_must_be_nonzero ... ok
+test live_completion_reload_limit_and_configuration_fail_explicitly ... ok
+test hls_collections_and_durations_are_hard_bounded ... ok
+test live_media_playlist_cannot_be_misused_as_vod ... ok
+test live_sequence_emits_oldest_unseen_segments_then_polls_to_the_duration_deadline ... ok
+test media_playlist_models_sequences_durations_titles_and_discontinuities ... ok
+test master_playlist_preserves_variant_order_and_resolves_uris ... ok
+test unsupported_or_malformed_hls_features_fail_explicitly ... ok
+test vod_sequence_delivers_each_segment_once_and_has_stable_eof ... ok
+test live_history_remains_bounded_during_a_long_sliding_window_simulation ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.38s
+
+     Running tests/phase10_mpeg_ts.rs (target/debug/deps/phase10_mpeg_ts-c2dcd9376c1b87f1)
+
+running 5 tests
+test every_mpeg_ts_limit_must_be_nonzero ... ok
+test packet_psi_pes_output_and_metadata_limits_are_enforced ... ok
+test malformed_transport_packets_continuity_and_pes_truncation_fail_explicitly ... ok
+test missing_tables_or_adts_streams_fail_without_guessing_a_pid ... ok
+test extracts_pat_pmt_pes_adts_and_sdt_metadata_then_uses_the_existing_decoder ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/phase10_playlists.rs (target/debug/deps/phase10_playlists-b64cf94db3745ca3)
+
+running 10 tests
+test every_playlist_limit_must_be_nonzero ... ok
+test hls_classification_precedes_an_ordinary_m3u_referral ... ok
+test http_reference_resolution_rejects_credentials_and_other_schemes ... ok
+test m3u_preserves_referral_order_and_extinf_stream_classification ... ok
+test http_references_resolve_relative_paths_queries_and_authorities ... ok
+test malformed_utf8_outside_a_reference_is_replaced_without_failure ... ok
+test non_playlist_bytes_and_empty_playlists_do_not_match ... ok
+test plain_lists_are_explicit_and_keep_first_supported_line ... ok
+test playlist_limits_fail_before_returning_a_partial_result ... ok
+test pls_pairs_entries_by_numeric_index_deterministically ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/phase11_sources.rs (target/debug/deps/phase11_sources-cf8192bcff3fb45b)
+
+running 4 tests
+test source_cancellation_stops_local_selection_before_probe ... ok
+test local_source_probes_metadata_and_round_trips_registry_owned_wire_details ... ok
+test http_source_turns_ordinary_playlists_into_referrals_and_hls_into_tracks ... ok
+test http_source_probes_bounded_ranges_and_reports_invalid_media_as_failure ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/phase12_bandcamp.rs (target/debug/deps/phase12_bandcamp-74baa93bc217e530)
+
+running 7 tests
+test scheduled_live_track_smoke ... ignored, scheduled live-service smoke; not a normal PR gate
+test routes_current_track_and_album_pages_strictly ... ok
+test source_details_reconstruct_tracks_and_shutdown_is_terminal ... ok
+test album_replay_preserves_service_order_and_page_metadata ... ok
+test track_replay_parses_current_attribute_and_refreshes_signed_playback ... ok
+test parser_bounds_malformed_pages_and_terminal_states_fail_closed ... ok
+test freshly_resolved_mp3_uses_the_bounded_media_pipeline ... ok
+
+test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/phase12_beam.rs (target/debug/deps/phase12_beam-3704d7bf7b3e4899)
+
+running 4 tests
+test cancellation_invalid_routes_bounds_and_shutdown_are_explicit ... ok
+test legacy_empty_details_reconstruct_the_composite_identifier_exactly ... ok
+test recognized_routes_return_terminal_no_track_without_falling_through ... ok
+test routes_only_the_historical_https_beam_and_mixer_shapes ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/phase12_getyarn.rs (target/debug/deps/phase12_getyarn-30a6cc4679b24f3c)
+
+running 4 tests
+test cancellation_invalid_routes_bounds_and_shutdown_are_explicit ... ok
+test legacy_empty_details_retain_page_and_media_roles_without_logging_media_url ... ok
+test recognized_pages_return_terminal_no_track_without_falling_through ... ok
+test routes_only_bounded_historical_getyarn_clip_pages ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/phase12_niconico.rs (target/debug/deps/phase12_niconico-970e9e17e8c0afbe)
+
+running 6 tests
+test scheduled_live_watch_and_access_rights_smoke ... ignored, scheduled live-service smoke; playback delivery is region conditional
+test routes_current_watch_and_shorts_urls_strictly ... ok
+test malformed_watch_data_and_cancelled_load_are_stable_failures ... ok
+test source_manager_uses_empty_details_and_lifecycle_guards ... ok
+test watch_and_access_rights_replay_builds_metadata_without_leaking_secrets ... ok
+test encrypted_cmaf_audio_replay_opens_and_decodes_pcm ... ok
+
+test result: ok. 5 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/phase12_remote_http.rs (target/debug/deps/phase12_remote_http-7c1406e9ac598c42)
+
+running 10 tests
+test rejects_unbounded_policy_and_credential_bearing_request_syntax ... ok
+test enforces_ssrf_policy_and_redacts_request_credentials ... ok
+test request_specific_response_ceiling_is_validated_and_enforced ... ok
+test bounds_request_and_response_bodies_before_allocation_growth ... ok
+test sends_bounded_get_and_post_requests_without_exposing_response_secrets ... ok
+test routed_client_binds_each_selected_ip_and_reports_connection_outcomes ... ok
+test follows_headerless_redirects_but_never_forwards_caller_headers ... ok
+test retries_only_explicitly_idempotent_posts_with_bounded_backoff ... ok
+test classifies_statuses_and_retry_after_without_returning_error_bodies ... ok
+test cancellation_interrupts_retry_backoff_promptly ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/phase12_soundcloud.rs (target/debug/deps/phase12_soundcloud-a677ccd9a240f107)
+
+running 5 tests
+test routes_current_inputs_and_rejects_unsafe_shapes ... ok
+test resolve_replay_builds_bounded_track_and_preserves_auth_policy ... ok
+test source_manager_maps_route_and_shutdown_without_leaking_details ... ok
+test bounds_errors_cancellation_and_empty_source_details_fail_closed ... ok
+test search_and_playlist_replays_preserve_order_and_access_states ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/phase12_twitch.rs (target/debug/deps/phase12_twitch-14dd556bd5804b55)
+
+running 8 tests
+test scheduled_live_helix_metadata_smoke ... ignored, requires caller-owned Twitch client ID, access token, and known-live channel
+test routes_current_live_channel_hosts_strictly ... ok
+test invalid_authentication_and_option_bounds_fail_before_network_use ... ok
+test helix_replay_builds_live_metadata_and_keeps_credentials_private ... ok
+test source_contract_reconstructs_empty_details_and_shutdown_is_terminal ... ok
+test helix_offline_auth_rate_limit_and_cancellation_are_distinct ... ok
+test compatibility_query_is_bounded_redacted_and_never_receives_oauth ... ok
+test signed_master_selects_lowest_bandwidth_and_reuses_bounded_live_pipeline ... ok
+
+test result: ok. 7 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/phase12_vimeo.rs (target/debug/deps/phase12_vimeo-897833c64628b10c)
+
+running 7 tests
+test scheduled_live_public_config_smoke ... ignored, scheduled live-service smoke; not a normal PR gate
+test routes_current_public_and_player_urls_strictly ... ok
+test hls_only_public_config_is_observable_but_not_misparsed_as_progressive_mp4 ... ok
+test public_config_replay_builds_metadata_and_refreshes_lowest_mp4 ... ok
+test authenticated_api_replay_uses_official_headers_and_redacts_the_token ... ok
+test bounds_errors_cancellation_source_details_and_shutdown_fail_closed ... ok
+test authenticated_audio_mp4_uses_the_bounded_media_pipeline ... ok
+
+test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/phase12_yandex_music.rs (target/debug/deps/phase12_yandex_music-56a4d290b0b24035)
+
+running 12 tests
+test routes_current_track_album_playlist_search_and_recommendation_inputs_strictly ... ok
+test authenticated_track_replay_builds_current_metadata_without_exposing_credentials ... ok
+test user_and_uuid_playlist_replays_accept_wrapped_tracks_and_liked_song_names ... ok
+test playback_replay_selects_the_best_mp3_and_builds_the_pinned_md5_url ... ok
+test search_and_recommendation_replays_use_form_encoding_and_search_classification ... ok
+test album_and_artist_replays_preserve_bounded_collection_metadata_and_order ... ok
+test collection_limits_and_empty_region_results_fail_without_partial_playlists ... ok
+test authentication_response_bounds_cancellation_and_source_details_fail_closed ... ok
+test unavailable_mismatched_and_oversized_metadata_do_not_produce_partial_tracks ... ok
+test resolved_mp3_opens_through_bounded_range_input_and_decodes_pcm ... ok
+test playback_bounds_and_media_mismatch_fail_without_exposing_urls ... ok
+test playback_resolution_rejects_candidate_xml_origin_and_cancellation_failures ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/phase12_youtube.rs (target/debug/deps/phase12_youtube-8d30949dc5ecf823)
+
+running 42 tests
+test deno_process_cipher_provider_executes_packaged_adapter_without_permissions ... ignored, Deno-equipped CI executes the packaged no-permission EJS provider
+test default_clients_preserve_the_pinned_order_and_capabilities ... ok
+test authentication_and_source_policy_reject_invalid_bounds ... ok
+test authentication_is_applied_but_never_appears_in_diagnostics ... ok
+test process_cipher_fixture_child ... ignored, subprocess fixture invoked only by isolated process-provider tests
+test playback_discovery_obeys_preflight_cancellation ... ok
+test music_search_uses_the_music_endpoint_and_bounded_result_shape ... ok
+test live_metadata_and_preflight_cancellation_are_deterministic ... ok
+test routes_current_video_playlist_mix_and_search_identifiers ... ok
+test mix_loading_falls_through_clients_and_selects_the_requested_track ... ok
+test scheduled_live_video_and_playback_discovery_smoke ... ignored, scheduled live-service metadata/playback-discovery smoke; not a normal PR gate
+test mix_track_limit_fails_closed ... ok
+test ordinary_search_falls_through_clients_and_skips_non_tracks ... ok
+test native_cipher_program_fails_closed_at_the_operation_limit_and_caches_failure ... ok
+test oauth_device_exchange_is_caller_polled_bounded_and_redacted ... ok
+test player_metadata_enforces_string_and_thumbnail_bounds ... ok
+test youtube_track_details_are_empty_and_reconstruct_from_outer_info ... ok
+test playback_discovery_falls_through_clients_and_prefers_stereo_non_drc_opus ... ok
+test video_loading_falls_through_clients_and_builds_bounded_track_metadata ... ok
+test playback_format_and_live_content_length_limits_fail_closed ... ok
+test oauth_polling_outcomes_and_response_ceiling_fail_closed ... ok
+test public_offline_handoff_preserves_validation_filters_seek_and_mode_transitions ... ok
+test finite_media_handoff_rejects_mismatch_bounds_and_preflight_cancellation ... ok
+test native_cipher_program_resolves_signature_and_n_without_executing_javascript ... ok
+test metadata_loading_does_not_require_playback_but_playback_still_does ... ok
+test playlist_loading_follows_bounded_continuations_and_selects_the_requested_track ... ok
+test live_hls_handoff_rejects_finite_selection_and_preflight_cancellation ... ok
+test result_and_page_limits_fail_closed_without_overfetching ... ok
+test unavailable_metadata_cannot_invent_a_track ... ok
+test bounded_cipher_provider_handles_current_script_shapes_and_validates_output ... ok
+test player_script_acquisition_is_bounded_and_diagnostics_redact_its_url ... ok
+test playback_discovery_preserves_bounded_cipher_inputs_without_logging_them ... ok
+test tv_oauth_refresh_is_cached_rotated_and_scoped_to_player_requests ... ok
+test finite_webm_opus_handoff_preserves_the_exact_passthrough_packet ... ok
+test isolated_process_cipher_provider_uses_the_bounded_protocol_without_a_shell ... ok
+test finite_opus_session_seeks_filters_and_returns_safely_to_passthrough ... ok
+test finite_streaming_filter_pulls_resets_replaces_and_restores_passthrough ... ok
+test finite_aac_handoff_uses_the_normal_pcm_to_opus_fallback ... ok
+test isolated_process_cipher_provider_enforces_timeout_and_cancellation ... ok
+test live_hls_handoff_reloads_at_deadlines_and_preserves_continuous_output ... ok
+test staged_playback_reopens_after_eof_without_network_or_previous_cancellation ... ok
+test public_offline_handoff_drains_complete_opus_mp3_aac_and_flac_fixtures ... ok
+
+test result: ok. 39 passed; 0 failed; 3 ignored; 0 measured; 0 filtered out; finished in 0.88s
+
+     Running tests/phase6_http.rs (target/debug/deps/phase6_http-b1fcb618cccd3ea2)
+
+running 20 tests
+test denies_loopback_by_default_without_making_a_request ... ok
+test playlist_loading_shares_parser_bounds_and_cancellation ... ok
+test loads_a_redirected_playlist_and_resolves_against_the_final_uri ... ok
+test loads_an_hls_master_then_sequences_its_vod_media_playlist ... ok
+test body_recovery_is_bounded_across_partial_progress_and_cancellation ... ok
+test live_http_reload_obeys_manual_deadlines_and_cancellation_without_early_requests ... ok
+test follows_bounded_redirects_and_reuses_the_final_uri ... ok
+test staged_open_honors_cancellation_and_response_validation ... ok
+test staging_ceiling_preserves_streaming_for_larger_objects ... ok
+test rejects_redirect_overflow_and_changed_range_validators_without_leaking_urls ... ok
+test retries_one_transient_range_response_and_obeys_cancellation ... ok
+test staged_ranges_read_and_seek_after_the_origin_is_gone ... ok
+test rejects_non_range_encoded_and_oversized_responses_without_leaking_urls ... ok
+test body_recovery_resumes_at_consumed_byte_and_preserves_exact_media ... ok
+test reads_bounded_finite_and_chunked_non_range_bodies ... ok
+test body_recovery_requires_unchanged_strong_identity_and_exact_range ... ok
+test decodes_and_seeks_over_bounded_http_ranges ... ok
+test loads_bounded_hls_segment_bytes_and_observes_cancellation ... ok
+test body_recovery_has_one_total_deadline ... ok
+test joins_multiple_http_mpeg_ts_segments_into_one_continuous_adts_session ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests/phase6_media.rs (target/debug/deps/phase6_media-f83e53af779c939e)
+
+running 10 tests
+test extracts_webm_opus_packets_without_growing_caller_storage ... ok
+test enforces_probe_packet_pcm_and_output_bounds ... ok
+test malformed_inputs_fail_without_producing_unbounded_output ... ok
+test initialized_he_aac_session_can_transfer_to_its_media_worker ... ok
+test enforces_native_aac_configuration_memory_pcm_and_output_bounds ... ok
+test probes_primary_frozen_formats ... ok
+test seeks_each_primary_local_path ... ok
+test corrupted_he_aac_payloads_terminate_within_packet_and_output_bounds ... ok
+test decodes_he_aac_profiles_with_bounded_reusable_storage ... ok
+test decodes_pcm_without_growing_caller_storage ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.63s
+
+     Running tests/phase7_allocations.rs (target/debug/deps/phase7_allocations-fcca795321689e7f)
+
+running 3 tests
+test concurrent_allocation_measurements_are_isolated ... ok
+test opus_packet_extraction_has_two_bounded_backend_allocations_per_packet ... ok
+test decoded_reads_have_a_stable_bounded_allocation_envelope_after_warmup ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s
+
+     Running tests/phase7_opus.rs (target/debug/deps/phase7_opus-f31c62709c763a77)
+
+running 1 test
+test routes_real_compatible_webm_packets_without_growing_output_storage ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/phase9_contracts.rs (target/debug/deps/phase9_contracts-c063a8f7048fc9a8)
+
+running 24 tests
+test cancellation_before_open_stops_probe ... ok
+test metadata_strings_obey_the_caller_limit ... ok
+test zero_codec_probe_limit_is_rejected ... ok
+test zero_metadata_limit_is_rejected ... ok
+test malformed_and_truncated_fragmented_mp4_terminate_within_bounds ... ok
+test wav_rejects_reference_invalid_channel_and_rate_headers ... ok
+test forward_only_tagged_mp3_uses_bounded_metadata_preflight ... ok
+test malformed_and_truncated_ebml_mappings_terminate_within_bounds ... ok
+test high_bit_depth_extensible_wav_satisfies_the_shared_pcm_contract ... ok
+test wav_mono_and_sample_rate_edges_satisfy_the_current_pcm_scope ... ok
+test malformed_and_truncated_extensible_wav_terminate_within_bounds ... ok
+test raw_adts_profile_probe_is_bounded_and_supports_forward_only_input ... ok
+test cbr_and_tagged_xing_vbr_mp3_satisfy_the_shared_contract ... ok
+test tagged_flac_satisfies_the_shared_pcm_contract ... ok
+test malformed_and_truncated_ogg_mappings_terminate_within_bounds ... ok
+test malformed_and_truncated_mp3_terminate_within_bounds ... ok
+test wav_sample_widths_decode_to_the_same_signal ... ok
+test standard_and_fragmented_mp4_satisfy_the_shared_contract ... ok
+test ogg_opus_flac_and_vorbis_satisfy_the_shared_contracts ... ok
+test malformed_and_truncated_native_flac_terminate_within_bounds ... ok
+test matroska_vorbis_and_aac_profiles_satisfy_the_shared_contract ... ok
+test raw_adts_crc_and_aac_profiles_satisfy_the_sequential_contract ... ok
+test raw_adts_scans_crc_and_malformed_headers_within_bounds ... ok
+test current_decoded_formats_satisfy_the_shared_pcm_contract ... ok
+
+test result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.60s
+
+     Running unittests src/main.rs (target/debug/deps/mantle_media_bench-20613a41a60d47fc)
+
+running 5 tests
+test tests::parses_closed_bounded_ranges ... ok
+test tests::accepts_only_bounded_soak_checkpoint_schedules ... ok
+test tests::parses_run_modes_without_retaining_input_in_results ... ok
+test tests::summarizes_with_nearest_rank_percentiles ... ok
+test tests::summarizes_soak_memory_from_fixed_edge_windows ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/replay_fault_soak.rs (target/debug/deps/mantle_replay_fault_soak-613fe738551f3214)
+
+running 3 tests
+test tests::accepts_only_the_bounded_full_checkpoint_schedule ... ok
+test tests::request_counts_are_exact_and_constant_size ... ok
+test tests::summarizes_fixed_memory_edge_windows ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/mantle_opus-af5bc33829da6487)
+
+running 3 tests
+test tests::rejects_invalid_configuration_and_lengths_before_output_mutation ... ok
+test tests::encodes_into_caller_storage_and_reset_reproduces_the_packet ... ok
+test tests::decoder_round_trip_and_reset_are_deterministic ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/mantle_oracle-02c7560ad3cb51e1)
+
+running 4 tests
+test schema::tests::protocol_hex_encodes_untrusted_text ... ok
+test schema::tests::validates_references_and_lifecycle ... ok
+test trace::tests::comparison_preserves_evidence_from_both_backends ... ok
+test trace::tests::raw_record_rejects_unknown_fields ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/mantle_reference-1aa61f07bb2a7046)
+
+running 9 tests
+test inventory::tests::extracts_balanced_method_body ... ok
+test inventory::tests::extracts_external_types_from_descriptors_and_signatures ... ok
+test inventory::tests::parses_pom_dependency_defaults ... ok
+test inventory::tests::extracts_registration_order ... ok
+test tests::parses_media_proof_options ... ok
+test tests::parses_open_ended_http_range ... ok
+test tests::rejects_invalid_http_range ... ok
+test tests::rejects_invalid_pcm_chunk_size ... ok
+test tests::summary_uses_nearest_rank_percentiles ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/mantle_symphonia_isomp4-1e646fca6777878e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/mantle_worker_bench-720bc67f703296b9)
+
+running 10 tests
+test oracle::tests::all_delivered_ticks_are_counted_exactly ... ok
+test oracle::tests::empty_reads_are_one_underrun_per_track_and_tick ... ok
+test oracle::tests::skipped_deadlines_count_only_whole_periods ... ok
+test oracle::tests::wrong_tick_width_is_rejected_without_mutating_counts ... ok
+test tests::parses_bounded_synthetic_configuration ... ok
+test tests::real_workload_requires_input_and_resource_bounds_are_enforced ... ok
+test tests::summaries_use_nearest_rank_percentiles ... ok
+test tests::shared_worker_density_is_bounded_by_track_count_and_limit ... ok
+test tests::independent_pcm_sources_are_bit_exact_across_threads ... ok
+test tests::independent_pcm_sources_are_bit_exact_when_interleaved ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+     Running unittests src/lib.rs (target/debug/deps/mantle_xaac-54ce44ee1c3a9ace)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests mantle_audio
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests mantle_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests mantle_jvm
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests mantle_media
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests mantle_opus
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests mantle_symphonia_isomp4
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests mantle_xaac
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

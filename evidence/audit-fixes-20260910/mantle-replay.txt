@@ -1,0 +1,131 @@
+   Compiling mantle-audio v0.0.0 (<projects>/mantle-rust-fix/crates/mantle-audio)
+   Compiling mantle-media v0.0.0 (<projects>/mantle-rust-fix/crates/mantle-media)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 13.36s
+     Running unittests src/lib.rs (target/debug/deps/mantle_media-de8d8f42b50edb99)
+
+running 2 tests
+test youtube_playback::tests::pcm_seek_after_eof_resets_decoder_history ... ok
+test youtube_playback::tests::seek_after_eof_reproduces_fresh_transcoded_audio ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 24 filtered out; finished in 3.74s
+
+     Running tests/mp4_packet_preflight.rs (target/debug/deps/mp4_packet_preflight-6671e2a72082e49a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/phase10_hls.rs (target/debug/deps/phase10_hls-a61a65bef13cb3e4)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+     Running tests/phase10_mpeg_ts.rs (target/debug/deps/phase10_mpeg_ts-4f0f56e4c13f9418)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/phase10_playlists.rs (target/debug/deps/phase10_playlists-0cb0cd3c13afa65c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+     Running tests/phase11_sources.rs (target/debug/deps/phase11_sources-d54d025c34586964)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/phase12_bandcamp.rs (target/debug/deps/phase12_bandcamp-e0d3cfdf0865d9c5)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/phase12_beam.rs (target/debug/deps/phase12_beam-2c0962b3ee134c38)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/phase12_getyarn.rs (target/debug/deps/phase12_getyarn-01ad29bb3162f524)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/phase12_niconico.rs (target/debug/deps/phase12_niconico-e8034e4b1dea6ee2)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s
+
+     Running tests/phase12_remote_http.rs (target/debug/deps/phase12_remote_http-97124202656af57f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+     Running tests/phase12_soundcloud.rs (target/debug/deps/phase12_soundcloud-b35917adefbcb3cd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/phase12_twitch.rs (target/debug/deps/phase12_twitch-0f84489e2325d146)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.00s
+
+     Running tests/phase12_vimeo.rs (target/debug/deps/phase12_vimeo-4015a57a45aef2d6)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/phase12_yandex_music.rs (target/debug/deps/phase12_yandex_music-e4738b03847793e9)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.00s
+
+     Running tests/phase12_youtube.rs (target/debug/deps/phase12_youtube-85ef05a308f01b24)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 42 filtered out; finished in 0.00s
+
+     Running tests/phase6_http.rs (target/debug/deps/phase6_http-6d8988c22a2d08d7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 20 filtered out; finished in 0.00s
+
+     Running tests/phase6_media.rs (target/debug/deps/phase6_media-90aace465cd784ae)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
+
+     Running tests/phase7_allocations.rs (target/debug/deps/phase7_allocations-6ddc247c289eb813)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+     Running tests/phase7_opus.rs (target/debug/deps/phase7_opus-f83496e8875fd7a5)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/phase9_contracts.rs (target/debug/deps/phase9_contracts-632753a6d3e3de78)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 24 filtered out; finished in 0.00s
+
