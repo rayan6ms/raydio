@@ -1,0 +1,31 @@
+{
+  "status": "failed-incomplete",
+  "requestedSeconds": 21600,
+  "receiverSeconds": 9091.592203857423,
+  "receiverWallSeconds": 9092.595100000002,
+  "finishedAt": "2026-09-10T05:55:56.751Z",
+  "browserCheckpoint": {
+    "savesIncludingSetup": 154,
+    "errors": 0,
+    "maxSerializeMs": 6.5
+  },
+  "localHost": {
+    "inReceiverWindowSamples": 150,
+    "maximumSampleGapSeconds": 61.00507140159607
+  },
+  "beforeFinalPartialMinute": {
+    "seconds": 9059.544968994142,
+    "concealedSeconds": 13.062166666666666,
+    "silentConcealmentSeconds": 3.0922708333333335,
+    "concealmentMsPerMinute": 86.50875984194332
+  },
+  "shorterMidSongQuietMs": [
+    944.1041666666666,
+    784.8333333333334,
+    483.3541666666667,
+    63.145833333333336,
+    126.89583333333333,
+    319.5833333333333,
+    381.1458333333333
+  ]
+}

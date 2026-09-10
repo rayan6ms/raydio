@@ -1,0 +1,6 @@
+{
+  "previousMappingAt": "2026-09-09T22:39:26-03:00",
+  "nextMappingAt": "2026-09-10T02:57:00-03:00",
+  "publicIpv4Changed": true,
+  "note": "Endpoint changes and router NetworkFailure corroborate local network disruption; they do not prove Tailscale caused it."
+}

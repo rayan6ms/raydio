@@ -15,6 +15,7 @@ root=args.input
 r=json.loads((root/'receiver.json').read_text())
 start=dt.datetime.fromisoformat(r['startedAt'].replace('Z','+00:00'))
 end=start+dt.timedelta(seconds=r['elapsedSeconds'])
+planned_end=start+dt.timedelta(seconds=r.get('requestedSeconds',r['elapsedSeconds']))
 d=r['delta']
 samples_per_ms=r.get('codec',{}).get('clockRate',48000)/1000
 archive_warnings=[]
@@ -32,9 +33,30 @@ if archive.exists():
 log=re.sub(r'\x1b\[[0-9;]*m','',(root/'service.log').read_text())
 repeats=[]
 checkpoints=[]
+sender_events=[]
+sender_log_times=[]
 for line in log.splitlines():
     try: date=dt.datetime.fromisoformat(line.split()[0])
     except (ValueError,IndexError): continue
+    sender_log_times.append(date)
+    # A receiver failure must not hide a later sender failure. Keep this
+    # separate from the counters measured during the receiver window.
+    if start <= date <= planned_end:
+        kind = next((kind for text,kind in (
+            ('audio sender stopped after a terminal failure','audio-terminal-failure'),
+            ('voice connection failure','connection-failure'),
+            ('voice closed; cleaning up playback','session-cleanup'),
+            ('end watchdog','end-watchdog'),
+        ) if text in line),None)
+        if kind:
+            fields={key:value for key,value in re.findall(
+                r'\b(failure|dave_failure)=Some\((\w+)\)',line)}
+            fields.update({key:int(value) for key,value in re.findall(
+                r'\b(code|generation|position_ms|frames_sent|frames_unavailable|skipped_deadlines|send_failures|source_overruns|active_version)[=:] ?(\d+)',line)})
+            fields.update({key:value=='true' for key,value in re.findall(
+                r'\b(transition_pending|ready): (true|false)',line)})
+            sender_events.append({'utc':date.isoformat(),'kind':kind,
+                'afterReceiverEnd':date>end,**fields})
     if 'track started generation=' in line: repeats.append(date)
     if 'voice diagnostic checkpoint' in line:
         counters={k:int(v) for k,v in re.findall(r'(frames_sent|silence_frames_sent|frames_unavailable|skipped_deadlines|send_failures|source_overruns|active_send_gaps_40ms|active_send_gaps_100ms|active_send_gaps_1s): (\d+)',line)}
@@ -45,6 +67,11 @@ resources=[json.loads(x) for x in (root/'resources.jsonl').read_text().splitline
 samples=[s for s in resources if start <= dt.datetime.fromisoformat(s['utc']) <= end]
 mem=[s['pssKiB']/1024 for s in samples if 'pssKiB' in s]
 summary={'status':r['status'],'startedAt':r['startedAt'],'receiverSeconds':r['elapsedSeconds'],'coverage':r['coverage'],
+    'requestedSeconds':r.get('requestedSeconds'),'plannedEndAt':planned_end.isoformat(),
+    'receiverFinishedAt':r.get('finishedAt'),'receiverError':r.get('error'),
+    'unobservedRequestedSeconds':max(0,(planned_end-end).total_seconds()),
+    'senderEventsThroughPlannedEnd':sender_events,
+    'senderLogExtent':{'first':min(sender_log_times).isoformat(),'last':max(sender_log_times).isoformat()} if sender_log_times else None,
     'packetsReceived':d['packetsReceived'],'lostNet':d['packetsLost'],'positiveLoss':r['sampling']['positiveLossDeltas'],'negativeLossDeltas':r['sampling']['negativeLossDeltas'],
     'discarded':d['packetsDiscarded'],'nacks':d['nackCount'],'concealmentMs':d['concealedSamples']/samples_per_ms,'silentConcealmentMs':d['silentConcealedSamples']/samples_per_ms,
     'concealmentMsPerMinute':d['concealedSamples']/samples_per_ms/(r['elapsedSeconds']/60),'pcm':r['pcm'],'quietIntervals':quiet,
@@ -70,6 +97,14 @@ if (root/'checkpoints.jsonl').exists():
 summary['sourceHeadReferenceMs']=args.source_head_ms
 summary['quietClassificationCounts']={label:sum(q['classification']==label for q in quiet) for label in sorted({q['classification'] for q in quiet})}
 summary['evidenceWarnings']=archive_warnings
+if any(e['kind']=='audio-terminal-failure' for e in sender_events):
+    summary['evidenceWarnings'].append('terminal sender failure occurred during the requested observation window, possibly after receiver coverage ended')
+summary['hostCollectionCoverage']={
+    'samples':len(resources),
+    'first':resources[0]['utc'] if resources else None,
+    'last':resources[-1]['utc'] if resources else None,
+    'errors':sum('error' in sample for sample in resources),
+    'note':'Host collection after playback stops is not audio coverage; PSS and CPU above use only the receiver window.'}
 summary['persistedEventHistoryComplete']=r.get('persistedEventHistoryComplete',r['coverage'].get('completeEventHistory'))
 required=('frames_sent','silence_frames_sent','frames_unavailable','skipped_deadlines','send_failures','source_overruns')
 if len(checkpoints)>1:

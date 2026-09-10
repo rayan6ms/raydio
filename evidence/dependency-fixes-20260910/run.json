@@ -129,11 +129,23 @@
     "output": "target/dependency-six-hour-20260910/receiver"
   },
   "scope": "one Oracle Testbot, test/General, Rick Astley dQw4w9WgXcQ, volume70, loop on",
-  "qualification": "six-hour run started directly per user's latest request; first five minutes observed as qualification within same continuous run",
+  "qualification": "Started six-hour run directly as requested; no separate completed five-minute qualification before launch.",
   "sourceReference": "source-reference.json",
   "remainingLimits": [
     "single-receiver path cannot attribute every packet to a particular network hop",
     "source boundary classification is conservative temporal agreement, not captured-waveform alignment",
     "the setup interval was stopped after enabling Loop and is separate from this run"
-  ]
+  ],
+  "outcome": {
+    "status": "failed-incomplete",
+    "receiverFinishedAt": "2026-09-10T05:55:56.751Z",
+    "receiverSeconds": 9091.592203857423,
+    "plannedEndAt": "2026-09-10T09:24:24.157000+00:00",
+    "failure": "Receiver voice transport failed; sender later stopped with DaveTransition/InvalidState. Distinct events, not a proved single cause.",
+    "details": "results/summary.json",
+    "collectedEvidence": "results/raw-evidence.tar.gz",
+    "production": "inactive and disabled",
+    "testbot": "same PID 8963 online, playback cleaned up after terminal audio failure",
+    "newRunStarted": false
+  }
 }

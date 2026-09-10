@@ -1,0 +1,87 @@
+{
+  "archiveBytes": 223366,
+  "archiveSha256": "5ba9416ded3654f7d9da00ae6a13a1837ad6e1510080664080f53d2dc40da6dd",
+  "files": [
+    {
+      "file": "receiver.json",
+      "bytes": 492173,
+      "sha256": "ef622ff3ea2afa72286f2abb08df8ab8a6e6f413b3ab3d47dd5424f8126a426f"
+    },
+    {
+      "file": "receiver-events.jsonl",
+      "bytes": 422944,
+      "sha256": "7f47de7d39a40f21822f88bf57521da600d1cebadae0632070d276a6da57c59b"
+    },
+    {
+      "file": "receiver-host.jsonl",
+      "bytes": 479464,
+      "sha256": "6e45594120bf05c25840227ca56fb148765692c7f7cc50dc8c24dc64e17b60ae"
+    },
+    {
+      "file": "checkpoints.jsonl",
+      "bytes": 27107,
+      "sha256": "b175f3d6cf180822c9abd87f3fc55a79ee121a41d564548050bec2d0bca3874d"
+    },
+    {
+      "file": "resources.jsonl",
+      "bytes": 608604,
+      "sha256": "0560e4ffd2f5715e07470bcb4825b4acf745640d5ba3289e0f80bcdba9e56834"
+    },
+    {
+      "file": "service.log",
+      "bytes": 131944,
+      "sha256": "53a0c4fe662c771278a60e90cd08303d7ccab53ea4ce563acf461232655b1fee"
+    },
+    {
+      "file": "kernel.log",
+      "bytes": 17,
+      "sha256": "19c4e28b2f54ea8f217db4e622b0a5c758efa7b77ce2dc0394b6d159568c0b2e"
+    },
+    {
+      "file": "final-service.txt",
+      "bytes": 267,
+      "sha256": "8d04405c6152d29c47a3c1df2294f574abc4bbfec95689763c271ab5ee13591e"
+    },
+    {
+      "file": "preflight.txt",
+      "bytes": 312,
+      "sha256": "96da998fdfab7c13d2d336410baa91f71b21351ecd4e8fe05cd0cc57535cb528"
+    },
+    {
+      "file": "binary.sha256",
+      "bytes": 125,
+      "sha256": "805d45ca24f42ea96f93f20f7e56c51fcb0cf06ef943070bc05cd13ca07f57fe"
+    },
+    {
+      "file": "prepared-at.txt",
+      "bytes": 21,
+      "sha256": "91efb3d35765c98087ce203d106fc8a53dc61120505302edb7a6c5e71262d633"
+    },
+    {
+      "file": "boot-id.txt",
+      "bytes": 37,
+      "sha256": "67aae86d1f7d2333a506c74a690213192f32422c9985ad3a96abefadccc8f258"
+    },
+    {
+      "file": "source-reference.json",
+      "bytes": 1359,
+      "sha256": "f1cb178de5313d80cc882f6a90fa7b385d51bca1a51c69600f2c48c1f05a0629"
+    },
+    {
+      "file": "source-result.json",
+      "bytes": 295,
+      "sha256": "261e913d0d6620cc40efda840a10d95c2490670313464ed269f027ee7dffda81"
+    },
+    {
+      "file": "source-decoded.json",
+      "bytes": 298,
+      "sha256": "bdca4ec23a109691d3c6e97d95682b55cbb3e8d5e998b12057608b9fe8b65e0b"
+    },
+    {
+      "file": "local-network-redacted.txt",
+      "bytes": 3553,
+      "sha256": "09f4f438622cb046676cc52729c87551a69247e9a8cfbed423341476a741dc1d"
+    }
+  ],
+  "privacy": "No credentials, Oracle IDs, public IPs, raw PCM or packet payloads. Local network addresses are redacted."
+}
