@@ -1,0 +1,12 @@
+MainPID=8167
+NRestarts=0
+MemoryCurrent=9314304
+Id=raydio-isolated-six-hour.service
+ActiveState=active
+
+MainPID=0
+NRestarts=0
+MemoryCurrent=[not set]
+Id=raydio.service
+ActiveState=inactive
+a665618b5a2c860555fdf3c2bbe7ecfdbd45e84bf5a67c4eb205a09cbc4127b7  /proc/8167/exe

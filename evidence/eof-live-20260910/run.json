@@ -1,0 +1,54 @@
+{
+  "candidateCommit": "9eb883bdad6f5ba52d2024ce994bdde9144d78dd",
+  "crustCommit": "dba892f8e12dca582db6848acae9f37b8a1ffc5e",
+  "candidateSha256": "a665618b5a2c860555fdf3c2bbe7ecfdbd45e84bf5a67c4eb205a09cbc4127b7",
+  "candidateBytes": 18596784,
+  "candidatePath": "/opt/raydio/candidates/eof-fix-9eb883b/bin/raydio",
+  "pid": 8167,
+  "production": "inactive and disabled",
+  "receiverTab": "tab_3",
+  "receiverCollector": "raydio-receiver-eof-20260910.service",
+  "oracleSampler": "eof-live-20260910-resources.service",
+  "oracleOutput": "/var/lib/raydio/eof-live-20260910",
+  "preparedAt": "2026-09-10T00:53:42.381021+00:00",
+  "status": "completed",
+  "automaticStart": "tab_3 raydioQualification: 10 seconds of playing/loop70% plus healthy collector; 300 second run; auto-save and persistence verify; expires after20minutes",
+  "receiverStartedAt": "2026-09-10T01:00:57.115Z",
+  "receiverFinishedAt": "2026-09-10T01:05:57.167Z",
+  "receiverSeconds": 299.9999509277344,
+  "volume": 70,
+  "loop": true,
+  "qualification": {
+    "armedAt": "2026-09-10T00:56:22.898Z",
+    "busy": false,
+    "checkpointErrorBaseline": 0,
+    "checkpointErrors": 0,
+    "deadline": 1789002982898,
+    "finishedAt": "2026-09-10T01:05:57.175Z",
+    "initialPanel": "Raydio \u2022 Now Playing\nRick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)\n\u2501\u2501\u2501\u2501\u2501\u25cf\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n0:36 / 3:33\nChannel\nRick Astley\nRequested by\nmigole\nUp next\nNothing queued\nVolume\n70%\nPlaying \u2022 Loop: ON \u2022 refreshes every second",
+    "persistence": {
+      "elapsedSeconds": 5.00631591796875,
+      "hostSamples": 24,
+      "remainingSeconds": 5785.230709013998,
+      "requestedAt": "2026-09-10T01:00:54.904Z",
+      "verified": true
+    },
+    "result": {
+      "elapsedSeconds": 299.9999509277344,
+      "status": "completed"
+    },
+    "stableSince": 1789002044899,
+    "startedRequestAt": "2026-09-10T01:00:54.903Z",
+    "status": "completed",
+    "timer": null
+  },
+  "interpretation": "Successful five-minute loop regression with residual non-silent concealment; not six-hour reliability proof",
+  "ciRun": 34422386391,
+  "ciArchitectures": [
+    "x86_64",
+    "aarch64"
+  ],
+  "ciConclusion": "success",
+  "oracleAdminDuringMeasurement": false,
+  "localBuildDuringMeasurement": false
+}

@@ -37,14 +37,13 @@ Testbot unit as PID 8167. Binary SHA256:
 Size: 18,596,784 bytes (4,304 bytes above the earlier candidate). This change
 makes no measured memory/CPU optimization claim. Production Raydio stays disabled.
 
-The signed-in browser is instrumented before joining General. Its chat input
-still requires manual submission of /play; native Enter and a fresh tab did not
-activate the slash menu. Five-minute qualification is armed to begin on stable
-playback with Loop ON at volume 70, with independent host sampling, minute
-checkpoints and automatic final save. **No live five-minute pass is claimed
-until a completed receiver report and sender logs are reviewed.** Preparation
-and deployment metadata are preserved in `target/eof-live-20260910`, and fresh
-receiver evidence will be under `target/receiver-eof-20260910`.
+The user submitted /play after automated Enter failed to activate the slash
+menu. The [five-minute live receiver test](../eof-live-20260910/RESULTS.md) then
+completed with a successful natural loop, a normal 976.25 ms tail, no silent
+concealment or clipping, and 273.083 ms of non-silent concealment. The sender
+logged a natural finish and next start 2.047 ms apart without watchdog recovery.
+This confirms ordinary deployment behavior; it does not establish six-hour
+reliability or resolve the separate receiver-network incident.
 
 The six-hour 15.624-second silence started at the normal source tail and extended
 it by roughly 14.7 seconds. This reproduced race closely explains its missing

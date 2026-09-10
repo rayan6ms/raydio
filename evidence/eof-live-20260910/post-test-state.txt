@@ -1,0 +1,12 @@
+active
+active
+active
+MainPID=8167
+NRestarts=0
+Id=raydio-isolated-six-hour.service
+ActiveState=active
+
+MainPID=0
+NRestarts=0
+Id=raydio.service
+ActiveState=inactive

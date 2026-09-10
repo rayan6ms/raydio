@@ -1,0 +1,30 @@
+{
+  "longTasks": [
+    {
+      "startMs": 12280.699999999255,
+      "durationMs": 59,
+      "overlappingRecordedFaultWindows": []
+    },
+    {
+      "startMs": 110400.09999999776,
+      "durationMs": 62,
+      "overlappingRecordedFaultWindows": []
+    },
+    {
+      "startMs": 118952.09999999776,
+      "durationMs": 57,
+      "overlappingRecordedFaultWindows": []
+    },
+    {
+      "startMs": 199353.09999999776,
+      "durationMs": 55,
+      "overlappingRecordedFaultWindows": []
+    },
+    {
+      "startMs": 213593.69999999925,
+      "durationMs": 60,
+      "overlappingRecordedFaultWindows": []
+    }
+  ],
+  "conclusion": "No overlap between recorded long tasks and receiver fault windows. This is temporal evidence only; network and host data do not establish an exact cause."
+}

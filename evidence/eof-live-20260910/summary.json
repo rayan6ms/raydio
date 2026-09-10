@@ -1,0 +1,121 @@
+{
+  "status": "completed",
+  "startedAt": "2026-09-10T01:00:57.115Z",
+  "receiverSeconds": 299.9999509277344,
+  "coverage": {
+    "receiverSeconds": 299.9999509277344,
+    "pcmSeconds": 300.0106666666667,
+    "completePollCoverage": true,
+    "completePcmCoverage": true,
+    "uninterruptedConnection": true,
+    "completeEventHistory": true,
+    "retainedDiagnosticWindows": 1,
+    "droppedDiagnosticWindows": 0
+  },
+  "packetsReceived": 15000,
+  "lostNet": 0,
+  "positiveLoss": 0,
+  "negativeLossDeltas": 0,
+  "discarded": 7,
+  "nacks": 19,
+  "concealmentMs": 273.0833333333333,
+  "silentConcealmentMs": 0.0,
+  "concealmentMsPerMinute": 54.6166756005467,
+  "pcm": {
+    "samples": 28801024,
+    "squared": 235461.16790479518,
+    "peak": 0.5731680989265442,
+    "nearFullScale": 0,
+    "nonFinite": 0,
+    "emptyFrames": 0,
+    "longestQuietMs": 976.25,
+    "ongoingQuietMs": 0,
+    "reports": 1197,
+    "frames": 14400512,
+    "audioSeconds": 300.0106666666667,
+    "rms": 0.09041816363004598
+  },
+  "quietIntervals": [
+    {
+      "utc": "2026-09-10T01:03:49.815000+00:00",
+      "durationMs": 21.958333333333332,
+      "nearestStartOffsetSeconds": -0.880407,
+      "classification": "source-tail-candidate"
+    },
+    {
+      "utc": "2026-09-10T01:03:50.819900+00:00",
+      "durationMs": 976.25,
+      "nearestStartOffsetSeconds": 0.124493,
+      "classification": "source-tail-candidate"
+    }
+  ],
+  "quietRequiringReviewAtLeast100Ms": [],
+  "networkEvents": [],
+  "receiverScheduling": {
+    "enabled": true,
+    "longTasksSupported": true,
+    "longTasks": 5,
+    "totalLongTaskMs": 293,
+    "maxLongTaskMs": 62,
+    "initialVisibility": "visible"
+  },
+  "sampling": {
+    "polls": 300,
+    "stalePolls": 0,
+    "maxPollMs": 1021.125,
+    "positiveLossDeltas": 0,
+    "negativeLossDeltas": 0,
+    "maxConcealedMsPerPoll": 29.645833333333332,
+    "pcmReportsMissing": 0
+  },
+  "senderCheckpointDelta": {
+    "frames_sent": 12000,
+    "silence_frames_sent": 0,
+    "frames_unavailable": 0,
+    "skipped_deadlines": 0,
+    "send_failures": 0,
+    "source_overruns": 0
+  },
+  "senderCoverage": {
+    "from": "2026-09-10T01:01:17.934782+00:00",
+    "to": "2026-09-10T01:05:17.934467+00:00"
+  },
+  "resourceSamples": 5,
+  "pssMiB": {
+    "min": 15.8720703125,
+    "max": 16.0556640625,
+    "median": 15.8720703125
+  },
+  "sourceTailReferenceMs": 938.458,
+  "sourceTailToleranceMs": 100,
+  "limitations": [
+    "one receiver cannot isolate network hop",
+    "short window is not six-hour guarantee",
+    "source-tail-candidate means temporal and duration agreement, not fresh decoded waveform alignment",
+    "negative cumulative loss deltas can include corrections to losses predating this observation",
+    "sender/resource counters use bracketing minute samples and cannot prove per-packet send timing"
+  ],
+  "botCpuPercentOfOneCore": 3.75399348243401,
+  "hostStealPercent": 0.212859199899831,
+  "udpCounterDelta": {
+    "InDatagrams": 268,
+    "NoPorts": 0,
+    "InErrors": 0,
+    "OutDatagrams": 12028,
+    "RcvbufErrors": 0,
+    "SndbufErrors": 0,
+    "InCsumErrors": 0,
+    "IgnoredMulti": 0,
+    "MemErrors": 0
+  },
+  "cgroupMemoryEventsDelta": {
+    "low": 0,
+    "high": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0,
+    "oom_group_kill": 0
+  },
+  "checkpointSavesForThisRun": 7,
+  "checkpointSavesInCollectedFile": 7
+}
