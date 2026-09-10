@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "requestedAt": "2026-09-09T17:55:54.983Z",
   "startedAt": "2026-09-09T17:55:57.192Z",
   "plannedEnd": "2026-09-09T23:55:57.192000+00:00",
@@ -48,5 +48,29 @@
       "saveDurationMs": 4.802065999683691
     },
     "remainingSeconds": 24129.483458296
+  },
+  "completedAt": "2026-09-09T23:55:57.244Z",
+  "qualified": false,
+  "resultSummary": "Full six-hour coverage completed, but audio continuity did not pass: 32.23 seconds silent concealment, a 14.83-second receiver transport interruption, and a 15.62-second sender/source-handoff silence.",
+  "postRun": {
+    "oraclePid": 6744,
+    "oracleRestarts": 0,
+    "productionActive": false,
+    "resourcesCollected": 360,
+    "checkpointCount": 375,
+    "checkpointErrorDelta": 0,
+    "receiverStatus": "completed",
+    "receiverCoverage": {
+      "receiverSeconds": 21599.99960888672,
+      "pcmSeconds": 21600.010666666665,
+      "completePollCoverage": true,
+      "completePcmCoverage": true,
+      "uninterruptedConnection": false,
+      "completeEventHistory": true,
+      "retainedDiagnosticWindows": 155,
+      "droppedDiagnosticWindows": 0
+    },
+    "oracleSamplerStillActiveAtCollection": true,
+    "maintenanceTimersRestoreScheduled": "2026-09-10T00:15:42Z"
   }
 }

@@ -1,102 +1,131 @@
 {
   "status": "completed",
-  "startedAt": "2026-09-09T17:41:49.763Z",
-  "receiverSeconds": 599.9996069335938,
+  "startedAt": "2026-09-09T17:55:57.192Z",
+  "receiverSeconds": 21599.99960888672,
   "coverage": {
-    "receiverSeconds": 599.9996069335938,
-    "pcmSeconds": 600.0106666666667,
+    "receiverSeconds": 21599.99960888672,
+    "pcmSeconds": 21600.010666666665,
     "completePollCoverage": true,
     "completePcmCoverage": true,
-    "uninterruptedConnection": true,
+    "uninterruptedConnection": false,
     "completeEventHistory": true,
-    "retainedDiagnosticWindows": 3,
+    "retainedDiagnosticWindows": 155,
     "droppedDiagnosticWindows": 0
   },
-  "packetsReceived": 29982,
-  "lostNet": 0,
-  "positiveLoss": 0,
-  "recoveredLoss": 0,
-  "discarded": 13,
-  "nacks": 33,
-  "concealmentMs": 808.0416666666666,
-  "silentConcealmentMs": 0.0,
-  "concealmentMsPerMinute": 80.80421960237366,
-  "pcm": {
-    "samples": 57601024,
-    "squared": 439804.90047917486,
-    "peak": 0.5731680989265442,
-    "nearFullScale": 0,
-    "nonFinite": 0,
-    "emptyFrames": 0,
-    "longestQuietMs": 976.25,
-    "ongoingQuietMs": 0,
-    "reports": 2394,
-    "frames": 28800512,
-    "audioSeconds": 600.0106666666667,
-    "rms": 0.08738058139306489
-  },
-  "quietIntervals": [
+  "packetsReceived": 1078155,
+  "lostNet": -7,
+  "positiveLoss": 64,
+  "recoveredLoss": 71,
+  "discarded": 380,
+  "nacks": 1161,
+  "concealmentMs": 51615.354166666664,
+  "silentConcealmentMs": 32234.208333333332,
+  "concealmentMsPerMinute": 143.3759863924,
+  "unexpectedQuietAtLeast100Ms": [
     {
-      "utc": "2026-09-09T17:44:47.723100+00:00",
-      "durationMs": 21.958333333333332,
-      "nearestStartOffsetSeconds": -0.893001,
-      "within2SecondsOfTrackStart": true
+      "utc": "2026-09-09T18:06:28.610300+00:00",
+      "durationMs": 1154.2083333333333,
+      "nearestStartOffsetSeconds": 19.711106,
+      "within2SecondsOfTrackStart": false
     },
     {
-      "utc": "2026-09-09T17:44:48.725600+00:00",
-      "durationMs": 976.25,
-      "nearestStartOffsetSeconds": 0.109499,
-      "within2SecondsOfTrackStart": true
+      "utc": "2026-09-09T18:50:19.106700+00:00",
+      "durationMs": 365.3541666666667,
+      "nearestStartOffsetSeconds": 93.132498,
+      "within2SecondsOfTrackStart": false
     },
     {
-      "utc": "2026-09-09T17:48:21.547600+00:00",
-      "durationMs": 21.958333333333332,
-      "nearestStartOffsetSeconds": -0.467984,
-      "within2SecondsOfTrackStart": true
+      "utc": "2026-09-09T20:29:44.717600+00:00",
+      "durationMs": 330.3333333333333,
+      "nearestStartOffsetSeconds": 90.502095,
+      "within2SecondsOfTrackStart": false
     },
     {
-      "utc": "2026-09-09T17:48:22.549700+00:00",
-      "durationMs": 976.25,
-      "nearestStartOffsetSeconds": 0.534116,
-      "within2SecondsOfTrackStart": true
+      "utc": "2026-09-09T20:51:12.150900+00:00",
+      "durationMs": 14825.916666666666,
+      "nearestStartOffsetSeconds": 99.451171,
+      "within2SecondsOfTrackStart": false
+    },
+    {
+      "utc": "2026-09-09T20:58:28.556800+00:00",
+      "durationMs": 300.5833333333333,
+      "nearestStartOffsetSeconds": -103.802209,
+      "within2SecondsOfTrackStart": false
+    },
+    {
+      "utc": "2026-09-09T22:07:27.810600+00:00",
+      "durationMs": 481,
+      "nearestStartOffsetSeconds": -14.108711,
+      "within2SecondsOfTrackStart": false
     }
   ],
-  "unexpectedQuietAtLeast100Ms": [],
-  "networkEvents": [],
-  "receiverScheduling": {
-    "enabled": true,
-    "longTasksSupported": true,
-    "longTasks": 0,
-    "totalLongTaskMs": 0,
-    "maxLongTaskMs": 0,
-    "initialVisibility": "visible"
-  },
-  "sampling": {
-    "polls": 600,
-    "stalePolls": 0,
-    "maxPollMs": 1021.89501953125,
-    "positiveLossDeltas": 0,
-    "negativeLossDeltas": 0,
-    "maxConcealedMsPerPoll": 215.29166666666666,
-    "pcmReportsMissing": 0
-  },
+  "networkEvents": [
+    {
+      "ms": 10506021.299999999,
+      "kind": "ice",
+      "phase": {
+        "positionSeconds": 80,
+        "durationSeconds": 213,
+        "label": "middle",
+        "playing": true,
+        "loop": true
+      },
+      "state": "disconnected"
+    },
+    {
+      "ms": 10506023.1,
+      "kind": "connection",
+      "phase": {
+        "positionSeconds": 80,
+        "durationSeconds": 213,
+        "label": "middle",
+        "playing": true,
+        "loop": true
+      },
+      "state": "disconnected"
+    },
+    {
+      "ms": 10514888.299999999,
+      "kind": "ice",
+      "phase": {
+        "positionSeconds": 92,
+        "durationSeconds": 213,
+        "label": "middle",
+        "playing": true,
+        "loop": true
+      },
+      "state": "connected"
+    },
+    {
+      "ms": 10514894.9,
+      "kind": "connection",
+      "phase": {
+        "positionSeconds": 92,
+        "durationSeconds": 213,
+        "label": "middle",
+        "playing": true,
+        "loop": true
+      },
+      "state": "connected"
+    }
+  ],
   "senderCheckpointDelta": {
-    "frames_sent": 26982,
-    "silence_frames_sent": 1,
-    "frames_unavailable": 1,
-    "skipped_deadlines": 9,
+    "frames_sent": 1075890,
+    "silence_frames_sent": 7,
+    "frames_unavailable": 7,
+    "skipped_deadlines": 153,
     "send_failures": 0,
     "source_overruns": 0
   },
   "senderCoverage": {
-    "from": "2026-09-09T17:42:15.594434+00:00",
-    "to": "2026-09-09T17:51:15.595081+00:00"
+    "from": "2026-09-09T17:56:15.594479+00:00",
+    "to": "2026-09-09T23:55:15.594969+00:00"
   },
-  "resourceSamples": 10,
+  "resourceSamples": 360,
   "pssMiB": {
-    "min": 15.806640625,
-    "max": 16.017578125,
-    "median": 15.962890625
+    "min": 16.041015625,
+    "max": 17.041015625,
+    "median": 16.396484375
   },
   "sourceTailReferenceMs": 938.458,
   "limitations": [
@@ -105,13 +134,13 @@
     "quiet alignment is temporal classification, not fresh decoded waveform alignment",
     "sender/resource counters use bracketing minute samples and cannot prove per-packet send timing"
   ],
-  "botCpuPercentOfOneCore": 4.016497103547279,
-  "hostStealPercent": 0.3384267329303119,
+  "botCpuPercentOfOneCore": 3.980415169674899,
+  "hostStealPercent": 0.36560445697210625,
   "udpCounterDelta": {
-    "InDatagrams": 606,
+    "InDatagrams": 24470,
     "NoPorts": 0,
     "InErrors": 0,
-    "OutDatagrams": 27050,
+    "OutDatagrams": 1078875,
     "RcvbufErrors": 0,
     "SndbufErrors": 0,
     "InCsumErrors": 0,
@@ -125,5 +154,37 @@
     "oom": 0,
     "oom_kill": 0,
     "oom_group_kill": 0
+  },
+  "qualified": false,
+  "positiveLossPackets": 64,
+  "recoveredLossPackets": 71,
+  "netCounterDelta": -7,
+  "concealmentSeconds": 51.6153541667,
+  "silentConcealmentSeconds": 32.2342083333,
+  "largestQuietMs": 15623.75,
+  "unexpectedQuietCount": 6,
+  "connectionTransitions": 4,
+  "receiverIncident": {
+    "start": "2026-09-09T20:50:57.276Z",
+    "connectionDisconnected": "2026-09-09T20:51:03.213Z",
+    "connectionConnected": "2026-09-09T20:51:12.087Z",
+    "quietMs": 14825.9167,
+    "causeAssessment": "receiver/voice transport interruption; sender checkpoints and Oracle UDP/interface counters remained healthy"
+  },
+  "sourceHandoffIncident": {
+    "quietStart": "2026-09-09T23:47:08.717Z",
+    "quietMs": 15623.75,
+    "generation103Started": "2026-09-09T23:43:36.256920Z",
+    "generation104Started": "2026-09-09T23:47:24.295722Z",
+    "causeAssessment": "strong evidence of sender media handoff/source-terminal stall; exact Mantle/Crust/Oto layer is not isolated"
+  },
+  "memoryAssessment": {
+    "warmPssMiBMin": 15.8066,
+    "warmPssMiBMax": 17.041,
+    "warmPssMiBMedian": 16.3965,
+    "firstWarmFiveMedianMiB": 15.9629,
+    "lastFiveMedianMiB": 17.002,
+    "cgroupMemoryEventsAllZero": true,
+    "interpretation": "small ~1 MiB warm-to-end increase; no OOM or pressure; insufficient to call a leak"
   }
 }
