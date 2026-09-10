@@ -69,4 +69,15 @@ sending; it does not measure process memory savings. Candidate-only recovery tes
 also passed in the exact release benchmark binary. Binary hashes and raw counters
 are in benchmarks.json; no parallel builds ran during these measurements.
 
-Raydio passes all 49 tests and all-target Clippy. Oracle validation is pending the release build.
+Raydio passes all 49 tests and all-target Clippy. The release was deployed to Oracle as Testbot PID 10564, using the existing
+isolated service; production Raydio remains inactive/disabled. Package checksums,
+exact running-binary hash and `--check` passed. Build revision 20f1cec has an
+18,625,168-byte binary (+5,920 bytes versus the prior release) and a 7,570,715-byte
+archive (+2,628 bytes). No runtime helper, codec setting or dependency was added.
+
+Live receiver validation is pending manual submission of `/play` in Discord:
+the controlled browser is authenticated and joined to General, but automated Enter
+still does not submit. A separate five-minute recording and both host samplers are
+prepared; no new six-hour observation is running. Local deterministic recovery
+and release performance evidence above is complete; a live recovery or quality
+pass is not claimed before the receiver test.

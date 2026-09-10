@@ -1,0 +1,16 @@
+{
+  "revision": "20f1cec",
+  "oto": "352fa9a277377dbeb4f44513961c34f0785d870a",
+  "crust": "4a05a7db7500884eee30f0d32041a55ab26b1ce1",
+  "binaryBytes": 18625168,
+  "binarySha256": "6a9a58fd7ce1706a778a213b73d7617a478ba45e2524a1cc0db379974c036c67",
+  "packageBytes": 7570715,
+  "packageSha256": "0889f6b925ceaad58cab44692d155a6f839f161ddff1e3a13c5337ec7a2365a6",
+  "deployedAt": "2026-09-10T12:05:44.740520+00:00",
+  "testbotPid": 10564,
+  "unit": "raydio-isolated-six-hour.service",
+  "production": "inactive and disabled",
+  "liveReceiver": "pending manual Discord command submission; automated Enter did not submit",
+  "collectorEndsInSecondsAtLaunch": 3600,
+  "newSixHourRun": false
+}

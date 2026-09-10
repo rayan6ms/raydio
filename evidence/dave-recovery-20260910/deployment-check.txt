@@ -1,0 +1,3 @@
+Backend check passed
+Candidate ready: PID 10564
+Running as unit: dave-recovery-20260910-resources.service; invocation ID: b3803d78262a4fa2b30759cdb62cc9fe
