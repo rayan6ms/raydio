@@ -1,0 +1,8 @@
+    Checking crust v0.0.0 (https://github.com/rayan6ms/crust?rev=dba892f8e12dca582db6848acae9f37b8a1ffc5e#dba892f8)
+    Checking crust-mantle-adapter v0.0.0 (https://github.com/rayan6ms/crust?rev=dba892f8e12dca582db6848acae9f37b8a1ffc5e#dba892f8)
+    Checking crust-oto-adapter v0.0.0 (https://github.com/rayan6ms/crust?rev=dba892f8e12dca582db6848acae9f37b8a1ffc5e#dba892f8)
+    Checking crust-protocol v0.0.0 (https://github.com/rayan6ms/crust?rev=dba892f8e12dca582db6848acae9f37b8a1ffc5e#dba892f8)
+    Checking crust-server v0.0.0 (https://github.com/rayan6ms/crust?rev=dba892f8e12dca582db6848acae9f37b8a1ffc5e#dba892f8)
+    Checking raydio v0.2.2 (/home/rayan/Documents/Projects/raydio-rust)
+    Checking crust-testkit v0.0.0 (https://github.com/rayan6ms/crust?rev=dba892f8e12dca582db6848acae9f37b8a1ffc5e#dba892f8)
+    Finished `dev` profile [unoptimized] target(s) in 10.10s

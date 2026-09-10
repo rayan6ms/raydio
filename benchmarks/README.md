@@ -4,8 +4,10 @@ For live cloud audio, avoid new SSH logins, builds, and kernel tracing during th
 quiet receiver window. Ubuntu's dynamic SSH MOTD generation was observed to
 disturb the fractional-CPU Oracle VM. A running bot and zero net packet loss do
 not establish good audio: record concealment, PCM silence/clipping, speaking
-changes, and sender timing separately. Start captures automatically early in a
-track and finish before EOF; natural ending silence must not count as stutter.
+changes, and sender timing separately. For mid-song comparisons, start early
+and finish before EOF. Handoff/endurance tests must cover song boundaries and
+retain their quiet intervals: natural tails are expected, extended tails are
+still possible stalls and require review.
 
 `playback_scheduler.py --pid PID --seconds 180 --output report.json` is a bounded
 Linux diagnostic for a separate investigation window. It reads per-thread
@@ -88,6 +90,24 @@ bun benchmarks/test_browser_checkpoint.mjs
 bun benchmarks/test_browser_endurance.mjs
 uv run --no-project python benchmarks/test_receiver_checkpoint.py
 ```
+
+Summarize a collected directory containing `receiver.json`, `service.log`,
+`resources.jsonl` and optional `checkpoints.jsonl` with:
+
+```sh
+uv run --no-project python benchmarks/summarize_receiver.py \
+  --input target/RUN/collected --output target/RUN/summary.json \
+  --source-tail-ms 938.458
+uv run --no-project python benchmarks/test_summarize_receiver.py
+```
+
+The tail value must come from the tested source; this example is the measured
+Rick Astley fixture. Boundary alignment within two seconds only identifies a
+candidate tail. An interval longer than the source tail plus an explicit 100 ms
+tolerance remains flagged, even if its end coincides with a restart. All quiet
+intervals are retained; this classification is not waveform matching. Checkpoint
+counts are matched to the receiver's `requestedAt`, and negative loss-counter
+changes are retained as signed corrections rather than attributed recoveries.
 
 ### Redundant volume regression
 

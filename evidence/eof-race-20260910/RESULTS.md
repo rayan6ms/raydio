@@ -26,8 +26,25 @@ Opus encoding, bitrate, encryption, DSP, and natural tail audio are unchanged.
 
 Validation: Crust workspace 154 passed, 0 failed, 4 ignored manual benchmarks;
 workspace/all-targets Clippy with warnings denied and formatting pass.
-Raydio integration, portable build and five-minute receiver validation follow
-in the live-result section once complete.
+Raydio all-targets integration: 49 passed, 0 failed. Formatting and strict
+all-targets Clippy passed. The diagnostic checks passed (three collector tests,
+one summary regression, and both Bun harness checks).
+
+The release build at Raydio `9eb883bdad6f5ba52d2024ce994bdde9144d78dd`
+completed, passed local and Oracle `--check`, and was deployed to the existing
+Testbot unit as PID 8167. Binary SHA256:
+`a665618b5a2c860555fdf3c2bbe7ecfdbd45e84bf5a67c4eb205a09cbc4127b7`.
+Size: 18,596,784 bytes (4,304 bytes above the earlier candidate). This change
+makes no measured memory/CPU optimization claim. Production Raydio stays disabled.
+
+The signed-in browser is instrumented before joining General. Its chat input
+still requires manual submission of /play; native Enter and a fresh tab did not
+activate the slash menu. Five-minute qualification is armed to begin on stable
+playback with Loop ON at volume 70, with independent host sampling, minute
+checkpoints and automatic final save. **No live five-minute pass is claimed
+until a completed receiver report and sender logs are reviewed.** Preparation
+and deployment metadata are preserved in `target/eof-live-20260910`, and fresh
+receiver evidence will be under `target/receiver-eof-20260910`.
 
 The six-hour 15.624-second silence started at the normal source tail and extended
 it by roughly 14.7 seconds. This reproduced race closely explains its missing

@@ -1,0 +1,7 @@
+   Compiling crust v0.0.0 (https://github.com/rayan6ms/crust?rev=dba892f8e12dca582db6848acae9f37b8a1ffc5e#dba892f8)
+   Compiling crust-server v0.0.0 (https://github.com/rayan6ms/crust?rev=dba892f8e12dca582db6848acae9f37b8a1ffc5e#dba892f8)
+   Compiling crust-mantle-adapter v0.0.0 (https://github.com/rayan6ms/crust?rev=dba892f8e12dca582db6848acae9f37b8a1ffc5e#dba892f8)
+   Compiling crust-oto-adapter v0.0.0 (https://github.com/rayan6ms/crust?rev=dba892f8e12dca582db6848acae9f37b8a1ffc5e#dba892f8)
+   Compiling crust-protocol v0.0.0 (https://github.com/rayan6ms/crust?rev=dba892f8e12dca582db6848acae9f37b8a1ffc5e#dba892f8)
+   Compiling raydio v0.2.2 (/home/rayan/Documents/Projects/raydio-rust)
+    Finished `release` profile [optimized] target(s) in 2m 55s
