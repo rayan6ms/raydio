@@ -334,8 +334,9 @@ Discord credentials, cloud credentials, media payload captures or load tests
 were needed. Tests used local fake peers/HTTP servers and existing audio fixtures;
 the five-minute DAVE waits use Tokio's virtual clock, not real sleeps.
 
-Apply the corresponding patch from this document's artifact directory to the
-exact revision in an isolated checkout, then run:
+Decompress the corresponding `.patch.gz` from this document's artifact directory
+and apply it to the exact revision in an isolated checkout (`gzip -dc <patch.gz>
+| git apply -`), then run:
 
 ```sh
 cargo test -j 1 -p oto --lib audit_ -- --nocapture --test-threads=1
