@@ -45,8 +45,23 @@ sha256sum "$binary" > "$out/binary.sha256"
 timedatectl show -p NTPSynchronized >> "$out/preflight.txt"
 date -u +%FT%TZ > "$out/prepared-at.txt"
 cat /proc/sys/kernel/random/boot_id > "$out/boot-id.txt"
-systemd-run --unit="$run_id-restore" --on-active=7h /usr/bin/systemctl start apt-daily.timer apt-daily-upgrade.timer fwupd-refresh.timer motd-news.timer
-systemctl stop apt-daily.timer apt-daily-upgrade.timer fwupd-refresh.timer motd-news.timer
+# A timer stop alone is insufficient: apt-daily-upgrade may already be queued,
+# and its unattended-upgrades/needrestart transaction can stop active services.
+# Runtime masks prevent both the timers and their units from starting during the
+# bounded observation. A separately scheduled restore runs even if the caller
+# disconnects, then removes only these runtime masks.
+maintenance_units=(apt-daily.service apt-daily-upgrade.service apt-daily.timer apt-daily-upgrade.timer fwupd-refresh.service fwupd-refresh.timer motd-news.service motd-news.timer)
+maintenance_timers=(apt-daily.timer apt-daily-upgrade.timer fwupd-refresh.timer motd-news.timer)
+systemctl stop "${maintenance_units[@]}" || true
+systemctl mask --runtime "${maintenance_units[@]}"
+cat > "/opt/raydio/diagnostics/$run_id-restore-maintenance.sh" <<EOF
+#!/bin/sh
+set -eu
+systemctl unmask ${maintenance_units[*]}
+systemctl start ${maintenance_timers[*]}
+EOF
+chmod 700 "/opt/raydio/diagnostics/$run_id-restore-maintenance.sh"
+systemd-run --unit="$run_id-restore" --on-active=7h "/opt/raydio/diagnostics/$run_id-restore-maintenance.sh"
 python3 - "$out" "$started" "$run_id" <<'PY'
 from pathlib import Path
 import sys,shlex
