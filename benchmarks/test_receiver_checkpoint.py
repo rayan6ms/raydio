@@ -90,6 +90,30 @@ class Checkpoints(unittest.TestCase):
             self.assertEqual(len(sample['errors']), 7)
             self.assertNotIn('cpuTicks', sample)
 
+    def test_final_reports_survive_later_runs_and_duplicate_saves(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            collector = Collector(root)
+            first = dict(version=1, requestedSeconds=300, status='completed', requestedAt='first')
+            second = dict(version=1, requestedSeconds=300, status='running', requestedAt='second')
+            collector.save(first, 100)
+            archived_bytes = collector.archive_bytes
+            collector.save(first, 100)
+            self.assertEqual(collector.archive_bytes, archived_bytes)
+            collector.save(second, 100)
+            self.assertEqual(json.loads((root / 'receiver.json').read_text()), second)
+            self.assertEqual([json.loads(p.read_text()) for p in root.glob('receiver-final-*.json')], [first])
+            second['status'] = 'stopped'
+            with patch('receiver_checkpoint.os.fsync', side_effect=OSError('disk error')):
+                with self.assertRaises(OSError): collector.save(second, 100)
+            self.assertEqual(len(list(root.glob('receiver-final-*.json'))), 1)
+            collector.save(second, 100)
+            self.assertEqual(len(list(root.glob('receiver-final-*.json'))), 2)
+            third = dict(first, requestedAt='third')
+            collector.archive_limit_bytes = collector.archive_bytes
+            with self.assertRaises(ValueError): collector.save(third, 100)
+            self.assertEqual(json.loads((root / 'receiver.json').read_text()), second)
+
 
 if __name__ == '__main__':
     unittest.main()

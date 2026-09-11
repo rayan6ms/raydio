@@ -68,6 +68,7 @@ class Collector:
         if data.get('version') != 1 or type(duration) is not int or not 10 <= duration <= 21600:
             raise ValueError('invalid report version or duration')
         started = time.monotonic()
+        self.archive_final(data)
         temporary = self.output / 'receiver.next.json'
         with temporary.open('w') as f:
             json.dump(data, f, separators=(',', ':'))
@@ -82,6 +83,27 @@ class Collector:
         self.archive_events(data)
         self.archive_windows(data)
         self.last_receiver = checkpoint
+
+    def archive_final(self, data):
+        """Keep terminal reports even when another browser run replaces latest."""
+        if data.get('status') not in ('completed', 'stopped', 'failed'):
+            return
+        payload = json.dumps(data, sort_keys=True, separators=(',', ':')).encode()
+        digest = hashlib.sha256(payload).hexdigest()
+        destination = self.output / f'receiver-final-{digest}.json'
+        if destination.exists():
+            if destination.read_bytes() != payload:
+                raise ValueError('final report archive content mismatch')
+            return
+        if self.archive_bytes + len(payload) > self.archive_limit_bytes:
+            raise ValueError('final report archive reached its 64 MiB bound')
+        temporary = self.output / 'receiver-final.next.json'
+        with temporary.open('wb') as output:
+            output.write(payload)
+            output.flush()
+            os.fsync(output.fileno())
+        temporary.replace(destination)
+        self.archive_bytes += len(payload)
 
     def archive_windows(self, data):
         """Persist revisions: an open incident gains samples after its first save."""

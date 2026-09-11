@@ -168,3 +168,31 @@ required to compare the rare sender-gap rate to the six-hour baseline.
 
 Evidence: [`evidence/transport-improvements-20260911`](../evidence/transport-improvements-20260911),
 including rejected/failed experiments and exact source/libopus hashes.
+
+## Fresh full-bot receiver run
+
+On 2026-09-11, the transport-improvements candidate (SHA-256
+`225a2af42cbb9639394db8f0d40d0eb0ae897e81ade62c50e36dfd0ac79a9d91`) ran as the
+isolated Testbot on Oracle while a signed-in Discord receiver stayed in General.
+The command was submitted through Discord's Send Message control and Loop was
+enabled. The five-minute receiver observation completed with 300.000 seconds of
+receiver time and 300.011 seconds of PCM coverage. It had zero connection,
+track, clipping, non-finite, or empty-frame errors and retained all 32 events and
+five diagnostic windows.
+
+The receiver reported 14,912 packets, 50 positive lost packets, one discarded
+packet, 14 NACKs, 2,419.8 ms of concealment, and 1,697.9 ms of silent
+concealment. The loss occurred in a one-second window at about 202.3 seconds;
+the following window recovered. PCM recorded one 1,693.0 ms off-boundary quiet
+interval overlapping that receiver incident. Sender checkpoints covering the
+interior four minutes show five additional >=40 ms gaps, no >=100 ms gap, no
+send failures, no unavailable frames, and no source overruns. Oracle UDP error
+and receive-buffer counters remained zero. PSS was 15.52–15.79 MiB (median
+15.74 MiB), and CPU was 3.99% of one core.
+
+The sender counters did not change during the receiver outage, so these data do
+not support a sender-side cause or a code fix that would eliminate this event.
+They do establish a reproducible diagnostic classification: the interval is
+not a natural loop boundary and must remain an external receiver-path loss
+until a matched network experiment isolates the hop. The immutable report is
+`target/transport-improvements-20260911/full-candidate-receiver/receiver-final-56063444d01779a9c42668c1ed436f79b188cc59dab5a5f1afe75b7cd6167864.json`.

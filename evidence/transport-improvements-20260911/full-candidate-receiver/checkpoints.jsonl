@@ -1,0 +1,7 @@
+{"savedAt":1789091163.5608912,"requestedAt":"2026-09-11T01:45:03.884Z","status":"running","elapsedSeconds":57.07626293945312,"bytes":10168,"saveDurationMs":2.879076993849594}
+{"savedAt":1789091165.1175656,"requestedAt":"2026-09-11T01:45:03.884Z","status":"running","elapsedSeconds":58.07723291015625,"bytes":10170,"saveDurationMs":2.8238789964234456}
+{"savedAt":1789091223.5607312,"requestedAt":"2026-09-11T01:45:03.884Z","status":"running","elapsedSeconds":117.14865893554688,"bytes":11718,"saveDurationMs":2.9585520023829304}
+{"savedAt":1789091283.564062,"requestedAt":"2026-09-11T01:45:03.884Z","status":"running","elapsedSeconds":177.2237578125,"bytes":16073,"saveDurationMs":6.076842000766192}
+{"savedAt":1789091343.5618496,"requestedAt":"2026-09-11T01:45:03.884Z","status":"running","elapsedSeconds":237.35143896484374,"bytes":20688,"saveDurationMs":3.608762999647297}
+{"savedAt":1789091403.565278,"requestedAt":"2026-09-11T01:45:03.884Z","status":"running","elapsedSeconds":297.4375949707031,"bytes":20940,"saveDurationMs":6.300244000158273}
+{"savedAt":1789091406.1558235,"requestedAt":"2026-09-11T01:45:03.884Z","status":"completed","elapsedSeconds":300.00003393554687,"bytes":22112,"saveDurationMs":6.839620000391733}
