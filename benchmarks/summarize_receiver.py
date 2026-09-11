@@ -148,6 +148,11 @@ else: summary['evidenceWarnings'].append('insufficient sender checkpoints')
 if r.get('missingCounters'): summary['evidenceWarnings'].append('unsupported receiver counters: '+', '.join(r['missingCounters']))
 if r.get('clock',{}).get('pcmEpochUncertaintyMs',0)>50: summary['evidenceWarnings'].append('PCM-to-wall-clock uncertainty exceeds 50 ms')
 summary['clock']=r.get('clock')
+summary['uiObservation']=r.get('uiObservation')
+if r.get('uiObservation',{}).get('rowRebindings',0) or r.get('uiObservation',{}).get('missingRowPolls',0):
+    summary['evidenceWarnings'].append('voice UI was rebound or absent; speaking-indicator coverage is incomplete')
+if r.get('uiObservation',{}).get('unknownPhasePolls',0):
+    summary['evidenceWarnings'].append('track phase was unavailable for some polls; use logged lifecycle and retain uncertain quiet intervals')
 summary['availableCounters']=r.get('availableCounters')
 summary['sourceReference']=json.loads((root/'source-reference.json').read_text()) if (root/'source-reference.json').exists() else None
 if summary['sourceReference'] is None: summary['evidenceWarnings'].append('source reference provenance missing')

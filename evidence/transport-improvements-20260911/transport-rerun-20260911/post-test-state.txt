@@ -1,0 +1,19 @@
+Fri Sep 11 18:04:26 UTC 2026
+MainPID=0
+Id=raydio-isolated-six-hour.service
+ActiveState=inactive
+
+MainPID=0
+Id=raydio.service
+ActiveState=inactive
+enabled
+enabled
+enabled
+enabled
+active
+active
+active
+active
+timer: 00:00~24:00/4
+last: today at 18:01 UTC
+next: tomorrow at 02:18 UTC

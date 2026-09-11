@@ -73,6 +73,7 @@ class SummaryTests(unittest.TestCase):
                 'status': 'completed', 'requestedAt': 'current-run',
                 'startedAt': '2026-09-09T00:00:00Z', 'elapsedSeconds': 60,
                 'coverage': {}, 'pcm': {}, 'receiverScheduling': {},
+                'uiObservation': {'rowRebindings': 2, 'missingRowPolls': 3, 'unknownPhasePolls': 3},
                 'sampling': {'positiveLossDeltas': 2, 'negativeLossDeltas': -3},
                 'delta': {'packetsReceived': 3000, 'packetsLost': -1,
                           'packetsDiscarded': 0, 'nackCount': 0,
@@ -111,6 +112,9 @@ class SummaryTests(unittest.TestCase):
             self.assertTrue(summary['incidentWindows']['completePersistedHistory'])
             self.assertEqual(summary['diagnosticWindows'][0]['samples'], [[0], [1000]])
             self.assertFalse(any('windows overwritten' in w for w in summary['evidenceWarnings']))
+            self.assertEqual(summary['uiObservation']['rowRebindings'], 2)
+            self.assertTrue(any('speaking-indicator coverage is incomplete' in w for w in summary['evidenceWarnings']))
+            self.assertTrue(any('track phase was unavailable' in w for w in summary['evidenceWarnings']))
 
 
 if __name__ == '__main__':

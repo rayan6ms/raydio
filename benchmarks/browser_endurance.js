@@ -90,6 +90,7 @@
             diagnosticSampleFields:['elapsedMs','windowMs','packets','lost','discarded','concealedMs','silentMs','jitterMs','meanBufferMs','rttMs'],
             receiverScheduling:{enabled:scheduling,longTasksSupported:false,longTasks:0,
                 totalLongTaskMs:0,maxLongTaskMs:0,initialVisibility:document.visibilityState},
+            uiObservation:{rowRebindings:0,missingRowPolls:0,unknownPhasePolls:0},
             pcm:{samples:0,squared:0,peak:0,nearFullScale:0,nonFinite:0,emptyFrames:0,
                 longestQuietMs:0,ongoingQuietMs:0,reports:0,frames:0},
             sampling:{polls:0,stalePolls:0,maxPollMs:0,positiveLossDeltas:0,negativeLossDeltas:0,
@@ -145,7 +146,8 @@
             const id=active[0].r.id;
             const receiver=peer.getReceivers().find(r=>r.track.id===active[0].r.trackIdentifier);
             if(!receiver||receiver.track.readyState!=='live')throw Error('Receiver is not live');
-            const row=[...document.querySelectorAll('.username__07f91')].find(e=>e.textContent===botName);
+            const findVoiceRow=()=>[...document.querySelectorAll('.username__07f91')].find(e=>e.textContent===botName&&e.isConnected);
+            let row=findVoiceRow();
             if(!row||!row.className.includes('usernameSpeaking'))throw Error('Bot is not visibly speaking');
             if(pcm){
                 ctx=new AudioContext({sampleRate:48000});await ctx.resume();
@@ -189,15 +191,16 @@
                 document.addEventListener('visibilitychange',visibilityListener);
             }
             const initialRaw=(await peer.getStats()).get(id);
-            data.availableCounters=fields.filter(k=>typeof initialRaw[k]==='number');
             if(!initialRaw)throw Error('Receiver disappeared before baseline');
+            data.availableCounters=fields.filter(k=>typeof initialRaw[k]==='number');
             if(['timestamp','packetsReceived','packetsLost','concealedSamples','silentConcealedSamples','totalSamplesReceived'].some(k=>typeof initialRaw[k]!=='number'))
                 throw Error('Required receiver quality counters unavailable');
             data.receiverIdentity={id,ssrc:initialRaw.ssrc,trackIdentifier:initialRaw.trackIdentifier};
             data.missingCounters=fields.filter(k=>typeof initialRaw[k]!=='number');
             let last=counters(initialRaw);data.initial=last;
-            let speaking=true;
+            let speaking=row.className.includes('usernameSpeaking');
             observer=new MutationObserver(()=>{
+                if(!row?.isConnected)return;
                 const next=row.className.includes('usernameSpeaking');
                 if(next!==speaking){event('speaking',{speaking:next});speaking=next;}
             });
@@ -252,7 +255,9 @@
                 const pair=transport?report.get(transport.selectedCandidatePairId):null;
                 if(pair)data.network.current={rttMs:pair.currentRoundTripTime*1000,state:pair.state,
                     bytesReceived:pair.bytesReceived,bytesSent:pair.bytesSent};
-                if(!raw||['closed','failed'].includes(peer.connectionState)||!row.isConnected)throw Error('Receiver or voice row was replaced/disconnected');
+                if(!raw)throw Error('Receiver stats disappeared');
+                if(['closed','failed'].includes(peer.connectionState))throw Error('Voice peer '+peer.connectionState);
+                if(receiver.track.readyState!=='live')throw Error('Receiver track ended');
                 if(ctx&&ctx.state!=='running')throw Error('Audio context stopped running');
                 if(raw.ssrc!==data.receiverIdentity.ssrc||raw.trackIdentifier!==data.receiverIdentity.trackIdentifier)
                     throw Error('Receiver identity changed');
@@ -260,6 +265,23 @@
                 const now=counters(raw),dt=now.timestamp-last.timestamp;
                 if(data.availableCounters.filter(k=>k!=='packetsLost'&&k!=='timestamp').some(k=>now[k]<last[k]))
                     throw Error('Receiver cumulative counter reset');
+                // Discord can replace or virtualize its voice sidebar without
+                // changing WebRTC. Rebind only the UI observer; keep the exact
+                // peer, SSRC, track, counter baseline and PCM graph throughout.
+                if(!row?.isConnected){
+                    const previous=row;
+                    row=findVoiceRow();
+                    if(row!==previous){
+                        observer.disconnect();
+                        data.uiObservation.rowRebindings++;
+                        event('voice-row-rebound',{present:!!row,speakingHistoryGap:true});
+                        if(row){
+                            speaking=row.className.includes('usernameSpeaking');
+                            observer.observe(row.parentElement.parentElement.parentElement,{subtree:true,attributes:true,attributeFilter:['class']});
+                        }
+                    }
+                }
+                if(!row)data.uiObservation.missingRowPolls++;
                 if(dt<=0){data.sampling.stalePolls++;continue;}
                 const delta=Object.fromEntries(fields.map(k=>[k,now[k]-last[k]]));
                 const elapsedMs=now.timestamp-data.initial.timestamp;
@@ -269,6 +291,7 @@
                 for(const window of data.diagnosticWindows)if(window.remaining>0){window.samples.push(sample);window.remaining--;}
                 history.push(sample);if(history.length>6)history.shift();
                 const p=phase();
+                if(p.positionSeconds===null)data.uiObservation.unknownPhasePolls++;
                 if(p.positionSeconds!==null&&priorPosition!==null&&p.positionSeconds+5<priorPosition)event('track-restart',{priorPosition});
                 if(p.positionSeconds!==null)priorPosition=p.positionSeconds;
                 const index=Math.floor(elapsedMs/60000);
@@ -320,6 +343,8 @@
                     && !data.events.some(e=>['ice','connection'].includes(e.kind)
                         && ['disconnected','failed','closed'].includes(e.state)),
                 completeEventHistory:!data.eventsTruncated,
+                completeSpeakingObservation:data.uiObservation.rowRebindings===0&&data.uiObservation.missingRowPolls===0,
+                completeTrackPhaseObservation:data.uiObservation.unknownPhasePolls===0,
                 retainedDiagnosticWindows:data.diagnosticWindows.length,
                 droppedDiagnosticWindows:data.diagnosticWindowsDropped,
             };

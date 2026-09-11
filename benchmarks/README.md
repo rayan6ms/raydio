@@ -77,6 +77,19 @@ remaining lifetime in both collectors for the rest of the run plus a minute.
 Do not call a run ready if this check throws.
 Verify the independent Oracle sampler separately before beginning measurement.
 
+Run the local collector in a supervised `systemd-run --user` service for long
+observations, with a bounded lifetime and sleep inhibitor. An agent shell
+session is not a durable process supervisor. Inspect the first host samples and
+actual advancing browser save before leaving the test unattended.
+
+Discord may rebuild or temporarily remove the voice sidebar without replacing
+the audio receiver. The audit now rebinds its speaking-indicator observer and
+marks UI coverage gaps while continuing the same PCM graph, peer, SSRC, track,
+and cumulative counters. Real receiver disappearance, identity changes, closed
+peers, stopped audio contexts and counter resets still fail the observation.
+UI gaps never establish a speaking interruption or silently become complete
+speaking-indicator coverage.
+
 The 256-window receiver bound would retain all 168 diagnostic windows from the
 September 9 six-hour observation, instead of discarding 40. It remains bounded;
 `diagnosticWindowsDropped` and event truncation must still be reported. No

@@ -1,0 +1,5 @@
+16 Python diagnostic regression tests passed.
+Bun six-hour simulated receiver, UI replacement/absence, actual peer/stats/track/identity/counter failures: passed.
+Bun actual PCM worklet regression: passed.
+Bun browser checkpoint persistence, retries, final archival: passed.
+No Rust binary change or live six-hour receiver rerun was performed as part of this recorder repair.

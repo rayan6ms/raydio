@@ -1,0 +1,51 @@
+{
+  "collectedAt": "2026-09-10T17:25:59.261386+00:00",
+  "source": "https://youtu.be/dQw4w9WgXcQ",
+  "volume": 70,
+  "sourcePacketsSha256": "29f1ac2bad421ed974c8276c15943cc6a47cbde931276c8d35f51c874532431b",
+  "sourceHeadMs": 0,
+  "sourceTailMs": 938.458333,
+  "decoder": {
+    "decoder": "libopus 1.6",
+    "quietIntervals": [
+      {
+        "startSeconds": 212.121542,
+        "durationMs": 938.458333,
+        "atEnd": true
+      }
+    ],
+    "frames": 10653,
+    "seconds": 213.06,
+    "wrongFrameDuration": 0,
+    "tinyPackets": 47,
+    "longestQuietMs": 938.458333,
+    "nearFullScale": 0,
+    "nonFinite": 0,
+    "peak": 0.584290266,
+    "rms": 0.09019673,
+    "failed": false
+  },
+  "sourcePull": {
+    "paced": false,
+    "runs": [
+      {
+        "bytes": 2633918,
+        "elapsedSeconds": 24.137776294,
+        "filterUpdateMs": 0.0,
+        "filterUpdates": 0,
+        "frames": 10653,
+        "iteration": 0,
+        "maxReadMs": 13.005523,
+        "stalls": [],
+        "startupMs": 391.611378
+      }
+    ],
+    "scope": "integrated source and volume processing, no Discord transport",
+    "staged": true,
+    "volume": 70
+  },
+  "candidateSha256": "c007862072d46a0ded0b8dbe93e030d8ba029ac7087f0ef213989586ba4f3002",
+  "sourceToolSha256": "a6d796d20dda1c3bcc66f9fdf5f86b62288d51377ffebc478141b837daf28273",
+  "candidateRevision": "2be406be22fd64f56adaccd45c2d115c27fd380c",
+  "limitation": "Independent source fetch on Oracle with the same pinned dependencies and volume; not waveform alignment of every loop"
+}
