@@ -1,0 +1,15 @@
+Starting raydio-audio-trial-candidate-fresh.service - /opt/raydio/candidates/transport-trial-candidate/probe /dev/null --continuous-seconds 380...
+Started raydio-audio-trial-candidate-fresh.service - /opt/raydio/candidates/transport-trial-candidate/probe /dev/null --continuous-seconds 380.
+{"channel":"General","connected":false,"stage":"joined"}
+2026-09-11T01:13:29.146612Z  INFO crust_oto_adapter: DAVE lifecycle transition connection_generation=1 opcode=29 before=DaveContext { active_version: 0, transition_pending: false, ready: false } after=DaveContext { active_version: 1, transition_pending: false, ready: true }
+{"code":null,"event":"TrackStartEvent","reason":null}
+2026-09-11T01:13:29.505996Z  INFO discord_voice_probe: track started generation=1
+{"generation":1,"positionMs":20,"secondsRemaining":379,"stage":"continuous"}
+{"generation":1,"positionMs":9960,"secondsRemaining":369,"stage":"continuous"}
+2026-09-11T01:13:43.397421Z  INFO crust_oto_adapter: DAVE lifecycle transition connection_generation=1 opcode=24 before=DaveContext { active_version: 1, transition_pending: false, ready: true } after=DaveContext { active_version: 0, transition_pending: false, ready: false }
+2026-09-11T01:13:43.397500Z  INFO crust_oto_adapter: DAVE lifecycle transition connection_generation=1 opcode=21 before=DaveContext { active_version: 0, transition_pending: false, ready: false } after=DaveContext { active_version: 0, transition_pending: true, ready: false }
+{"code":null,"event":"TrackEndEvent","reason":"cleanup"}
+2026-09-11T01:13:49.507245Z  INFO crust_oto_adapter: audio sender stopped frames_sent=692 silence_frames_sent=0 frames_unavailable=0 skipped_deadlines=3 send_failures=0 source_overruns=0 max_lateness_us=40203 phase=Stopped failure=None dave_failure=None dave_context=None
+Error: Voice transport disconnected
+raydio-audio-trial-candidate-fresh.service: Main process exited, code=exited, status=1/FAILURE
+raydio-audio-trial-candidate-fresh.service: Failed with result 'exit-code'.

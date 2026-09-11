@@ -1,0 +1,7 @@
+{
+  "valid": false,
+  "reason": "Browser navigation/reinitialization reset Discord DAVE/voice transport after 14 seconds. Candidate stopped on an external receiver-induced disconnect; no receiver comparison is inferred.",
+  "started": "2026-09-11T01:13:29Z",
+  "stopped": "2026-09-11T01:13:49Z",
+  "candidateProbeSha256": "a54d28a6f15ed33ca30023dd91eba87086ad3f735304495c2f16895189a48bd5"
+}

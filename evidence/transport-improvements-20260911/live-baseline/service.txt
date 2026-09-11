@@ -1,0 +1,55 @@
+Starting raydio-audio-trial-baseline.service - /opt/raydio/candidates/transport-trial-baseline/probe /dev/null --continuous-seconds 340...
+Started raydio-audio-trial-baseline.service - /opt/raydio/candidates/transport-trial-baseline/probe /dev/null --continuous-seconds 340.
+{"channel":"General","connected":false,"stage":"joined"}
+2026-09-11T01:02:30.583202Z  INFO crust_oto_adapter: DAVE lifecycle transition connection_generation=1 opcode=29 before=DaveContext { active_version: 0, transition_pending: false, ready: false } after=DaveContext { active_version: 1, transition_pending: false, ready: true }
+{"code":null,"event":"TrackStartEvent","reason":null}
+2026-09-11T01:02:31.216016Z  INFO discord_voice_probe: track started generation=1
+{"generation":1,"positionMs":40,"secondsRemaining":339,"stage":"continuous"}
+{"generation":1,"positionMs":10000,"secondsRemaining":329,"stage":"continuous"}
+{"generation":1,"positionMs":20000,"secondsRemaining":319,"stage":"continuous"}
+{"generation":1,"positionMs":29860,"secondsRemaining":309,"stage":"continuous"}
+{"generation":1,"positionMs":39820,"secondsRemaining":299,"stage":"continuous"}
+{"generation":1,"positionMs":49820,"secondsRemaining":289,"stage":"continuous"}
+2026-09-11T01:03:31.216866Z  INFO crust_oto_adapter: voice diagnostic checkpoint connection_generation=1 connection_phase=Connected failure=None audio=Some(AudioSnapshot { generation: SourceGeneration(1), phase: Sending, failure: None, dave_failure: None, dave_context: None, stats: AudioStats { frames_sent: 2990, silence_frames_sent: 0, frames_unavailable: 0, skipped_deadlines: 6, send_failures: 0, source_overruns: 0, max_lateness: 40.367986ms, last_source_overrun_wall: 0ns, last_source_overrun_cpu: 0ns, active_send_gaps_40ms: 5, active_send_gaps_100ms: 0, active_send_gaps_1s: 0, max_active_send_gap: 59.104138ms, last_active_send_gap: 57.354099ms, last_active_send_gap_unix_ms: 1789088583092 } })
+{"generation":1,"positionMs":59820,"secondsRemaining":279,"stage":"continuous"}
+{"generation":1,"positionMs":69820,"secondsRemaining":269,"stage":"continuous"}
+{"generation":1,"positionMs":79560,"secondsRemaining":259,"stage":"continuous"}
+{"generation":1,"positionMs":89560,"secondsRemaining":249,"stage":"continuous"}
+{"generation":1,"positionMs":99560,"secondsRemaining":239,"stage":"continuous"}
+{"generation":1,"positionMs":109560,"secondsRemaining":229,"stage":"continuous"}
+2026-09-11T01:04:31.216992Z  INFO crust_oto_adapter: voice diagnostic checkpoint connection_generation=1 connection_phase=Connected failure=None audio=Some(AudioSnapshot { generation: SourceGeneration(1), phase: Sending, failure: None, dave_failure: None, dave_context: None, stats: AudioStats { frames_sent: 5977, silence_frames_sent: 0, frames_unavailable: 0, skipped_deadlines: 12, send_failures: 0, source_overruns: 0, max_lateness: 64.442748ms, last_source_overrun_wall: 0ns, last_source_overrun_cpu: 0ns, active_send_gaps_40ms: 10, active_send_gaps_100ms: 0, active_send_gaps_1s: 0, max_active_send_gap: 83.098301ms, last_active_send_gap: 73.081621ms, last_active_send_gap_unix_ms: 1789088627792 } })
+{"generation":1,"positionMs":119560,"secondsRemaining":219,"stage":"continuous"}
+{"generation":1,"positionMs":129560,"secondsRemaining":209,"stage":"continuous"}
+{"generation":1,"positionMs":139560,"secondsRemaining":199,"stage":"continuous"}
+{"generation":1,"positionMs":149560,"secondsRemaining":189,"stage":"continuous"}
+{"generation":1,"positionMs":159560,"secondsRemaining":179,"stage":"continuous"}
+{"generation":1,"positionMs":169560,"secondsRemaining":169,"stage":"continuous"}
+2026-09-11T01:05:31.217560Z  INFO crust_oto_adapter: voice diagnostic checkpoint connection_generation=1 connection_phase=Connected failure=None audio=Some(AudioSnapshot { generation: SourceGeneration(1), phase: Sending, failure: None, dave_failure: None, dave_context: None, stats: AudioStats { frames_sent: 8977, silence_frames_sent: 0, frames_unavailable: 0, skipped_deadlines: 12, send_failures: 0, source_overruns: 0, max_lateness: 64.442748ms, last_source_overrun_wall: 0ns, last_source_overrun_cpu: 0ns, active_send_gaps_40ms: 10, active_send_gaps_100ms: 0, active_send_gaps_1s: 0, max_active_send_gap: 83.098301ms, last_active_send_gap: 73.081621ms, last_active_send_gap_unix_ms: 1789088627792 } })
+{"generation":1,"positionMs":179560,"secondsRemaining":159,"stage":"continuous"}
+{"generation":1,"positionMs":189560,"secondsRemaining":149,"stage":"continuous"}
+{"generation":1,"positionMs":199560,"secondsRemaining":139,"stage":"continuous"}
+{"generation":1,"positionMs":209560,"secondsRemaining":129,"stage":"continuous"}
+{"code":null,"event":"TrackEndEvent","reason":"finished"}
+2026-09-11T01:06:04.733354Z  INFO discord_voice_probe: track finished generation=1
+{"code":null,"event":"TrackStartEvent","reason":null}
+2026-09-11T01:06:04.735255Z  INFO discord_voice_probe: track started generation=2
+{"generation":2,"positionMs":6500,"secondsRemaining":119,"stage":"continuous"}
+{"generation":2,"positionMs":16500,"secondsRemaining":109,"stage":"continuous"}
+2026-09-11T01:06:31.217360Z  INFO crust_oto_adapter: voice diagnostic checkpoint connection_generation=1 connection_phase=Connected failure=None audio=Some(AudioSnapshot { generation: SourceGeneration(2), phase: Sending, failure: None, dave_failure: None, dave_context: None, stats: AudioStats { frames_sent: 11977, silence_frames_sent: 0, frames_unavailable: 0, skipped_deadlines: 12, send_failures: 0, source_overruns: 0, max_lateness: 64.442748ms, last_source_overrun_wall: 0ns, last_source_overrun_cpu: 0ns, active_send_gaps_40ms: 10, active_send_gaps_100ms: 0, active_send_gaps_1s: 0, max_active_send_gap: 83.098301ms, last_active_send_gap: 73.081621ms, last_active_send_gap_unix_ms: 1789088627792 } })
+{"generation":2,"positionMs":26500,"secondsRemaining":99,"stage":"continuous"}
+{"generation":2,"positionMs":36500,"secondsRemaining":89,"stage":"continuous"}
+{"generation":2,"positionMs":46500,"secondsRemaining":79,"stage":"continuous"}
+{"generation":2,"positionMs":56500,"secondsRemaining":69,"stage":"continuous"}
+{"generation":2,"positionMs":66500,"secondsRemaining":59,"stage":"continuous"}
+{"generation":2,"positionMs":76500,"secondsRemaining":49,"stage":"continuous"}
+2026-09-11T01:07:31.217472Z  INFO crust_oto_adapter: voice diagnostic checkpoint connection_generation=1 connection_phase=Connected failure=None audio=Some(AudioSnapshot { generation: SourceGeneration(2), phase: Sending, failure: None, dave_failure: None, dave_context: None, stats: AudioStats { frames_sent: 14977, silence_frames_sent: 0, frames_unavailable: 0, skipped_deadlines: 12, send_failures: 0, source_overruns: 0, max_lateness: 64.442748ms, last_source_overrun_wall: 0ns, last_source_overrun_cpu: 0ns, active_send_gaps_40ms: 10, active_send_gaps_100ms: 0, active_send_gaps_1s: 0, max_active_send_gap: 83.098301ms, last_active_send_gap: 73.081621ms, last_active_send_gap_unix_ms: 1789088627792 } })
+{"generation":2,"positionMs":86500,"secondsRemaining":39,"stage":"continuous"}
+{"generation":2,"positionMs":96500,"secondsRemaining":29,"stage":"continuous"}
+{"generation":2,"positionMs":106500,"secondsRemaining":19,"stage":"continuous"}
+{"generation":2,"positionMs":116500,"secondsRemaining":9,"stage":"continuous"}
+{"generation":2,"positionMs":126500,"secondsRemaining":0,"stage":"continuous"}
+{"generations":2,"seconds":340,"stage":"continuous-complete"}
+{"code":null,"event":"TrackEndEvent","reason":"cleanup"}
+2026-09-11T01:08:11.313158Z  INFO crust_oto_adapter: audio sender stopped frames_sent=16977 silence_frames_sent=5 frames_unavailable=5 skipped_deadlines=12 send_failures=0 source_overruns=0 max_lateness_us=64442 phase=Stopped failure=None dave_failure=None dave_context=None
+raydio-audio-trial-baseline.service: Deactivated successfully.
+raydio-audio-trial-baseline.service: Consumed 13.356s CPU time, 2.7M memory peak, 0B memory swap peak.

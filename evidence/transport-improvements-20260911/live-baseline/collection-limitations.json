@@ -1,0 +1,19 @@
+{
+  "receiverFinalReportPreserved": false,
+  "reason": "Collector receiver.json is the latest run; next report overwrote final baseline before a per-run copy. Raw events for baseline remain in shared archive, but final PCM/coverage fields are only available in tool output. Fresh matched baseline must be rerun; do not use this as acceptance evidence.",
+  "observedSummary": {
+    "receiverSeconds": 299.99636791992185,
+    "pcmSeconds": 300.0106666666667,
+    "packetsReceived": 14985,
+    "packetsLost": 1,
+    "packetsDiscarded": 2,
+    "nacks": 28,
+    "concealedSamples": 12346,
+    "concealedMs": 257.2083333333333,
+    "silentConcealedSamples": 0,
+    "pcmLongestQuietMs": 976.25,
+    "pcmNonfinite": 0,
+    "pcmClipped": 0,
+    "pcmEmptyFrames": 0
+  }
+}
