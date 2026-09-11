@@ -62,6 +62,28 @@ class Checkpoints(unittest.TestCase):
                     collector.save(data, 20)
             self.assertIsNone(collector.last_receiver)
 
+    def test_incident_revisions_survive_browser_eviction(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            collector = Collector(root)
+            window = dict(id=1, ms=1000, remaining=5, samples=[[0]], triggers=[])
+            data = dict(version=1, requestedSeconds=21600, requestedAt='run',
+                        diagnosticWindows=[window])
+            collector.save(data, 100)
+            collector.save(data, 100)
+            window.update(remaining=0, samples=[[0], [1000]])
+            collector.save(data, 100)
+            data['diagnosticWindows'] = [dict(id=2, ms=7000, remaining=0, samples=[])]
+            collector.save(data, 100)
+            rows = [json.loads(line) for line in (root / 'receiver-windows.jsonl').read_text().splitlines()]
+            self.assertEqual([(r['window']['id'], r['revision']) for r in rows], [(1, 1), (1, 2), (2, 1)])
+            self.assertEqual(rows[1]['window']['samples'], [[0], [1000]])
+            self.assertEqual(collector.health()['archivedWindows'], 2)
+            collector.archive_limit_bytes = collector.archive_bytes
+            data['diagnosticWindows'][0]['samples'] = [[8000]]
+            with self.assertRaises(ValueError): collector.save(data, 100)
+            self.assertEqual(collector.window_revisions[2][0], 1)
+
     def test_missing_host_fields_are_explicit(self):
         with TemporaryDirectory() as directory:
             sample = host_snapshot(Path(directory))

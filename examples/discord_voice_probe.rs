@@ -17,10 +17,33 @@ const GUILD: u64 = 1544468012491346110;
 
 #[tokio::main(worker_threads = 2)]
 async fn main() -> Result<()> {
+    let arguments: Vec<String> = std::env::args().collect();
+    let continuous = arguments
+        .iter()
+        .position(|arg| arg == "--continuous-seconds")
+        .map(|i| {
+            arguments
+                .get(i + 1)
+                .context("Duration missing")?
+                .parse::<u64>()
+                .context("Invalid duration")
+        })
+        .transpose()?;
+    if let Some(seconds) = continuous {
+        ensure!(
+            (30..=21600).contains(&seconds),
+            "Duration must be 30..=21600 seconds"
+        );
+    }
+    tracing_subscriber::fmt()
+        .with_ansi(false)
+        .with_env_filter("warn,crust_oto_adapter=info,discord_voice_probe=info")
+        .init();
     let path = std::env::args()
         .nth(1)
         .context("Pass the test environment file path")?;
-    let values: HashMap<_, _> = dotenvy::from_path_iter(path)?.collect::<Result<_, _>>()?;
+    let mut values: HashMap<_, _> = dotenvy::from_path_iter(path)?.collect::<Result<_, _>>()?;
+    values.extend(std::env::vars());
     let token = values
         .get("DISCORD_TOKEN_TESTBOT")
         .context("Test token missing")?
@@ -60,11 +83,17 @@ async fn main() -> Result<()> {
         }
     });
     let stop = cancel.clone();
+    let (ended_tx, mut ended_rx) = tokio::sync::mpsc::channel(8);
     let event_task = tokio::spawn(async move {
         loop {
             tokio::select! { _ = stop.cancelled() => break, event = events.recv() => match event {
                 None => break,
-                Some(raydio::node::Event::Payload(value)) if value["op"] == "event" => println!("{}",json!({"event":value["type"],"code":value["code"],"reason":if value["type"]=="WebSocketClosedEvent" { Value::Null } else { value["reason"].clone() }})),
+                Some(raydio::node::Event::Payload(value)) if value["op"] == "event" => {
+                    println!("{}",json!({"event":value["type"],"code":value["code"],"reason":if value["type"]=="WebSocketClosedEvent" { Value::Null } else { value["reason"].clone() }}));
+                    if value["type"] == "TrackEndEvent" {
+                        let _ = ended_tx.try_send(value["reason"] == "finished");
+                    }
+                },
                 _ => {}
             } }
         }
@@ -76,6 +105,10 @@ async fn main() -> Result<()> {
         let loaded = node.load("https://www.youtube.com/watch?v=dQw4w9WgXcQ").await?;
         let encoded = loaded["data"]["encoded"].as_str().context("Control video did not load")?;
         for (name, channel) in [("General",1544468013582127238_u64), ("private-vc",1544468199356112947_u64)] {
+            if continuous.is_some() {
+                ensure!(cache.lock().unwrap().guilds[&GUILD].voices.values()
+                    .any(|v| v.channel == channel && !v.bot), "A receiver must already be in General");
+            }
             cache.lock().unwrap().guilds.get_mut(&GUILD).unwrap().server = None;
             sender.command(&UpdateVoiceState::new(Id::new(GUILD), Some(Id::new(channel)), true, false))?;
             let (session, server) = timeout(Duration::from_secs(15), async {
@@ -101,7 +134,48 @@ async fn main() -> Result<()> {
             }
             let joined = node.update(GUILD,json!({"voice":{"token":server.token,"endpoint":server.endpoint,"sessionId":session,"channelId":channel.to_string()},"volume":70})).await?;
             println!("{}",json!({"channel":name,"stage":"joined","connected":joined["state"]["connected"]}));
+            if continuous.is_some() {
+                timeout(Duration::from_secs(20), async {
+                    loop {
+                        let player = node.request(reqwest::Method::GET,
+                            &format!("/v4/sessions/{}/players/{GUILD}",node.health().session), &[], None).await?;
+                        if player["state"]["connected"] == true { break Ok::<_,anyhow::Error>(()); }
+                        sleep(Duration::from_millis(100)).await;
+                    }
+                }).await.context("Voice transport readiness timed out")??;
+            }
             node.update(GUILD,json!({"track":{"encoded":encoded,"userData":{"raydioGeneration":1}}})).await?;
+            if let Some(seconds) = continuous {
+                // A dedicated backend transport experiment: no slash-command or panel
+                // exercise, and no pause/volume/seek actions during observation.
+                let mut generation = 1_u64;
+                tracing::info!(generation, "track started");
+                let deadline = tokio::time::Instant::now() + Duration::from_secs(seconds);
+                let mut samples = tokio::time::interval(Duration::from_secs(10));
+                samples.set_missed_tick_behavior(tokio::time::MissedTickBehavior::Skip);
+                loop {
+                    tokio::select! {
+                        _ = tokio::time::sleep_until(deadline) => break,
+                        ended = ended_rx.recv() => {
+                            ensure!(ended == Some(true), "Playback ended unexpectedly");
+                            tracing::info!(generation, "track finished");
+                            generation += 1;
+                            node.update(GUILD,json!({"track":{"encoded":encoded,
+                                "userData":{"raydioGeneration":generation}}})).await?;
+                            tracing::info!(generation, "track started");
+                        }
+                        _ = samples.tick() => {
+                            let player = node.request(reqwest::Method::GET,
+                                &format!("/v4/sessions/{}/players/{GUILD}",node.health().session), &[], None).await?;
+                            ensure!(player["state"]["connected"] == true, "Voice transport disconnected");
+                            println!("{}",json!({"stage":"continuous","generation":generation,
+                                "positionMs":player["state"]["position"],"secondsRemaining":deadline.saturating_duration_since(tokio::time::Instant::now()).as_secs()}));
+                        }
+                    }
+                }
+                println!("{}",json!({"stage":"continuous-complete","seconds":seconds,"generations":generation}));
+                return Ok(());
+            }
             sleep(Duration::from_secs(8)).await;
             let playing = node.request(reqwest::Method::GET,&format!("/v4/sessions/{}/players/{GUILD}",node.health().session), &[], None).await?;
             println!("{}",json!({"channel":name,"stage":"playing","connected":playing["state"]["connected"],"positionMs":playing["state"]["position"],"hasTrack":playing["track"].is_object()}));

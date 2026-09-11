@@ -86,7 +86,7 @@
         const data=api.report={version:1,status:'starting',requestedSeconds:seconds,pcmEnabled:pcm,
             requestedAt:new Date().toISOString(),minutes:[],events:[],eventsTruncated:false,eventsDropped:0,
             network:{onlineAtStart:navigator.onLine},
-            diagnosticWindows:[],diagnosticWindowsDropped:0,
+            diagnosticWindows:[],diagnosticWindowsDropped:0,diagnosticWindowsCreated:0,
             diagnosticSampleFields:['elapsedMs','windowMs','packets','lost','discarded','concealedMs','silentMs','jitterMs','meanBufferMs','rttMs'],
             receiverScheduling:{enabled:scheduling,longTasksSupported:false,longTasks:0,
                 totalLongTaskMs:0,maxLongTaskMs:0,initialVisibility:document.visibilityState},
@@ -124,7 +124,7 @@
                 if(prior&&prior.remaining>0){if(prior.triggers.length<8)prior.triggers.push({ms:at,kind});}
                 else{
                     if(data.diagnosticWindows.length>=256){data.diagnosticWindows.shift();data.diagnosticWindowsDropped++;}
-                    data.diagnosticWindows.push({ms:at,triggers:[{ms:at,kind}],samples:history.slice(),remaining:5});
+                    data.diagnosticWindows.push({id:++data.diagnosticWindowsCreated,ms:at,triggers:[{ms:at,kind}],samples:history.slice(),remaining:5});
                 }
             }
         };

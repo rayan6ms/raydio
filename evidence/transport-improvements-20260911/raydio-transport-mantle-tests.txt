@@ -1,0 +1,53 @@
+   Compiling mantle-opus v0.0.0 (/home/rayan/Documents/Projects/mantle-rust-fix/crates/mantle-opus)
+   Compiling mantle-audio v0.0.0 (/home/rayan/Documents/Projects/mantle-rust-fix/crates/mantle-audio)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.12s
+     Running unittests src/lib.rs (target/debug/deps/mantle_audio-bc58aa1c59e8dc2f)
+
+running 34 tests
+test filter::tests::pipeline_rejects_wrong_or_uninitialized_frame_format ... ok
+test filter::tests::factory_order_limit_and_atomic_replacement_are_explicit ... ok
+test filter::tests::equalizer_is_live_clamped_resettable_and_48khz_only ... ok
+test filter::tests::finish_emits_terminal_samples_before_one_final_padding ... ok
+test filter::tests::first_absent_timestamp_keeps_stream_clocks_absent ... ok
+test opus::tests::quality_clamps_like_lavaplayer ... ok
+test filter::tests::replacement_preserves_partial_frame_without_padding_at_rate_boundary ... ok
+test passthrough::tests::compatible_packets_transition_to_exact_direct_delivery ... ok
+test filter::tests::reset_replacement_drop_and_capacity_failures_are_deterministic ... ok
+test passthrough::tests::duration_and_packet_bounds_are_checked_without_mutating_output ... ok
+test passthrough::tests::volume_filters_and_geometry_force_explicit_transcode_transitions ... ok
+test filter::tests::surplus_is_retained_across_reads_and_fixed_filters_keep_graph_order ... ok
+test queue::tests::configuration_is_hard_bounded ... ok
+test opus::tests::encodes_compatible_pcm_into_stable_inline_storage ... ok
+test queue::tests::full_empty_fifo_and_clear_contracts_are_explicit ... ok
+test resample::tests::configuration_format_finish_and_input_bounds_are_enforced ... ok
+test resample::tests::first_block_without_timestamp_keeps_stream_timestamps_absent ... ok
+test tests::fixed_encoded_slot_rejects_oversize_before_mutation ... ok
+test tests::format_rejects_zero_rate_and_out_of_scope_channels ... ok
+test tests::signed_pcm_conversion_matches_the_reference_scale ... ok
+test resample::tests::reset_reproduces_output_and_clears_finished_state ... ok
+test tests::pcm_storage_never_grows_and_rejects_invalid_geometry_before_mutation ... ok
+test transform::tests::channel_mapping_is_reference_compatible_and_allocation_stable ... ok
+test transform::tests::channel_mapping_rejects_capacity_before_mutation ... ok
+test transform::tests::sample_conversion_and_volume_match_reference_integer_semantics ... ok
+test transform::tests::sample_conversion_rejects_small_output_before_mutation ... ok
+test opus::tests::reset_reproduces_output_volume_is_applied_and_bad_geometry_preserves_the_slot ... ok
+test allocation_tests::passthrough_and_spsc_delivery_allocate_zero_times_after_construction ... ok
+test filter::tests::variable_rate_changes_paced_duration_and_keeps_both_clocks_monotonic ... ok
+test queue::tests::endpoints_transfer_fifty_thousand_frames_in_order_across_threads ... ok
+test resample::tests::streams_irregular_chunks_to_exact_length_without_reallocation ... ok
+test allocation_tests::streaming_pcm_assembly_allocates_zero_times_after_construction ... ok
+test allocation_tests::pcm_opus_encoding_and_spsc_delivery_allocate_zero_times_after_construction ... ok
+test allocation_tests::opus_decode_filter_encode_allocates_zero_times_after_construction ... ok
+
+test result: ok. 34 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.67s
+
+     Running unittests src/lib.rs (target/debug/deps/mantle_opus-af5bc33829da6487)
+
+running 4 tests
+test tests::loss_hint_is_validated_and_survives_reset_without_forcing_fec ... ok
+test tests::rejects_invalid_configuration_and_lengths_before_output_mutation ... ok
+test tests::encodes_into_caller_storage_and_reset_reproduces_the_packet ... ok
+test tests::decoder_round_trip_and_reset_are_deterministic ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

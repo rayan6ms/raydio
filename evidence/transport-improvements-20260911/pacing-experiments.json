@@ -1,0 +1,932 @@
+[
+  {
+    "file": "1789086652-baseline.log",
+    "passed": true,
+    "result": {
+      "allocation": {
+        "allocations": 0,
+        "allocationsPerFrame": 0.0,
+        "bytesAllocated": 0,
+        "observedFrames": 50,
+        "reallocations": 0
+      },
+      "benchmarkId": "oto-p07-complete-non-dave",
+      "churn": {
+        "cycles": 4,
+        "elapsedMs": 0
+      },
+      "connectBatchMs": 85,
+      "cpu": {
+        "clockTicksPerSecond": 100,
+        "percentOfOneLogicalCore": 0.5499928449185001,
+        "processTicks": 66
+      },
+      "frames": {
+        "deliveryRatio": 1.0,
+        "measurementBoundaryDifference": 0,
+        "portableUdpSendCallsPerFrame": 1,
+        "senderCounted": 6000,
+        "udpPeerReceived": 6000
+      },
+      "measurementMs": 120001,
+      "memoryKiB": {
+        "activeIncrementPerSender": 8,
+        "activePss": 7061,
+        "baselinePss": 5085,
+        "idleIncrementPerConnection": 1924,
+        "idlePss": 7009,
+        "measurementEndPss": 7333,
+        "pendingIncrementPerSender": 44,
+        "pendingPss": 7053
+      },
+      "oneSlowSource": true,
+      "profile": "release",
+      "runtimeWorkers": 2,
+      "schemaVersion": 1,
+      "senders": 1,
+      "synchronizedStartMs": 87,
+      "tasks": {
+        "active": 10,
+        "baseline": 3,
+        "idle": 5,
+        "pacerCoordinators": 4,
+        "pending": 11
+      },
+      "threads": {
+        "active": 6,
+        "baseline": 4,
+        "idle": 6,
+        "pending": 6
+      },
+      "timingNanos": {
+        "gapsAtLeast100Ms": 0,
+        "gapsAtLeast40Ms": 0,
+        "maxInterval": 31592892,
+        "maxSenderObservedLateness": 13208157,
+        "p50IntervalError": 216080,
+        "p50Lateness": 16482,
+        "p95IntervalError": 835423,
+        "p95Lateness": 470952,
+        "p999Interval": 22157390,
+        "p999IntervalError": 4901895,
+        "p999Lateness": 1683804,
+        "p99Interval": 20357115,
+        "p99IntervalError": 866732,
+        "p99Lateness": 536442
+      },
+      "udpSyscalls": {
+        "exactKernelCount": null,
+        "measurementStatus": "UNAVAILABLE_NO_SYSCALL_TRACER",
+        "sourceObservedSendApiCallsPerFrame": 1
+      },
+      "warmupMs": 2000
+    }
+  },
+  {
+    "file": "1789086775-direct-pacer.log",
+    "passed": true,
+    "result": {
+      "allocation": {
+        "allocations": 0,
+        "allocationsPerFrame": 0.0,
+        "bytesAllocated": 0,
+        "observedFrames": 50,
+        "reallocations": 0
+      },
+      "benchmarkId": "oto-p07-complete-non-dave",
+      "churn": {
+        "cycles": 4,
+        "elapsedMs": 0
+      },
+      "connectBatchMs": 83,
+      "cpu": {
+        "clockTicksPerSecond": 100,
+        "percentOfOneLogicalCore": 0.5333263273142566,
+        "processTicks": 64
+      },
+      "frames": {
+        "deliveryRatio": 1.0,
+        "measurementBoundaryDifference": 0,
+        "portableUdpSendCallsPerFrame": 1,
+        "senderCounted": 6001,
+        "udpPeerReceived": 6001
+      },
+      "measurementMs": 120001,
+      "memoryKiB": {
+        "activeIncrementPerSender": 8,
+        "activePss": 7005,
+        "baselinePss": 4877,
+        "idleIncrementPerConnection": 2084,
+        "idlePss": 6961,
+        "measurementEndPss": 7277,
+        "pendingIncrementPerSender": 36,
+        "pendingPss": 6997
+      },
+      "oneSlowSource": true,
+      "profile": "release",
+      "runtimeWorkers": 2,
+      "schemaVersion": 1,
+      "senders": 1,
+      "synchronizedStartMs": 107,
+      "tasks": {
+        "active": 6,
+        "baseline": 3,
+        "idle": 5,
+        "pacerCoordinators": 0,
+        "pending": 7
+      },
+      "threads": {
+        "active": 6,
+        "baseline": 4,
+        "idle": 6,
+        "pending": 6
+      },
+      "timingNanos": {
+        "gapsAtLeast100Ms": 0,
+        "gapsAtLeast40Ms": 0,
+        "maxInterval": 27361653,
+        "maxSenderObservedLateness": 25917248,
+        "p50IntervalError": 208636,
+        "p50Lateness": 161295,
+        "p95IntervalError": 846735,
+        "p95Lateness": 612612,
+        "p999Interval": 22011105,
+        "p999IntervalError": 3705215,
+        "p999Lateness": 2028021,
+        "p99Interval": 20350295,
+        "p99IntervalError": 872382,
+        "p99Lateness": 671495
+      },
+      "udpSyscalls": {
+        "exactKernelCount": null,
+        "measurementStatus": "UNAVAILABLE_NO_SYSCALL_TRACER",
+        "sourceObservedSendApiCallsPerFrame": 1
+      },
+      "warmupMs": 2000
+    }
+  },
+  {
+    "file": "1789086898-baseline.log",
+    "passed": false,
+    "result": {
+      "allocation": {
+        "allocations": 2,
+        "allocationsPerFrame": 0.0425531914893617,
+        "bytesAllocated": 128,
+        "observedFrames": 47,
+        "reallocations": 0
+      },
+      "benchmarkId": "oto-p07-complete-non-dave",
+      "churn": {
+        "cycles": 4,
+        "elapsedMs": 0
+      },
+      "connectBatchMs": 84,
+      "cpu": {
+        "clockTicksPerSecond": 100,
+        "percentOfOneLogicalCore": 0.5749918796053063,
+        "processTicks": 69
+      },
+      "frames": {
+        "deliveryRatio": 1.0,
+        "measurementBoundaryDifference": 0,
+        "portableUdpSendCallsPerFrame": 1,
+        "senderCounted": 6000,
+        "udpPeerReceived": 6000
+      },
+      "measurementMs": 120001,
+      "memoryKiB": {
+        "activeIncrementPerSender": 8,
+        "activePss": 6964,
+        "baselinePss": 4795,
+        "idleIncrementPerConnection": 2117,
+        "idlePss": 6912,
+        "measurementEndPss": 7236,
+        "pendingIncrementPerSender": 44,
+        "pendingPss": 6956
+      },
+      "oneSlowSource": true,
+      "profile": "release",
+      "runtimeWorkers": 2,
+      "schemaVersion": 1,
+      "senders": 1,
+      "synchronizedStartMs": 104,
+      "tasks": {
+        "active": 10,
+        "baseline": 3,
+        "idle": 5,
+        "pacerCoordinators": 4,
+        "pending": 11
+      },
+      "threads": {
+        "active": 6,
+        "baseline": 4,
+        "idle": 6,
+        "pending": 6
+      },
+      "timingNanos": {
+        "gapsAtLeast100Ms": 0,
+        "gapsAtLeast40Ms": 0,
+        "maxInterval": 32638013,
+        "maxSenderObservedLateness": 40160866,
+        "p50IntervalError": 219125,
+        "p50Lateness": 0,
+        "p95IntervalError": 835813,
+        "p95Lateness": 441954,
+        "p999Interval": 24417302,
+        "p999IntervalError": 9647353,
+        "p999Lateness": 4266954,
+        "p99Interval": 20443729,
+        "p99IntervalError": 872212,
+        "p99Lateness": 535666
+      },
+      "udpSyscalls": {
+        "exactKernelCount": null,
+        "measurementStatus": "UNAVAILABLE_NO_SYSCALL_TRACER",
+        "sourceObservedSendApiCallsPerFrame": 1
+      },
+      "warmupMs": 2000
+    }
+  },
+  {
+    "file": "1789087124-direct-pacer.log",
+    "passed": true,
+    "result": {
+      "allocation": {
+        "allocations": 0,
+        "allocationsPerFrame": 0.0,
+        "bytesAllocated": 0,
+        "observedFrames": 47,
+        "reallocations": 0
+      },
+      "benchmarkId": "oto-p07-complete-non-dave",
+      "churn": {
+        "cycles": 4,
+        "elapsedMs": 0
+      },
+      "connectBatchMs": 84,
+      "cpu": {
+        "clockTicksPerSecond": 100,
+        "percentOfOneLogicalCore": 0.558327260105298,
+        "processTicks": 67
+      },
+      "frames": {
+        "deliveryRatio": 1.0,
+        "measurementBoundaryDifference": 0,
+        "portableUdpSendCallsPerFrame": 1,
+        "senderCounted": 6001,
+        "udpPeerReceived": 6001
+      },
+      "measurementMs": 120001,
+      "memoryKiB": {
+        "activeIncrementPerSender": 72,
+        "activePss": 7041,
+        "baselinePss": 5145,
+        "idleIncrementPerConnection": 1792,
+        "idlePss": 6937,
+        "measurementEndPss": 7313,
+        "pendingIncrementPerSender": 32,
+        "pendingPss": 6969
+      },
+      "oneSlowSource": true,
+      "profile": "release",
+      "runtimeWorkers": 2,
+      "schemaVersion": 1,
+      "senders": 1,
+      "synchronizedStartMs": 82,
+      "tasks": {
+        "active": 6,
+        "baseline": 3,
+        "idle": 5,
+        "pacerCoordinators": 0,
+        "pending": 7
+      },
+      "threads": {
+        "active": 6,
+        "baseline": 4,
+        "idle": 6,
+        "pending": 6
+      },
+      "timingNanos": {
+        "gapsAtLeast100Ms": 0,
+        "gapsAtLeast40Ms": 0,
+        "maxInterval": 33102578,
+        "maxSenderObservedLateness": 39485850,
+        "p50IntervalError": 216261,
+        "p50Lateness": 0,
+        "p95IntervalError": 850360,
+        "p95Lateness": 0,
+        "p999Interval": 24540764,
+        "p999IntervalError": 8881179,
+        "p999Lateness": 4009295,
+        "p99Interval": 20365160,
+        "p99IntervalError": 873795,
+        "p99Lateness": 0
+      },
+      "udpSyscalls": {
+        "exactKernelCount": null,
+        "measurementStatus": "UNAVAILABLE_NO_SYSCALL_TRACER",
+        "sourceObservedSendApiCallsPerFrame": 1
+      },
+      "warmupMs": 2000
+    }
+  },
+  {
+    "file": "baseline-p07-1-0.log",
+    "passed": true,
+    "result": {
+      "allocation": {
+        "allocations": 0,
+        "allocationsPerFrame": 0.0,
+        "bytesAllocated": 0,
+        "observedFrames": 50,
+        "reallocations": 0
+      },
+      "benchmarkId": "oto-p07-complete-non-dave",
+      "churn": {
+        "cycles": 4,
+        "elapsedMs": 0
+      },
+      "connectBatchMs": 83,
+      "cpu": {
+        "clockTicksPerSecond": 100,
+        "percentOfOneLogicalCore": 0.36665288973322196,
+        "processTicks": 11
+      },
+      "frames": {
+        "deliveryRatio": 1.0,
+        "measurementBoundaryDifference": 0,
+        "portableUdpSendCallsPerFrame": 1,
+        "senderCounted": 1500,
+        "udpPeerReceived": 1500
+      },
+      "measurementMs": 30001,
+      "memoryKiB": {
+        "activeIncrementPerSender": 4,
+        "activePss": 6924,
+        "baselinePss": 4790,
+        "idleIncrementPerConnection": 2026,
+        "idlePss": 6816,
+        "measurementEndPss": 6952,
+        "pendingIncrementPerSender": 104,
+        "pendingPss": 6920
+      },
+      "oneSlowSource": true,
+      "profile": "release",
+      "runtimeWorkers": 2,
+      "schemaVersion": 1,
+      "senders": 1,
+      "synchronizedStartMs": 80,
+      "tasks": {
+        "active": 10,
+        "baseline": 3,
+        "idle": 5,
+        "pacerCoordinators": 4,
+        "pending": 11
+      },
+      "threads": {
+        "active": 6,
+        "baseline": 4,
+        "idle": 6,
+        "pending": 6
+      },
+      "timingNanos": {
+        "gapsAtLeast100Ms": 0,
+        "gapsAtLeast40Ms": 0,
+        "maxInterval": 20371101,
+        "maxSenderObservedLateness": 1238462,
+        "p50IntervalError": 202717,
+        "p50Lateness": 72504,
+        "p95IntervalError": 852889,
+        "p95Lateness": 517341,
+        "p999Interval": 20369590,
+        "p999IntervalError": 900080,
+        "p999Lateness": 615185,
+        "p99Interval": 20344880,
+        "p99IntervalError": 877996,
+        "p99Lateness": 583367
+      },
+      "udpSyscalls": {
+        "exactKernelCount": null,
+        "measurementStatus": "UNAVAILABLE_NO_SYSCALL_TRACER",
+        "sourceObservedSendApiCallsPerFrame": 1
+      },
+      "warmupMs": 1000
+    }
+  },
+  {
+    "file": "baseline-p07-1-2.log",
+    "passed": true,
+    "result": {
+      "allocation": {
+        "allocations": 0,
+        "allocationsPerFrame": 0.0,
+        "bytesAllocated": 0,
+        "observedFrames": 50,
+        "reallocations": 0
+      },
+      "benchmarkId": "oto-p07-complete-non-dave",
+      "churn": {
+        "cycles": 4,
+        "elapsedMs": 0
+      },
+      "connectBatchMs": 83,
+      "cpu": {
+        "clockTicksPerSecond": 100,
+        "percentOfOneLogicalCore": 0.2999960095830788,
+        "processTicks": 9
+      },
+      "frames": {
+        "deliveryRatio": 1.0,
+        "measurementBoundaryDifference": 0,
+        "portableUdpSendCallsPerFrame": 1,
+        "senderCounted": 1500,
+        "udpPeerReceived": 1500
+      },
+      "measurementMs": 30000,
+      "memoryKiB": {
+        "activeIncrementPerSender": 4,
+        "activePss": 6896,
+        "baselinePss": 4902,
+        "idleIncrementPerConnection": 1878,
+        "idlePss": 6780,
+        "measurementEndPss": 6952,
+        "pendingIncrementPerSender": 112,
+        "pendingPss": 6892
+      },
+      "oneSlowSource": true,
+      "profile": "release",
+      "runtimeWorkers": 2,
+      "schemaVersion": 1,
+      "senders": 1,
+      "synchronizedStartMs": 81,
+      "tasks": {
+        "active": 10,
+        "baseline": 3,
+        "idle": 5,
+        "pacerCoordinators": 4,
+        "pending": 11
+      },
+      "threads": {
+        "active": 6,
+        "baseline": 4,
+        "idle": 6,
+        "pending": 6
+      },
+      "timingNanos": {
+        "gapsAtLeast100Ms": 0,
+        "gapsAtLeast40Ms": 0,
+        "maxInterval": 20607791,
+        "maxSenderObservedLateness": 1711715,
+        "p50IntervalError": 181488,
+        "p50Lateness": 149,
+        "p95IntervalError": 866511,
+        "p95Lateness": 442145,
+        "p999Interval": 20571146,
+        "p999IntervalError": 904049,
+        "p999Lateness": 552313,
+        "p99Interval": 20323033,
+        "p99IntervalError": 896209,
+        "p99Lateness": 508248
+      },
+      "udpSyscalls": {
+        "exactKernelCount": null,
+        "measurementStatus": "UNAVAILABLE_NO_SYSCALL_TRACER",
+        "sourceObservedSendApiCallsPerFrame": 1
+      },
+      "warmupMs": 1000
+    }
+  },
+  {
+    "file": "baseline-p07-100-1.log",
+    "passed": true,
+    "result": {
+      "allocation": {
+        "allocations": 0,
+        "allocationsPerFrame": 0.0,
+        "bytesAllocated": 0,
+        "observedFrames": 5000,
+        "reallocations": 0
+      },
+      "benchmarkId": "oto-p07-complete-non-dave",
+      "churn": {
+        "cycles": 4,
+        "elapsedMs": 0
+      },
+      "connectBatchMs": 181,
+      "cpu": {
+        "clockTicksPerSecond": 100,
+        "percentOfOneLogicalCore": 7.633001410231542,
+        "processTicks": 229
+      },
+      "frames": {
+        "deliveryRatio": 1.0,
+        "measurementBoundaryDifference": 0,
+        "portableUdpSendCallsPerFrame": 1,
+        "senderCounted": 150000,
+        "udpPeerReceived": 150000
+      },
+      "measurementMs": 30001,
+      "memoryKiB": {
+        "activeIncrementPerSender": 3,
+        "activePss": 43620,
+        "baselinePss": 7342,
+        "idleIncrementPerConnection": 341,
+        "idlePss": 41444,
+        "measurementEndPss": 50488,
+        "pendingIncrementPerSender": 17,
+        "pendingPss": 43232
+      },
+      "oneSlowSource": true,
+      "profile": "release",
+      "runtimeWorkers": 2,
+      "schemaVersion": 1,
+      "senders": 100,
+      "synchronizedStartMs": 86,
+      "tasks": {
+        "active": 307,
+        "baseline": 102,
+        "idle": 203,
+        "pacerCoordinators": 4,
+        "pending": 308
+      },
+      "threads": {
+        "active": 32,
+        "baseline": 4,
+        "idle": 32,
+        "pending": 32
+      },
+      "timingNanos": {
+        "gapsAtLeast100Ms": 0,
+        "gapsAtLeast40Ms": 0,
+        "maxInterval": 22152079,
+        "maxSenderObservedLateness": 2318536,
+        "p50IntervalError": 515603,
+        "p50Lateness": 147604,
+        "p95IntervalError": 932198,
+        "p95Lateness": 966603,
+        "p999Interval": 21667057,
+        "p999IntervalError": 1829144,
+        "p999Lateness": 1350672,
+        "p99Interval": 20980739,
+        "p99IntervalError": 1100177,
+        "p99Lateness": 1156825
+      },
+      "udpSyscalls": {
+        "exactKernelCount": null,
+        "measurementStatus": "UNAVAILABLE_NO_SYSCALL_TRACER",
+        "sourceObservedSendApiCallsPerFrame": 1
+      },
+      "warmupMs": 1000
+    }
+  },
+  {
+    "file": "dave-trace-0.log",
+    "passed": true,
+    "result": {
+      "allocation": {
+        "allocations": 0,
+        "allocationsPerFrame": 0.0,
+        "bytesAllocated": 0,
+        "bytesAllocatedPerFrame": 0.0,
+        "reallocations": 0,
+        "reallocationsPerFrame": 0.0
+      },
+      "benchmarkId": "oto-p08-complete-paced-dave",
+      "boundaryDifference": 0,
+      "frames": 1500,
+      "maxSenderLatenessNanos": 2011974,
+      "measurementMs": 30000,
+      "profile": "release",
+      "schemaVersion": 1,
+      "source": "owned-channel",
+      "traceEnabled": false,
+      "udpPackets": 1500,
+      "warmupMs": 1000
+    }
+  },
+  {
+    "file": "dave-trace-1.log",
+    "passed": false,
+    "result": {
+      "allocation": {
+        "allocations": 0,
+        "allocationsPerFrame": 0.0,
+        "bytesAllocated": 0,
+        "bytesAllocatedPerFrame": 0.0,
+        "reallocations": 0,
+        "reallocationsPerFrame": 0.0
+      },
+      "benchmarkId": "oto-p08-complete-paced-dave",
+      "boundaryDifference": 0,
+      "frames": 0,
+      "maxSenderLatenessNanos": 0,
+      "measurementMs": 30001,
+      "profile": "release",
+      "schemaVersion": 1,
+      "source": "owned-channel",
+      "traceEnabled": true,
+      "udpPackets": 0,
+      "warmupMs": 1000
+    }
+  },
+  {
+    "file": "dave-trace-fixed-0.log",
+    "passed": true,
+    "result": {
+      "allocation": {
+        "allocations": 0,
+        "allocationsPerFrame": 0.0,
+        "bytesAllocated": 0,
+        "bytesAllocatedPerFrame": 0.0,
+        "reallocations": 0,
+        "reallocationsPerFrame": 0.0
+      },
+      "benchmarkId": "oto-p08-complete-paced-dave",
+      "boundaryDifference": 0,
+      "frames": 1501,
+      "maxSenderLatenessNanos": 2010916,
+      "measurementMs": 30001,
+      "profile": "release",
+      "schemaVersion": 1,
+      "source": "owned-channel",
+      "traceEnabled": false,
+      "udpPackets": 1501,
+      "warmupMs": 1000
+    }
+  },
+  {
+    "file": "dave-trace-fixed-1.log",
+    "passed": true,
+    "result": {
+      "allocation": {
+        "allocations": 0,
+        "allocationsPerFrame": 0.0,
+        "bytesAllocated": 0,
+        "bytesAllocatedPerFrame": 0.0,
+        "reallocations": 0,
+        "reallocationsPerFrame": 0.0
+      },
+      "benchmarkId": "oto-p08-complete-paced-dave",
+      "boundaryDifference": 0,
+      "frames": 1501,
+      "maxSenderLatenessNanos": 1379943,
+      "measurementMs": 30000,
+      "profile": "release",
+      "schemaVersion": 1,
+      "source": "owned-channel",
+      "traceEnabled": true,
+      "udpPackets": 1501,
+      "warmupMs": 1000
+    }
+  },
+  {
+    "file": "direct-p07-1-0.log",
+    "passed": true,
+    "result": {
+      "allocation": {
+        "allocations": 0,
+        "allocationsPerFrame": 0.0,
+        "bytesAllocated": 0,
+        "observedFrames": 50,
+        "reallocations": 0
+      },
+      "benchmarkId": "oto-p07-complete-non-dave",
+      "churn": {
+        "cycles": 4,
+        "elapsedMs": 0
+      },
+      "connectBatchMs": 82,
+      "cpu": {
+        "clockTicksPerSecond": 100,
+        "percentOfOneLogicalCore": 0.3999862140084836,
+        "processTicks": 12
+      },
+      "frames": {
+        "deliveryRatio": 1.0,
+        "measurementBoundaryDifference": 0,
+        "portableUdpSendCallsPerFrame": 1,
+        "senderCounted": 1500,
+        "udpPeerReceived": 1500
+      },
+      "measurementMs": 30001,
+      "memoryKiB": {
+        "activeIncrementPerSender": 52,
+        "activePss": 6876,
+        "baselinePss": 4835,
+        "idleIncrementPerConnection": 1953,
+        "idlePss": 6788,
+        "measurementEndPss": 6933,
+        "pendingIncrementPerSender": 36,
+        "pendingPss": 6824
+      },
+      "oneSlowSource": true,
+      "profile": "release",
+      "runtimeWorkers": 2,
+      "schemaVersion": 1,
+      "senders": 1,
+      "synchronizedStartMs": 81,
+      "tasks": {
+        "active": 6,
+        "baseline": 3,
+        "idle": 5,
+        "pacerCoordinators": 0,
+        "pending": 7
+      },
+      "threads": {
+        "active": 6,
+        "baseline": 4,
+        "idle": 6,
+        "pending": 6
+      },
+      "timingNanos": {
+        "gapsAtLeast100Ms": 0,
+        "gapsAtLeast40Ms": 0,
+        "maxInterval": 20528818,
+        "maxSenderObservedLateness": 1748297,
+        "p50IntervalError": 196618,
+        "p50Lateness": 0,
+        "p95IntervalError": 843916,
+        "p95Lateness": 59526,
+        "p999Interval": 20450756,
+        "p999IntervalError": 902091,
+        "p999Lateness": 169068,
+        "p99Interval": 20356988,
+        "p99IntervalError": 893652,
+        "p99Lateness": 125157
+      },
+      "udpSyscalls": {
+        "exactKernelCount": null,
+        "measurementStatus": "UNAVAILABLE_NO_SYSCALL_TRACER",
+        "sourceObservedSendApiCallsPerFrame": 1
+      },
+      "warmupMs": 1000
+    }
+  },
+  {
+    "file": "direct-p07-1-2.log",
+    "passed": true,
+    "result": {
+      "allocation": {
+        "allocations": 0,
+        "allocationsPerFrame": 0.0,
+        "bytesAllocated": 0,
+        "observedFrames": 50,
+        "reallocations": 0
+      },
+      "benchmarkId": "oto-p07-complete-non-dave",
+      "churn": {
+        "cycles": 4,
+        "elapsedMs": 0
+      },
+      "connectBatchMs": 84,
+      "cpu": {
+        "clockTicksPerSecond": 100,
+        "percentOfOneLogicalCore": 0.33331904240160737,
+        "processTicks": 10
+      },
+      "frames": {
+        "deliveryRatio": 1.0,
+        "measurementBoundaryDifference": 0,
+        "portableUdpSendCallsPerFrame": 1,
+        "senderCounted": 1501,
+        "udpPeerReceived": 1501
+      },
+      "measurementMs": 30001,
+      "memoryKiB": {
+        "activeIncrementPerSender": 52,
+        "activePss": 6755,
+        "baselinePss": 5105,
+        "idleIncrementPerConnection": 1562,
+        "idlePss": 6667,
+        "measurementEndPss": 6811,
+        "pendingIncrementPerSender": 36,
+        "pendingPss": 6703
+      },
+      "oneSlowSource": true,
+      "profile": "release",
+      "runtimeWorkers": 2,
+      "schemaVersion": 1,
+      "senders": 1,
+      "synchronizedStartMs": 81,
+      "tasks": {
+        "active": 6,
+        "baseline": 3,
+        "idle": 5,
+        "pacerCoordinators": 0,
+        "pending": 7
+      },
+      "threads": {
+        "active": 6,
+        "baseline": 4,
+        "idle": 6,
+        "pending": 6
+      },
+      "timingNanos": {
+        "gapsAtLeast100Ms": 0,
+        "gapsAtLeast40Ms": 0,
+        "maxInterval": 20378103,
+        "maxSenderObservedLateness": 1826712,
+        "p50IntervalError": 179483,
+        "p50Lateness": 0,
+        "p95IntervalError": 864930,
+        "p95Lateness": 0,
+        "p999Interval": 20344493,
+        "p999IntervalError": 905243,
+        "p999Lateness": 60024,
+        "p99Interval": 20301406,
+        "p99IntervalError": 899655,
+        "p99Lateness": 37923
+      },
+      "udpSyscalls": {
+        "exactKernelCount": null,
+        "measurementStatus": "UNAVAILABLE_NO_SYSCALL_TRACER",
+        "sourceObservedSendApiCallsPerFrame": 1
+      },
+      "warmupMs": 1000
+    }
+  },
+  {
+    "file": "direct-p07-100-1.log",
+    "passed": true,
+    "result": {
+      "allocation": {
+        "allocations": 0,
+        "allocationsPerFrame": 0.0,
+        "bytesAllocated": 0,
+        "observedFrames": 5000,
+        "reallocations": 0
+      },
+      "benchmarkId": "oto-p07-complete-non-dave",
+      "churn": {
+        "cycles": 4,
+        "elapsedMs": 0
+      },
+      "connectBatchMs": 152,
+      "cpu": {
+        "clockTicksPerSecond": 100,
+        "percentOfOneLogicalCore": 8.33285382481522,
+        "processTicks": 250
+      },
+      "frames": {
+        "deliveryRatio": 1.0,
+        "measurementBoundaryDifference": 0,
+        "portableUdpSendCallsPerFrame": 1,
+        "senderCounted": 150000,
+        "udpPeerReceived": 150000
+      },
+      "measurementMs": 30001,
+      "memoryKiB": {
+        "activeIncrementPerSender": 3,
+        "activePss": 43496,
+        "baselinePss": 7226,
+        "idleIncrementPerConnection": 344,
+        "idlePss": 41652,
+        "measurementEndPss": 50285,
+        "pendingIncrementPerSender": 14,
+        "pendingPss": 43124
+      },
+      "oneSlowSource": true,
+      "profile": "release",
+      "runtimeWorkers": 2,
+      "schemaVersion": 1,
+      "senders": 100,
+      "synchronizedStartMs": 86,
+      "tasks": {
+        "active": 303,
+        "baseline": 102,
+        "idle": 203,
+        "pacerCoordinators": 0,
+        "pending": 304
+      },
+      "threads": {
+        "active": 41,
+        "baseline": 4,
+        "idle": 41,
+        "pending": 41
+      },
+      "timingNanos": {
+        "gapsAtLeast100Ms": 0,
+        "gapsAtLeast40Ms": 0,
+        "maxInterval": 21425662,
+        "maxSenderObservedLateness": 2525272,
+        "p50IntervalError": 518207,
+        "p50Lateness": 32774,
+        "p95IntervalError": 865686,
+        "p95Lateness": 792419,
+        "p999Interval": 21231605,
+        "p999IntervalError": 1246003,
+        "p999Lateness": 1248103,
+        "p99Interval": 21028523,
+        "p99IntervalError": 1037083,
+        "p99Lateness": 1082252
+      },
+      "udpSyscalls": {
+        "exactKernelCount": null,
+        "measurementStatus": "UNAVAILABLE_NO_SYSCALL_TRACER",
+        "sourceObservedSendApiCallsPerFrame": 1
+      },
+      "warmupMs": 1000
+    }
+  }
+]

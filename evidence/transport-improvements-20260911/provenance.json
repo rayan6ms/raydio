@@ -1,0 +1,21 @@
+{
+  "sourcePacketsSha256": "29f1ac2bad421ed974c8276c15943cc6a47cbde931276c8d35f51c874532431b",
+  "opusArchiveSha256": "53e4a62877fd6c4609a3dfcc83435baed5232858302e5b1433088cb296c63a97",
+  "opusCrate": "opus-head-sys 0.3.1",
+  "volume": 70,
+  "volumeMultiplier": 6172,
+  "sampleRate": 48000,
+  "channels": 2,
+  "frameSamples": 960,
+  "note": "libopus reports unknown version; archive hash pins exact deployment build. Initial codec outputs outside codec-volume70 and codec-sweep used linear volume and are superseded.",
+  "benchmarkToolchain": "Oto A/B harness rustc 1.98 default, shared Cargo.lock; final checks pinned rustc 1.97.1. Harness timings are not the full Raydio bot.",
+  "botBinarySha256": "225a2af42cbb9639394db8f0d40d0eb0ae897e81ade62c50e36dfd0ac79a9d91",
+  "probeCandidateSha256": "a54d28a6f15ed33ca30023dd91eba87086ad3f735304495c2f16895189a48bd5",
+  "botBinaryBytes": 18635408,
+  "otoRevision": "e3812da26d7f8da5e99bf4f328b8a0987c268c13",
+  "mantleRevision": "5b7caf0b6db492e8a56abac1bd4d36da76d5c8c5",
+  "crustRevision": "f4680f5f373a4c5bdb0129856590968623321ed5",
+  "probeBaselineSha256": "9f111355b988cb30fbf2f550eeea5a9198d731d7f86fb1d1a1b4edffdc9d015b",
+  "probeBaselineSource": "59e36fde680e34c91af76b0b36552676b1c76162 plus identical continuous-probe example",
+  "probeBuildToolchain": "rustc 1.97.1; identical release profile; each version uses its production Cargo.lock"
+}

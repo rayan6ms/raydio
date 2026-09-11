@@ -30,6 +30,23 @@ if archive.exists():
         r['events']=[events[i] for i in sequence]
         r['persistedEventHistoryComplete']=not archive_warnings
 
+window_archive=root/'receiver-windows.jsonl'
+persisted_windows_complete=False
+if window_archive.exists():
+    windows={}
+    for line in window_archive.read_text().splitlines():
+        row=json.loads(line)
+        if row.get('requestedAt')!=r.get('requestedAt'): continue
+        window=row['window']; identity=window['id']
+        if row['revision']>windows.get(identity,(0,None))[0]:
+            windows[identity]=(row['revision'],window)
+    # The final report may contain the newest in-progress revision if archival failed.
+    merged={identity:pair[1] for identity,pair in windows.items()}
+    merged.update({w['id']:w for w in r.get('diagnosticWindows',[]) if 'id' in w})
+    expected=r.get('diagnosticWindowsCreated')
+    persisted_windows_complete=(type(expected) is int and sorted(merged)==list(range(1,expected+1)))
+    r['diagnosticWindows']=[merged[i] for i in sorted(merged)]
+
 log=re.sub(r'\x1b\[[0-9;]*m','',(root/'service.log').read_text())
 repeats=[]
 checkpoints=[]
@@ -138,7 +155,13 @@ if any('error' in sample for sample in samples): summary['evidenceWarnings'].app
 if len({sample.get('pid') for sample in samples})>1: summary['evidenceWarnings'].append('sender process changed')
 for key in ('completePollCoverage','completePcmCoverage','completeEventHistory','uninterruptedConnection'):
     if r['coverage'].get(key) is not True: summary['evidenceWarnings'].append(key+' not established')
-if r.get('diagnosticWindowsDropped',0): summary['evidenceWarnings'].append('incident windows overwritten')
+summary['incidentWindows']={'retained':len(r.get('diagnosticWindows',[])),
+    'created':r.get('diagnosticWindowsCreated'), 'browserEvictions':r.get('diagnosticWindowsDropped',0),
+    'completePersistedHistory':persisted_windows_complete,
+    'incompletePostIncidentWindows':sum(w.get('remaining',0)>0 for w in r.get('diagnosticWindows',[]))}
+summary['diagnosticWindows']=r.get('diagnosticWindows',[])
+if r.get('diagnosticWindowsDropped',0) and not persisted_windows_complete:
+    summary['evidenceWarnings'].append('incident windows overwritten without complete archive')
 if r.get('status')!='completed': summary['evidenceWarnings'].append('receiver did not complete')
 if not samples: summary['evidenceWarnings'].append('no in-window sender-host samples')
 summary['limitations'].append('Natural boundaries require a logged finish followed by a later generation start; all PCM quiet, including candidates, remains in the report. Coincidence never proves source-only silence.')

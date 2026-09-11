@@ -1,5 +1,15 @@
 # Six-hour Oracle audio endurance result — 2026-09-10
 
+> **Correction from the subsequent evidence audit:** this initial interpretation
+> omitted seven shorter off-boundary quiet intervals (231–712 ms), in addition to
+> the two long interruptions listed below. Nine boundary intervals also overlap
+> receiver anomalies; agreement with the source tail is a candidate classification,
+> not proof of source-only silence. The 1,076,449 sender-frame delta below spans
+> the interior 359 minutes between checkpoints, not the entire six hours.
+> All event sequences survived, but four detailed incident windows were evicted.
+> See `AUDIO-TRANSPORT-IMPROVEMENTS-2026-09-11.md` for the corrected interpretation
+> and the subsequent experiments. The original observations below remain for provenance.
+
 The audit-fixes candidate (`2be406be22fd64f56adaccd45c2d115c27fd380c`, binary SHA-256 `c007862072d46a0ded0b8dbe93e030d8ba029ac7087f0ef213989586ba4f3002`) ran Testbot in `test → General` for the complete 21,600-second observation. Playback was Rick Astley’s “Never Gonna Give You Up” at volume 70 with Loop enabled.
 
 ## Coverage and audio output

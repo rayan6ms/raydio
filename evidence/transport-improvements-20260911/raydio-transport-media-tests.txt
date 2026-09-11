@@ -1,0 +1,17 @@
+   Compiling mantle-audio v0.0.0 (/home/rayan/Documents/Projects/mantle-rust-fix/crates/mantle-audio)
+   Compiling mantle-symphonia-isomp4 v0.6.1 (/home/rayan/Documents/Projects/mantle-rust-fix/third_party/symphonia-format-isomp4)
+   Compiling mantle-media v0.0.0 (/home/rayan/Documents/Projects/mantle-rust-fix/crates/mantle-media)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.43s
+     Running unittests src/lib.rs (target/debug/deps/mantle_media-de8d8f42b50edb99)
+
+running 7 tests
+test youtube_playback::tests::repeated_opus_bypass_transitions_preserve_packet_order_and_source_clock ... ok
+test youtube_playback::tests::fallback_duplicates_mono_and_emits_one_padded_final_frame ... ok
+test youtube_playback::tests::fallback_resamples_low_rate_pcm_into_monotonic_fixed_opus_frames ... ok
+test youtube_playback::tests::variable_rate_stage_changes_pcm_transcoder_paced_duration ... ok
+test youtube_playback::tests::pcm_seek_after_eof_resets_decoder_history ... ok
+test youtube_playback::tests::filter_changes_preserve_exact_audio_for_decoded_and_resampled_input ... ok
+test youtube_playback::tests::seek_after_eof_reproduces_fresh_transcoded_audio ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 19 filtered out; finished in 3.62s
+

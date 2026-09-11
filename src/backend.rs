@@ -31,7 +31,11 @@ impl Backend {
                 ..MantleAdapterOptions::default()
             },
         )?);
-        let voice = Arc::new(OtoVoiceBackend::with_defaults(100, 4)?);
+        let mut voice = OtoVoiceBackend::with_defaults(100, 4)?;
+        if std::env::var("RAYDIO_SEND_TRACE").as_deref() == Ok("1") {
+            voice = voice.with_send_trace();
+        }
+        let voice = Arc::new(voice);
         Self::start_with(media, voice).await
     }
     #[cfg(test)]

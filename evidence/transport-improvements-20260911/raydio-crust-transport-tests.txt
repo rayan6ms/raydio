@@ -1,0 +1,90 @@
+    Updating git repository `https://github.com/rayan6ms/oto`
+    Updating git repository `https://github.com/rayan6ms/mantle`
+    Updating crates.io index
+     Locking 10 packages to latest Rust 1.97.1 compatible versions
+      Adding davey v0.1.4 (https://github.com/rayan6ms/oto?rev=e3812da26d7f8da5e99bf4f328b8a0987c268c13#e3812da2)
+      Adding mantle-audio v0.0.0 (https://github.com/rayan6ms/mantle?rev=5b7caf0b6db492e8a56abac1bd4d36da76d5c8c5#5b7caf0b)
+      Adding mantle-core v0.0.0 (https://github.com/rayan6ms/mantle?rev=5b7caf0b6db492e8a56abac1bd4d36da76d5c8c5#5b7caf0b)
+      Adding mantle-media v0.0.0 (https://github.com/rayan6ms/mantle?rev=5b7caf0b6db492e8a56abac1bd4d36da76d5c8c5#5b7caf0b)
+      Adding mantle-opus v0.0.0 (https://github.com/rayan6ms/mantle?rev=5b7caf0b6db492e8a56abac1bd4d36da76d5c8c5#5b7caf0b)
+      Adding mantle-symphonia-isomp4 v0.6.1 (https://github.com/rayan6ms/mantle?rev=5b7caf0b6db492e8a56abac1bd4d36da76d5c8c5#5b7caf0b)
+      Adding mantle-xaac v0.0.0 (https://github.com/rayan6ms/mantle?rev=5b7caf0b6db492e8a56abac1bd4d36da76d5c8c5#5b7caf0b)
+      Adding openmls_rust_crypto v0.5.1 (https://github.com/rayan6ms/oto?rev=e3812da26d7f8da5e99bf4f328b8a0987c268c13#e3812da2)
+      Adding oto v1.0.0 (https://github.com/rayan6ms/oto?rev=e3812da26d7f8da5e99bf4f328b8a0987c268c13#e3812da2)
+      Adding oto-testkit v1.0.0 (https://github.com/rayan6ms/oto?rev=e3812da26d7f8da5e99bf4f328b8a0987c268c13#e3812da2)
+   Compiling mantle-xaac v0.0.0 (https://github.com/rayan6ms/mantle?rev=5b7caf0b6db492e8a56abac1bd4d36da76d5c8c5#5b7caf0b)
+   Compiling openmls_rust_crypto v0.5.1 (https://github.com/rayan6ms/oto?rev=e3812da26d7f8da5e99bf4f328b8a0987c268c13#e3812da2)
+   Compiling mantle-opus v0.0.0 (https://github.com/rayan6ms/mantle?rev=5b7caf0b6db492e8a56abac1bd4d36da76d5c8c5#5b7caf0b)
+   Compiling davey v0.1.4 (https://github.com/rayan6ms/oto?rev=e3812da26d7f8da5e99bf4f328b8a0987c268c13#e3812da2)
+   Compiling symphonia v0.6.1
+   Compiling mantle-audio v0.0.0 (https://github.com/rayan6ms/mantle?rev=5b7caf0b6db492e8a56abac1bd4d36da76d5c8c5#5b7caf0b)
+   Compiling mantle-symphonia-isomp4 v0.6.1 (https://github.com/rayan6ms/mantle?rev=5b7caf0b6db492e8a56abac1bd4d36da76d5c8c5#5b7caf0b)
+   Compiling mantle-core v0.0.0 (https://github.com/rayan6ms/mantle?rev=5b7caf0b6db492e8a56abac1bd4d36da76d5c8c5#5b7caf0b)
+   Compiling mantle-media v0.0.0 (https://github.com/rayan6ms/mantle?rev=5b7caf0b6db492e8a56abac1bd4d36da76d5c8c5#5b7caf0b)
+   Compiling oto-testkit v1.0.0 (https://github.com/rayan6ms/oto?rev=e3812da26d7f8da5e99bf4f328b8a0987c268c13#e3812da2)
+   Compiling oto v1.0.0 (https://github.com/rayan6ms/oto?rev=e3812da26d7f8da5e99bf4f328b8a0987c268c13#e3812da2)
+   Compiling crust-testkit v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-testkit)
+   Compiling crust-oto-adapter v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-oto-adapter)
+   Compiling crust-mantle-adapter v0.0.0 (/home/rayan/Documents/Projects/crust-raydio-public/crates/crust-mantle-adapter)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2m 15s
+     Running unittests src/lib.rs (target/debug/deps/crust_mantle_adapter-5ca6b702e4459e31)
+
+running 32 tests
+test filters::tests::crust_timescale_allocates_zero_times_after_construction ... ok
+test filters::tests::fixed_filter_golden_vectors_match_lavadsp_formulas ... ok
+test filters::tests::karaoke_rejects_invalid_parameters_and_boundary_filters_remain_finite ... ok
+test filters::tests::p09_filter_benchmark_report ... ignored, manual release-profile filter benchmark; run with --ignored --nocapture
+test filters::tests::phase_vocoder_timescale_changes_stream_duration ... ok
+test filters::tests::player_volume_matches_frozen_lavaplayer_signed_pcm_oracle_without_allocations ... ok
+test filters::tests::remaining_fixed_filter_golden_vectors_match_lavadsp_formulas ... ok
+test filters::tests::timescale_reset_replacement_removal_and_ratio_bounds_are_deterministic ... ok
+test filters::tests::timescale_speed_pitch_and_rate_are_independent_and_fractionally_paced ... ok
+test filters::tests::wsola_finish_flushes_exact_duration_at_speed_boundaries ... ok
+test tests::blocked_controls_expire_without_mutating_media ... ok
+test tests::buffered_audio_remains_available_while_next_read_is_blocked ... ok
+test tests::cancelled_queued_seek_never_changes_position ... ok
+test tests::completed_staged_input_repeats_and_resets_sequence_without_reopening_source ... ok
+test tests::completed_streaming_fallback_does_not_retain_a_decoder_or_source ... ok
+test tests::deferred_filters_are_bounded_ordered_and_drained_before_stop ... ok
+test tests::disabled_route_planner_reuses_source_http_connection ... ok
+test tests::dropping_load_guard_cancels_worker_and_reaps_watcher ... ok
+test tests::filter_update_waiting_on_a_source_read_does_not_block_buffered_audio ... ok
+test tests::identical_filters_do_not_wait_for_a_source_read_but_queued_changes_stay_ordered ... ok
+test tests::outbound_policy_preserves_identity_and_rejects_known_family_mismatch ... ok
+test tests::p18_offline_mantle_playback_benchmark_report ... ignored, release-only P18 Mantle full-playback performance gate
+test tests::pause_retains_read_ahead_and_resume_delivers_in_order ... ok
+test tests::pending_frame_does_not_block_stop_in_running_actor ... ok
+test tests::player_churn_reaps_dead_allocations ... ok
+test tests::production_source_http_defaults_to_mantles_public_internet_policy ... ok
+test tests::read_ahead_is_bounded_and_eof_waits_for_the_last_delivered_frame ... ok
+test tests::real_adapter_passes_the_shared_contract_through_mantle ... ok
+test tests::routed_mantle_requests_bind_the_selected_local_ip_without_cross_route_reuse ... ok
+test tests::seek_and_replacement_discard_frames_from_the_previous_position ... ok
+test tests::staged_input_cleanup_cancellation_and_stopped_controls ... ok
+test tests::stop_acknowledges_without_waiting_for_read_and_stale_result_is_discarded ... ok
+
+test result: ok. 30 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 3.68s
+
+     Running unittests src/lib.rs (target/debug/deps/crust_oto_adapter-e2a4a5d0fb89b21b)
+
+running 17 tests
+test tests::abort_before_producer_starts_wakes_pending_consumer ... ok
+test tests::backend_shutdown_polls_all_connections_concurrently ... ok
+test tests::bridge_is_capacity_one_and_pulls_again_only_after_consumption ... ok
+test tests::concurrent_publication_preserves_every_frame_and_terminal_order ... ok
+test tests::dropped_lifecycle_waiters_complete_before_replacement_and_shutdown ... ok
+test tests::dropped_stop_during_silence_drain_cannot_strand_busy ... ok
+test tests::empty_path_replaces_the_waker_and_wakes_on_nonempty_transition ... ok
+test tests::p10_bridge_target_scale_benchmark_report ... ignored, manual release-profile voice bridge benchmark; run with --ignored --nocapture
+test tests::pending_consumer_wakes_when_the_producer_is_cancelled ... ok
+test tests::ready_ring_frame_does_not_depend_on_tokio_cooperative_budget ... ok
+test tests::real_adapter_connects_idles_sends_replaces_stops_and_shuts_down ... ok
+test tests::real_adapter_maps_ping_resume_fresh_info_and_terminal_close ... ok
+test tests::real_adapter_never_starts_plaintext_audio_when_dave_is_required ... ok
+test tests::source_failure_is_retained_for_typed_event_delivery ... ok
+test tests::terminal_audio_failure_is_reported_instead_of_leaving_a_playing_zombie ... ok
+test tests::terminal_transition_wakes_pending_consumer_without_polling ... ok
+test tests::undersized_oto_output_fails_instead_of_emitting_an_empty_frame ... ok
+
+test result: ok. 16 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 10.20s
+

@@ -101,6 +101,22 @@ inventory contains exactly one running instance; the capacity report is historic
 Always Free and one instance are deployment constraints: do not add a paid shape
 or an additional instance as a workaround.
 
+### Short sender diagnostic traces
+
+For a bounded diagnostic session, process environment `RAYDIO_SEND_TRACE=1`
+enables RTP header and send-time batches in the voice adapter's journal output.
+The trace contains no audio payload or credentials. Each sender has a fixed
+1,024-record ring; overflow drops records and reports the count, never delaying
+audio. Keep tracing off for normal use. Batch formatting and journal writes still
+have overhead even though the packet producer allocates nothing.
+
+Export the service journal with `journalctl -o short-iso-precise`, then run
+`uv run --no-project python benchmarks/summarize_send_trace.py SERVICE_LOG OUTPUT`.
+The output distinguishes missing diagnostics, RTP sequence/timestamp discontinuities,
+and long local send intervals. Correlate with lifecycle and receiver logs before
+attributing a long interval to a bug: pauses and source transitions are retained.
+Successful local sends do not prove delivery to Discord or the listener.
+
 Process memory must be measured with `/proc/PID/smaps_rollup` (PSS and RSS),
 alongside cgroup accounting. `MemoryCurrent` can omit shared file pages charged
 to a different cgroup and is not the bot's total memory footprint. The initial

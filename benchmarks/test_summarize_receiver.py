@@ -80,7 +80,14 @@ class SummaryTests(unittest.TestCase):
                 'events': [{'kind': 'quiet', 'ms': ms, 'durationMs': duration}
                            for ms, duration in [(20000, 15623.75), (30000, 976.25),
                                                 (40000, 1136.25), (45000, 330.0)]],
+                'diagnosticWindowsCreated': 2, 'diagnosticWindowsDropped': 1,
+                'diagnosticWindows': [dict(id=2, remaining=0, samples=[[2000]])],
             }
+            (root / 'receiver-windows.jsonl').write_text('\n'.join(json.dumps(row) for row in [
+                dict(requestedAt='current-run',revision=1,window=dict(id=1,remaining=5,samples=[[0]])),
+                dict(requestedAt='current-run',revision=2,window=dict(id=1,remaining=0,samples=[[0],[1000]])),
+                dict(requestedAt='other-run',revision=9,window=dict(id=1,remaining=0,samples=[])),
+            ]))
             (root / 'receiver.json').write_text(json.dumps(receiver))
             (root / 'service.log').write_text(''.join(
                 f'2026-09-09T00:00:{second-1:02d}.999Z INFO track finished generation={generation}\n'
@@ -101,6 +108,9 @@ class SummaryTests(unittest.TestCase):
             self.assertEqual(summary['checkpointSavesInCollectedFile'], 3)
             self.assertEqual(summary['negativeLossDeltas'], -3)
             self.assertNotIn('recoveredLoss', summary)
+            self.assertTrue(summary['incidentWindows']['completePersistedHistory'])
+            self.assertEqual(summary['diagnosticWindows'][0]['samples'], [[0], [1000]])
+            self.assertFalse(any('windows overwritten' in w for w in summary['evidenceWarnings']))
 
 
 if __name__ == '__main__':

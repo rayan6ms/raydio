@@ -4,6 +4,7 @@ Host samples keep arriving without a browser or a successful POST. No packet
 interception, child process, or high-frequency scheduling probe is used.
 """
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -45,6 +46,8 @@ class Collector:
         self.archive_missing_events = 0
         self.archive_bytes = 0
         self.archive_limit_bytes = 64 * 1024 * 1024
+        self.window_run = None
+        self.window_revisions = {}
 
     def tick(self, now):
         if now < self.next_sample:
@@ -77,7 +80,43 @@ class Collector:
         with (self.output / 'checkpoints.jsonl').open('a') as f:
             f.write(json.dumps(checkpoint, separators=(',', ':')) + '\n')
         self.archive_events(data)
+        self.archive_windows(data)
         self.last_receiver = checkpoint
+
+    def archive_windows(self, data):
+        """Persist revisions: an open incident gains samples after its first save."""
+        run = data.get('requestedAt')
+        if run != self.window_run:
+            self.window_run = run
+            self.window_revisions = {}
+        updates = []
+        rows = []
+        for window in data.get('diagnosticWindows', []):
+            identity = window.get('id')
+            if type(identity) is not int or not 1 <= identity <= 21600:
+                raise ValueError('invalid incident window identity')
+            encoded = json.dumps(window, sort_keys=True, separators=(',', ':'))
+            digest = hashlib.sha256(encoded.encode()).digest()
+            revision, previous = self.window_revisions.get(identity, (0, None))
+            if digest == previous:
+                continue
+            revision += 1
+            rows.append(json.dumps({'requestedAt': run, 'revision': revision,
+                                    'window': window}, separators=(',', ':')) + '\n')
+            updates.append((identity, revision, digest))
+        payload = ''.join(rows)
+        size = len(payload.encode())
+        if self.archive_bytes + size > self.archive_limit_bytes:
+            raise ValueError('diagnostic archive reached its 64 MiB bound')
+        if not payload:
+            return
+        with (self.output / 'receiver-windows.jsonl').open('a') as output:
+            output.write(payload)
+            output.flush()
+            os.fsync(output.fileno())
+        self.archive_bytes += size
+        for identity, revision, digest in updates:
+            self.window_revisions[identity] = (revision, digest)
 
     def archive_events(self, data):
         run = data.get('requestedAt')
@@ -107,6 +146,7 @@ class Collector:
         return {'hostSamples': self.host_samples, 'lastReceiver': self.last_receiver,
                 'archivedSequence': self.archived_sequence, 'archiveMissingEvents': self.archive_missing_events,
                 'archiveBytes': self.archive_bytes,
+                'archivedWindows': len(self.window_revisions),
                 'remainingSeconds': max(0, self.expires_at - time.monotonic()) if self.expires_at is not None else None}
 
 
