@@ -1,0 +1,16 @@
+{
+  "run": "full-candidate-six-hour-20260911-0235",
+  "requestedSeconds": 21600,
+  "collectorLifetimeSeconds": 25200,
+  "candidateSha256": "225a2af42cbb9639394db8f0d40d0eb0ae897e81ade62c50e36dfd0ac79a9d91",
+  "oracleInstance": "137.131.202.133",
+  "service": "raydio-isolated-six-hour.service",
+  "hostSampler": "raydio-six-hour-20260911-host.service",
+  "receiver": "Discord test / General",
+  "bot": "Testbot (bot1544468432907669644)",
+  "track": "Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)",
+  "volume": 70,
+  "loop": true,
+  "startedAtUtc": "2026-09-11T02:35:25.478Z",
+  "notes": ["No production Raydio process was started", "No browser navigation or voice reconnect is planned during the observation"]
+}
