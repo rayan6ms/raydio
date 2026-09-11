@@ -57,7 +57,7 @@ systemctl mask --runtime "${maintenance_units[@]}"
 cat > "/opt/raydio/diagnostics/$run_id-restore-maintenance.sh" <<EOF
 #!/bin/sh
 set -eu
-systemctl unmask ${maintenance_units[*]}
+systemctl unmask --runtime ${maintenance_units[*]}
 systemctl start ${maintenance_timers[*]}
 EOF
 chmod 700 "/opt/raydio/diagnostics/$run_id-restore-maintenance.sh"
