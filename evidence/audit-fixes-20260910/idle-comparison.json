@@ -1,0 +1,85 @@
+{
+  "before": {
+    "samples": [
+      {
+        "monotonic": 195565.580894118,
+        "pid": 11320,
+        "pssKiB": 12681,
+        "rssKiB": 15056,
+        "cpuSeconds": 0.15,
+        "threads": 3
+      },
+      {
+        "monotonic": 195570.582246036,
+        "pid": 11320,
+        "pssKiB": 12681,
+        "rssKiB": 15056,
+        "cpuSeconds": 0.15,
+        "threads": 3
+      },
+      {
+        "monotonic": 195575.583492185,
+        "pid": 11320,
+        "pssKiB": 12681,
+        "rssKiB": 15056,
+        "cpuSeconds": 0.15,
+        "threads": 3
+      },
+      {
+        "monotonic": 195580.584670107,
+        "pid": 11320,
+        "pssKiB": 12681,
+        "rssKiB": 15056,
+        "cpuSeconds": 0.15,
+        "threads": 3
+      }
+    ],
+    "medianPssKiB": 12681.0,
+    "medianRssKiB": 15056.0,
+    "cpuPercentOneCore": 0.0
+  },
+  "after": {
+    "samples": [
+      {
+        "monotonic": 196387.627062085,
+        "pid": 11663,
+        "pssKiB": 12376,
+        "rssKiB": 14776,
+        "cpuSeconds": 0.11,
+        "threads": 3
+      },
+      {
+        "monotonic": 196392.628256604,
+        "pid": 11663,
+        "pssKiB": 12376,
+        "rssKiB": 14776,
+        "cpuSeconds": 0.12,
+        "threads": 3
+      },
+      {
+        "monotonic": 196397.629457296,
+        "pid": 11663,
+        "pssKiB": 12376,
+        "rssKiB": 14776,
+        "cpuSeconds": 0.12,
+        "threads": 3
+      },
+      {
+        "monotonic": 196402.630666081,
+        "pid": 11663,
+        "pssKiB": 12376,
+        "rssKiB": 14776,
+        "cpuSeconds": 0.12,
+        "threads": 3
+      }
+    ],
+    "medianPssKiB": 12376.0,
+    "medianRssKiB": 14776.0,
+    "cpuPercentOneCore": 0.06665065275422509
+  },
+  "scope": "One freshly restarted authenticated idle process per build, same Oracle VM/service/environment; 30 s warmup, 15 s sample span; 10 ms CPU accounting. No statistical significance claim.",
+  "pssDeltaKiB": -305.0,
+  "pssPercent": -2.4051730936046054,
+  "beforeSha256": "6a9a58fd7ce1706a778a213b73d7617a478ba45e2524a1cc0db379974c036c67",
+  "afterSha256": "c007862072d46a0ded0b8dbe93e030d8ba029ac7087f0ef213989586ba4f3002"
+}
