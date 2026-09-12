@@ -4,6 +4,17 @@ The final candidate completed the requested 21,600-second receiver observation o
 
 ## Comparison with the previous complete six-hour run
 
+This is a comparison of two qualified observations, not a byte-identical binary
+experiment. The previous run used binary SHA-256
+`c007862072d46a0ded0b8dbe93e030d8ba029ac7087f0ef213989586ba4f3002`; this run
+used `ebba57eb4406e01fa138b30678e2593ac5ec758d4d236b971c8ae1121cfa0576`.
+Between them, Raydio advanced its pinned Oto, Crust, and Mantle revisions and
+retained opt-in send diagnostics (disabled for this run). The default trace
+branch was off, but the dependency revision difference means these numbers
+cannot isolate a code effect from route and host variation. The table is useful
+for operational comparison and regression screening, not proof that any one
+change caused the loss or concealment difference.
+
 | Metric | Previous complete run | Final run | Change |
 |---|---:|---:|---:|
 | Receiver / PCM coverage | 21,600 s / 21,600 s | 21,600 s / 21,600 s | equal |
