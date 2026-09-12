@@ -1,0 +1,16 @@
+RuntimeMaxUSec=infinity
+MainPID=25387
+NRestarts=0
+CPUQuotaPerSecUSec=infinity
+Id=raydio-isolated-six-hour.service
+ActiveState=active
+UnitFileState=disabled
+
+RuntimeMaxUSec=infinity
+MainPID=0
+NRestarts=0
+CPUQuotaPerSecUSec=infinity
+Id=raydio.service
+ActiveState=inactive
+UnitFileState=disabled
+NTPSynchronized=yes

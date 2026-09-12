@@ -1,0 +1,15 @@
+MainPID=25387
+Result=success
+NRestarts=0
+MemoryCurrent=9158656
+CPUUsageNSec=887354645000
+Id=raydio-isolated-six-hour.service
+ActiveState=active
+
+MainPID=0
+Result=success
+NRestarts=0
+MemoryCurrent=[not set]
+CPUUsageNSec=[not set]
+Id=raydio.service
+ActiveState=inactive

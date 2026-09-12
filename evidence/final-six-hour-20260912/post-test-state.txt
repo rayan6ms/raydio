@@ -1,0 +1,18 @@
+2026-09-12T18:16:34Z
+MainPID=0
+Result=success
+NRestarts=0
+Id=raydio.service
+ActiveState=inactive
+UnitFileState=disabled
+
+MainPID=0
+Result=success
+NRestarts=0
+Id=raydio-isolated-six-hour.service
+ActiveState=inactive
+UnitFileState=disabled
+ebba57eb4406e01fa138b30678e2593ac5ec758d4d236b971c8ae1121cfa0576  /opt/raydio/candidates/final-diagnostics-20260912/bin/raydio
+timer: 00:00~24:00/4
+last: today at 18:14 UTC
+next: n/a
