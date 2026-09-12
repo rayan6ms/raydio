@@ -1,0 +1,878 @@
+{
+  "status": "completed",
+  "startedAt": "2026-09-11T23:58:10.419Z",
+  "receiverSeconds": 599.9998798828125,
+  "coverage": {
+    "receiverSeconds": 599.9998798828125,
+    "pcmSeconds": 600.0106666666667,
+    "completePollCoverage": true,
+    "completePcmCoverage": true,
+    "uninterruptedConnection": true,
+    "completeEventHistory": true,
+    "completeSpeakingObservation": true,
+    "completeTrackPhaseObservation": true,
+    "retainedDiagnosticWindows": 3,
+    "droppedDiagnosticWindows": 0
+  },
+  "requestedSeconds": 600,
+  "plannedEndAt": "2026-09-12T00:08:10.419000+00:00",
+  "receiverFinishedAt": "2026-09-12T00:08:10.472Z",
+  "receiverError": null,
+  "unobservedRequestedSeconds": 0.00012,
+  "senderEventsThroughPlannedEnd": [],
+  "senderLogExtent": {
+    "first": "2026-09-11T23:58:41.794447+00:00",
+    "last": "2026-09-12T00:08:22.017090+00:00"
+  },
+  "packetsReceived": 29985,
+  "lostNet": 0,
+  "positiveLoss": 2,
+  "negativeLossDeltas": -2,
+  "discarded": 3,
+  "nacks": 32,
+  "concealmentMs": 390.3333333333333,
+  "silentConcealmentMs": 0.0,
+  "concealmentMsPerMinute": 39.033341147625265,
+  "pcm": {
+    "samples": 57601024,
+    "squared": 444536.7557344665,
+    "peak": 0.5683156847953796,
+    "nearFullScale": 0,
+    "nonFinite": 0,
+    "emptyFrames": 0,
+    "longestQuietMs": 976.25,
+    "ongoingQuietMs": 0,
+    "reports": 2394,
+    "frames": 28800512,
+    "endWallMs": 600001.6999999881,
+    "audioSeconds": 600.0106666666667,
+    "rms": 0.08784938707250985
+  },
+  "quietIntervals": [
+    {
+      "utc": "2026-09-12T00:01:14.977062+00:00",
+      "startMs": 184537.97916666666,
+      "endMs": 184558.0625,
+      "durationMs": 20.083333333333332,
+      "timestampBasis": "pcm-frame-clock",
+      "nearestStartOffsetSeconds": -0.8613875000000116,
+      "classification": "source-tail-candidate",
+      "naturalHandoff": {
+        "endMs": 185413.951,
+        "startMs": 185419.45,
+        "previousGeneration": 3,
+        "generation": 4,
+        "eventHandoffMs": 5.49900000001071
+      },
+      "sourceBoundaryReferenceMs": 938.458,
+      "excessOverReferenceAndToleranceMs": 0,
+      "overlappingAnomalies": [],
+      "causeProven": false
+    },
+    {
+      "utc": "2026-09-12T00:01:15.977267+00:00",
+      "startMs": 184582.0166666607,
+      "endMs": 185558.2666666607,
+      "durationMs": 976.25,
+      "timestampBasis": "pcm-frame-clock",
+      "nearestStartOffsetSeconds": 0.13881666666068487,
+      "classification": "source-tail-candidate",
+      "naturalHandoff": {
+        "endMs": 185413.951,
+        "startMs": 185419.45,
+        "previousGeneration": 3,
+        "generation": 4,
+        "eventHandoffMs": 5.49900000001071
+      },
+      "sourceBoundaryReferenceMs": 938.458,
+      "excessOverReferenceAndToleranceMs": 0,
+      "overlappingAnomalies": [],
+      "causeProven": false
+    },
+    {
+      "utc": "2026-09-12T00:04:48.016950+00:00",
+      "startMs": 397577.86666665477,
+      "endMs": 397597.9499999881,
+      "durationMs": 20.083333333333332,
+      "timestampBasis": "pcm-frame-clock",
+      "nearestStartOffsetSeconds": -0.8776230000118957,
+      "classification": "source-tail-candidate",
+      "naturalHandoff": {
+        "endMs": 398474.229,
+        "startMs": 398475.573,
+        "previousGeneration": 4,
+        "generation": 5,
+        "eventHandoffMs": 1.3439999999827705
+      },
+      "sourceBoundaryReferenceMs": 938.458,
+      "excessOverReferenceAndToleranceMs": 0,
+      "overlappingAnomalies": [],
+      "causeProven": false
+    },
+    {
+      "utc": "2026-09-12T00:04:49.015454+00:00",
+      "startMs": 397620.20416666067,
+      "endMs": 398596.45416666067,
+      "durationMs": 976.25,
+      "timestampBasis": "pcm-frame-clock",
+      "nearestStartOffsetSeconds": 0.12088116666069254,
+      "classification": "source-tail-candidate",
+      "naturalHandoff": {
+        "endMs": 398474.229,
+        "startMs": 398475.573,
+        "previousGeneration": 4,
+        "generation": 5,
+        "eventHandoffMs": 1.3439999999827705
+      },
+      "sourceBoundaryReferenceMs": 938.458,
+      "excessOverReferenceAndToleranceMs": 0,
+      "overlappingAnomalies": [],
+      "causeProven": false
+    }
+  ],
+  "quietRequiringReviewAtLeast100Ms": [],
+  "networkEvents": [],
+  "receiverScheduling": {
+    "enabled": true,
+    "longTasksSupported": true,
+    "longTasks": 1,
+    "totalLongTaskMs": 50,
+    "maxLongTaskMs": 50,
+    "initialVisibility": "visible"
+  },
+  "sampling": {
+    "polls": 599,
+    "stalePolls": 0,
+    "maxPollMs": 1020.864990234375,
+    "positiveLossDeltas": 2,
+    "negativeLossDeltas": -2,
+    "maxConcealedMsPerPoll": 205.0625,
+    "pcmReportsMissing": 0
+  },
+  "senderCheckpointDelta": {
+    "active_send_gaps_100ms": 0,
+    "active_send_gaps_1s": 0,
+    "active_send_gaps_40ms": 6,
+    "frames_sent": 26985,
+    "frames_unavailable": 0,
+    "send_failures": 0,
+    "silence_frames_sent": 0,
+    "skipped_deadlines": 12,
+    "source_overruns": 0
+  },
+  "senderCheckpoints": [
+    {
+      "utc": "2026-09-11T23:58:41.794447+00:00",
+      "frames_sent": 2963,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 0,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 0,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-11T23:59:41.795035+00:00",
+      "frames_sent": 5963,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 0,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 0,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-12T00:00:41.794559+00:00",
+      "frames_sent": 8951,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 10,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 5,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-12T00:01:41.795126+00:00",
+      "frames_sent": 11951,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 10,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 5,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-12T00:02:41.794407+00:00",
+      "frames_sent": 14951,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 10,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 5,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-12T00:03:41.794670+00:00",
+      "frames_sent": 17951,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 10,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 5,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-12T00:04:41.795056+00:00",
+      "frames_sent": 20951,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 10,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 5,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-12T00:05:41.794972+00:00",
+      "frames_sent": 23951,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 10,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 5,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-12T00:06:41.794815+00:00",
+      "frames_sent": 26951,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 10,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 5,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-12T00:07:41.794502+00:00",
+      "frames_sent": 29948,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 12,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 6,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    }
+  ],
+  "senderCoverage": {
+    "from": "2026-09-11T23:58:41.794447+00:00",
+    "to": "2026-09-12T00:07:41.794502+00:00",
+    "unobservedHeadSeconds": 31.375447,
+    "unobservedTailSeconds": 28.624378,
+    "maximumCheckpointGapSeconds": 60.000588
+  },
+  "resourceSamples": 10,
+  "pssMiB": {
+    "min": 16.4169921875,
+    "max": 16.6279296875,
+    "median": 16.6005859375
+  },
+  "sourceTailReferenceMs": 938.458,
+  "sourceTailToleranceMs": 100,
+  "limitations": [
+    "one receiver cannot isolate network hop",
+    "short window is not six-hour guarantee",
+    "source-tail-candidate means temporal and duration agreement, not fresh decoded waveform alignment",
+    "negative cumulative loss deltas can include corrections to losses predating this observation",
+    "sender/resource deltas cover only the interior minute samples; exact uncovered head/tail are reported; active send gap counts exclude a paused timeline",
+    "Natural boundaries require a logged finish followed by a later generation start; all PCM quiet, including candidates, remains in the report. Coincidence never proves source-only silence."
+  ],
+  "botCpuPercentOfOneCore": 3.8627903105427124,
+  "hostStealPercent": 0.31803725579282144,
+  "udpCounterDelta": {
+    "InDatagrams": 604,
+    "NoPorts": 0,
+    "InErrors": 0,
+    "OutDatagrams": 27051,
+    "RcvbufErrors": 0,
+    "SndbufErrors": 0,
+    "InCsumErrors": 0,
+    "IgnoredMulti": 0,
+    "MemErrors": 0
+  },
+  "cgroupMemoryEventsDelta": {
+    "low": 0,
+    "high": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0,
+    "oom_group_kill": 0
+  },
+  "checkpointSavesForThisRun": 12,
+  "checkpointSavesInCollectedFile": 30,
+  "sourceHeadReferenceMs": 0,
+  "quietClassificationCounts": {
+    "source-tail-candidate": 4
+  },
+  "evidenceWarnings": [],
+  "hostCollectionCoverage": {
+    "samples": 16,
+    "first": "2026-09-11T23:53:31.904898+00:00",
+    "last": "2026-09-12T00:08:31.944622+00:00",
+    "errors": 0,
+    "note": "Host collection after playback stops is not audio coverage; PSS and CPU above use only the receiver window."
+  },
+  "persistedEventHistoryComplete": true,
+  "clock": {
+    "wallStartMs": 1789171090419,
+    "monotonicStartMs": 82017530,
+    "timeOrigin": 1789089072889.9,
+    "pcmResetAckDelayMs": 0.4000000059604645,
+    "pcmEpochUncertaintyMs": 0.4000000059604645,
+    "pcmWallDriftMinMs": -14.266666660783812,
+    "pcmWallDriftMaxMs": -0.5
+  },
+  "uiObservation": {
+    "rowRebindings": 0,
+    "missingRowPolls": 0,
+    "unknownPhasePolls": 0
+  },
+  "availableCounters": [
+    "timestamp",
+    "packetsReceived",
+    "packetsLost",
+    "bytesReceived",
+    "packetsDiscarded",
+    "nackCount",
+    "fecPacketsReceived",
+    "fecPacketsDiscarded",
+    "concealedSamples",
+    "silentConcealedSamples",
+    "concealmentEvents",
+    "totalSamplesReceived",
+    "jitterBufferDelay",
+    "jitterBufferEmittedCount",
+    "insertedSamplesForDeceleration",
+    "removedSamplesForAcceleration",
+    "jitterBufferTargetDelay",
+    "jitterBufferMinimumDelay"
+  ],
+  "sourceReference": {
+    "collectedAt": "2026-09-10T17:25:59.261386+00:00",
+    "source": "https://youtu.be/dQw4w9WgXcQ",
+    "volume": 70,
+    "sourcePacketsSha256": "29f1ac2bad421ed974c8276c15943cc6a47cbde931276c8d35f51c874532431b",
+    "sourceHeadMs": 0,
+    "sourceTailMs": 938.458333,
+    "decoder": {
+      "decoder": "libopus 1.6",
+      "quietIntervals": [
+        {
+          "startSeconds": 212.121542,
+          "durationMs": 938.458333,
+          "atEnd": true
+        }
+      ],
+      "frames": 10653,
+      "seconds": 213.06,
+      "wrongFrameDuration": 0,
+      "tinyPackets": 47,
+      "longestQuietMs": 938.458333,
+      "nearFullScale": 0,
+      "nonFinite": 0,
+      "peak": 0.584290266,
+      "rms": 0.09019673,
+      "failed": false
+    },
+    "sourcePull": {
+      "paced": false,
+      "runs": [
+        {
+          "bytes": 2633918,
+          "elapsedSeconds": 24.137776294,
+          "filterUpdateMs": 0.0,
+          "filterUpdates": 0,
+          "frames": 10653,
+          "iteration": 0,
+          "maxReadMs": 13.005523,
+          "stalls": [],
+          "startupMs": 391.611378
+        }
+      ],
+      "scope": "integrated source and volume processing, no Discord transport",
+      "staged": true,
+      "volume": 70
+    },
+    "candidateSha256": "c007862072d46a0ded0b8dbe93e030d8ba029ac7087f0ef213989586ba4f3002",
+    "sourceToolSha256": "a6d796d20dda1c3bcc66f9fdf5f86b62288d51377ffebc478141b837daf28273",
+    "candidateRevision": "2be406be22fd64f56adaccd45c2d115c27fd380c",
+    "limitation": "Independent source fetch on Oracle with the same pinned dependencies and volume; not waveform alignment of every loop",
+    "reuseNote": "Reused September 10 source-tail measurement for the same URL and volume; pacing/diagnostics experiments do not change source processing. No fresh per-loop waveform equality claim."
+  },
+  "incidentWindows": {
+    "retained": 3,
+    "created": 3,
+    "browserEvictions": 0,
+    "completePersistedHistory": true,
+    "incompletePostIncidentWindows": 0
+  },
+  "diagnosticWindows": [
+    {
+      "id": 1,
+      "ms": 115244.09999999404,
+      "triggers": [
+        {
+          "ms": 115244.09999999404,
+          "kind": "receiver"
+        }
+      ],
+      "samples": [
+        [
+          110226.6240234375,
+          1020.864990234375,
+          51,
+          0,
+          0,
+          0,
+          0,
+          2,
+          75.49019607843137,
+          16
+        ],
+        [
+          111234.09399414062,
+          1007.469970703125,
+          51,
+          0,
+          0,
+          0,
+          0,
+          3,
+          75.39999999999418,
+          16
+        ],
+        [
+          112236.19702148438,
+          1002.10302734375,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          73,
+          21
+        ],
+        [
+          113238.13696289062,
+          1001.93994140625,
+          50,
+          0,
+          0,
+          0,
+          0,
+          4,
+          74.20000000000194,
+          21
+        ],
+        [
+          114240.1640625,
+          1002.027099609375,
+          50,
+          0,
+          0,
+          0,
+          0,
+          4,
+          73.33333333333142,
+          21
+        ],
+        [
+          115242.11303710938,
+          1001.948974609375,
+          38,
+          0,
+          0,
+          205.0625,
+          0,
+          7,
+          41.02564102564103,
+          24
+        ],
+        [
+          116244.44799804688,
+          1002.3349609375,
+          50,
+          0,
+          0,
+          0,
+          0,
+          4,
+          42.79999999999806,
+          24
+        ],
+        [
+          117246.40600585938,
+          1001.9580078125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          31.568627450982294,
+          24
+        ],
+        [
+          118248.2880859375,
+          1001.882080078125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          4,
+          26.60000000000582,
+          21
+        ],
+        [
+          119250.28100585938,
+          1001.992919921875,
+          50,
+          0,
+          0,
+          0,
+          0,
+          4,
+          72.82608695652173,
+          21
+        ],
+        [
+          120251.97290039062,
+          1001.69189453125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          146.17021276595125,
+          17
+        ]
+      ],
+      "remaining": 0
+    },
+    {
+      "id": 2,
+      "ms": 184544.59999999404,
+      "triggers": [
+        {
+          "ms": 184544.59999999404,
+          "kind": "speaking"
+        }
+      ],
+      "samples": [
+        [
+          179353.02001953125,
+          1001.824951171875,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          94.50980392157243,
+          23
+        ],
+        [
+          180354.86108398438,
+          1001.841064453125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          94.20000000000194,
+          23
+        ],
+        [
+          181356.55297851562,
+          1001.69189453125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          2,
+          95,
+          18
+        ],
+        [
+          182358.86108398438,
+          1002.30810546875,
+          51,
+          0,
+          0,
+          0,
+          0,
+          1,
+          95.39999999999418,
+          18
+        ],
+        [
+          183360.79809570312,
+          1001.93701171875,
+          50,
+          0,
+          0,
+          0,
+          0,
+          2,
+          97.20000000000194,
+          18
+        ],
+        [
+          184374.00390625,
+          1013.205810546875,
+          50,
+          0,
+          0,
+          0,
+          0,
+          2,
+          97.25490196078621,
+          20
+        ],
+        [
+          185375.625,
+          1001.62109375,
+          50,
+          0,
+          0,
+          0,
+          0,
+          1,
+          97,
+          20
+        ],
+        [
+          186377.28198242188,
+          1001.656982421875,
+          50,
+          0,
+          0,
+          0,
+          0,
+          1,
+          96.79999999999806,
+          20
+        ],
+        [
+          187379.22802734375,
+          1001.946044921875,
+          51,
+          0,
+          0,
+          0,
+          0,
+          1,
+          97.20000000000194,
+          36
+        ],
+        [
+          188380.8759765625,
+          1001.64794921875,
+          50,
+          0,
+          0,
+          0,
+          0,
+          1,
+          96.39999999999418,
+          36
+        ],
+        [
+          189382.48901367188,
+          1001.613037109375,
+          50,
+          0,
+          0,
+          0,
+          0,
+          1,
+          97.20000000000194,
+          15
+        ]
+      ],
+      "remaining": 0
+    },
+    {
+      "id": 3,
+      "ms": 397582.40000000596,
+      "triggers": [
+        {
+          "ms": 397582.40000000596,
+          "kind": "speaking"
+        },
+        {
+          "ms": 398802.09999999404,
+          "kind": "quiet"
+        }
+      ],
+      "samples": [
+        [
+          391780.12109375,
+          1001.923095703125,
+          51,
+          0,
+          0,
+          0,
+          0,
+          4,
+          79.39999999999418,
+          26
+        ],
+        [
+          392782.0148925781,
+          1001.893798828125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          1,
+          81.20000000000194,
+          26
+        ],
+        [
+          393783.9479980469,
+          1001.93310546875,
+          50,
+          0,
+          0,
+          0,
+          0,
+          2,
+          79.79999999999806,
+          17
+        ],
+        [
+          394785.9069824219,
+          1001.958984375,
+          50,
+          0,
+          0,
+          0,
+          0,
+          1,
+          81,
+          17
+        ],
+        [
+          395787.9899902344,
+          1002.0830078125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          1,
+          81.20000000000194,
+          17
+        ],
+        [
+          396790.0158691406,
+          1002.02587890625,
+          50,
+          0,
+          0,
+          0,
+          0,
+          1,
+          80.98039215685894,
+          16
+        ],
+        [
+          397792.2041015625,
+          1002.188232421875,
+          50,
+          0,
+          0,
+          0,
+          0,
+          2,
+          80.00000000000396,
+          16
+        ],
+        [
+          398793.9189453125,
+          1001.71484375,
+          50,
+          0,
+          0,
+          0,
+          0,
+          2,
+          79,
+          16
+        ],
+        [
+          399795.7939453125,
+          1001.875,
+          50,
+          0,
+          0,
+          0,
+          0,
+          1,
+          81,
+          16
+        ],
+        [
+          400797.81396484375,
+          1002.02001953125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          1,
+          80.19607843137065,
+          16
+        ],
+        [
+          401799.6369628906,
+          1001.822998046875,
+          50,
+          0,
+          0,
+          0,
+          0,
+          2,
+          81,
+          28
+        ]
+      ],
+      "remaining": 0
+    }
+  ]
+}

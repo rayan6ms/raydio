@@ -1,0 +1,10 @@
+{
+  "narrowCandidate": {
+    "sha256": "10be7e273fdf889c3975f6a91548d58aca38e3b1b2373591b580b83cadf17ed5",
+    "remotePid": 22133,
+    "remoteRun": "timing-narrow-off-resume-20260911",
+    "receiverRequestedAt": "2026-09-11T23:42:37.657Z",
+    "tracing": false
+  },
+  "interruption": "Approximately three hours elapsed after service start and before command submission. No candidate receiver test ran during that interval. Expired collectors were renewed before measurement."
+}

@@ -1,0 +1,1339 @@
+{
+  "runs": {
+    "diagnostic-on": {
+      "receiverSeconds": 599.9982111816406,
+      "activePairs": 29934,
+      "minGapMicros": 1044,
+      "maxGapMicros": 79737,
+      "under10ms": 37,
+      "under18ms": 118,
+      "atLeast40ms": 26,
+      "atLeast100ms": 0,
+      "p99Micros": 20962,
+      "largestStageInGaps": {
+        "wake": 24,
+        "transportCrypto": 1,
+        "daveRoundTrip": 1
+      },
+      "incidents": [
+        {
+          "unixMicros": 1789155366301569,
+          "gapMicros": 48194,
+          "timings": [
+            1,
+            28617,
+            1,
+            92,
+            13,
+            10,
+            6,
+            48
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155385898425,
+          "gapMicros": 75142,
+          "timings": [
+            1,
+            56776,
+            1,
+            32,
+            12,
+            10,
+            6,
+            34
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155385993070,
+          "gapMicros": 53404,
+          "timings": [
+            1,
+            34035,
+            1,
+            559,
+            13,
+            10,
+            6,
+            39
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155386092398,
+          "gapMicros": 77329,
+          "timings": [
+            1,
+            1169,
+            1,
+            606,
+            12,
+            9,
+            57520,
+            27
+          ],
+          "largest": "transportCrypto"
+        },
+        {
+          "unixMicros": 1789155386193185,
+          "gapMicros": 58959,
+          "timings": [
+            1,
+            40025,
+            1,
+            703,
+            12,
+            10,
+            6,
+            44
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155386392120,
+          "gapMicros": 57070,
+          "timings": [
+            1,
+            38836,
+            1,
+            35,
+            14,
+            11,
+            8,
+            49
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155386492225,
+          "gapMicros": 77728,
+          "timings": [
+            1,
+            60018,
+            1,
+            24,
+            14,
+            11,
+            7,
+            48
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155421992395,
+          "gapMicros": 78148,
+          "timings": [
+            1,
+            59766,
+            2,
+            354,
+            12,
+            9,
+            6,
+            36
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155422492057,
+          "gapMicros": 58636,
+          "timings": [
+            1,
+            39571,
+            1,
+            28,
+            16,
+            12,
+            6,
+            49
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155422593673,
+          "gapMicros": 79737,
+          "timings": [
+            1,
+            25718,
+            1,
+            35845,
+            12,
+            9,
+            6,
+            39
+          ],
+          "largest": "daveRoundTrip"
+        },
+        {
+          "unixMicros": 1789155522892221,
+          "gapMicros": 77194,
+          "timings": [
+            1,
+            58477,
+            1,
+            28,
+            16,
+            13,
+            7,
+            28
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155522995843,
+          "gapMicros": 61573,
+          "timings": [
+            1,
+            42887,
+            1,
+            672,
+            13,
+            11,
+            7,
+            49
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155523093016,
+          "gapMicros": 55241,
+          "timings": [
+            1,
+            36139,
+            1,
+            991,
+            11,
+            9,
+            6,
+            29
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155523313429,
+          "gapMicros": 78675,
+          "timings": [
+            1,
+            1149,
+            1,
+            30,
+            12,
+            10,
+            6,
+            40
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155523392649,
+          "gapMicros": 79220,
+          "timings": [
+            1,
+            59805,
+            1,
+            582,
+            11,
+            9,
+            7,
+            53
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155523492758,
+          "gapMicros": 78695,
+          "timings": [
+            1,
+            60032,
+            1,
+            22,
+            12,
+            9,
+            6,
+            43
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155523792457,
+          "gapMicros": 78311,
+          "timings": [
+            1,
+            59639,
+            1,
+            25,
+            14,
+            11,
+            7,
+            21
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155727692413,
+          "gapMicros": 77817,
+          "timings": [
+            1,
+            59875,
+            1,
+            33,
+            13,
+            10,
+            6,
+            35
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155727892711,
+          "gapMicros": 58648,
+          "timings": [
+            1,
+            39581,
+            1,
+            657,
+            12,
+            9,
+            7,
+            46
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155728192139,
+          "gapMicros": 58089,
+          "timings": [
+            1,
+            39082,
+            2,
+            76,
+            55,
+            52,
+            5,
+            41
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155728292835,
+          "gapMicros": 79439,
+          "timings": [
+            1,
+            60607,
+            1,
+            30,
+            12,
+            9,
+            6,
+            46
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155728493063,
+          "gapMicros": 58489,
+          "timings": [
+            1,
+            40167,
+            1,
+            25,
+            11,
+            9,
+            6,
+            24
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155728592335,
+          "gapMicros": 77954,
+          "timings": [
+            1,
+            59082,
+            1,
+            121,
+            12,
+            9,
+            5,
+            57
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155738792095,
+          "gapMicros": 58510,
+          "timings": [
+            1,
+            39666,
+            1,
+            24,
+            14,
+            11,
+            7,
+            56
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155773492059,
+          "gapMicros": 58213,
+          "timings": [
+            1,
+            39884,
+            1,
+            21,
+            11,
+            9,
+            5,
+            46
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789155773613810,
+          "gapMicros": 41133,
+          "timings": [
+            1,
+            1128,
+            1,
+            29,
+            11,
+            9,
+            6,
+            33
+          ],
+          "largest": "wake"
+        }
+      ],
+      "sourceSha256": "408491eabf77c17660d5c26ddc4bdb27d29ab42dfdb1802f51c967a9cd789404"
+    },
+    "recovery-on": {
+      "receiverSeconds": 600.0341450195313,
+      "activePairs": 29954,
+      "minGapMicros": 18188,
+      "maxGapMicros": 84950,
+      "under10ms": 0,
+      "under18ms": 0,
+      "atLeast40ms": 60,
+      "atLeast100ms": 0,
+      "p99Micros": 20939,
+      "largestStageInGaps": {
+        "wake": 56,
+        "daveRoundTrip": 3,
+        "udp": 1
+      },
+      "incidents": [
+        {
+          "unixMicros": 1789156329092123,
+          "gapMicros": 61581,
+          "timings": [
+            1,
+            43504,
+            1,
+            20,
+            11,
+            9,
+            6,
+            44
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156329192093,
+          "gapMicros": 40540,
+          "timings": [
+            1,
+            22414,
+            1,
+            70,
+            10,
+            8,
+            6,
+            44
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156329292631,
+          "gapMicros": 43319,
+          "timings": [
+            1,
+            24697,
+            2,
+            566,
+            11,
+            8,
+            5,
+            43
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156329392161,
+          "gapMicros": 60895,
+          "timings": [
+            1,
+            42745,
+            1,
+            92,
+            12,
+            9,
+            5,
+            46
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156329492062,
+          "gapMicros": 41513,
+          "timings": [
+            1,
+            23442,
+            1,
+            20,
+            11,
+            8,
+            5,
+            39
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156329592137,
+          "gapMicros": 40250,
+          "timings": [
+            1,
+            22092,
+            1,
+            104,
+            11,
+            8,
+            6,
+            41
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156329692105,
+          "gapMicros": 60600,
+          "timings": [
+            1,
+            1207,
+            2,
+            41294,
+            13,
+            9,
+            5,
+            86
+          ],
+          "largest": "daveRoundTrip"
+        },
+        {
+          "unixMicros": 1789156329774939,
+          "gapMicros": 43782,
+          "timings": [
+            1,
+            25727,
+            1,
+            21,
+            11,
+            8,
+            5,
+            22
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156329992587,
+          "gapMicros": 40161,
+          "timings": [
+            1,
+            21517,
+            1,
+            600,
+            11,
+            8,
+            5,
+            33
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156330192669,
+          "gapMicros": 40528,
+          "timings": [
+            1,
+            21870,
+            1,
+            602,
+            11,
+            8,
+            6,
+            43
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156367392138,
+          "gapMicros": 58396,
+          "timings": [
+            1,
+            39334,
+            2,
+            32,
+            12,
+            9,
+            6,
+            89
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156367492088,
+          "gapMicros": 61336,
+          "timings": [
+            1,
+            43260,
+            1,
+            20,
+            11,
+            8,
+            5,
+            43
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156367792598,
+          "gapMicros": 47033,
+          "timings": [
+            1,
+            28443,
+            2,
+            536,
+            11,
+            8,
+            5,
+            42
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156367892074,
+          "gapMicros": 60863,
+          "timings": [
+            1,
+            42779,
+            2,
+            30,
+            11,
+            9,
+            6,
+            40
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156367992134,
+          "gapMicros": 41996,
+          "timings": [
+            1,
+            23843,
+            1,
+            98,
+            11,
+            9,
+            5,
+            42
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156368192040,
+          "gapMicros": 40098,
+          "timings": [
+            1,
+            1152,
+            1,
+            20886,
+            14,
+            10,
+            7,
+            46
+          ],
+          "largest": "daveRoundTrip"
+        },
+        {
+          "unixMicros": 1789156368292145,
+          "gapMicros": 60799,
+          "timings": [
+            1,
+            42638,
+            2,
+            105,
+            12,
+            10,
+            6,
+            44
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156368492095,
+          "gapMicros": 43935,
+          "timings": [
+            1,
+            25856,
+            1,
+            21,
+            11,
+            9,
+            6,
+            45
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156395892354,
+          "gapMicros": 61088,
+          "timings": [
+            1,
+            42919,
+            1,
+            86,
+            11,
+            9,
+            6,
+            69
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156395991999,
+          "gapMicros": 40415,
+          "timings": [
+            1,
+            22341,
+            1,
+            26,
+            9,
+            7,
+            5,
+            37
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156396092129,
+          "gapMicros": 41618,
+          "timings": [
+            1,
+            23538,
+            1,
+            20,
+            12,
+            9,
+            5,
+            49
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156396192390,
+          "gapMicros": 61865,
+          "timings": [
+            1,
+            43754,
+            2,
+            54,
+            13,
+            10,
+            6,
+            43
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156396292094,
+          "gapMicros": 60696,
+          "timings": [
+            1,
+            42593,
+            1,
+            40,
+            14,
+            11,
+            7,
+            49
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156396492042,
+          "gapMicros": 44480,
+          "timings": [
+            1,
+            1650,
+            1,
+            33,
+            11,
+            9,
+            5,
+            24785
+          ],
+          "largest": "udp"
+        },
+        {
+          "unixMicros": 1789156396595135,
+          "gapMicros": 84193,
+          "timings": [
+            1,
+            65410,
+            2,
+            745,
+            11,
+            9,
+            10,
+            21
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156396694472,
+          "gapMicros": 80834,
+          "timings": [
+            1,
+            62762,
+            1,
+            31,
+            11,
+            8,
+            5,
+            30
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156408492083,
+          "gapMicros": 55498,
+          "timings": [
+            1,
+            37411,
+            2,
+            25,
+            14,
+            11,
+            7,
+            46
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156408594534,
+          "gapMicros": 64698,
+          "timings": [
+            1,
+            44198,
+            1,
+            2442,
+            13,
+            10,
+            6,
+            44
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156427992471,
+          "gapMicros": 76620,
+          "timings": [
+            1,
+            57910,
+            2,
+            42,
+            13,
+            10,
+            6,
+            32
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156428192125,
+          "gapMicros": 41960,
+          "timings": [
+            1,
+            23890,
+            1,
+            24,
+            10,
+            7,
+            5,
+            35
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156428392047,
+          "gapMicros": 46852,
+          "timings": [
+            1,
+            28738,
+            1,
+            70,
+            9,
+            7,
+            5,
+            34
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156428492215,
+          "gapMicros": 43169,
+          "timings": [
+            1,
+            25107,
+            1,
+            18,
+            10,
+            8,
+            5,
+            32
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156428593171,
+          "gapMicros": 62757,
+          "timings": [
+            1,
+            43970,
+            2,
+            37,
+            14,
+            11,
+            7,
+            736
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156474192658,
+          "gapMicros": 58991,
+          "timings": [
+            1,
+            38809,
+            2,
+            617,
+            12,
+            9,
+            6,
+            47
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156474592389,
+          "gapMicros": 40877,
+          "timings": [
+            1,
+            22462,
+            1,
+            364,
+            10,
+            7,
+            5,
+            38
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156484992115,
+          "gapMicros": 54194,
+          "timings": [
+            1,
+            34577,
+            2,
+            37,
+            13,
+            10,
+            7,
+            56
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156485092556,
+          "gapMicros": 61195,
+          "timings": [
+            1,
+            43133,
+            2,
+            22,
+            12,
+            10,
+            6,
+            26
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156531492274,
+          "gapMicros": 54178,
+          "timings": [
+            1,
+            34760,
+            2,
+            24,
+            13,
+            10,
+            6,
+            45
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156531592070,
+          "gapMicros": 41938,
+          "timings": [
+            1,
+            23804,
+            1,
+            81,
+            11,
+            8,
+            5,
+            42
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156531671177,
+          "gapMicros": 40739,
+          "timings": [
+            1,
+            22641,
+            1,
+            39,
+            13,
+            10,
+            6,
+            47
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156531992066,
+          "gapMicros": 84950,
+          "timings": [
+            1,
+            66842,
+            1,
+            42,
+            15,
+            11,
+            6,
+            52
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156532292404,
+          "gapMicros": 61321,
+          "timings": [
+            1,
+            42925,
+            2,
+            334,
+            12,
+            10,
+            7,
+            47
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156532392026,
+          "gapMicros": 41752,
+          "timings": [
+            1,
+            1162,
+            1,
+            22532,
+            13,
+            10,
+            6,
+            46
+          ],
+          "largest": "daveRoundTrip"
+        },
+        {
+          "unixMicros": 1789156572092186,
+          "gapMicros": 43672,
+          "timings": [
+            1,
+            25584,
+            1,
+            23,
+            14,
+            11,
+            7,
+            52
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156572192111,
+          "gapMicros": 61361,
+          "timings": [
+            1,
+            43217,
+            1,
+            89,
+            12,
+            9,
+            5,
+            42
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156673592009,
+          "gapMicros": 41447,
+          "timings": [
+            1,
+            23376,
+            1,
+            19,
+            11,
+            8,
+            5,
+            40
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156673792068,
+          "gapMicros": 59760,
+          "timings": [
+            1,
+            41636,
+            2,
+            31,
+            12,
+            9,
+            6,
+            79
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156673892028,
+          "gapMicros": 43216,
+          "timings": [
+            1,
+            25122,
+            2,
+            34,
+            12,
+            10,
+            5,
+            47
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156673992302,
+          "gapMicros": 42718,
+          "timings": [
+            1,
+            24382,
+            1,
+            271,
+            11,
+            8,
+            6,
+            52
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156674092153,
+          "gapMicros": 62005,
+          "timings": [
+            1,
+            43893,
+            1,
+            58,
+            47,
+            44,
+            6,
+            41
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156674192061,
+          "gapMicros": 41498,
+          "timings": [
+            1,
+            23407,
+            2,
+            31,
+            12,
+            9,
+            6,
+            46
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156674292167,
+          "gapMicros": 42065,
+          "timings": [
+            1,
+            23855,
+            1,
+            32,
+            12,
+            9,
+            6,
+            166
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156809592060,
+          "gapMicros": 79046,
+          "timings": [
+            1,
+            59795,
+            17,
+            40,
+            13,
+            10,
+            6,
+            30
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156809692070,
+          "gapMicros": 42516,
+          "timings": [
+            1,
+            24408,
+            2,
+            34,
+            13,
+            10,
+            6,
+            58
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156809892208,
+          "gapMicros": 47420,
+          "timings": [
+            1,
+            29338,
+            2,
+            26,
+            11,
+            9,
+            6,
+            42
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156809992417,
+          "gapMicros": 61520,
+          "timings": [
+            1,
+            43382,
+            1,
+            103,
+            10,
+            8,
+            5,
+            24
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156810092141,
+          "gapMicros": 62063,
+          "timings": [
+            1,
+            43970,
+            1,
+            23,
+            13,
+            10,
+            6,
+            57
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156810192066,
+          "gapMicros": 80760,
+          "timings": [
+            1,
+            62649,
+            2,
+            41,
+            14,
+            11,
+            7,
+            53
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156820493618,
+          "gapMicros": 45497,
+          "timings": [
+            1,
+            27439,
+            1,
+            25,
+            10,
+            8,
+            5,
+            22
+          ],
+          "largest": "wake"
+        },
+        {
+          "unixMicros": 1789156820593211,
+          "gapMicros": 42331,
+          "timings": [
+            1,
+            23124,
+            2,
+            34,
+            13,
+            10,
+            6,
+            1159
+          ],
+          "largest": "wake"
+        }
+      ],
+      "sourceSha256": "559a03a5cc10a389c4d0607722c4d4ea983b40eb2b871714dceebfe10d091c8b"
+    }
+  },
+  "limitations": [
+    "Successful UDP submission is not remote delivery; trace records include only locally successful sends.",
+    "Both ends of each gap are required inside the receiver window; exact edge fragments are omitted.",
+    "Cross-host UTC synchronization is assumed; no sub-millisecond accuracy claim is made.",
+    "Largest measured stage locates wall time, not whether hypervisor, guest scheduler, or code caused it.",
+    "Tracing is opt-in and changes execution; compare an untraced trial before promotion."
+  ]
+}

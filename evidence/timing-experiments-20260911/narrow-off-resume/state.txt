@@ -1,0 +1,6 @@
+MainPID=22133
+NRestarts=0
+MemoryCurrent=9261056
+CPUUsageNSec=30600920000
+ActiveState=active
+NTPSynchronized=yes

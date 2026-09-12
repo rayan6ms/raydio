@@ -22,8 +22,11 @@ def summarize(lines):
             dropped = int(re.search(r'\bdropped=(\d+)', line)[1])
             data = re.search(r'\brecords=(\[.*\])', line)[1]
             records = ast.literal_eval(data.replace('true', 'True').replace('false', 'False'))
-            if any(len(row) != 8 or any(type(v) is not int for v in row[:7])
-                   or type(row[7]) is not bool for row in records):
+            if any(len(row) not in (8, 9) or any(type(v) is not int or v < 0 for v in row[:7])
+                   or type(row[7]) is not bool
+                   or (len(row) == 9 and (not isinstance(row[8], (list, tuple))
+                       or len(row[8]) != 8 or any(type(v) is not int or v < 0 for v in row[8])
+                       or row[8][0] not in (0, 1))) for row in records):
                 raise ValueError('invalid record')
             stream = streams.setdefault(epoch, {'records': {}, 'dropped': 0, 'conflicts': 0})
             stream['dropped'] = max(stream['dropped'], dropped)
@@ -54,13 +57,25 @@ def summarize(lines):
                 gaps.append({'unixMicros': epoch + b[1], 'gapMicros': gap,
                              'beforeIndex': a[0], 'afterIndex': b[0],
                              'sourceChanged': a[3] != b[3],
-                             'includesSilencePacket': a[7] or b[7]})
+                             'includesSilencePacket': a[7] or b[7],
+                             'timingMicros': b[8] if len(b) == 9 else None})
+        timing_names = ['scheduled', 'wakeLateness', 'sourcePoll', 'daveRoundTrip',
+                        'daveWorkWall', 'daveWorkCpu', 'transportCrypto', 'udpWait']
+        timing = {}
+        for i, name in enumerate(timing_names[1:], 1):
+            values = sorted(r[8][i] for r in rows if len(r) == 9
+                            and r[8][0] == 1 and r[8][i] != 2**64 - 1)
+            if values:
+                timing[name] = {'count': len(values), 'max': values[-1],
+                                'p50': values[(len(values) - 1) // 2],
+                                'p99': values[(len(values) - 1) * 99 // 100]}
         output.append({'epochUnixMicros': epoch, 'records': len(rows),
                        'missingRecords': missing, 'ringDroppedRecords': stream['dropped'],
                        'conflictingRecords': stream['conflicts'],
                        'sequenceJumps': sequence_jumps, 'timestampJumps': timestamp_jumps,
                        'clockReversals': clock_reversals, 'maxGapMicros': maximum_gap,
                        'gapsAtLeast40Ms': gaps,
+                       'stageTimingMicros': timing,
                        'firstUnixMicros': epoch + rows[0][1] if rows else None,
                        'lastUnixMicros': epoch + rows[-1][1] if rows else None})
     return {'streams': output, 'malformedBatches': malformed,

@@ -1,0 +1,6 @@
+MainPID=0
+NRestarts=0
+MemoryCurrent=[not set]
+CPUUsageNSec=[not set]
+ActiveState=inactive
+NTPSynchronized=yes

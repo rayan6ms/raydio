@@ -1,0 +1,5 @@
+Release Oto actual paced DAVE/UDP path, owned frame channel, stage trace enabled.
+Command: OTO_P08_FRAME_CHANNEL=1 OTO_P08_TRACE=1 OTO_P08_MEASURE_MS=30000 target/release/deps/oto-693325e456c71282 --exact audio::tests::p08_complete_paced_dave_path_benchmark --ignored --nocapture
+Result: 1501 sent frames, 1501 UDP packets, 30001ms measurement after1000ms warmup.
+Allocation region: 0 allocations, 0 reallocations, 0 bytes. Max sender lateness2031613ns.
+Test passed. Local controlled harness only, not full bot, no Oracle network delivery claim.

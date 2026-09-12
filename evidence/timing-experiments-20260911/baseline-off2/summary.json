@@ -1,0 +1,1345 @@
+{
+  "status": "completed",
+  "startedAt": "2026-09-11T20:20:49.853Z",
+  "receiverSeconds": 599.9994499511719,
+  "coverage": {
+    "receiverSeconds": 599.9994499511719,
+    "pcmSeconds": 600.0106666666667,
+    "completePollCoverage": true,
+    "completePcmCoverage": true,
+    "uninterruptedConnection": true,
+    "completeEventHistory": true,
+    "completeSpeakingObservation": true,
+    "completeTrackPhaseObservation": true,
+    "retainedDiagnosticWindows": 6,
+    "droppedDiagnosticWindows": 0
+  },
+  "requestedSeconds": 600,
+  "plannedEndAt": "2026-09-11T20:30:49.853000+00:00",
+  "receiverFinishedAt": "2026-09-11T20:30:49.905Z",
+  "receiverError": null,
+  "unobservedRequestedSeconds": 0.00055,
+  "senderEventsThroughPlannedEnd": [],
+  "senderLogExtent": {
+    "first": "2026-09-11T20:21:25.209843+00:00",
+    "last": "2026-09-11T20:31:05.015411+00:00"
+  },
+  "packetsReceived": 29969,
+  "lostNet": 0,
+  "positiveLoss": 1,
+  "negativeLossDeltas": -1,
+  "discarded": 6,
+  "nacks": 34,
+  "concealmentMs": 777.8125,
+  "silentConcealmentMs": 0.0,
+  "concealmentMsPerMinute": 77.78132130587439,
+  "pcm": {
+    "samples": 57601024,
+    "squared": 445953.9489880322,
+    "peak": 0.5683156847953796,
+    "nearFullScale": 0,
+    "nonFinite": 0,
+    "emptyFrames": 0,
+    "longestQuietMs": 976.25,
+    "ongoingQuietMs": 0,
+    "reports": 2394,
+    "frames": 28800512,
+    "endWallMs": 600001,
+    "audioSeconds": 600.0106666666667,
+    "rms": 0.08798930856166096
+  },
+  "quietIntervals": [
+    {
+      "utc": "2026-09-11T20:23:57.361933+00:00",
+      "startMs": 187488.849999994,
+      "endMs": 187508.93333332735,
+      "durationMs": 20.083333333333332,
+      "timestampBasis": "pcm-frame-clock",
+      "nearestStartOffsetSeconds": -0.9083436666726484,
+      "classification": "boundary-quiet-with-overlapping-anomaly",
+      "naturalHandoff": {
+        "endMs": 188415.237,
+        "startMs": 188417.277,
+        "previousGeneration": 1,
+        "generation": 2,
+        "eventHandoffMs": 2.040000000008149
+      },
+      "sourceBoundaryReferenceMs": 938.458,
+      "excessOverReferenceAndToleranceMs": 0,
+      "overlappingAnomalies": [
+        "receiver"
+      ],
+      "causeProven": false
+    },
+    {
+      "utc": "2026-09-11T20:23:58.361838+00:00",
+      "startMs": 187532.58750000596,
+      "endMs": 188508.83750000596,
+      "durationMs": 976.25,
+      "timestampBasis": "pcm-frame-clock",
+      "nearestStartOffsetSeconds": 0.0915605000059586,
+      "classification": "boundary-quiet-with-overlapping-anomaly",
+      "naturalHandoff": {
+        "endMs": 188415.237,
+        "startMs": 188417.277,
+        "previousGeneration": 1,
+        "generation": 2,
+        "eventHandoffMs": 2.040000000008149
+      },
+      "sourceBoundaryReferenceMs": 938.458,
+      "excessOverReferenceAndToleranceMs": 0,
+      "overlappingAnomalies": [
+        "receiver"
+      ],
+      "causeProven": false
+    },
+    {
+      "utc": "2026-09-11T20:27:30.913963+00:00",
+      "startMs": 401040.8791666727,
+      "endMs": 401060.962500006,
+      "durationMs": 20.083333333333332,
+      "timestampBasis": "pcm-frame-clock",
+      "nearestStartOffsetSeconds": -0.8851954999940354,
+      "classification": "source-tail-candidate",
+      "naturalHandoff": {
+        "endMs": 401940.287,
+        "startMs": 401946.15800000005,
+        "previousGeneration": 2,
+        "generation": 3,
+        "eventHandoffMs": 5.871000000042841
+      },
+      "sourceBoundaryReferenceMs": 938.458,
+      "excessOverReferenceAndToleranceMs": 0,
+      "overlappingAnomalies": [],
+      "causeProven": false
+    },
+    {
+      "utc": "2026-09-11T20:27:31.913067+00:00",
+      "startMs": 401083.8166666726,
+      "endMs": 402060.0666666726,
+      "durationMs": 976.25,
+      "timestampBasis": "pcm-frame-clock",
+      "nearestStartOffsetSeconds": 0.11390866667253431,
+      "classification": "source-tail-candidate",
+      "naturalHandoff": {
+        "endMs": 401940.287,
+        "startMs": 401946.15800000005,
+        "previousGeneration": 2,
+        "generation": 3,
+        "eventHandoffMs": 5.871000000042841
+      },
+      "sourceBoundaryReferenceMs": 938.458,
+      "excessOverReferenceAndToleranceMs": 0,
+      "overlappingAnomalies": [],
+      "causeProven": false
+    }
+  ],
+  "quietRequiringReviewAtLeast100Ms": [
+    {
+      "utc": "2026-09-11T20:23:58.361838+00:00",
+      "startMs": 187532.58750000596,
+      "endMs": 188508.83750000596,
+      "durationMs": 976.25,
+      "timestampBasis": "pcm-frame-clock",
+      "nearestStartOffsetSeconds": 0.0915605000059586,
+      "classification": "boundary-quiet-with-overlapping-anomaly",
+      "naturalHandoff": {
+        "endMs": 188415.237,
+        "startMs": 188417.277,
+        "previousGeneration": 1,
+        "generation": 2,
+        "eventHandoffMs": 2.040000000008149
+      },
+      "sourceBoundaryReferenceMs": 938.458,
+      "excessOverReferenceAndToleranceMs": 0,
+      "overlappingAnomalies": [
+        "receiver"
+      ],
+      "causeProven": false
+    }
+  ],
+  "networkEvents": [],
+  "receiverScheduling": {
+    "enabled": true,
+    "longTasksSupported": true,
+    "longTasks": 0,
+    "totalLongTaskMs": 0,
+    "maxLongTaskMs": 0,
+    "initialVisibility": "visible"
+  },
+  "sampling": {
+    "polls": 599,
+    "stalePolls": 0,
+    "maxPollMs": 1064.29296875,
+    "positiveLossDeltas": 1,
+    "negativeLossDeltas": -1,
+    "maxConcealedMsPerPoll": 100.89583333333333,
+    "pcmReportsMissing": 0
+  },
+  "senderCheckpointDelta": {
+    "active_send_gaps_100ms": 0,
+    "active_send_gaps_1s": 0,
+    "active_send_gaps_40ms": 13,
+    "frames_sent": 26968,
+    "frames_unavailable": 0,
+    "send_failures": 0,
+    "silence_frames_sent": 0,
+    "skipped_deadlines": 23,
+    "source_overruns": 0
+  },
+  "senderCheckpoints": [
+    {
+      "utc": "2026-09-11T20:21:25.209843+00:00",
+      "frames_sent": 3000,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 0,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 0,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-11T20:22:25.209883+00:00",
+      "frames_sent": 6000,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 0,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 0,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-11T20:23:25.209092+00:00",
+      "frames_sent": 9000,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 0,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 0,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-11T20:24:25.209309+00:00",
+      "frames_sent": 12000,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 0,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 0,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-11T20:25:25.209891+00:00",
+      "frames_sent": 14986,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 10,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 5,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-11T20:26:25.209849+00:00",
+      "frames_sent": 17976,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 18,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 9,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-11T20:27:25.208999+00:00",
+      "frames_sent": 20976,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 18,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 9,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-11T20:28:25.209243+00:00",
+      "frames_sent": 23976,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 18,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 9,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-11T20:29:25.209645+00:00",
+      "frames_sent": 26968,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 23,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 13,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    {
+      "utc": "2026-09-11T20:30:25.209983+00:00",
+      "frames_sent": 29968,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 23,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 13,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    }
+  ],
+  "senderCoverage": {
+    "from": "2026-09-11T20:21:25.209843+00:00",
+    "to": "2026-09-11T20:30:25.209983+00:00",
+    "unobservedHeadSeconds": 35.356843,
+    "unobservedTailSeconds": 24.642467,
+    "maximumCheckpointGapSeconds": 60.000582
+  },
+  "resourceSamples": 10,
+  "pssMiB": {
+    "min": 16.26953125,
+    "max": 16.48046875,
+    "median": 16.4765625
+  },
+  "sourceTailReferenceMs": 938.458,
+  "sourceTailToleranceMs": 100,
+  "limitations": [
+    "one receiver cannot isolate network hop",
+    "short window is not six-hour guarantee",
+    "source-tail-candidate means temporal and duration agreement, not fresh decoded waveform alignment",
+    "negative cumulative loss deltas can include corrections to losses predating this observation",
+    "sender/resource deltas cover only the interior minute samples; exact uncovered head/tail are reported; active send gap counts exclude a paused timeline",
+    "Natural boundaries require a logged finish followed by a later generation start; all PCM quiet, including candidates, remains in the report. Coincidence never proves source-only silence."
+  ],
+  "botCpuPercentOfOneCore": 3.9035342975439584,
+  "hostStealPercent": 0.3636194981679885,
+  "udpCounterDelta": {
+    "InDatagrams": 608,
+    "NoPorts": 0,
+    "InErrors": 0,
+    "OutDatagrams": 27039,
+    "RcvbufErrors": 0,
+    "SndbufErrors": 0,
+    "InCsumErrors": 0,
+    "IgnoredMulti": 0,
+    "MemErrors": 0
+  },
+  "cgroupMemoryEventsDelta": {
+    "low": 0,
+    "high": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0,
+    "oom_group_kill": 0
+  },
+  "checkpointSavesForThisRun": 12,
+  "checkpointSavesInCollectedFile": 54,
+  "sourceHeadReferenceMs": 0,
+  "quietClassificationCounts": {
+    "boundary-quiet-with-overlapping-anomaly": 2,
+    "source-tail-candidate": 2
+  },
+  "evidenceWarnings": [],
+  "hostCollectionCoverage": {
+    "samples": 12,
+    "first": "2026-09-11T20:19:56.218742+00:00",
+    "last": "2026-09-11T20:30:56.247380+00:00",
+    "errors": 0,
+    "note": "Host collection after playback stops is not audio coverage; PSS and CPU above use only the receiver window."
+  },
+  "persistedEventHistoryComplete": true,
+  "clock": {
+    "wallStartMs": 1789158049853,
+    "monotonicStartMs": 68976963.9,
+    "timeOrigin": 1789089072889.9,
+    "pcmResetAckDelayMs": 0.30000001192092896,
+    "pcmEpochUncertaintyMs": 0.30000001192092896,
+    "pcmWallDriftMinMs": -16.033333351217152,
+    "pcmWallDriftMaxMs": 4.0999999940395355
+  },
+  "uiObservation": {
+    "rowRebindings": 0,
+    "missingRowPolls": 0,
+    "unknownPhasePolls": 0
+  },
+  "availableCounters": [
+    "timestamp",
+    "packetsReceived",
+    "packetsLost",
+    "bytesReceived",
+    "packetsDiscarded",
+    "nackCount",
+    "fecPacketsReceived",
+    "fecPacketsDiscarded",
+    "concealedSamples",
+    "silentConcealedSamples",
+    "concealmentEvents",
+    "totalSamplesReceived",
+    "jitterBufferDelay",
+    "jitterBufferEmittedCount",
+    "insertedSamplesForDeceleration",
+    "removedSamplesForAcceleration",
+    "jitterBufferTargetDelay",
+    "jitterBufferMinimumDelay"
+  ],
+  "sourceReference": {
+    "collectedAt": "2026-09-10T17:25:59.261386+00:00",
+    "source": "https://youtu.be/dQw4w9WgXcQ",
+    "volume": 70,
+    "sourcePacketsSha256": "29f1ac2bad421ed974c8276c15943cc6a47cbde931276c8d35f51c874532431b",
+    "sourceHeadMs": 0,
+    "sourceTailMs": 938.458333,
+    "decoder": {
+      "decoder": "libopus 1.6",
+      "quietIntervals": [
+        {
+          "startSeconds": 212.121542,
+          "durationMs": 938.458333,
+          "atEnd": true
+        }
+      ],
+      "frames": 10653,
+      "seconds": 213.06,
+      "wrongFrameDuration": 0,
+      "tinyPackets": 47,
+      "longestQuietMs": 938.458333,
+      "nearFullScale": 0,
+      "nonFinite": 0,
+      "peak": 0.584290266,
+      "rms": 0.09019673,
+      "failed": false
+    },
+    "sourcePull": {
+      "paced": false,
+      "runs": [
+        {
+          "bytes": 2633918,
+          "elapsedSeconds": 24.137776294,
+          "filterUpdateMs": 0.0,
+          "filterUpdates": 0,
+          "frames": 10653,
+          "iteration": 0,
+          "maxReadMs": 13.005523,
+          "stalls": [],
+          "startupMs": 391.611378
+        }
+      ],
+      "scope": "integrated source and volume processing, no Discord transport",
+      "staged": true,
+      "volume": 70
+    },
+    "candidateSha256": "c007862072d46a0ded0b8dbe93e030d8ba029ac7087f0ef213989586ba4f3002",
+    "sourceToolSha256": "a6d796d20dda1c3bcc66f9fdf5f86b62288d51377ffebc478141b837daf28273",
+    "candidateRevision": "2be406be22fd64f56adaccd45c2d115c27fd380c",
+    "limitation": "Independent source fetch on Oracle with the same pinned dependencies and volume; not waveform alignment of every loop",
+    "reuseNote": "Reused September 10 source-tail measurement for the same URL and volume; pacing/diagnostics experiments do not change source processing. No fresh per-loop waveform equality claim."
+  },
+  "incidentWindows": {
+    "retained": 6,
+    "created": 6,
+    "browserEvictions": 0,
+    "completePersistedHistory": true,
+    "incompletePostIncidentWindows": 0
+  },
+  "diagnosticWindows": [
+    {
+      "id": 1,
+      "ms": 187486.5,
+      "triggers": [
+        {
+          "ms": 187486.5,
+          "kind": "speaking"
+        }
+      ],
+      "samples": [
+        [
+          182298.74487304688,
+          1001.427001953125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          0,
+          45.79999999999806,
+          21
+        ],
+        [
+          183300.28588867188,
+          1001.541015625,
+          50,
+          0,
+          0,
+          0,
+          0,
+          0,
+          45,
+          21
+        ],
+        [
+          184301.70190429688,
+          1001.416015625,
+          50,
+          0,
+          0,
+          0,
+          0,
+          0,
+          45.60000000000097,
+          17
+        ],
+        [
+          185303.0048828125,
+          1001.302978515625,
+          50,
+          0,
+          0,
+          0,
+          0,
+          0,
+          45.60000000000097,
+          17
+        ],
+        [
+          186304.3740234375,
+          1001.369140625,
+          51,
+          0,
+          0,
+          0,
+          0,
+          0,
+          45.49019607843042,
+          21
+        ],
+        [
+          187305.77587890625,
+          1001.40185546875,
+          49,
+          0,
+          1,
+          12.9375,
+          0,
+          2,
+          43.87755102040816,
+          21
+        ],
+        [
+          188307.36694335938,
+          1001.591064453125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          32.19999999999951,
+          21
+        ],
+        [
+          189308.88598632812,
+          1001.51904296875,
+          51,
+          0,
+          0,
+          0,
+          0,
+          3,
+          32,
+          39
+        ],
+        [
+          190310.47094726562,
+          1001.5849609375,
+          50,
+          0,
+          0,
+          0,
+          0,
+          2,
+          33.137254901961256,
+          39
+        ],
+        [
+          191312.18798828125,
+          1001.717041015625,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          32.44897959183723,
+          39
+        ],
+        [
+          192313.63500976562,
+          1001.447021484375,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          31.599999999998545,
+          26
+        ]
+      ],
+      "remaining": 0
+    },
+    {
+      "id": 2,
+      "ms": 247409.79999998212,
+      "triggers": [
+        {
+          "ms": 247409.79999998212,
+          "kind": "receiver"
+        },
+        {
+          "ms": 248411.5,
+          "kind": "receiver"
+        }
+      ],
+      "samples": [
+        [
+          242400.0048828125,
+          1001.4130859375,
+          50,
+          0,
+          0,
+          0,
+          0,
+          2,
+          44.400000000001455,
+          18
+        ],
+        [
+          243401.376953125,
+          1001.3720703125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          44.80000000000049,
+          18
+        ],
+        [
+          244403.376953125,
+          1002,
+          50,
+          0,
+          0,
+          0,
+          0,
+          2,
+          44.901960784311825,
+          18
+        ],
+        [
+          245405.48583984375,
+          1002.10888671875,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          44,
+          27
+        ],
+        [
+          246406.87084960938,
+          1001.385009765625,
+          51,
+          0,
+          0,
+          0,
+          0,
+          3,
+          43.60000000000097,
+          27
+        ],
+        [
+          247408.41796875,
+          1001.547119140625,
+          43,
+          0,
+          0,
+          93.47916666666667,
+          0,
+          9,
+          39.090909090907985,
+          32
+        ],
+        [
+          248410.03881835938,
+          1001.620849609375,
+          45,
+          0,
+          0,
+          100.89583333333333,
+          0,
+          4,
+          17.391304347826086,
+          32
+        ],
+        [
+          249411.671875,
+          1001.633056640625,
+          51,
+          0,
+          0,
+          0,
+          0,
+          4,
+          17.75510204081781,
+          32
+        ],
+        [
+          250413.044921875,
+          1001.373046875,
+          50,
+          0,
+          0,
+          0,
+          0,
+          2,
+          21.599999999998545,
+          19
+        ],
+        [
+          251414.4599609375,
+          1001.4150390625,
+          50,
+          0,
+          0,
+          0,
+          0,
+          2,
+          40.20000000000194,
+          19
+        ],
+        [
+          252415.9599609375,
+          1001.5,
+          50,
+          0,
+          0,
+          0,
+          0,
+          1,
+          66.73469387755003,
+          19
+        ]
+      ],
+      "remaining": 0
+    },
+    {
+      "id": 3,
+      "ms": 280462.40000000596,
+      "triggers": [
+        {
+          "ms": 280462.40000000596,
+          "kind": "receiver"
+        }
+      ],
+      "samples": [
+        [
+          275453.52392578125,
+          1001.68994140625,
+          50,
+          0,
+          0,
+          0,
+          0,
+          2,
+          120.39999999999903,
+          22
+        ],
+        [
+          276455.0358886719,
+          1001.511962890625,
+          49,
+          0,
+          0,
+          0,
+          0,
+          2,
+          119,
+          22
+        ],
+        [
+          277456.4609375,
+          1001.425048828125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          118.19999999999952,
+          17
+        ],
+        [
+          278458.0539550781,
+          1001.593017578125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          4,
+          113.40000000000146,
+          17
+        ],
+        [
+          279459.5439453125,
+          1001.489990234375,
+          51,
+          0,
+          0,
+          0,
+          0,
+          4,
+          115.79999999999806,
+          32
+        ],
+        [
+          280461.1259765625,
+          1001.58203125,
+          40,
+          0,
+          0,
+          97.35416666666667,
+          0,
+          8,
+          64.66666666666882,
+          32
+        ],
+        [
+          281462.6149902344,
+          1001.489013671875,
+          50,
+          0,
+          0,
+          9.666666666666666,
+          0,
+          4,
+          19.79999999999806,
+          32
+        ],
+        [
+          282464.2529296875,
+          1001.637939453125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          5,
+          12.745098039215685,
+          37
+        ],
+        [
+          283465.7578125,
+          1001.5048828125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          10,
+          37
+        ],
+        [
+          284467.5158691406,
+          1001.758056640625,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          10.400000000001455,
+          37
+        ],
+        [
+          285469.16796875,
+          1001.652099609375,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          11,
+          37
+        ]
+      ],
+      "remaining": 0
+    },
+    {
+      "id": 4,
+      "ms": 292480.90000000596,
+      "triggers": [
+        {
+          "ms": 292480.90000000596,
+          "kind": "receiver"
+        }
+      ],
+      "samples": [
+        [
+          287472.1188964844,
+          1001.405029296875,
+          51,
+          0,
+          0,
+          0,
+          0,
+          3,
+          10,
+          21
+        ],
+        [
+          288473.6848144531,
+          1001.56591796875,
+          50,
+          0,
+          0,
+          7.0625,
+          0,
+          4,
+          11.60000000000097,
+          21
+        ],
+        [
+          289475.2839355469,
+          1001.59912109375,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          16.800000000000484,
+          21
+        ],
+        [
+          290476.7180175781,
+          1001.43408203125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          2,
+          15.599999999998545,
+          20
+        ],
+        [
+          291478.0969238281,
+          1001.37890625,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          17.20000000000194,
+          20
+        ],
+        [
+          292479.52099609375,
+          1001.424072265625,
+          50,
+          0,
+          0,
+          85.16666666666667,
+          0,
+          4,
+          39.347826086956,
+          24
+        ],
+        [
+          293481.298828125,
+          1001.77783203125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          2,
+          100,
+          24
+        ],
+        [
+          294482.7038574219,
+          1001.405029296875,
+          50,
+          0,
+          0,
+          0,
+          0,
+          2,
+          112.59999999999854,
+          24
+        ],
+        [
+          295484.1428222656,
+          1001.43896484375,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          117.95918367347038,
+          24
+        ],
+        [
+          296485.6599121094,
+          1001.51708984375,
+          50,
+          0,
+          0,
+          0,
+          0,
+          1,
+          121,
+          17
+        ],
+        [
+          297487.3010253906,
+          1001.64111328125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          119.39999999999903,
+          17
+        ]
+      ],
+      "remaining": 0
+    },
+    {
+      "id": 5,
+      "ms": 401036.5,
+      "triggers": [
+        {
+          "ms": 401036.5,
+          "kind": "speaking"
+        }
+      ],
+      "samples": [
+        [
+          395662.7419433594,
+          1001.525146484375,
+          50,
+          0,
+          0,
+          0,
+          0,
+          2,
+          72.20000000000194,
+          16
+        ],
+        [
+          396664.2458496094,
+          1001.50390625,
+          50,
+          0,
+          0,
+          0,
+          0,
+          2,
+          72.19999999999709,
+          16
+        ],
+        [
+          397665.8640136719,
+          1001.6181640625,
+          50,
+          0,
+          0,
+          0,
+          0,
+          4,
+          70.20000000000194,
+          15
+        ],
+        [
+          398667.5949707031,
+          1001.73095703125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          4,
+          70.79999999999806,
+          15
+        ],
+        [
+          399669.06591796875,
+          1001.470947265625,
+          50,
+          0,
+          0,
+          0,
+          0,
+          4,
+          70.20000000000194,
+          15
+        ],
+        [
+          400670.7099609375,
+          1001.64404296875,
+          51,
+          0,
+          0,
+          0,
+          0,
+          5,
+          71.79999999999806,
+          22
+        ],
+        [
+          401672.23388671875,
+          1001.52392578125,
+          49,
+          0,
+          0,
+          0,
+          0,
+          4,
+          69.20000000000194,
+          22
+        ],
+        [
+          402673.751953125,
+          1001.51806640625,
+          50,
+          0,
+          0,
+          0,
+          0,
+          4,
+          70.20000000000194,
+          27
+        ],
+        [
+          403675.47998046875,
+          1001.72802734375,
+          50,
+          0,
+          0,
+          0,
+          0,
+          4,
+          68.59999999999611,
+          27
+        ],
+        [
+          404680.2138671875,
+          1004.73388671875,
+          51,
+          0,
+          0,
+          0,
+          0,
+          4,
+          70.60000000000097,
+          27
+        ],
+        [
+          405681.6848144531,
+          1001.470947265625,
+          50,
+          0,
+          0,
+          0,
+          0,
+          4,
+          70.1960784313735,
+          22
+        ]
+      ],
+      "remaining": 0
+    },
+    {
+      "id": 6,
+      "ms": 483869.59999999404,
+      "triggers": [
+        {
+          "ms": 483869.59999999404,
+          "kind": "receiver"
+        },
+        {
+          "ms": 484871.09999999404,
+          "kind": "receiver"
+        }
+      ],
+      "samples": [
+        [
+          478860.52490234375,
+          1001.6240234375,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          80.20000000000194,
+          36
+        ],
+        [
+          479861.8498535156,
+          1001.324951171875,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          80.19999999999709,
+          36
+        ],
+        [
+          480863.8640136719,
+          1002.01416015625,
+          50,
+          0,
+          0,
+          0,
+          0,
+          4,
+          80.3921568627451,
+          36
+        ],
+        [
+          481865.2958984375,
+          1001.431884765625,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          80.20408163265405,
+          36
+        ],
+        [
+          482866.6728515625,
+          1001.376953125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          4,
+          80.20000000000194,
+          25
+        ],
+        [
+          483868.1560058594,
+          1001.483154296875,
+          44,
+          0,
+          0,
+          56.458333333333336,
+          0,
+          10,
+          64.04255319148626,
+          25
+        ],
+        [
+          484869.8479003906,
+          1001.69189453125,
+          48,
+          0,
+          0,
+          47.333333333333336,
+          0,
+          5,
+          30.62499999999899,
+          24
+        ],
+        [
+          485871.3728027344,
+          1001.52490234375,
+          50,
+          0,
+          0,
+          0,
+          0,
+          4,
+          28.40000000000388,
+          24
+        ],
+        [
+          486872.9348144531,
+          1001.56201171875,
+          50,
+          0,
+          0,
+          0,
+          0,
+          3,
+          48.36734693877452,
+          24
+        ],
+        [
+          487874.3928222656,
+          1001.4580078125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          10,
+          47,
+          19
+        ],
+        [
+          488875.9089355469,
+          1001.51611328125,
+          50,
+          0,
+          0,
+          0,
+          0,
+          7,
+          46.27450980391872,
+          19
+        ]
+      ],
+      "remaining": 0
+    }
+  ]
+}

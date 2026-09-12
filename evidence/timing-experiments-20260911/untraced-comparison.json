@@ -1,0 +1,84 @@
+{
+  "runs": [
+    {
+      "receiverSeconds": 599.9994499511719,
+      "senderSeconds": 540.00014,
+      "codec": {
+        "mimeType": "audio/opus",
+        "clockRate": 48000,
+        "channels": 2
+      },
+      "packetsReceived": 29969,
+      "netLost": 0,
+      "positiveLossDeltas": 1,
+      "negativeLossCorrections": -1,
+      "discarded": 6,
+      "nacks": 34,
+      "concealmentMs": 777.8125,
+      "concealmentMsPerMinute": 77.78132130587439,
+      "silentConcealmentMs": 0.0,
+      "senderGaps40ms": 13,
+      "senderGaps40msPerHour": 86.6666441975367,
+      "senderGaps100ms": 0,
+      "unavailableFrames": 0,
+      "silenceFrames": 0,
+      "sendFailures": 0,
+      "quietRequiringReview100ms": 1,
+      "pcmNearFullScale": 0,
+      "pcmNonFinite": 0,
+      "medianPssMiB": 16.4765625,
+      "cpuPercentOneCore": 3.9035342975439584,
+      "hostStealPercent": 0.3636194981679885,
+      "warnings": [],
+      "label": "baseline-off2",
+      "inputSha256": {
+        "summary.json": "7aa0e03e3aff02513f6834c1121f3cde20623f5568e225265ee4d07e6e5685cd",
+        "receiver.json": "4143308a83d78a973a9da6afad53ed1c8d6b21824257c47fea95caab5ca51ad0"
+      }
+    },
+    {
+      "receiverSeconds": 600.0001359863281,
+      "senderSeconds": 539.999972,
+      "codec": {
+        "mimeType": "audio/opus",
+        "clockRate": 48000,
+        "channels": 2
+      },
+      "packetsReceived": 29958,
+      "netLost": 0,
+      "positiveLossDeltas": 2,
+      "negativeLossCorrections": -2,
+      "discarded": 7,
+      "nacks": 34,
+      "concealmentMs": 791.4583333333334,
+      "concealmentMsPerMinute": 79.14581539541862,
+      "silentConcealmentMs": 0.0,
+      "senderGaps40ms": 16,
+      "senderGaps40msPerHour": 106.66667219753116,
+      "senderGaps100ms": 0,
+      "unavailableFrames": 0,
+      "silenceFrames": 0,
+      "sendFailures": 0,
+      "quietRequiringReview100ms": 0,
+      "pcmNearFullScale": 0,
+      "pcmNonFinite": 0,
+      "medianPssMiB": 16.263671875,
+      "cpuPercentOneCore": 3.823909985847792,
+      "hostStealPercent": 0.443224598037943,
+      "warnings": [],
+      "label": "narrow-off-resume",
+      "inputSha256": {
+        "summary.json": "c3e63ee73dfe15436ef135eae85e3ec82418033ba99e759166c2f180b2390e91",
+        "receiver.json": "3fa325bb778413407374df0ee4fd5ba4625e391ae17b4e069bf684061ad0793d"
+      }
+    }
+  ],
+  "limitations": [
+    "Sequential short observations do not isolate code effects from host/network variation.",
+    "Sender rates use interior checkpoint duration, not the longer receiver duration.",
+    "Positive loss deltas include late packets; negative corrections remain separate.",
+    "Concealment is replacement audio, not necessarily silence or an audible artifact.",
+    "Compare tracing state, source, volume, route, host pressure, and warnings before drawing conclusions.",
+    "Full ten-minute coverage does not qualify six hours."
+  ]
+}

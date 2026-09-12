@@ -1,0 +1,12 @@
+{"savedAt":1789154707.3539503,"requestedAt":"2026-09-11T19:24:30.985Z","status":"running","elapsedSeconds":34.05113598632813,"bytes":4369,"saveDurationMs":2.7264620002824813}
+{"savedAt":1789154735.147305,"requestedAt":"2026-09-11T19:24:30.985Z","status":"running","elapsedSeconds":61.10029711914063,"bytes":5511,"saveDurationMs":5.494080003700219}
+{"savedAt":1789154767.3491313,"requestedAt":"2026-09-11T19:24:30.985Z","status":"running","elapsedSeconds":93.1511611328125,"bytes":8048,"saveDurationMs":2.6437909982632846}
+{"savedAt":1789154827.346484,"requestedAt":"2026-09-11T19:24:30.985Z","status":"running","elapsedSeconds":153.24424096679687,"bytes":13987,"saveDurationMs":5.815546988742426}
+{"savedAt":1789154887.3545072,"requestedAt":"2026-09-11T19:24:30.985Z","status":"running","elapsedSeconds":213.32665698242187,"bytes":19221,"saveDurationMs":7.312654997804202}
+{"savedAt":1789154947.3458643,"requestedAt":"2026-09-11T19:24:30.985Z","status":"running","elapsedSeconds":273.425498046875,"bytes":21854,"saveDurationMs":4.411963003803976}
+{"savedAt":1789155007.3492212,"requestedAt":"2026-09-11T19:24:30.985Z","status":"running","elapsedSeconds":333.51234912109373,"bytes":25287,"saveDurationMs":6.9295730063458905}
+{"savedAt":1789155067.3463352,"requestedAt":"2026-09-11T19:24:30.985Z","status":"running","elapsedSeconds":393.6004741210937,"bytes":29059,"saveDurationMs":4.9090020038420334}
+{"savedAt":1789155127.368163,"requestedAt":"2026-09-11T19:24:30.985Z","status":"running","elapsedSeconds":453.6933791503906,"bytes":33346,"saveDurationMs":7.956315006595105}
+{"savedAt":1789155187.3503942,"requestedAt":"2026-09-11T19:24:30.985Z","status":"running","elapsedSeconds":513.8123391113281,"bytes":35796,"saveDurationMs":8.373275995836593}
+{"savedAt":1789155247.35013,"requestedAt":"2026-09-11T19:24:30.985Z","status":"running","elapsedSeconds":573.9058510742187,"bytes":37301,"saveDurationMs":8.369642004254274}
+{"savedAt":1789155273.3863595,"requestedAt":"2026-09-11T19:24:30.985Z","status":"completed","elapsedSeconds":599.9963610839844,"bytes":42165,"saveDurationMs":13.26283800881356}

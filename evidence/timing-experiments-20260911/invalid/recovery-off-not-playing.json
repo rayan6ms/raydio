@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "status": "failed",
+  "requestedSeconds": 600,
+  "pcmEnabled": true,
+  "requestedAt": "2026-09-11T20:04:48.591Z",
+  "minutes": [],
+  "events": [],
+  "eventsTruncated": false,
+  "eventsDropped": 0,
+  "network": {
+    "onlineAtStart": true
+  },
+  "diagnosticWindows": [],
+  "diagnosticWindowsDropped": 0,
+  "diagnosticWindowsCreated": 0,
+  "diagnosticSampleFields": [
+    "elapsedMs",
+    "windowMs",
+    "packets",
+    "lost",
+    "discarded",
+    "concealedMs",
+    "silentMs",
+    "jitterMs",
+    "meanBufferMs",
+    "rttMs"
+  ],
+  "receiverScheduling": {
+    "enabled": true,
+    "longTasksSupported": false,
+    "longTasks": 0,
+    "totalLongTaskMs": 0,
+    "maxLongTaskMs": 0,
+    "initialVisibility": "visible"
+  },
+  "uiObservation": {
+    "rowRebindings": 0,
+    "missingRowPolls": 0,
+    "unknownPhasePolls": 0
+  },
+  "pcm": {
+    "samples": 0,
+    "squared": 0,
+    "peak": 0,
+    "nearFullScale": 0,
+    "nonFinite": 0,
+    "emptyFrames": 0,
+    "longestQuietMs": 0,
+    "ongoingQuietMs": 0,
+    "reports": 0,
+    "frames": 0,
+    "audioSeconds": 0,
+    "rms": 0
+  },
+  "sampling": {
+    "polls": 0,
+    "stalePolls": 0,
+    "maxPollMs": 0,
+    "positiveLossDeltas": 0,
+    "negativeLossDeltas": 0,
+    "maxConcealedMsPerPoll": 0,
+    "pcmReportsMissing": 0
+  },
+  "limitations": [
+    "Finite receiver observation, not a guarantee of future network behavior",
+    "Track phase comes from the once-per-second visible player; silence near track boundaries is retained for review, never silently excluded",
+    "No PCM is recorded; source defects and perceptual quality need separate evidence"
+  ],
+  "error": "Error: Expected exactly one advancing receiver",
+  "finishedAt": "2026-09-11T20:04:49.691Z",
+  "observationWallSeconds": 1.1005,
+  "coverage": {
+    "receiverSeconds": 0,
+    "pcmSeconds": 0,
+    "completePollCoverage": false,
+    "completePcmCoverage": false,
+    "uninterruptedConnection": false,
+    "completeEventHistory": true,
+    "completeSpeakingObservation": true,
+    "completeTrackPhaseObservation": true,
+    "retainedDiagnosticWindows": 0,
+    "droppedDiagnosticWindows": 0
+  }
+}

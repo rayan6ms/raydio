@@ -1,0 +1,6 @@
+MainPID=19708
+NRestarts=0
+MemoryCurrent=28241920
+CPUUsageNSec=28473956000
+ActiveState=deactivating
+NTPSynchronized=yes

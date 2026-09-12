@@ -1,0 +1,14 @@
+{"savedAt":1789170167.581343,"requestedAt":"2026-09-11T23:42:37.657Z","status":"running","elapsedSeconds":7.048674072265625,"bytes":4402,"saveDurationMs":5.211761003010906}
+{"savedAt":1789170182.6657517,"requestedAt":"2026-09-11T23:42:37.657Z","status":"running","elapsedSeconds":22.0747509765625,"bytes":4408,"saveDurationMs":5.042115997639485}
+{"savedAt":1789170203.5731122,"requestedAt":"2026-09-11T23:42:37.657Z","status":"running","elapsedSeconds":43.11735498046875,"bytes":4771,"saveDurationMs":2.1749040024587885}
+{"savedAt":1789170212.1323984,"requestedAt":"2026-09-11T23:42:37.657Z","status":"running","elapsedSeconds":52.13244409179688,"bytes":4766,"saveDurationMs":2.3191390064312145}
+{"savedAt":1789170227.5789495,"requestedAt":"2026-09-11T23:42:37.657Z","status":"running","elapsedSeconds":67.15796704101562,"bytes":5022,"saveDurationMs":4.855124992900528}
+{"savedAt":1789170287.5801203,"requestedAt":"2026-09-11T23:42:37.657Z","status":"running","elapsedSeconds":127.296251953125,"bytes":8347,"saveDurationMs":5.342913995264098}
+{"savedAt":1789170347.5806646,"requestedAt":"2026-09-11T23:42:37.657Z","status":"running","elapsedSeconds":187.40423706054688,"bytes":15941,"saveDurationMs":5.760632993769832}
+{"savedAt":1789170407.5818121,"requestedAt":"2026-09-11T23:42:37.657Z","status":"running","elapsedSeconds":247.5786159667969,"bytes":18810,"saveDurationMs":6.370831004460342}
+{"savedAt":1789170467.5829704,"requestedAt":"2026-09-11T23:42:37.657Z","status":"running","elapsedSeconds":307.68581494140625,"bytes":19661,"saveDurationMs":6.8657750089187175}
+{"savedAt":1789170527.582026,"requestedAt":"2026-09-11T23:42:37.657Z","status":"running","elapsedSeconds":366.882544921875,"bytes":22079,"saveDurationMs":6.54112700431142}
+{"savedAt":1789170587.5829382,"requestedAt":"2026-09-11T23:42:37.657Z","status":"running","elapsedSeconds":427.0082919921875,"bytes":24860,"saveDurationMs":6.922314001712948}
+{"savedAt":1789170647.5823305,"requestedAt":"2026-09-11T23:42:37.657Z","status":"running","elapsedSeconds":487.15389086914064,"bytes":25982,"saveDurationMs":6.980128004215658}
+{"savedAt":1789170707.5835128,"requestedAt":"2026-09-11T23:42:37.657Z","status":"running","elapsedSeconds":547.2725649414062,"bytes":27544,"saveDurationMs":6.955302000278607}
+{"savedAt":1789170759.9447906,"requestedAt":"2026-09-11T23:42:37.657Z","status":"completed","elapsedSeconds":600.0001359863281,"bytes":33270,"saveDurationMs":10.197734998655505}
