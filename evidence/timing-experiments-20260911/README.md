@@ -24,6 +24,12 @@ while the bot was offline; another run was explicitly stopped at 207 seconds;
 the first matched baseline omitted Loop and the song ended. None qualifies as
 a completed comparison or demonstrates a spontaneous bot/Discord failure.
 
+A later final-binary smoke attempt is recorded in the local trial notes as
+`invalid-ui-preflight`: Discord's slash-command autocomplete returned “No options
+match your search,” so no new inbound WebRTC audio peer existed. The isolated
+service was stopped immediately; the final binary passed its hash and offline
+backend check but was not promoted on the basis of that attempt.
+
 `service.log.gz` is the journal captured from the receiver's start. Traced runs
 also have `full-service.txt.gz`, which starts at process launch so record numbers
 can be checked from 1. Diagnostic timestamps measure local UDP submission, not
