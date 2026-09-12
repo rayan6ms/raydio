@@ -166,9 +166,9 @@ six-hour claim.
 The Oracle production `raydio.service` remained disabled; these experiments use
 Testbot only. Maintenance protection is bounded and has an automatic restoration
 timer. No default codec, bitrate, FEC, or buffer setting changed. The stage timing
-and trace-schema changes are committed in Oto `4f68e8c7` and Crust `5b7b4aa1`;
-Raydio is being updated to those commits. A narrower minimum-spacing experiment
-is pending a completed, untraced receiver comparison.
+and trace-schema changes are committed in Oto `4f68e8c7` and Crust
+`24a9fa6d`. Raydio is pinned to those revisions. The narrower minimum-spacing
+experiment was completed and rejected by the matched receiver comparison below.
 
 Two incomplete attempts are excluded: a command submitted while Testbot was
 offline never established playback, and the experiment operator explicitly
