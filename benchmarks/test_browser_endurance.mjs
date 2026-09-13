@@ -20,8 +20,10 @@ async function simulate(seconds, mode='normal') {
         }
         return new Map([['rtp',{id:'rtp',type:'inbound-rtp',kind:'audio',trackIdentifier:'track',timestamp:now,
             ssrc:mode==='identity-change'&&now>7000?2:1,
-            packetsReceived:mode==='counter-reset'&&now>7000?0:Math.floor(now/20),packetsLost:0,packetsDiscarded:0,nackCount:0,
-            concealedSamples:Math.floor(now/3000)*2400,silentConcealedSamples:0,
+            packetsReceived:mode==='counter-reset'&&now>7000?0:Math.floor(now/20),
+            packetsLost:mode==='small-loss'&&now>7000&&now<10000?1:0,
+            packetsDiscarded:mode==='small-discard'&&now>7000?1:0,nackCount:0,
+            concealedSamples:mode.startsWith('small-')?0:Math.floor(now/3000)*2400,silentConcealedSamples:0,
             totalSamplesReceived:now*48,jitterBufferEmittedCount:now*48,jitterBufferDelay:now*.048,jitter:.003}]]);
     }};
     const window={...target,raydioEndurance:{peers:[peer],running:false},RTCPeerConnection:class{}};
@@ -68,4 +70,17 @@ for(const mode of ['row-replaced','row-missing']){
 }
 const short=await simulate(10);
 assert.equal(short.report.coverage.uninterruptedConnection,true);
+for(const mode of ['small-loss','small-discard']){
+    const measured=await simulate(20,mode);
+    assert.equal(measured.report.status,'completed');
+    assert.equal(measured.report.diagnosticWindowsCreated,1);
+    const incident=measured.report.diagnosticWindows[0];
+    assert.equal(incident.remaining,0);
+    assert.ok(incident.samples.length>6,'retain pre- and post-incident samples');
+    assert.ok(incident.samples.some(s=>s[mode==='small-loss'?3:4]===1));
+    if(mode==='small-loss'){
+        assert.ok(incident.samples.some(s=>s[3]===-1),'retain the later signed correction');
+        assert.equal(measured.report.delta.packetsLost,0,'net zero does not erase the incident');
+    }
+}
 console.log('PASS: six-hour simulation, UI replacement/absence preserves receiver counters, true disconnect/identity/reset failures, bounded diagnostics and cleanup');

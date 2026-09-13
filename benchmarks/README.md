@@ -277,3 +277,18 @@ code are identical. Locally the original executable is preserved as
   The browser audit now selects an advancing stream and times its own windows.
   A player-panel edit race found by the control test is fixed; control speedup
   remains unclaimed because the failed baseline is not a valid comparison.
+
+
+### Packet-loss comparison safeguards
+
+Small positive receiver loss deltas and packet discards now trigger bounded
+incident context even without 40 ms of concealment. Corrections remain signed
+and are retained after an incident; loss can be declared when the stream
+resumes, so review the preceding samples as well as the counter update.
+
+`compare_delivery_trials.py` requires complete independent collector coverage
+and persisted event history. It includes fully observed connection interruptions
+as explicit outcomes instead of excluding those runs. Inclusion means the
+observation is usable for comparison; it is not an uninterrupted-audio verdict.
+Failed or incomplete observations must be reported separately, never silently
+dropped when deciding whether a candidate improves reliability.

@@ -14,10 +14,17 @@ import sys
 def metrics(summary, receiver):
     if summary['status'] != 'completed' or receiver['status'] != 'completed':
         raise ValueError('Incomplete receiver trial')
-    for key in ('completePollCoverage', 'completePcmCoverage', 'uninterruptedConnection'):
+    for key in ('completePollCoverage', 'completePcmCoverage'):
         if summary['coverage'].get(key) is not True:
             raise ValueError(f'Unqualified receiver coverage: {key}')
-    for name, coverage in summary.get('collectionCoverage', {}).items():
+    # Transient connection failures with complete observation are outcomes,
+    # not missing evidence. Excluding them selects the smoothest trials.
+    if type(summary['coverage'].get('uninterruptedConnection')) is not bool:
+        raise ValueError('Connection continuity was not reported')
+    if summary.get('persistedEventHistoryComplete') is not True:
+        raise ValueError('Incomplete event evidence')
+    for name in ('senderHost', 'receiverHost', 'receiverCheckpoints'):
+        coverage = summary.get('collectionCoverage', {}).get(name, {})
         if coverage.get('complete') is not True:
             raise ValueError(f'Unqualified diagnostic collection: {name}')
     seconds = summary['receiverSeconds']
@@ -33,6 +40,8 @@ def metrics(summary, receiver):
         'receiverSeconds': seconds,
         'senderSeconds': sender_seconds,
         'codec': receiver['codec'],
+        'uninterruptedConnection': summary['coverage']['uninterruptedConnection'],
+        'networkEvents': summary.get('networkEvents', []),
         'packetsReceived': summary['packetsReceived'],
         'netLost': summary['lostNet'],
         'positiveLossDeltas': summary['positiveLoss'],
@@ -70,6 +79,7 @@ def compare(folders):
         rows.append(row)
     return {'runs': rows, 'limitations': [
         'Sequential short observations do not isolate code effects from host/network variation.',
+        'Completed, fully observed trials retain connection interruptions as outcomes; inclusion is not an audio-quality pass.',
         'Sender rates use interior checkpoint duration, not the longer receiver duration.',
         'Positive loss deltas include late packets; negative corrections remain separate.',
         'Concealment is replacement audio, not necessarily silence or an audible artifact.',

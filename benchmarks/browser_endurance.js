@@ -118,7 +118,7 @@
             data.events.push({sequence:++eventSequence,ms:at,kind,phase:trackPhase,...detail});
             const trigger=(kind==='speaking'&&!detail.speaking)
                 ||(kind==='quiet'&&detail.durationMs>=100&&trackPhase.label==='middle')
-                ||(kind==='receiver'&&(detail.packets===0||detail.windowMs>2000||detail.concealedMs>=40))
+                ||(kind==='receiver'&&(detail.lost>0||detail.discarded>0||detail.packets===0||detail.windowMs>2000||detail.concealedMs>=40))
                 ||['connection','ice','network-offline','audio-context','track-ended','track-muted'].includes(kind);
             if(trigger){
                 const prior=data.diagnosticWindows.at(-1);
