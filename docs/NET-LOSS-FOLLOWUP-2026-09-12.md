@@ -79,10 +79,15 @@ hours on the same receiver, preserve route/RTT and ICE events, and accept a
 candidate only if net-loss rate and concealment both improve without increased
 sender gaps, silent concealment, or PCM errors.
 
-The actual bot dependency graph was also corrected: Crust's Oto adapter now
-pins the same Oto revision as Raydio. This prevents the binary from silently
-linking an older transport through the adapter. Crust tests (16 passed) and the
-full Raydio suite (49 passed) passed with the aligned revisions.
+The actual bot dependency graph was also corrected: Crust's Oto adapter and
+server test fixtures now pin the same Oto transport revision as Raydio. This
+prevents the binary from silently linking an older transport through the
+adapter. The final build uses Oto `e205f9a3` and Crust `5479267a`; the transport
+test covers both IPv4 and IPv6 marking and verifies unchanged packet bytes.
+Crust tests (16 passed) and the full Raydio suite (49 passed) passed with the
+aligned revisions. The live DSCP windows necessarily used the earlier trial
+build (`0673097`/`6be8a10`); the final build was installed and checked on
+Oracle but was not restarted for another receiver window.
 
 Evidence is under `target/net-loss-20260912/`: `baseline/` is DSCP 0,
 `dscp-collector-2/` is DSCP 46, and `manifest.json` records source and binary

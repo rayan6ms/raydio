@@ -5,6 +5,7 @@ import re
 import statistics
 import argparse
 from quiet_classification import classify_quiet
+from collection_coverage import collection_coverage
 parser=argparse.ArgumentParser(description="Summarize receiver evidence without hiding extended song-boundary silence")
 parser.add_argument('--input', required=True, type=Path)
 parser.add_argument('--output', required=True, type=Path)
@@ -123,6 +124,26 @@ if (root/'checkpoints.jsonl').exists():
 summary['sourceHeadReferenceMs']=args.source_head_ms
 summary['quietClassificationCounts']={label:sum(q['classification']==label for q in quiet) for label in sorted({q['classification'] for q in quiet})}
 summary['evidenceWarnings']=archive_warnings
+receiver_host_path = root / 'receiver-host.jsonl'
+receiver_hosts = ([json.loads(line) for line in receiver_host_path.read_text().splitlines()]
+                  if receiver_host_path.exists() else [])
+checkpoint_path = root / 'checkpoints.jsonl'
+receiver_saves = ([row for line in checkpoint_path.read_text().splitlines()
+                   if (row := json.loads(line)).get('requestedAt') == r.get('requestedAt')]
+                  if checkpoint_path.exists() else [])
+summary['collectionCoverage'] = {
+    'senderHost': collection_coverage(resources, start.timestamp(), end.timestamp(),
+        timestamp=lambda row: dt.datetime.fromisoformat(row['utc']).timestamp(),
+        error=lambda row: 'error' in row),
+    'receiverHost': collection_coverage(receiver_hosts, start.timestamp(), end.timestamp(),
+        timestamp=lambda row: row['savedAt'],
+        error=lambda row: bool(row.get('host', {}).get('errors'))),
+    'receiverCheckpoints': collection_coverage(receiver_saves, start.timestamp(), end.timestamp(),
+        timestamp=lambda row: row['savedAt']),
+}
+for name, coverage in summary['collectionCoverage'].items():
+    if not coverage['complete']:
+        summary['evidenceWarnings'].append(name+' collection did not cover the observation')
 if any(e['kind']=='audio-terminal-failure' for e in sender_events):
     summary['evidenceWarnings'].append('terminal sender failure occurred during the requested observation window, possibly after receiver coverage ended')
 summary['hostCollectionCoverage']={

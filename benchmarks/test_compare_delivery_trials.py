@@ -42,6 +42,12 @@ class DeliveryComparisonTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 metrics(broken, self.receiver)
 
+    def test_complete_pcm_does_not_override_late_collector(self):
+        broken = copy.deepcopy(self.summary)
+        broken['collectionCoverage'] = {'receiverHost': {'complete': False}}
+        with self.assertRaisesRegex(ValueError, 'receiverHost'):
+            metrics(broken, self.receiver)
+
 
 if __name__ == '__main__':
     unittest.main()

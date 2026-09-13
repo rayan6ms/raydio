@@ -17,6 +17,9 @@ def metrics(summary, receiver):
     for key in ('completePollCoverage', 'completePcmCoverage', 'uninterruptedConnection'):
         if summary['coverage'].get(key) is not True:
             raise ValueError(f'Unqualified receiver coverage: {key}')
+    for name, coverage in summary.get('collectionCoverage', {}).items():
+        if coverage.get('complete') is not True:
+            raise ValueError(f'Unqualified diagnostic collection: {name}')
     seconds = summary['receiverSeconds']
     if abs(seconds - receiver['requestedSeconds']) > 2:
         raise ValueError('Receiver duration differs from requested duration')
