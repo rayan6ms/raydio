@@ -182,10 +182,10 @@ recommended operating load for the one-GiB free VM.
 
 ## Current production promotion
 
-On 2026-09-13 the existing Oracle VM was promoted to the verified Rust
-candidate `ef30de0fa39228712a50e1a5221152957f93986b`. The package was checked
-locally and again by `raydioctl` on the VM, then installed with rollback
-protection. `raydio.service` is active and enabled for boot, with one Raydio
-process and no Testbot process. `RAYDIO_AUDIO_DSCP` is unset, which keeps the
-experimental DSCP marking disabled. The TypeScript implementation remains
-preserved in its separate project/branch.
+On 2026-09-13 the existing Oracle VM was promoted to the verified Rust release
+`v0.2.2` (`06c8eb92d319ebd5abc9c6b937180463db04ba16`). The GitHub x86-64
+package was checksum-checked locally and again by `raydioctl` on the VM, then
+installed with rollback protection. `raydio.service` is active and enabled for
+boot, with one Raydio process and no Testbot process. `RAYDIO_AUDIO_DSCP` is
+unset, which keeps the experimental DSCP marking disabled. The TypeScript
+implementation remains preserved in its separate project/branch.
