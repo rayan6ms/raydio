@@ -1,0 +1,15 @@
+MainPID=0
+NRestarts=0
+Id=raydio.service
+ActiveState=inactive
+UnitFileState=disabled
+
+MainPID=30879
+NRestarts=0
+Id=raydio-isolated-six-hour.service
+ActiveState=active
+UnitFileState=disabled
+NTPSynchronized=yes
+RAYDIO_SEND_TRACE=0
+MALLOC_ARENA_MAX=2
+RAYDIO_WORKER_THREADS=2
