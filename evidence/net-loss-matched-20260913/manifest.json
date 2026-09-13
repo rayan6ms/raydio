@@ -1,0 +1,32 @@
+{
+  "binarySha256": "436db3478beed4c8d7a22daba18a5cd1b4ea620bbce69227f444a8c4cee6fe57",
+  "baseline": {
+    "folder": "dscp0b",
+    "pid": 28405,
+    "dscp": 0,
+    "requestedAt": "2026-09-13T00:34:36.796Z",
+    "startedAt": "2026-09-13T00:34:39.010Z",
+    "seconds": 900
+  },
+  "candidate": {
+    "folder": "dscp46",
+    "pid": 28624,
+    "dscp": 46,
+    "seconds": 900,
+    "tosVerified": "0xb8",
+    "tosVerificationUtc": "2026-09-13T00:54:02Z",
+    "requestedAt": "2026-09-13T00:54:32.065Z",
+    "startedAt": "2026-09-13T00:54:34.278Z",
+    "finishedAt": "2026-09-13T01:09:34.332Z"
+  },
+  "source": "https://youtu.be/dQw4w9WgXcQ",
+  "volume": 70,
+  "loop": true,
+  "design": "Same binary, receiver peer, track, volume, loop state and codec. Consecutive 900-second windows with fresh bot starts; start phases differed (about 64 vs 84 s) and bot ages differed. No SSH administration during qualified windows. Historical source-tail reference reused, not fresh waveform alignment. Setup reports preserved, never pooled into valid windows.",
+  "limitations": [
+    "One pair is a screen, not proof of rare-loss reduction.",
+    "Sender-host sampling is at one-minute intervals; no packet tracing during measurement."
+  ],
+  "decision": "No demonstrated raw-loss benefit; DSCP remains disabled by default. Services and collectors stopped after preservation; production remains inactive and disabled.",
+  "diagnosticsCommit": "12d99d0"
+}

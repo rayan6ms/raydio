@@ -1,0 +1,89 @@
+{
+  "runs": [
+    {
+      "receiverSeconds": 899.9995200195312,
+      "senderSeconds": 840.000457,
+      "codec": {
+        "channels": 2,
+        "clockRate": 48000,
+        "mimeType": "audio/opus"
+      },
+      "uninterruptedConnection": true,
+      "networkEvents": [],
+      "packetsReceived": 44989,
+      "netLost": 0,
+      "positiveLossDeltas": 1,
+      "negativeLossCorrections": -1,
+      "discarded": 15,
+      "nacks": 44,
+      "concealmentMs": 668.7291666666666,
+      "concealmentMsPerMinute": 44.58196822052667,
+      "silentConcealmentMs": 17.5,
+      "senderGaps40ms": 5,
+      "senderGaps40msPerHour": 21.428559770414505,
+      "senderGaps100ms": 0,
+      "unavailableFrames": 0,
+      "silenceFrames": 0,
+      "sendFailures": 0,
+      "quietRequiringReview100ms": 2,
+      "pcmNearFullScale": 0,
+      "pcmNonFinite": 0,
+      "medianPssMiB": 16.11328125,
+      "cpuPercentOneCore": 3.803409154308713,
+      "hostStealPercent": 0.2707295983780077,
+      "warnings": [],
+      "label": "dscp0b",
+      "inputSha256": {
+        "summary.json": "0e938434493c2950cdab92df519cd937e36729f063b06370193b926c04aa14a4",
+        "receiver.json": "4b31d2bd2801063f4cf2f4fcf0e70128264a67d44cd5c61647a84e40c4c1a6a1"
+      }
+    },
+    {
+      "receiverSeconds": 900.0001640625,
+      "senderSeconds": 839.999695,
+      "codec": {
+        "channels": 2,
+        "clockRate": 48000,
+        "mimeType": "audio/opus"
+      },
+      "uninterruptedConnection": true,
+      "networkEvents": [],
+      "packetsReceived": 44991,
+      "netLost": 1,
+      "positiveLossDeltas": 4,
+      "negativeLossCorrections": -3,
+      "discarded": 20,
+      "nacks": 64,
+      "concealmentMs": 971.875,
+      "concealmentMsPerMinute": 64.79165485568792,
+      "silentConcealmentMs": 0.0,
+      "senderGaps40ms": 4,
+      "senderGaps40msPerHour": 17.1428633673492,
+      "senderGaps100ms": 0,
+      "unavailableFrames": 0,
+      "silenceFrames": 0,
+      "sendFailures": 0,
+      "quietRequiringReview100ms": 0,
+      "pcmNearFullScale": 0,
+      "pcmNonFinite": 0,
+      "medianPssMiB": 16.3095703125,
+      "cpuPercentOneCore": 3.9057832698362813,
+      "hostStealPercent": 0.2790614471840434,
+      "warnings": [],
+      "label": "dscp46",
+      "inputSha256": {
+        "summary.json": "f6f77edb390969459c6bed379e2d7c315a6bf7a3324b152e7383c447241ff9cd",
+        "receiver.json": "d73da09ff3f5c17f9a6a4916c5c2ab0c19f809a90f2b5a6ffb32784061ff1550"
+      }
+    }
+  ],
+  "limitations": [
+    "Sequential short observations do not isolate code effects from host/network variation.",
+    "Completed, fully observed trials retain connection interruptions as outcomes; inclusion is not an audio-quality pass.",
+    "Sender rates use interior checkpoint duration, not the longer receiver duration.",
+    "Positive loss deltas include late packets; negative corrections remain separate.",
+    "Concealment is replacement audio, not necessarily silence or an audible artifact.",
+    "Compare tracing state, source, volume, route, host pressure, and warnings before drawing conclusions.",
+    "Full ten-minute coverage does not qualify six hours."
+  ]
+}
