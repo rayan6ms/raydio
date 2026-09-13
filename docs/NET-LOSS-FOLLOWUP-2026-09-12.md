@@ -55,6 +55,19 @@ promising concealment screen, not proof of lower rare loss: both windows had
 zero net lost packets and five minutes cannot sample the six-hour burst rate.
 Route conditions and jitter-buffer state can explain the concealment difference.
 
+A second five-minute DSCP-0 control was then run with a fresh player and the
+same procedure. It received 14,999 packets, net lost 0, discarded 0, NACK 15,
+and 3,652 concealed samples (76.08 ms). This shows that the 20,312-sample
+first-control value and the 1,578-sample DSCP-46 value are within-run network
+variation, not a controlled proof that DSCP reduces concealment. The second
+control had complete poll/PCM/event coverage and no connection transition.
+
+The first DSCP-46 run's receiver report itself had complete coverage, but its
+separate Oracle resource collector was started late. It is retained for receiver
+quality analysis and marked as a setup limitation; it is not used as a strict
+host-correlation result. The second DSCP-0 control had its independent resource
+collector started before playback.
+
 ## Decision
 
 Keep the DSCP implementation available for a controlled longer experiment but
@@ -65,6 +78,11 @@ diagnostics enabled. A future A/B should alternate DSCP 0 and 46 over multiple
 hours on the same receiver, preserve route/RTT and ICE events, and accept a
 candidate only if net-loss rate and concealment both improve without increased
 sender gaps, silent concealment, or PCM errors.
+
+The actual bot dependency graph was also corrected: Crust's Oto adapter now
+pins the same Oto revision as Raydio. This prevents the binary from silently
+linking an older transport through the adapter. Crust tests (16 passed) and the
+full Raydio suite (49 passed) passed with the aligned revisions.
 
 Evidence is under `target/net-loss-20260912/`: `baseline/` is DSCP 0,
 `dscp-collector-2/` is DSCP 46, and `manifest.json` records source and binary
