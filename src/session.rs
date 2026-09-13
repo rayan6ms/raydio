@@ -49,7 +49,6 @@ struct PanelEdit {
     channel: u64,
     message: u64,
     view: View,
-    retire: bool,
     outcome: EditOutcome,
 }
 #[derive(serde::Deserialize)]
@@ -90,6 +89,8 @@ pub(crate) struct GuildSession {
     responses: JoinSet<()>,
     // At most one progress edit, with newer snapshots coalesced in session state.
     panel_edits: JoinSet<PanelEdit>,
+    // Bounded, owned deletion retries; never block audio on Discord DELETE.
+    panel_deletions: JoinSet<()>,
     panel: Option<Panel>,
     notification: Option<u64>,
     events: [u64; 7],
@@ -265,7 +266,7 @@ impl GuildSession {
                     // after any older progress snapshot already in flight.
                     self.flush_refresh().await;
                 }
-                if request.updates_message() && !matches!(request.name.as_str(), "stop" | "leave") {
+                if request.updates_message() && self.queue.current.is_some() {
                     let view = self.player_view();
                     if request
                         .respond_no_model(&self.shared.http, &view)
@@ -285,13 +286,12 @@ impl GuildSession {
                             self.panel_checks = 0;
                         }
                     }
+                } else if request.updates_message() {
+                    // The deferred component was already acknowledged. Its
+                    // message is being deleted; do not edit a deleted webhook.
+                    self.remove_panel().await;
                 } else {
                     let _ = request.respond(&self.shared.http, View::text(text)).await;
-                    if request.updates_message() {
-                        // A terminal button response owns the final panel text.
-                        // Retire it before the periodic refresh can replace it.
-                        self.panel = None;
-                    }
                 }
             }
             Err(error) => request.error(&self.shared.http, &error).await,
@@ -551,6 +551,7 @@ impl GuildSession {
             loaders: JoinSet::new(),
             responses: JoinSet::new(),
             panel_edits: JoinSet::new(),
+            panel_deletions: JoinSet::new(),
             panel: None,
             notification: None,
             events: [0; 7],
@@ -595,6 +596,7 @@ impl GuildSession {
                     }
                 }
                 Some(_) = self.responses.join_next(), if !self.responses.is_empty() => {},
+                Some(_) = self.panel_deletions.join_next(), if !self.panel_deletions.is_empty() => {},
                 Some(result) = self.panel_edits.join_next(), if !self.panel_edits.is_empty() => {
                     self.finish_refresh(result);
                     self.refresh().await;
@@ -617,6 +619,20 @@ impl GuildSession {
         self.loaders.abort_all();
         let _ = timeout(Duration::from_secs(3), self.cleanup(None)).await;
         self.panel_edits.shutdown().await;
+        // Allow all three one-second deletion attempts and their backoff to
+        // finish, within the service's overall shutdown deadline.
+        if timeout(Duration::from_secs(4), async {
+            while self.panel_deletions.join_next().await.is_some() {}
+        })
+        .await
+        .is_err()
+        {
+            tracing::warn!(
+                guild = self.id,
+                "Player message deletion exceeded shutdown deadline"
+            );
+        }
+        self.panel_deletions.shutdown().await;
         self.responses.abort_all();
         self.publish_activity();
     }
@@ -942,8 +958,7 @@ impl GuildSession {
             if !notes.is_empty() {
                 text.push_str(&format!(" {}.", notes.join("; ")));
             }
-            let _ = request.respond(&self.shared.http, View::text(text)).await;
-            self.refresh().await;
+            self.present_player(&request, Some(text)).await;
         }
         self.update_alone();
     }
@@ -1218,6 +1233,7 @@ impl GuildSession {
     }
     async fn cleanup(&mut self, notification: Option<&str>) {
         self.invalidate().await;
+        self.remove_panel().await;
         let active = self.channel.take().is_some();
         self.queue = Queue::default();
         self.token = random_token();
@@ -1237,15 +1253,15 @@ impl GuildSession {
             false,
         ));
         let _ = timeout(Duration::from_secs(3), self.shared.node.destroy(self.id)).await;
-        self.flush_refresh().await;
-        self.refresh().await;
-        self.flush_refresh().await;
         if active && let Some(text) = notification {
             self.notify(text).await;
         }
         self.events[6] = self.events[6].saturating_add(1);
     }
     async fn present_player(&mut self, request: &Request, content: Option<String>) {
+        if self.queue.current.is_none() {
+            self.remove_panel().await;
+        }
         self.flush_refresh().await;
         self.panel_checks = 0;
         let token = random_token();
@@ -1266,20 +1282,56 @@ impl GuildSession {
                 token,
                 last_view: Some(view),
             });
+            // Keep working controls if creating the replacement fails. Once
+            // the new response exists, retire the old message across channels.
             if let Some(previous) = previous
-                && previous.message != message.id.get()
+                && (previous.channel, previous.message)
+                    != (message.channel_id.get(), message.id.get())
             {
-                let _ = timeout(
-                    Duration::from_secs(3),
-                    self.shared
-                        .http
-                        .delete_message(Id::new(previous.channel), Id::new(previous.message)),
-                )
-                .await;
+                self.delete_panel(previous).await;
             }
         }
     }
+
+    async fn remove_panel(&mut self) {
+        self.panel_checks = 0;
+        self.panel_retry = Instant::now();
+        // Cancel and drain stale refreshes before retiring their message.
+        // The set can be reused for the next panel in this session.
+        self.panel_edits.abort_all();
+        while self.panel_edits.join_next().await.is_some() {}
+        if let Some(panel) = self.panel.take() {
+            self.delete_panel(panel).await;
+        }
+    }
+    async fn delete_panel(&mut self, panel: Panel) {
+        // Backpressure only at the bounded retirement limit, never silently
+        // forget a message because a new invocation arrived during a retry.
+        while self.panel_deletions.len() >= 16 {
+            self.panel_deletions.join_next().await;
+        }
+        let shared = self.shared.clone();
+        self.panel_deletions.spawn(async move {
+            for attempt in 0..3 {
+                let result = timeout(Duration::from_secs(1), shared.http
+                    .delete_message(Id::new(panel.channel), Id::new(panel.message))).await;
+                match result {
+                    Ok(Ok(_)) => return,
+                    Ok(Err(ref error)) if matches!(error.kind(), twilight_http::error::ErrorType::Response { status, .. } if status.get() == 404) => return,
+                    Ok(Err(ref error)) if matches!(error.kind(), twilight_http::error::ErrorType::Response { status, .. } if [401,403].contains(&status.get())) => break,
+                    _ if attempt < 2 => tokio::time::sleep(Duration::from_millis(250)).await,
+                    _ => break,
+                }
+            }
+            tracing::warn!(channel = panel.channel, message = panel.message,
+                "Could not delete retired player message after bounded retries");
+        });
+    }
     async fn refresh(&mut self) {
+        if self.queue.current.is_none() {
+            self.remove_panel().await;
+            return;
+        }
         if !self.panel_edits.is_empty() || Instant::now() < self.panel_retry {
             return;
         }
@@ -1326,7 +1378,6 @@ impl GuildSession {
                         channel,
                         message,
                         view,
-                        retire: false,
                         outcome,
                     }
                 });
@@ -1335,7 +1386,6 @@ impl GuildSession {
         }
         let (channel, message) = (panel.channel, panel.message);
         let shared = self.shared.clone();
-        let retire = self.queue.current.is_none();
         self.panel_edits.spawn(async move {
             let result = timeout(Duration::from_secs(4), shared
                 .http
@@ -1353,7 +1403,7 @@ impl GuildSession {
                 Ok(Err(error)) if matches!(error.kind(), twilight_http::error::ErrorType::Response { status, .. } if [401, 403, 404].contains(&status.get())) => EditOutcome::TerminalFailure,
                 _ => EditOutcome::TransientFailure,
             };
-            PanelEdit { channel, message, view, retire, outcome }
+            PanelEdit { channel, message, view, outcome }
         });
     }
     async fn flush_refresh(&mut self) {
@@ -1384,9 +1434,6 @@ impl GuildSession {
             EditOutcome::Delivered => {
                 self.panel.as_mut().expect("active panel").last_view = Some(edit.view);
                 self.edits = self.edits.saturating_add(1);
-                if edit.retire && self.queue.current.is_none() {
-                    self.panel = None;
-                }
             }
             EditOutcome::TerminalFailure => {
                 self.edit_terminal = self.edit_terminal.saturating_add(1);
@@ -1480,6 +1527,188 @@ mod tests {
             ]),
             ..Default::default()
         }
+    }
+    async fn panel_http_fixture() -> (
+        Arc<Shared>,
+        crate::backend::Backend,
+        crate::node::NodeOwner,
+        tokio::task::JoinHandle<()>,
+        Arc<std::sync::Mutex<Vec<(String, String)>>>,
+    ) {
+        let calls = Arc::new(std::sync::Mutex::new(Vec::new()));
+        let observed = calls.clone();
+        let router = axum::Router::new().fallback(move |method: axum::http::Method, uri: axum::http::Uri| {
+            observed.lock().unwrap().push((method.to_string(), uri.path().to_owned()));
+            async move { axum::Json(json!({
+                "id":"6","channel_id":"10","author":{"id":"9","username":"fixture","discriminator":"0001","avatar":null},
+                "content":"player","timestamp":"2026-09-13T00:00:00+00:00","edited_timestamp":null,
+                "tts":false,"mention_everyone":false,"mentions":[],"mention_roles":[],"attachments":[],"embeds":[],"pinned":false,"type":0
+            })) }
+        });
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let address = listener.local_addr().unwrap();
+        let server = tokio::spawn(async move { axum::serve(listener, router).await.unwrap() });
+        let (mut shared, backend, owner, _events) = Shared::fixture().await;
+        Arc::get_mut(&mut shared).unwrap().http = twilight_http::Client::builder()
+            .token("fixture".into())
+            .proxy(address.to_string(), true)
+            .ratelimiter(None)
+            .build();
+        shared.cache.write().unwrap().guilds.insert(1, guild());
+        (shared, backend, owner, server, calls)
+    }
+    fn active_panel() -> Panel {
+        Panel {
+            channel: 3,
+            message: 5,
+            token: "panel".into(),
+            last_view: None,
+        }
+    }
+    #[tokio::test]
+    async fn replacement_and_disconnect_delete_only_owned_panel_messages() {
+        let (shared, backend, owner, server, calls) = panel_http_fixture().await;
+        let mut session = GuildSession::new(1, shared.clone());
+        session.channel = Some(3);
+        session.queue.enqueue(vec![track("one")], 1000);
+        session.panel = Some(active_panel());
+        // Summoning the player in another text channel preserves the queue.
+        session
+            .present_player(&request("nowplaying", &[]), None)
+            .await;
+        while session.panel_deletions.join_next().await.is_some() {}
+        assert_eq!(session.panel.as_ref().unwrap().message, 6);
+        assert_eq!(session.queue.len(), 1);
+        // External kick/disconnect reaches the same cleanup as /leave.
+        shared
+            .cache
+            .write()
+            .unwrap()
+            .guilds
+            .get_mut(&1)
+            .unwrap()
+            .voices
+            .remove(&9);
+        session.voice_changed().await;
+        while session.panel_deletions.join_next().await.is_some() {}
+        session.refresh().await;
+        assert!(session.panel.is_none());
+        assert!(session.channel.is_none());
+        let observed = calls.lock().unwrap().clone();
+        assert_eq!(
+            observed.len(),
+            3,
+            "one replacement response and two deletes; no dead-panel edits"
+        );
+        assert!(observed[0].1.ends_with("/messages/@original"));
+        assert_eq!(
+            observed[1],
+            ("DELETE".into(), "/api/v10/channels/3/messages/5".into())
+        );
+        assert_eq!(
+            observed[2],
+            ("DELETE".into(), "/api/v10/channels/10/messages/6".into())
+        );
+        // Retiring a panel must not prevent this session from presenting and
+        // refreshing another one on a later invocation.
+        session.queue.enqueue(vec![track("two")], 1000);
+        session
+            .present_player(&request("nowplaying", &[]), None)
+            .await;
+        session.panel.as_mut().unwrap().last_view = None;
+        session.refresh().await;
+        session.flush_refresh().await;
+        assert_eq!(session.edits, 1);
+        assert!(calls.lock().unwrap().iter().any(|(method, path)| {
+            method == "PATCH" && path == "/api/v10/channels/10/messages/6"
+        }));
+        owner.shutdown().await;
+        backend.shutdown().await.unwrap();
+        server.abort();
+        let _ = server.await;
+    }
+    #[tokio::test]
+    async fn queue_end_and_terminal_buttons_delete_panels_without_editing_deleted_responses() {
+        for action in ["finished", "stop", "skip", "leave"] {
+            let (shared, backend, owner, server, calls) = panel_http_fixture().await;
+            let mut session = GuildSession::new(1, shared);
+            session.channel = Some(3);
+            session.queue.enqueue(vec![track("one")], 1000);
+            session.start_current().await.unwrap();
+            session.panel = Some(active_panel());
+            if action != "finished" {
+                let mut request = request(action, &[]);
+                request.custom_id = Some(format!("raydio:player:panel:{action}"));
+                Arc::make_mut(&mut request.interaction).message = Some(serde_json::from_value(json!({
+                    "id":"5","channel_id":"3","author":{"id":"9","username":"fixture","discriminator":"0001","avatar":null},
+                    "content":"player","timestamp":"2026-09-13T00:00:00+00:00","tts":false,"mention_everyone":false,"mentions":[],"mention_roles":[],"attachments":[],"embeds":[],"pinned":false,"type":0
+                })).unwrap());
+                session.interaction(request).await;
+            } else {
+                session.backend(json!({"type":"TrackEndEvent","reason":"finished", "track":{"userData":{"raydioGeneration":session.generation}}})).await;
+            }
+            while session.panel_deletions.join_next().await.is_some() {}
+            assert!(session.queue.is_empty());
+            assert!(session.panel.is_none());
+            assert_eq!(
+                *calls.lock().unwrap(),
+                vec![("DELETE".into(), "/api/v10/channels/3/messages/5".into())]
+            );
+            owner.shutdown().await;
+            backend.shutdown().await.unwrap();
+            server.abort();
+            let _ = server.await;
+        }
+    }
+    #[tokio::test]
+    async fn failed_replacement_keeps_controls_and_deletion_retries_are_bounded() {
+        let attempts = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+        let count = attempts.clone();
+        let router = axum::Router::new().fallback(move |method: axum::http::Method| {
+            let number = if method == axum::http::Method::DELETE {
+                count.fetch_add(1, Ordering::Relaxed)
+            } else {
+                0
+            };
+            async move {
+                (
+                    if number > 0 {
+                        axum::http::StatusCode::NOT_FOUND
+                    } else {
+                        axum::http::StatusCode::BAD_GATEWAY
+                    },
+                    axum::Json(json!({"code":10008,"message":"fixture"})),
+                )
+            }
+        });
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let address = listener.local_addr().unwrap();
+        let server = tokio::spawn(async move { axum::serve(listener, router).await.unwrap() });
+        let (mut shared, backend, owner, _events) = Shared::fixture().await;
+        Arc::get_mut(&mut shared).unwrap().http = twilight_http::Client::builder()
+            .token("fixture".into())
+            .proxy(address.to_string(), true)
+            .ratelimiter(None)
+            .build();
+        let mut session = GuildSession::new(1, shared);
+        session.queue.enqueue(vec![track("one")], 1000);
+        session.panel = Some(active_panel());
+        session
+            .present_player(&request("nowplaying", &[]), None)
+            .await;
+        assert_eq!(session.panel.as_ref().unwrap().message, 5);
+        assert_eq!(attempts.load(Ordering::Relaxed), 0);
+        session.cleanup(None).await;
+        while session.panel_deletions.join_next().await.is_some() {}
+        assert_eq!(
+            attempts.load(Ordering::Relaxed),
+            2,
+            "retry a transient failure, accept an already-deleted message"
+        );
+        owner.shutdown().await;
+        backend.shutdown().await.unwrap();
+        server.abort();
+        let _ = server.await;
     }
     #[tokio::test]
     async fn slow_progress_edit_does_not_block_track_restart() {

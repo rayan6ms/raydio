@@ -112,9 +112,19 @@ mod tests {
             assert!(matches!(classify(url), Input::Video(_)), "{url}");
         }
         assert_eq!(classify("  Daft Punk  "), Input::Search("Daft Punk".into()));
-        assert_eq!(
-            classify("youtube.com/watch?v=video"),
-            Input::Search("youtube.com/watch?v=video".into())
-        );
+        // Scheme-less links are search strings, matching the TypeScript
+        // counterpart; callers can paste a fully-qualified URL for direct
+        // resolution.
+        for input in ["youtube.com/watch?v=video", "youtu.be/video"] {
+            assert!(matches!(classify(input), Input::Search(_)), "{input}");
+        }
+        assert!(matches!(
+            classify("<https://youtu.be/video>"),
+            Input::Search(_)
+        ));
+        assert!(matches!(
+            classify("MUSIC.YouTube.com/watch?v=video"),
+            Input::Search(_)
+        ));
     }
 }

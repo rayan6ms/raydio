@@ -166,32 +166,38 @@ impl Shared {
     async fn autocomplete(&self, request: Request) {
         let query = request.option("request").trim();
         let guild = request.interaction.guild_id.map(|id| id.get());
+        let access = guild.and_then(|id| {
+            let cache = self.cache.read().unwrap();
+            let guild = cache.guilds.get(&id)?;
+            if !guild.available
+                || guild.activity.queue_count >= self.config.limits.queue
+                || guild.activity.pending >= self.config.pending
+            {
+                return None;
+            }
+            let channel = guild.access(id, request.user(), self.bot, None).ok()?;
+            guild
+                .activity
+                .channel
+                .is_none_or(|active| active == channel)
+                .then_some((id, channel))
+        });
         let valid = query.len() >= 2
             && query.len() <= 500
             && matches!(urls::classify(query), urls::Input::Search(_))
-            && guild.is_some_and(|id| {
-                let cache = self.cache.read().unwrap();
-                cache.guilds.get(&id).is_some_and(|guild| {
-                    guild.available
-                        && guild.activity.queue_count < self.config.limits.queue
-                        && guild.activity.pending < self.config.pending
-                        && guild
-                            .access(id, request.user(), self.bot, None)
-                            .is_ok_and(|channel| {
-                                guild
-                                    .activity
-                                    .channel
-                                    .is_none_or(|active| active == channel)
-                            })
-                })
-            })
+            && access.is_some()
             && self.node.health().ready;
         let choices = if valid {
+            let (guild, channel) = access.expect("valid autocomplete has voice access");
+            // Search results are scoped to the same guild/channel as the
+            // TypeScript implementation. A query can otherwise reuse a
+            // result while the caller is in a different voice session.
+            let cache_key = format!("{guild}:{channel}:{}", query.to_lowercase());
             let cached = self
                 .autocomplete
                 .lock()
                 .unwrap()
-                .get(query)
+                .get(&cache_key)
                 .filter(|(at, _)| at.elapsed() < Duration::from_secs(30))
                 .map(|(_, choices)| choices.clone());
             if let Some(choices) = cached {
@@ -210,7 +216,7 @@ impl Shared {
                         {
                             cache.remove(&oldest);
                         }
-                        cache.insert(query.to_owned(), (Instant::now(), choices.clone()));
+                        cache.insert(cache_key, (Instant::now(), choices.clone()));
                         choices
                     }
                     _ => vec![],

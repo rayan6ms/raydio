@@ -4,6 +4,7 @@ use crate::{
 };
 use serde::Deserialize;
 use serde_json::{Value, json};
+use std::collections::HashSet;
 use twilight_model::application::command::{CommandOptionChoice, CommandOptionChoiceValue};
 use twilight_model::channel::message::{
     Component, Embed, EmojiReactionType,
@@ -34,17 +35,47 @@ impl View {
 /// Autocomplete only needs the display name and video URL. Discard encoded
 /// audio/source metadata before caching choices for the existing 30-second TTL.
 pub fn search_choices(tracks: Vec<Track>) -> Vec<CommandOptionChoice> {
+    let mut seen = HashSet::new();
     tracks
         .into_iter()
-        .take(10)
-        .map(|track| CommandOptionChoice {
-            name: truncate(&format!("{} — {}", track.title, track.author), 100),
-            name_localizations: None,
-            value: CommandOptionChoiceValue::String(format!(
-                "https://www.youtube.com/watch?v={}",
-                track.identifier
-            )),
+        .filter_map(|track| {
+            if !valid_identifier(&track.identifier) || !seen.insert(track.identifier.clone()) {
+                return None;
+            }
+            let value = format!("https://www.youtube.com/watch?v={}", track.identifier);
+            if value.encode_utf16().count() > 100 {
+                return None;
+            }
+            // Autocomplete labels are plain text; Markdown escaping would be
+            // displayed literally. Flatten whitespace/control characters first.
+            let title = plain(&track.title);
+            let author = plain(&track.author);
+            let title = if title.is_empty() {
+                "Untitled YouTube track"
+            } else {
+                &title
+            };
+            let name = if author.is_empty() {
+                title.to_owned()
+            } else {
+                format!("{title} — {author}")
+            };
+            Some(CommandOptionChoice {
+                name: truncate(&name, 100),
+                name_localizations: None,
+                value: CommandOptionChoiceValue::String(value),
+            })
         })
+        .take(10)
+        .collect()
+}
+
+fn plain(text: &str) -> String {
+    text.split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ")
+        .chars()
+        .filter(|c| !c.is_control())
         .collect()
 }
 
@@ -379,5 +410,32 @@ mod tests {
                 + data[1]["components"].as_array().unwrap().len(),
             7
         );
+    }
+
+    #[test]
+    fn search_choices_are_unique_bounded_and_have_a_fallback_title() {
+        let track = |identifier: &str, title: &str, author: &str| Track {
+            encoded: "encoded".into(),
+            identifier: identifier.into(),
+            title: title.into(),
+            author: author.into(),
+            duration_ms: 1_000,
+            stream: false,
+            uri: None,
+            requester_id: String::new(),
+            requested_by: String::new(),
+        };
+        let tracks = vec![track("same", "", ""), track("same", "duplicate", "author")];
+        let choices = search_choices(tracks);
+        assert_eq!(choices.len(), 1);
+        assert_eq!(choices[0].name, "Untitled YouTube track");
+        let mut tracks = vec![track("same", "A_[live]\n   B\0", " Artist "); 12];
+        tracks.push(track("other", &"😀".repeat(60), "Artist"));
+        tracks.push(track("invalid/id", "Invalid", ""));
+        tracks.push(track(&"a".repeat(100), "Overlong URL", ""));
+        let choices = search_choices(tracks);
+        assert_eq!(choices.len(), 2);
+        assert_eq!(choices[0].name, "A_[live] B — Artist");
+        assert!(choices[1].name.encode_utf16().count() <= 100);
     }
 }
