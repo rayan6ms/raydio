@@ -179,3 +179,13 @@ retained object is at most 16 MiB; a replacement can temporarily hold two
 objects (32 MiB). The embedded backend's existing 100-player ceiling bounds
 worst-case simultaneous replacement storage to 3.125 GiB. This is not the
 recommended operating load for the one-GiB free VM.
+
+## Current production promotion
+
+On 2026-09-13 the existing Oracle VM was promoted to the verified Rust
+candidate `ef30de0fa39228712a50e1a5221152957f93986b`. The package was checked
+locally and again by `raydioctl` on the VM, then installed with rollback
+protection. `raydio.service` is active and enabled for boot, with one Raydio
+process and no Testbot process. `RAYDIO_AUDIO_DSCP` is unset, which keeps the
+experimental DSCP marking disabled. The TypeScript implementation remains
+preserved in its separate project/branch.
