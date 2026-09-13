@@ -153,3 +153,76 @@ Standards consulted: [RTP loss reporting, RFC 3550 §6.4.1](https://www.rfc-edit
 and [Opus congestion tradeoffs, RFC 7587 §5](https://www.rfc-editor.org/rfc/rfc7587#section-5).
 A cumulative loss correction does not undo already concealed playback; the
 standards also distinguish late/duplicate reception from audio playout.
+
+### Completed 15-minute comparison
+
+The final installed binary (SHA-256
+`436db3478beed4c8d7a22daba18a5cd1b4ea620bbce69227f444a8c4cee6fe57`)
+was used for both windows. DSCP 0 ran from 00:34:39 to 00:49:39 UTC;
+DSCP 46 ran from 00:54:34 to 01:09:34 UTC on September 13. Both used the
+same connected browser peer, source URL, volume 70, Loop on, and Opus
+48 kHz stereo. Outgoing DSCP-46 datagrams were verified as TOS `0xb8`
+before its measured window. There was no packet capture, SSH administration,
+build, or control interaction during either measured window.
+
+| Metric | DSCP 0 | DSCP 46 |
+|---|---:|---:|
+| Receiver observation | 900 s | 900 s |
+| Received packets | 44,989 | 44,991 |
+| Net lost packets | 0 | 1 |
+| Positive loss deltas / signed corrections | 1 / −1 | 4 / −3 |
+| Discarded packets | 15 | 20 |
+| NACKs | 44 | 64 |
+| Concealment | 668.73 ms | 971.88 ms |
+| Concealment per minute | 44.58 ms | 64.79 ms |
+| Silent concealment | 17.50 ms | 0 ms |
+| Sender gaps ≥40 ms, interior 840 s | 5 | 4 |
+| Sender gaps ≥100 ms / send failures / source overruns | 0 / 0 / 0 | 0 / 0 / 0 |
+| Bot PSS median | 16.113 MiB | 16.310 MiB |
+| Bot CPU, one core | 3.803% | 3.906% |
+| Host CPU steal | 0.271% | 0.279% |
+| PCM clipping / non-finite / empty frames | 0 / 0 / 0 | 0 / 0 / 0 |
+
+Both observations completed with full poll, PCM, speaking UI, track-phase,
+persisted event, and independent collector coverage. Neither had a connection
+transition, a UDP buffer/checksum error, or a sender termination. The minute
+samplers report their endpoint slack explicitly; sender deltas cover the
+interior 840 seconds, not all 900 seconds. No kernel warning or maintenance
+service activity was recorded during the qualified windows.
+
+Concealment was 45.3% higher with DSCP 46, discards 33.3% higher, and NACKs
+45.5% higher. Silent concealment and short sender gaps were lower. The overall
+result does **not** support enabling DSCP. It also does not establish that
+DSCP caused the worse observations: one sequential pair cannot control route
+variation or the receiver jitter-buffer history. Bot process age and starting
+track phase differed (about 64 vs 84 seconds into the track). The same binary
+and unchanged audio configuration exclude a different encoder implementation,
+but not those environmental effects. No raw-loss reduction is demonstrated.
+
+Natural boundaries remain visible. The DSCP-0 report retained two quiet
+intervals ≥100 ms for review: 988.75 ms with a receiver anomaly and 1,051.25 ms
+at a boundary. The latter exceeds the historical 938.458 ms source tail plus
+100 ms tolerance by 12.792 ms. Neither was silently classified as a clean
+source tail. DSCP 46 had no ≥100 ms interval requiring review. The source
+reference was reused from September 10; this is not fresh waveform alignment.
+
+Setup attempts are retained separately and excluded from the comparison:
+the first DSCP-0 audit lacked its Oracle collector at the beginning; it was
+stopped and restarted after collector verification. The first DSCP-46
+preflight ran before a fresh play command and correctly failed with no
+advancing receiver. The subsequent completed reports have distinct identities.
+Early failed collector launches also did not count as observations. Raw final
+reports are restored from their immutable, SHA-256-named collector archives;
+source-reference annotations live outside the raw receiver payload.
+
+The deployment decision remains unchanged: DSCP is opt-in and disabled by
+default. Both temporary Testbot services and their collectors were stopped
+after preservation; production `raydio.service` remains inactive and disabled,
+as it was before this task. The verified candidate remains installed. No
+six-hour qualification or production promotion is claimed by these windows.
+
+Evidence: `evidence/net-loss-matched-20260913/`, including both reports,
+archives, sender journals, host samples, comparison, manifest and hashes.
+Validation: 49 Raydio Rust tests, 27 Python diagnostic tests, and the three
+Bun receiver/persistence/PCM harnesses passed. Oto/Crust/Mantle runtime code
+was not changed during this follow-up.
