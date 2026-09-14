@@ -1,0 +1,22 @@
+{
+  "revision": "e205f9a3f44be36fab2fa3cd48ef113cbb0f4d1f",
+  "compiler": "rustc 1.97.1",
+  "profile": "release",
+  "music_frames": 180,
+  "terminal_silence_frames": 5,
+  "queue_slots": 8,
+  "queue_storage_bytes": 20800,
+  "native_stack_reserved_bytes": 262144,
+  "trials": [
+    {"path":"current","runtime_stall_ms":0,"sender_stall_ms":0,"received":185,"gaps_ge_40ms":0,"interval_max_us":21500},
+    {"path":"queue","runtime_stall_ms":0,"sender_stall_ms":0,"received":185,"gaps_ge_40ms":0,"interval_max_us":20463},
+    {"path":"current","runtime_stall_ms":100,"sender_stall_ms":0,"received":185,"gaps_ge_40ms":1,"interval_max_us":103364},
+    {"path":"queue","runtime_stall_ms":100,"sender_stall_ms":0,"received":185,"gaps_ge_40ms":0,"interval_max_us":20121},
+    {"path":"current","runtime_stall_ms":250,"sender_stall_ms":0,"received":185,"gaps_ge_40ms":1,"interval_max_us":251260},
+    {"path":"queue","runtime_stall_ms":250,"sender_stall_ms":0,"received":185,"gaps_ge_40ms":0,"interval_max_us":20132},
+    {"path":"queue","runtime_stall_ms":0,"sender_stall_ms":100,"received":185,"gaps_ge_40ms":1,"interval_max_us":100192}
+  ],
+  "allocation_probe": {"allocations":0,"deallocations":0,"reallocations":0,"bytes_allocated":0,"bytes_deallocated":0,"bytes_reallocated":0},
+  "lifecycle_test": "passed",
+  "source": "oto test-only decision spike; no production deployment"
+}

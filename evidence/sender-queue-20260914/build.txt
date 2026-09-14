@@ -1,0 +1,3 @@
+   Compiling oto v1.0.0 (/home/rayan/Documents/Projects/oto-sender-queue/crates/oto)
+    Finished `release` profile [optimized] target(s) in 53.54s
+  Executable unittests src/lib.rs (target/release/deps/oto-6046cfd9ac92b116)
