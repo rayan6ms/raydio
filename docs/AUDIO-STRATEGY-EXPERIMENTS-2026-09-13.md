@@ -1,5 +1,55 @@
 # Audio strategy experiments — 2026-09-13
 
+## Correction — 2026-09-14
+
+**The report below overstated the testing and its conclusions. It is retained
+as a historical record and superseded by this correction.** Neither adaptive
+read-ahead nor an independent sender queue was implemented or compared against
+baseline. No before/after improvement for those strategies has been established.
+
+The deployed Oto pin is `e205f9a3f44be36fab2fa3cd48ef113cbb0f4d1f`, whose
+audio executor owns its timer directly. The September 13 benchmarks instead ran
+in the older `/home/rayan/Documents/Projects/oto` checkout (HEAD
+`8d7a0cbd4e74fa796e0e99cd8634901ce1917bd4`, with dirty gateway/pacer files).
+That checkout still uses coordinator/deadline channels. Its packet, allocation
+and timing figures below cannot establish the deployed bot's performance or
+justify rejecting an independent sender queue. The two benchmark commands also
+ran concurrently, so their timing/CPU data are not isolated measurements.
+
+The four allocation tests did pass at deployed Mantle pin
+`5b7caf0b6db492e8a56abac1bd4d36da76d5c8c5`. They count Rust allocator calls
+in the instrumented thread after construction, not native allocations or total
+bot memory. This supports retaining the reusable frame slots; it does not prove
+that the full Crust/Mantle adapter has zero allocations. Its adapter regressions
+were inspected, not rerun during this investigation.
+
+Corrected recommendations:
+
+- Adaptive read-ahead remains untested. Retain the 16-frame default until a
+  controlled source-stall experiment establishes a benefit, testing finite and
+  live sources separately. Extra read-ahead does not necessarily add steady
+  playback latency; control impact depends on handling of prefetched frames.
+- An independently scheduled sender queue remains worth testing. Compare it
+  against the deployed direct timer under normal operation, upstream executor
+  stalls and sender/whole-host stalls. Validate frame order, source/connection
+  generations, DAVE transitions, pause/stop and shutdown before promotion.
+- Do not add a redundant frame pool. Profile any remaining task/future
+  allocations in the full adapter before proposing an alternative.
+- Direct Opus passthrough already exists. Install local Fedora `gcc-c++` to
+  unblock the pinned media regression build, then test real packet identity,
+  safe processing transitions and CPU with identical sources. The low-level
+  test alone does not establish these results. Volume 70 requires processing;
+  switching to 100 would not be a matched loudness comparison. Passthrough
+  cannot apply the re-encoder's 5% loss hint. No compiler is needed on Oracle
+  to run the prebuilt bot.
+- Seek ghosting remains excluded as requested.
+
+Production was unchanged. No new strategy has earned production promotion from
+these experiments. Independent sender scheduling cannot fix downstream packet
+loss or whole-VM descheduling.
+
+## Superseded report
+
 This note records the requested tests of ideas used by LavaPlayer/Lavalink/Koe.
 The deployed Oracle release was left unchanged while the experiments ran.
 
@@ -64,4 +114,3 @@ adaptive read-ahead or native sender-thread queue needs a controlled scheduler
 stall benchmark first; it should not be introduced solely to improve packet
 counters. Re-run the full Mantle media regression suite on a build host with a
 C++ compiler before release changes involving source-format selection.
-
