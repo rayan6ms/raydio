@@ -1,0 +1,54 @@
+    Checking oto v1.0.0 (/home/rayan/Documents/Projects/oto-sender-queue/crates/oto)
+error: called `ok().expect()` on a `Result` value
+   --> crates/oto/src/sender_queue_experiment.rs:244:9
+    |
+244 | /         self.controls
+245 | |             .try_send(Control::Pause(paused, reply))
+246 | |             .ok()
+247 | |             .expect("control capacity");
+    | |_______________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#ok_expect
+    = note: `-D clippy::ok-expect` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::ok_expect)]`
+help: call `expect()` directly on the `Result`
+    |
+245 -             .try_send(Control::Pause(paused, reply))
+246 -             .ok()
+247 -             .expect("control capacity");
+245 +             .try_send(Control::Pause(paused, reply)).expect("control capacity");
+    |
+
+error: called `ok().expect()` on a `Result` value
+   --> crates/oto/src/sender_queue_experiment.rs:256:9
+    |
+256 | /         self.controls
+257 | |             .try_send(Control::Fence {
+258 | |                 source,
+259 | |                 epoch,
+...   |
+262 | |             .ok()
+263 | |             .expect("control capacity");
+    | |_______________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#ok_expect
+help: call `expect()` directly on the `Result`
+    |
+261 -             })
+262 -             .ok()
+263 -             .expect("control capacity");
+261 +             }).expect("control capacity");
+    |
+
+error: the `Err`-variant returned from this function is very large
+    --> crates/oto/src/gateway.rs:1639:6
+     |
+1639 | ) -> Result<(), InstalledTransport> {
+     |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the `Err`-variant is at least 176 bytes
+     |
+     = help: try reducing the size of `audio::InstalledTransport`, for example by boxing large elements or replacing it with `Box<audio::InstalledTransport>`
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#result_large_err
+     = note: `-D clippy::result-large-err` implied by `-D warnings`
+     = help: to override `-D warnings` add `#[allow(clippy::result_large_err)]`
+
+error: could not compile `oto` (lib test) due to 3 previous errors

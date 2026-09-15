@@ -1,0 +1,7 @@
+
+running 1 test
+test audio::sender_queue_experiment::native_queue_allocations ... QUEUE_ALLOCATIONS=Stats { allocations: 0, deallocations: 0, reallocations: 0, bytes_allocated: 0, bytes_deallocated: 0, bytes_reallocated: 0 }
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 117 filtered out; finished in 3.37s
+
