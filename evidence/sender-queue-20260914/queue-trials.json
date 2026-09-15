@@ -8,15 +8,76 @@
   "queue_storage_bytes": 20800,
   "native_stack_reserved_bytes": 262144,
   "trials": [
-    {"path":"current","runtime_stall_ms":0,"sender_stall_ms":0,"received":185,"gaps_ge_40ms":0,"interval_max_us":21500},
-    {"path":"queue","runtime_stall_ms":0,"sender_stall_ms":0,"received":185,"gaps_ge_40ms":0,"interval_max_us":20463},
-    {"path":"current","runtime_stall_ms":100,"sender_stall_ms":0,"received":185,"gaps_ge_40ms":1,"interval_max_us":103364},
-    {"path":"queue","runtime_stall_ms":100,"sender_stall_ms":0,"received":185,"gaps_ge_40ms":0,"interval_max_us":20121},
-    {"path":"current","runtime_stall_ms":250,"sender_stall_ms":0,"received":185,"gaps_ge_40ms":1,"interval_max_us":251260},
-    {"path":"queue","runtime_stall_ms":250,"sender_stall_ms":0,"received":185,"gaps_ge_40ms":0,"interval_max_us":20132},
-    {"path":"queue","runtime_stall_ms":0,"sender_stall_ms":100,"received":185,"gaps_ge_40ms":1,"interval_max_us":100192}
+    {
+      "path": "current",
+      "runtime_stall_ms": 0,
+      "sender_stall_ms": 0,
+      "received": 185,
+      "gaps_ge_40ms": 0,
+      "interval_max_us": 21500
+    },
+    {
+      "path": "queue",
+      "runtime_stall_ms": 0,
+      "sender_stall_ms": 0,
+      "received": 185,
+      "gaps_ge_40ms": 0,
+      "interval_max_us": 20463
+    },
+    {
+      "path": "current",
+      "runtime_stall_ms": 100,
+      "sender_stall_ms": 0,
+      "received": 185,
+      "gaps_ge_40ms": 1,
+      "interval_max_us": 103364
+    },
+    {
+      "path": "queue",
+      "runtime_stall_ms": 100,
+      "sender_stall_ms": 0,
+      "received": 185,
+      "gaps_ge_40ms": 0,
+      "interval_max_us": 20121
+    },
+    {
+      "path": "current",
+      "runtime_stall_ms": 250,
+      "sender_stall_ms": 0,
+      "received": 185,
+      "gaps_ge_40ms": 1,
+      "interval_max_us": 251260
+    },
+    {
+      "path": "queue",
+      "runtime_stall_ms": 250,
+      "sender_stall_ms": 0,
+      "received": 185,
+      "gaps_ge_40ms": 0,
+      "interval_max_us": 20132
+    },
+    {
+      "path": "queue",
+      "runtime_stall_ms": 0,
+      "sender_stall_ms": 100,
+      "received": 185,
+      "gaps_ge_40ms": 1,
+      "interval_max_us": 100192
+    }
   ],
-  "allocation_probe": {"allocations":0,"deallocations":0,"reallocations":0,"bytes_allocated":0,"bytes_deallocated":0,"bytes_reallocated":0},
+  "allocation_probe": {
+    "allocations": 0,
+    "deallocations": 0,
+    "reallocations": 0,
+    "bytes_allocated": 0,
+    "bytes_deallocated": 0,
+    "bytes_reallocated": 0
+  },
   "lifecycle_test": "passed",
-  "source": "oto test-only decision spike; no production deployment"
+  "source": "oto test-only decision spike; no production deployment",
+  "status": "superseded: not evidence for bounded real-pipeline protection",
+  "provenance": "manually transcribed output, not raw capture data",
+  "methodology_correction": "Candidate precomputed 185 DAVE frames in a Vec and used a second native feeder unaffected by Tokio stalls. Queue/stack costs are partial; allocation probe excluded DAVE/source preparation; lifecycle test was prototype-only.",
+  "omitted_prepared_stream_storage_bytes": 481000,
+  "corrected_evidence": "../sender-queue-20260915/"
 }

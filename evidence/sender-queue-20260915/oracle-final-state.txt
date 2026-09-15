@@ -1,0 +1,10 @@
+/opt/raydio/releases/06c8eb92d319ebd5abc9c6b937180463db04ba16
+active
+inactive
+MainPID=32498
+MemoryCurrent=16883712
+TasksCurrent=3
+               total        used        free      shared  buff/cache   available
+Mem:             954         391         116           5         608         562
+Swap:              0           0           0
+2cb205b68b87eded407c08517eb762de02ef0472d690830e7a5f7c1d93ffb40a  /home/ubuntu/oto-queue-20260915/probe

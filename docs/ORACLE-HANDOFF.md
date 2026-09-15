@@ -1,5 +1,15 @@
 # Oracle VM handoff
 
+Verified 2026-09-15: the same single instance is running. Raydio is active on
+release `06c8eb92d319ebd5abc9c6b937180463db04ba16` (v0.2.2), Testbot is inactive,
+and the VM has about 562 MiB available RAM. Six short sender-queue **loopback**
+experiments ran as separate unprivileged processes and completed; no service
+was restarted or deployed. See `docs/SENDER-QUEUE-VALIDATION-2026-09-15.md`.
+SSH is restricted to administrator `/32` addresses in the OCI security list;
+if the local public IP changes, verify it and add only that single TCP/22 rule
+while preserving the existing rules/ETag. The September 15 timeout was resolved
+this way, without rebooting the VM or changing the other project's access.
+
 This is the existing single Always Free VM used by Raydio. Reuse it; do not
 create a second instance or select a paid shape.
 

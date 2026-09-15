@@ -53,7 +53,7 @@ loss or whole-VM descheduling.
 After `gcc-c++` was installed, the pinned Mantle YouTube tests all passed:
 exact WebM Opus packet handoff, seek/filter transition, and restoration to
 passthrough (3 tests, 0 failures). The pinned Oto release benchmark was then
-run alone from commit `e205f9a3f44be36fab2fa3cd48ef113cbb0f4d1f`: 250 senders,
+run from commit `e205f9a3f44be36fab2fa3cd48ef113cbb0f4d1f`: 250 senders,
 3,001 ms measurement, 37,500/37,500 packets delivered, zero allocations,
 zero gaps at least 40 ms or 100 ms, 2,489,034 ns maximum sender lateness,
 and 1,089,550 ns p99.9 interval error. The complete paced DAVE path delivered
@@ -61,6 +61,10 @@ and 1,089,550 ns p99.9 interval error. The complete paced DAVE path delivered
 clean pinned Crust adapter test also passed its bounded 16-frame read-ahead and
 EOF-tail ordering assertions. These are baseline and correctness measurements;
 they are not evidence that a new queue or adaptive capacity improves the bot.
+Correction (2026-09-15): the earlier claim that these measurements ran alone
+was inaccurate; builds overlapped. Their timing/CPU figures cannot establish
+an isolated performance comparison. The subsequent sender-queue experiment
+also needs the methodology correction in SENDER-QUEUE-EXPERIMENT-2026-09-14.md.
 
 ## Superseded report
 

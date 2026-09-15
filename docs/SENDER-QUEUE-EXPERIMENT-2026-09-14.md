@@ -1,5 +1,38 @@
 # Independent sender queue experiment — 2026-09-14
 
+## Correction — 2026-09-15
+
+**The timing results below do not establish the benefit of bounded buffering
+in the real bot.** The candidate precomputed and DAVE-encrypted the entire
+stream into a `Vec<Prepared>`, then a second native producer thread fed the
+eight-slot queue. Blocking Tokio did not block that producer. This explains
+why a nominal 160 ms queue appeared to cover a 250 ms stall.
+
+The 20,800-byte figure counts only the ring slots. It excludes the full prepared
+stream (481,000 bytes for 185 frames), the feeder thread and its stack, DAVE,
+task state, buffers, and receiver instrumentation. The allocation measurement
+used plain prepared packets and excluded source/DAVE preparation. The lifecycle
+test covers an explicit prototype fence, not production gateway/reconnect
+ordering. Intervals are loopback receiver arrival times, not kernel send times
+or decoded-audio quality measurements. The JSON was manually transcribed;
+it is not a raw capture.
+
+The observations below are retained as historical evidence only. A replacement
+benchmark must prepare incrementally on Tokio, stop production during the
+injected runtime stall, account for all bounded in-flight frames, and expose
+underflow when a stall exceeds available audio. Production remains unchanged.
+
+## Replacement evidence
+
+The corrected, incrementally produced channel/DAVE tests and matched Oracle
+loopback runs are documented in [SENDER-QUEUE-VALIDATION-2026-09-15.md](SENDER-QUEUE-VALIDATION-2026-09-15.md).
+Raw logs are in `evidence/sender-queue-20260915/`. The eight-slot experiment
+correctly exposes underflow once runtime stalls exceed its prepared capacity.
+No production integration, Discord receiver run, or six-hour test is implied
+by those experiments.
+
+## Historical experiment (superseded for promotion decisions)
+
 This is the measured decision spike for the native-style sender queue. The
 production Raydio service and the deployed Oto pin were not changed.
 
@@ -37,9 +70,9 @@ generation, re-key, pause, stop and replacement regression passed. A warmed
 queue transport test measured zero allocations, reallocations, and allocated
 bytes over 100 frames.
 
-The queue storage is 20,800 bytes for eight fixed slots. The prototype reserves
-one additional 256 KiB sender-thread stack. These are upper bounds for the
-spike, not a production memory budget.
+The queue storage is 20,800 bytes for eight fixed slots. The prototype requests
+a 256 KiB sender-thread stack. These are partial component costs, not upper
+bounds for the spike or a production memory budget; see the correction above.
 
 ## Interpretation
 
