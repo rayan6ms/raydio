@@ -1,0 +1,33 @@
+{
+  "status": "running",
+  "runId": "queued-worker-six-hour-20260921",
+  "revisions": {
+    "raydio": "e7db90e6b912464c7ae37b9609553a2a1d0e3332",
+    "oto": "e7dd06679ffc5eff980e0f564d460f2923747d8c",
+    "crust": "25b217ee621986e2bbab1bd776f38fb9e0242e63"
+  },
+  "features": [
+    "experimental-audio-worker"
+  ],
+  "binarySha256": "3c17db1cfe0426ab32789d2525e767fdb8190ac4beefdef29a7200432b929e1f",
+  "binaryBytes": 18686032,
+  "candidatePath": "/opt/raydio/candidates/queued-worker-e7db90e/bin/raydio",
+  "oracleDirectory": "/var/lib/raydio/queued-worker-six-hour-20260921",
+  "receiverTab": "tab_1",
+  "requestedSeconds": 21600,
+  "track": "https://youtu.be/dQw4w9WgXcQ",
+  "volume": 70,
+  "productionPolicy": "Raydio stopped and disabled for Testbot-only run; existing production release preserved",
+  "requestedAt": "2026-09-22T00:15:51.026Z",
+  "startedAt": "2026-09-22T00:15:53.237Z",
+  "expectedEndUtc": "2026-09-22T06:15:53.237Z",
+  "expectedEndBrasilia": "2026-09-22T03:15:53.237-03:00",
+  "oraclePid": 53299,
+  "receiverCheckpointUnit": "raydio-queued-worker-20260921-checkpoint.service",
+  "sleepInhibitorUnit": "raydio-queued-worker-20260921-keepawake.service",
+  "persistenceVerified": true,
+  "receiverMissingCounters": [],
+  "loopEnabled": true,
+  "productionStopped": true,
+  "localBotProcesses": 0
+}

@@ -1,6 +1,12 @@
 # Experimental isolated audio worker — 2026-09-21
 
-Status: integration validated; preparing Testbot-only Oracle endurance run. This is not a production promotion.
+Status: **six-hour Testbot-only Oracle run started** at 2026-09-22 00:15:53 UTC (September 21, 21:15:53 Brasília). Expected completion: September 22, 06:15:53 UTC / 03:15:53 Brasília. This is not a production promotion.
+
+Candidate commits: Raydio `e7db90e`, Crust `25b217e`, Oto `e7dd066`. Binary SHA256: `3c17db1cfe0426ab32789d2525e767fdb8190ac4beefdef29a7200432b929e1f`. Oracle PID 53299; Raydio is stopped/disabled, and no local bot process is running. The unchanged production release remains installed.
+
+The Discord receiver is connected, muted and not deafened. Playback and Loop ON were submitted through the signed-in UI; volume is 70. Receiver packets and PCM samples are advancing. Checkpoint persistence was verified against the current report identity; no requested WebRTC counters are missing. Oracle sender traces are present with zero dropped records at preflight. The host sampler, periodic journal saves, seven-hour maintenance restoration and local sleep inhibitor are active.
+
+Evidence destinations: Oracle `/var/lib/raydio/queued-worker-six-hour-20260921`; local `evidence/queued-worker-20260921/six-hour`. The run manifest records identities/times. Keep the controlled browser and this machine running. Receiver/connection loss can still invalidate full-path coverage; no six-hour quality conclusion is available yet.
 
 ## Candidate
 

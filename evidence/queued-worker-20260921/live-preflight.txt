@@ -1,0 +1,17 @@
+RuntimeMaxUSec=infinity
+MainPID=53299
+NRestarts=0
+CPUQuotaPerSecUSec=infinity
+Id=raydio-isolated-six-hour.service
+ActiveState=active
+UnitFileState=disabled
+
+RuntimeMaxUSec=infinity
+MainPID=0
+NRestarts=0
+CPUQuotaPerSecUSec=infinity
+Id=raydio.service
+ActiveState=inactive
+UnitFileState=disabled
+NTPSynchronized=yes
+{"utc":"2026-09-22T00:16:03.412839+00:00","elapsedSeconds":60.003,"pid":53299,"cpuTicks":[760817,11135,209020,232673947,37457,0,14531,346033,0,0],"cpuSeconds":1.67,"threads":6,"rssKiB":18808,"pssKiB":16406,"cgroupBytes":8355840,"cgroupMemory":{"anon":3780608,"file":3739648,"file_dirty":0,"file_writeback":0},"cgroupMemoryEvents":{"low":0,"high":0,"max":0,"oom":0,"oom_kill":0,"oom_group_kill":0},"cgroupCpu":{"usage_usec":1615646,"user_usec":1177752,"system_usec":437893,"nice_usec":0,"core_sched.force_idle_usec":0},"pressure":{"cpu":"some avg10=0.22 avg60=0.95 avg300=0.44 total=1201608407\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0","memory":"some avg10=0.00 avg60=0.00 avg300=0.00 total=4887801\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=4548686","io":"some avg10=0.03 avg60=0.28 avg300=0.12 total=268288772\nfull avg10=0.03 avg60=0.22 avg300=0.08 total=243770032"},"hostMemoryKiB":{"MemAvailable":561932,"SwapTotal":0,"SwapFree":0,"Dirty":64,"Writeback":40},"load":["0.69","0.18","0.06"],"networkDevices":{"lo":{"rxBytes":100282261,"rxPackets":601116,"rxErrors":0,"rxDrops":0,"txBytes":100282261,"txPackets":601116,"txErrors":0,"txDrops":0},"ens3":{"rxBytes":1615699281,"rxPackets":3024401,"rxErrors":0,"rxDrops":0,"txBytes":4743676806,"txPackets":12259623,"txErrors":0,"txDrops":0}},"udp":{"InDatagrams":400100,"NoPorts":128,"InErrors":0,"OutDatagrams":9845963,"RcvbufErrors":0,"SndbufErrors":0,"InCsumErrors":0,"IgnoredMulti":0,"MemErrors":0}}
