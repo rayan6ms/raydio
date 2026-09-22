@@ -6,6 +6,9 @@ rust-version = "1.97.1"
 license = "MIT"
 description = "A lightweight YouTube-first Discord music bot powered by Crust, Mantle, and Oto"
 
+[features]
+experimental-audio-worker = ["crust-server/experimental-audio-worker"]
+
 [dependencies]
 anyhow = "1.0.104"
 dotenvy = "0.15.7"
@@ -23,13 +26,13 @@ twilight-gateway = { version = "0.17.1", default-features = false, features = ["
 twilight-http = { version = "0.17.1", default-features = false, features = ["rustls-native-roots"] }
 twilight-model = "0.17.1"
 url = "2.5.8"
-crust = { git = "https://github.com/rayan6ms/crust", rev = "5479267afe16352674294d57943536a211968852" }
-crust-server = { git = "https://github.com/rayan6ms/crust", rev = "5479267afe16352674294d57943536a211968852" }
-crust-mantle-adapter = { git = "https://github.com/rayan6ms/crust", rev = "5479267afe16352674294d57943536a211968852" }
-crust-oto-adapter = { git = "https://github.com/rayan6ms/crust", rev = "5479267afe16352674294d57943536a211968852" }
+crust = { git = "https://github.com/rayan6ms/crust", rev = "25b217ee621986e2bbab1bd776f38fb9e0242e63" }
+crust-server = { git = "https://github.com/rayan6ms/crust", rev = "25b217ee621986e2bbab1bd776f38fb9e0242e63" }
+crust-mantle-adapter = { git = "https://github.com/rayan6ms/crust", rev = "25b217ee621986e2bbab1bd776f38fb9e0242e63" }
+crust-oto-adapter = { git = "https://github.com/rayan6ms/crust", rev = "25b217ee621986e2bbab1bd776f38fb9e0242e63" }
 
 [patch.crates-io]
-openmls_rust_crypto = { git = "https://github.com/rayan6ms/oto", rev = "e205f9a3f44be36fab2fa3cd48ef113cbb0f4d1f" }
+openmls_rust_crypto = { git = "https://github.com/rayan6ms/oto", rev = "e7dd06679ffc5eff980e0f564d460f2923747d8c" }
 
 
 [profile.dev]
@@ -45,8 +48,8 @@ opt-level = "s"
 # dominate resident executable pages on small Oracle instances.
 
 [dev-dependencies]
-crust-testkit = { git = "https://github.com/rayan6ms/crust", rev = "5479267afe16352674294d57943536a211968852" }
+crust-testkit = { git = "https://github.com/rayan6ms/crust", rev = "25b217ee621986e2bbab1bd776f38fb9e0242e63" }
 axum = { version = "0.8.4", features = ["ws"] }
-oto = { git = "https://github.com/rayan6ms/oto", rev = "e205f9a3f44be36fab2fa3cd48ef113cbb0f4d1f" }
+oto = { git = "https://github.com/rayan6ms/oto", rev = "e7dd06679ffc5eff980e0f564d460f2923747d8c" }
 mantle-core = { git = "https://github.com/rayan6ms/mantle", rev = "5b7caf0b6db492e8a56abac1bd4d36da76d5c8c5" }
 mantle-media = { git = "https://github.com/rayan6ms/mantle", rev = "5b7caf0b6db492e8a56abac1bd4d36da76d5c8c5" }

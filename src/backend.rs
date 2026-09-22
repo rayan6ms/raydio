@@ -35,6 +35,10 @@ impl Backend {
         if std::env::var("RAYDIO_SEND_TRACE").as_deref() == Ok("1") {
             voice = voice.with_send_trace();
         }
+        tracing::info!(
+            isolated_audio_worker = cfg!(feature = "experimental-audio-worker"),
+            "voice execution configuration"
+        );
         let voice = Arc::new(voice);
         Self::start_with(media, voice).await
     }

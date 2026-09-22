@@ -31,15 +31,22 @@ s=s.replace('/opt/raydio/candidates/event-wake/bin/raydio',sys.argv[1])
 assert 'Restart=no' in s and 'LD_PRELOAD' not in s
 assert 'EnvironmentFile=/etc/raydio/testbot.env' in s
 assert 'RAYDIO_WORKER_THREADS=2' in s
+s=s.replace('Environment=RAYDIO_WORKER_THREADS=2', 'Environment=RAYDIO_WORKER_THREADS=2\nEnvironment=RAYDIO_SEND_TRACE=1')
 Path('/run/systemd/system/raydio-isolated-six-hour.service').write_text(s)
 PY
 systemctl daemon-reload
+for maintenance in apt-daily.service apt-daily-upgrade.service fwupd-refresh.service motd-news.service; do
+    if systemctl is-active --quiet "$maintenance"; then
+        echo "Maintenance is active: $maintenance; retry after it completes." >&2
+        exit 1
+    fi
+done
 started=$(date -u +%FT%TZ)
 systemctl start "$unit.service"
 pid=$(systemctl show "$unit.service" -p MainPID --value)
 test "$pid" -gt 0
 test "$(pgrep -x raydio | wc -l)" = 1
-systemd-run --unit="$run_id-resources" --property=MemoryMax=64M --property=TasksMax=8 /usr/bin/python3 /opt/raydio/diagnostics/endurance-host-isolated.py --pid "$pid" --expected-exe "$binary" --seconds 25200 --output "$out/resources.jsonl"
+systemd-run --unit="$run_id-resources" --property=MemoryMax=64M --property=TasksMax=8 /usr/bin/python3 /opt/raydio/diagnostics/endurance-host-queued-20260921.py --pid "$pid" --expected-exe "$binary" --seconds 25200 --output "$out/resources.jsonl"
 systemctl show "$unit.service" raydio.service -p Id -p MainPID -p ActiveState -p UnitFileState -p NRestarts -p CPUQuotaPerSecUSec -p RuntimeMaxUSec > "$out/preflight.txt"
 sha256sum "$binary" > "$out/binary.sha256"
 timedatectl show -p NTPSynchronized >> "$out/preflight.txt"
@@ -52,16 +59,27 @@ cat /proc/sys/kernel/random/boot_id > "$out/boot-id.txt"
 # disconnects, then removes only these runtime masks.
 maintenance_units=(apt-daily.service apt-daily-upgrade.service apt-daily.timer apt-daily-upgrade.timer fwupd-refresh.service fwupd-refresh.timer motd-news.service motd-news.timer)
 maintenance_timers=(apt-daily.timer apt-daily-upgrade.timer fwupd-refresh.timer motd-news.timer)
-systemctl stop "${maintenance_units[@]}" || true
-systemctl mask --runtime "${maintenance_units[@]}"
+restore_unmask=()
+restore_timers=()
+for maintenance in "${maintenance_units[@]}"; do
+    state=$(systemctl is-enabled "$maintenance" 2>/dev/null || true)
+    case "$state" in masked|masked-runtime) ;; *) restore_unmask+=("$maintenance");; esac
+done
+for maintenance in "${maintenance_timers[@]}"; do
+    if systemctl is-active --quiet "$maintenance"; then restore_timers+=("$maintenance"); fi
+done
+# Schedule restoration before masking so a preparation interruption cannot strand masks.
+
 cat > "/opt/raydio/diagnostics/$run_id-restore-maintenance.sh" <<EOF
 #!/bin/sh
 set -eu
-systemctl unmask --runtime ${maintenance_units[*]}
-systemctl start ${maintenance_timers[*]}
+if [ ${#restore_unmask[@]} -gt 0 ]; then systemctl unmask --runtime ${restore_unmask[*]}; fi
+if [ ${#restore_timers[@]} -gt 0 ]; then systemctl start ${restore_timers[*]}; fi
 EOF
 chmod 700 "/opt/raydio/diagnostics/$run_id-restore-maintenance.sh"
 systemd-run --unit="$run_id-restore" --on-active=7h "/opt/raydio/diagnostics/$run_id-restore-maintenance.sh"
+systemctl stop "${maintenance_timers[@]}"
+if (( ${#restore_unmask[@]} )); then systemctl mask --runtime "${restore_unmask[@]}"; fi
 python3 - "$out" "$started" "$run_id" <<'PY'
 from pathlib import Path
 import sys,shlex

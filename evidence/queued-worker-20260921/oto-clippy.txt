@@ -1,0 +1,7 @@
+   Compiling rustls v0.23.43
+    Checking rustls-webpki v0.103.15
+    Checking tungstenite v0.30.0
+    Checking tokio-rustls v0.26.5
+    Checking tokio-tungstenite v0.30.0
+    Checking oto v1.0.0 (/home/rayan/Documents/Projects/oto-sender-queue/crates/oto)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.96s

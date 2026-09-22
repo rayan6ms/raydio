@@ -1,0 +1,3 @@
+PASS: failed preflight -> new run -> progress/retry -> final save; deduplication and bounded lifetime
+PASS: six-hour simulation, UI replacement/absence preserves receiver counters, true disconnect/identity/reset failures, bounded diagnostics and cleanup
+PASS: actual audio worklet timestamps exact one-second silence; clipping, invalid samples and empty input remain separate
