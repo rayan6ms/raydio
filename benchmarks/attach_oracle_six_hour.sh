@@ -1,6 +1,6 @@
 #!/bin/bash
-# Run as root on Oracle before playback. The production service must be disabled.
-# Usage: prepare_oracle_six_hour.sh BINARY SHA256 RUN_ID
+# Attach a fresh observation to an already-running Testbot. No bot restart.
+# Usage: attach_oracle_six_hour.sh BINARY SHA256 RUN_ID
 set -euo pipefail
 binary=${1:?binary required}
 expected=${2:?sha256 required}
@@ -11,30 +11,14 @@ run_id=${3:?run id required}
 test "$(sha256sum "$binary" | cut -d' ' -f1)" = "$expected"
 test "$(systemctl show raydio.service -p MainPID --value)" = 0
 test "$(systemctl is-enabled raydio.service)" = disabled
-if pgrep -x raydio >/dev/null; then
-    echo 'A bot is already running; refusing to disturb playback.' >&2; exit 1
-fi
 out="/var/lib/raydio/$run_id"
 test ! -e "$out"
 unit=raydio-isolated-six-hour
-case "$(systemctl show "$unit.service" -p ActiveState --value)" in
-    active|activating|deactivating|reloading) exit 1;;
-esac
+pid=$(systemctl show "$unit.service" -p MainPID --value)
+test "$pid" -gt 0
+test "$(pgrep -x raydio | wc -l)" = 1
+test "$(readlink -f "/proc/$pid/exe")" = "$binary"
 install -d -m 700 "$out"
-runuser -u raydio -- "$binary" --check
-python3 - "$binary" <<'PY'
-import sys
-from pathlib import Path
-s=Path('/run/systemd/system/raydio-event-wake-six-hour.service').read_text()
-s=s.replace('Raydio latest candidate six-hour Testbot','Raydio isolated six-hour diagnostic Testbot')
-s=s.replace('/opt/raydio/candidates/event-wake/bin/raydio',sys.argv[1])
-assert 'Restart=no' in s and 'LD_PRELOAD' not in s
-assert 'EnvironmentFile=/etc/raydio/testbot.env' in s
-assert 'RAYDIO_WORKER_THREADS=2' in s
-s=s.replace('Environment=RAYDIO_WORKER_THREADS=2', 'Environment=RAYDIO_WORKER_THREADS=2\nEnvironment=RAYDIO_SEND_TRACE=1')
-Path('/run/systemd/system/raydio-isolated-six-hour.service').write_text(s)
-PY
-systemctl daemon-reload
 for maintenance in apt-daily.service apt-daily-upgrade.service fwupd-refresh.service motd-news.service; do
     if systemctl is-active --quiet "$maintenance"; then
         echo "Maintenance is active: $maintenance; retry after it completes." >&2
@@ -43,7 +27,6 @@ for maintenance in apt-daily.service apt-daily-upgrade.service fwupd-refresh.ser
 done
 test -f /opt/raydio/diagnostics/start_oracle_capture.sh
 started=$(date -u +%FT%TZ)
-systemctl start "$unit.service"
 pid=$(systemctl show "$unit.service" -p MainPID --value)
 test "$pid" -gt 0
 test "$(pgrep -x raydio | wc -l)" = 1

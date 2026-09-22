@@ -1,0 +1,51 @@
+{
+  "revisions": {
+    "raydio": "e7db90e6b912464c7ae37b9609553a2a1d0e3332",
+    "oto": "e7dd06679ffc5eff980e0f564d460f2923747d8c",
+    "crust": "25b217ee621986e2bbab1bd776f38fb9e0242e63"
+  },
+  "features": [
+    "experimental-audio-worker"
+  ],
+  "binarySha256": "3c17db1cfe0426ab32789d2525e767fdb8190ac4beefdef29a7200432b929e1f",
+  "binaryBytes": 18686032,
+  "candidatePath": "/opt/raydio/candidates/queued-worker-e7db90e/bin/raydio",
+  "track": "https://youtu.be/dQw4w9WgXcQ",
+  "volume": 70,
+  "status": "running",
+  "runId": "queued-worker-stream-20260922",
+  "requestedSeconds": 21600,
+  "requestedAt": "2026-09-22T19:37:46.059Z",
+  "sessionRequestedAt": "2026-09-22T19:37:46.058Z",
+  "startedAt": "2026-09-22T19:37:48.268Z",
+  "expectedEndUtc": "2026-09-23T01:37:48.268000+00:00",
+  "expectedEndBrasilia": "2026-09-22T22:37:48.268000-03:00",
+  "oracleDirectory": "/var/lib/raydio/queued-worker-stream-20260922",
+  "oraclePid": 53299,
+  "processRestarted": false,
+  "receiverTab": "tab_1",
+  "loopEnabled": true,
+  "productionStopped": true,
+  "sendTrace": true,
+  "collectorMode": "continuous-append-only-journal-followers",
+  "collectorOverheadSampled": true,
+  "persistenceVerified": true,
+  "receiverCheckpointUnit": "raydio-queued-stream-20260922-checkpoint.service",
+  "sleepInhibitorUnit": "raydio-queued-stream-20260922-keepawake.service",
+  "localBotProcesses": 0,
+  "limitations": [
+    "Same candidate, process, live track and trace configuration; compare capture method against prior candidate attempts, not a matched worker/default trial.",
+    "Use within-window counter deltas and trace epoch filtering; bot process and playback started before this observation.",
+    "Collector CPU/memory/events and output progress are sampled each minute; full-window overhead and continuity remain to be assessed.",
+    "Receiver supervisor retains segment failures/gaps and never forces a Discord reconnect."
+  ],
+  "diagnosticSha256": {
+    "start_oracle_capture.sh": "82ed2105d4537cee83f0edca29dc38a9162f8edadaaeeeda0e51b4cd4de17952",
+    "attach_oracle_six_hour.sh": "7a51e3407782b5572a873e25064f4fb13abfbbd2c54925f89dbb4620beddd859",
+    "endurance_host.py": "0545ff753b9a05693989517773cf3abf4a14520105ead2c0cf111693b4403cdc",
+    "browser_session.js": "9ac0fb5a64b6a93620ec9d66a36410a31b23b02101b3f6b9a14825a902bab7ba",
+    "browser_checkpoint.js": "d5690d31b421a44ca7acc3d6d82564460d27668af6c384952833ffa5e7afb327",
+    "browser_endurance.js": "c62437b866a2424d2960dd385bcb623a886988b061118bb272613ae38af9549f",
+    "receiver_checkpoint.py": "24ac84fe04a3beec7fc3fccd8af329124c027b387a6375071ca04c4945617c04"
+  }
+}

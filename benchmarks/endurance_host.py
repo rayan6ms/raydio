@@ -16,6 +16,8 @@ parser.add_argument('--expected-exe', type=Path, required=True)
 parser.add_argument('--seconds', type=int, default=22200)
 parser.add_argument('--output', type=Path, required=True)
 parser.add_argument('--peer-pid', type=int, help='Optional production process sharing the instance')
+parser.add_argument('--collector-cgroup', action='append', default=[], type=Path, help='Capture collector overhead without subprocesses')
+parser.add_argument('--capture-dir', type=Path, help='Track append-only output progress without reading logs')
 args = parser.parse_args()
 if not 60 <= args.seconds <= 25200:
     parser.error('seconds must be 60..25200')
@@ -73,6 +75,27 @@ with args.output.open('x') as output:
                 row['peer'] = peer
             except (OSError, RuntimeError) as error:
                 row['peer'] = dict(pid=args.peer_pid, error=type(error).__name__)
+        row['collectors'] = {}
+        for group in args.collector_cgroup:
+            try:
+                row['collectors'][group.name] = {
+                    'cpu': {key: int(value) for key, value in
+                            (line.split() for line in (group / 'cpu.stat').read_text().splitlines())},
+                    'memoryBytes': int((group / 'memory.current').read_text()),
+                    'memoryEvents': {key: int(value) for key, value in
+                                     (line.split() for line in (group / 'memory.events').read_text().splitlines())},
+                    'events': (group / 'cgroup.events').read_text().strip(),
+                }
+            except (OSError, ValueError) as error:
+                row['collectors'][group.name] = {'error': type(error).__name__}
+        if args.capture_dir is not None:
+            row['captureFiles'] = {}
+            for name in ('service.log', 'kernel.log'):
+                try:
+                    metadata = (args.capture_dir / name).stat()
+                    row['captureFiles'][name] = {'bytes': metadata.st_size, 'modifiedUnixSeconds': metadata.st_mtime}
+                except OSError as error:
+                    row['captureFiles'][name] = {'error': type(error).__name__}
         row['pressure'] = {name: (Path('/proc/pressure') / name).read_text().strip()
                            for name in ('cpu', 'memory', 'io') if (Path('/proc/pressure') / name).exists()}
         row['hostMemoryKiB'] = {line.split(':')[0]: int(line.split()[1])

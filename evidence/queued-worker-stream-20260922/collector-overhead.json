@@ -1,0 +1,16 @@
+{
+  "seconds": 60.003229,
+  "collectors": {
+    "queued-worker-stream-20260922-journal.service": {
+      "cpuSeconds": 0.019891,
+      "cpuPercentOneCore": 0.03314988265048203,
+      "cgroupMiB": 7.20703125
+    },
+    "queued-worker-stream-20260922-kernel.service": {
+      "cpuSeconds": 0.006637,
+      "cpuPercentOneCore": 0.011061071396674334,
+      "cgroupMiB": 2.578125
+    }
+  },
+  "captureBytes": 319535
+}

@@ -67,6 +67,17 @@ class Collector:
         duration = data.get('requestedSeconds')
         if data.get('version') != 1 or type(duration) is not int or not 10 <= duration <= 21600:
             raise ValueError('invalid report version or duration')
+        if data.get('kind') == 'receiver-session':
+            if (not isinstance(data.get('segments'), list) or len(data['segments']) > 32
+                    or not isinstance(data.get('gaps'), list) or len(data['gaps']) > 32):
+                raise ValueError('invalid session history')
+            temporary = self.output / 'receiver-session.next.json'
+            with temporary.open('w') as output:
+                json.dump(data, output, separators=(',', ':'))
+                output.flush()
+                os.fsync(output.fileno())
+            temporary.replace(self.output / 'receiver-session.json')
+            return
         started = time.monotonic()
         self.archive_final(data)
         temporary = self.output / 'receiver.next.json'

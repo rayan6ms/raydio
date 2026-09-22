@@ -52,6 +52,23 @@ class Checkpoints(unittest.TestCase):
             data['events'] = [dict(sequence=6, kind='quiet', ms=6)]
             with self.assertRaises(ValueError): collector.save(data, 100)
 
+    def test_session_summary_never_overwrites_receiver_or_terminal_archive(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            collector = Collector(root)
+            failed = dict(version=1, requestedSeconds=120, status='failed', requestedAt='first')
+            collector.save(failed, 100)
+            session = dict(version=1, kind='receiver-session', requestedSeconds=120,
+                           status='waiting-for-receiver', segments=[failed], gaps=[{'from': 'failure'}])
+            collector.save(session, 200)
+            self.assertEqual(json.loads((root / 'receiver.json').read_text()), failed)
+            self.assertEqual(json.loads((root / 'receiver-session.json').read_text()), session)
+            self.assertEqual(len(list(root.glob('receiver-final-*.json'))), 1)
+            with patch('receiver_checkpoint.os.fsync', side_effect=OSError('disk error')):
+                with self.assertRaises(OSError): collector.save(dict(session, status='completed'), 200)
+            self.assertEqual(json.loads((root / 'receiver-session.json').read_text()), session)
+            with self.assertRaises(ValueError): collector.save(dict(session, segments=[{}]*33), 100)
+
     def test_bad_reports_do_not_replace_evidence(self):
         with TemporaryDirectory() as directory:
             collector = Collector(Path(directory))

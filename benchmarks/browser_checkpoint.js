@@ -30,6 +30,14 @@
         // report identity until the collector's seven-hour lifetime expires.
         // Completed unchanged reports are deduplicated; failed writes retry.
     };
+    state.saveSession = async data => {
+        const response = await fetch('http://127.0.0.1:18766/checkpoint', {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body:JSON.stringify(data), signal:AbortSignal.timeout(5000)
+        });
+        if (!response.ok) throw Error(`Session checkpoint HTTP ${response.status}`);
+        state.lastSavedSessionAt = new Date().toISOString();
+    };
     state.verify = async () => {
         const data = window.raydioEndurance?.report;
         if (!data || data.status !== 'running' || !(data.elapsedSeconds > 0))
