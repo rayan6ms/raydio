@@ -29,5 +29,9 @@
   "receiverMissingCounters": [],
   "loopEnabled": true,
   "productionStopped": true,
-  "localBotProcesses": 0
+  "localBotProcesses": 0,
+  "firstLoopVerified": true,
+  "firstTrackFinishedUtc": "2026-09-22T00:19:04.894769Z",
+  "secondTrackStartedUtc": "2026-09-22T00:19:04.897004Z",
+  "postLoopRestartCount": 0
 }
