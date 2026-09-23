@@ -1,6 +1,6 @@
 # Append-only collection and six-hour candidate run — September 22
 
-Status: **running**, measured start **2026-09-22 19:37:48.268 UTC**, expected end **September 23 01:37:48.268 UTC / September 22 22:37:48 Brasília**. [Manifest](../evidence/queued-worker-stream-20260922/run-manifest.json).
+Status: **completed with full receiver coverage; final 8.74 seconds overlapped premature evidence export**. See [results](QUEUED-AUDIO-WORKER-STREAM-RESULTS-2026-09-23.md), measured start **2026-09-22 19:37:48.268 UTC**, expected end **September 23 01:37:48.268 UTC / September 22 22:37:48 Brasília**. [Manifest](../evidence/queued-worker-stream-20260922/run-manifest.json).
 
 This is the user's authorized follow-up after the prior run exposed collection interference. Only the diagnostic collection and recorder supervision changed. Testbot remains the same candidate binary, PID 53299, with detailed tracing enabled, the same looping track at volume 70, and the same connected receiver. No bot restart, new playback command, codec change or production promotion occurred. Raydio remains inactive and no local bot process is running.
 

@@ -12,7 +12,7 @@
   "candidatePath": "/opt/raydio/candidates/queued-worker-e7db90e/bin/raydio",
   "track": "https://youtu.be/dQw4w9WgXcQ",
   "volume": 70,
-  "status": "running",
+  "status": "completed-with-late-export-interference",
   "runId": "queued-worker-stream-20260922",
   "requestedSeconds": 21600,
   "requestedAt": "2026-09-22T19:37:46.059Z",
@@ -47,5 +47,14 @@
     "browser_checkpoint.js": "d5690d31b421a44ca7acc3d6d82564460d27668af6c384952833ffa5e7afb327",
     "browser_endurance.js": "c62437b866a2424d2960dd385bcb623a886988b061118bb272613ae38af9549f",
     "receiver_checkpoint.py": "24ac84fe04a3beec7fc3fccd8af329124c027b387a6375071ca04c4945617c04"
-  }
+  },
+  "receiverFinishedAt": "2026-09-23T01:37:48.328Z",
+  "receiverSeconds": 21599.99998388672,
+  "receiverPcmSeconds": 21600.010666666665,
+  "fullReceiverCoverage": true,
+  "uninterruptedConnection": true,
+  "evidenceExportStartedUtc": "2026-09-23T01:37:39.529495Z",
+  "evidenceExportOverlapSeconds": 8.738505,
+  "productionPromoted": false,
+  "analysisDocument": "docs/QUEUED-AUDIO-WORKER-STREAM-RESULTS-2026-09-23.md"
 }
