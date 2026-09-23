@@ -1,6 +1,8 @@
 # Default audio implementation: matched six-hour observation
 
-The default implementation is recording on Oracle with the experimental audio worker disabled. This is a comparison run, not a production promotion. Only Testbot runs; production Raydio remains disabled and inactive.
+**Result:** the observation ended with gaps after receiver failure and a later bot DAVE timeout. See [the results and qualified comparison](DEFAULT-AUDIO-WORKER-RESULTS-2026-09-23.md). The following records the original preparation.
+
+The default implementation was started on Oracle with the experimental audio worker disabled. This was a comparison run, not a production promotion. Only Testbot ran; production Raydio remained disabled and inactive.
 
 - Recording: September 23, 2026, **02:30:49.945–08:30:49.945 UTC**, or **23:30:49.945 September 22–05:30:49.945 September 23 Brasília**.
 - Run: `default-worker-stream-20260923`; Oracle PID `58789`.

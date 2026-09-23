@@ -1,0 +1,55 @@
+{
+  "sessionStatus": "completed-with-gaps",
+  "sessionFinishedAt": "2026-09-23T08:30:52.944Z",
+  "receiverSeconds": 3274.6878840332033,
+  "receiverFractionOfRequested": 0.15160592055709274,
+  "attempts": 32,
+  "startedSegments": 1,
+  "archivedTerminalSegments": 32,
+  "sessionPersistenceRetries": 3,
+  "networkEvents": [
+    {
+      "utc": "2026-09-23T03:25:15.338900+00:00",
+      "kind": "ice",
+      "state": "disconnected"
+    },
+    {
+      "utc": "2026-09-23T03:25:15.344700+00:00",
+      "kind": "connection",
+      "state": "disconnected"
+    },
+    {
+      "utc": "2026-09-23T03:25:25.335500+00:00",
+      "kind": "connection",
+      "state": "failed"
+    }
+  ],
+  "localHostSamples": 415,
+  "maxLocalHostSampleIntervalSeconds": 61.00511336326599,
+  "oracleHostSamples": 421,
+  "oracleHostErrors": 0,
+  "oraclePids": [
+    58789
+  ],
+  "kernelLogBytes": 0,
+  "sourceReference": "Historical source-tail reference only; no new waveform alignment",
+  "quietPrefix": {
+    "default": {
+      "count": 3,
+      "totalMs": 1713.625
+    },
+    "worker": {
+      "count": 0,
+      "totalMs": 0
+    }
+  },
+  "gapConcentration": {
+    "defaultFirst5Minutes": 48,
+    "defaultFollowing49Minutes": 37,
+    "workerFirst5Minutes": 13,
+    "workerFollowing49Minutes": 48,
+    "defaultStallMinuteGaps": 40,
+    "defaultStallMinuteStealPercent": 5.521267723102586,
+    "defaultStallMinuteWakeOver20ms": 38
+  }
+}

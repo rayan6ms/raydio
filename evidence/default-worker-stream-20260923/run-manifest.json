@@ -11,7 +11,7 @@
   "candidatePath": "/opt/raydio/candidates/default-worker-e7db90e/bin/raydio",
   "track": "https://youtu.be/dQw4w9WgXcQ",
   "volume": 70,
-  "status": "recording",
+  "status": "completed-with-gaps",
   "runId": "default-worker-stream-20260923",
   "requestedSeconds": 21600,
   "requestedAt": "2026-09-23T02:30:47.711Z",
@@ -53,5 +53,14 @@
   "productionPromoted": false,
   "comparisonRun": "queued-worker-stream-20260922",
   "exportEarliestUtc": "2026-09-23T08:31:49.945Z",
-  "exportCommand": "uv run --no-project python benchmarks/collect_completed_run.py evidence/default-worker-stream-20260923/run-manifest.json"
+  "exportCommand": "uv run --no-project python benchmarks/collect_completed_run.py evidence/default-worker-stream-20260923/run-manifest.json",
+  "receiverFinishedAt": "2026-09-23T03:25:25.636Z",
+  "sessionFinishedAt": "2026-09-23T08:30:52.944Z",
+  "receiverSeconds": 3274.6878840332033,
+  "fullReceiverCoverage": false,
+  "uninterruptedConnection": false,
+  "oracleExportCheckedAt": "2026-09-23T10:32:11.862631+00:00",
+  "oraclePidAfterRun": 58789,
+  "oracleRestarts": 0,
+  "analysisDocument": "docs/DEFAULT-AUDIO-WORKER-RESULTS-2026-09-23.md"
 }

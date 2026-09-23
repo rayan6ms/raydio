@@ -1,0 +1,8 @@
+{
+  "checkedAt": "2026-09-23T10:32:11.862631+00:00",
+  "expectedEndUtc": "2026-09-23T08:30:49.945Z",
+  "sessionStatus": "completed-with-gaps",
+  "receiverStatus": "failed",
+  "remoteCompression": false,
+  "archive": "oracle-completed.tar"
+}

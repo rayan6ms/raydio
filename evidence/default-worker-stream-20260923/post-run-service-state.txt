@@ -1,0 +1,16 @@
+MainPID=58789
+NRestarts=0
+Id=raydio-isolated-six-hour.service
+ActiveState=active
+
+MainPID=0
+NRestarts=0
+Id=raydio.service
+ActiveState=inactive
+enabled
+enabled
+enabled
+enabled
+[2m2026-09-23T03:27:41.285400Z[0m [33m WARN[0m [2mcrust_oto_adapter[0m[2m:[0m voice connection failure [3mfailure[0m[2m=[0mFailureSnapshot { kind: DaveTransition, operation: Connect, generation: ConnectionGeneration(1), retry: Fatal, safe_code: None, dave_failure: Some(ResponseTimeout), dave_context: Some(DaveContext { active_version: 0, transition_pending: true, ready: false }) }
+[2m2026-09-23T03:27:41.285504Z[0m [32m INFO[0m [2mcrust_oto_adapter[0m[2m:[0m audio sender stopped [3mframes_sent[0m[2m=[0m170902 [3msilence_frames_sent[0m[2m=[0m0 [3mframes_unavailable[0m[2m=[0m0 [3mskipped_deadlines[0m[2m=[0m195 [3msend_failures[0m[2m=[0m0 [3msource_overruns[0m[2m=[0m0 [3mmax_lateness_us[0m[2m=[0m90885 [3mphase[0m[2m=[0mFailed [3mfailure[0m[2m=[0mSome(Shutdown) [3mdave_failure[0m[2m=[0mNone [3mdave_context[0m[2m=[0mNone
+[2m2026-09-23T03:27:41.285684Z[0m [33m WARN[0m [2mraydio::session[0m[2m:[0m voice closed; cleaning up playback [3mcode[0m[2m=[0m0 [3mgeneration[0m[2m=[0m17 [3mposition_ms[0m[2m=[0m9100

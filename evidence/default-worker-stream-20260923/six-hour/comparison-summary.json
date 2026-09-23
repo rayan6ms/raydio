@@ -1,0 +1,558 @@
+{
+  "default": {
+    "receiverStatus": "failed",
+    "receiverSeconds": 3274.6878840332033,
+    "receiverPrefix": {
+      "buckets": 54,
+      "seconds": 3239.630895996094,
+      "packets": 161752,
+      "lostNet": 0,
+      "positiveLoss": 30,
+      "concealedSamples": 351015,
+      "silentConcealedSamples": 85039,
+      "concealmentEvents": 164,
+      "concealmentMs": 7312.8125,
+      "silentConcealmentMs": 1771.6458333333333,
+      "concealmentMsPerMinute": 135.43788292125518
+    },
+    "ringDropped": 0,
+    "windows": {
+      "first54Minutes": {
+        "records": 161770,
+        "maxGapUs": 110886,
+        "missing": 0,
+        "sequenceJumps": 0,
+        "timestampJumps": 0,
+        "silence": 0,
+        "first": 1790130649.953447,
+        "last": 1790133889.932729,
+        "gap40": 85,
+        "gap100": 4,
+        "gap1s": 0,
+        "observedSpanSeconds": 3239.9792819023132,
+        "gap40PerObservedHour": 94.44504837090685,
+        "stages": {
+          "wake": {
+            "p50": 1103,
+            "p99": 1948,
+            "max": 81448
+          },
+          "source": {
+            "p50": 1,
+            "p99": 2,
+            "max": 2263
+          },
+          "daveRoundTrip": {
+            "p50": 31,
+            "p99": 71,
+            "max": 89736
+          },
+          "daveWall": {
+            "p50": 11,
+            "p99": 33,
+            "max": 12310
+          },
+          "daveCpu": {
+            "p50": 8,
+            "p99": 27,
+            "max": 12307
+          },
+          "crypto": {
+            "p50": 5,
+            "p99": 17,
+            "max": 38475
+          },
+          "udp": {
+            "p50": 34,
+            "p99": 71,
+            "max": 17098
+          }
+        },
+        "checkpointSeconds": 3179.999302148819,
+        "checkpointDelta": {
+          "frames_sent": 158771,
+          "silence_frames_sent": 0,
+          "frames_unavailable": 0,
+          "send_failures": 0,
+          "source_overruns": 0,
+          "active_send_gaps_40ms": 85,
+          "active_send_gaps_100ms": 4,
+          "active_send_gaps_1s": 0
+        },
+        "host": {
+          "seconds": 3180.202003955841,
+          "samples": 54,
+          "pssMedianMiB": 16.4111328125,
+          "cpuPercent": 3.8135942260630067,
+          "stealPercent": 0.4093396857896602
+        },
+        "collectors": {
+          "default-worker-stream-20260923-journal.service": {
+            "cpuPercent": 0.032992023736067334,
+            "maxMiB": 51.73828125,
+            "maxEvents": 0,
+            "oomKills": 0,
+            "missing": 0
+          },
+          "default-worker-stream-20260923-kernel.service": {
+            "cpuPercent": 0.010208471021531622,
+            "maxMiB": 18.78515625,
+            "maxEvents": 0,
+            "oomKills": 0,
+            "missing": 0
+          }
+        }
+      },
+      "receiverSegment": {
+        "records": 163504,
+        "maxGapUs": 110886,
+        "missing": 0,
+        "sequenceJumps": 0,
+        "timestampJumps": 0,
+        "silence": 0,
+        "first": 1790130649.953447,
+        "last": 1790133924.613133,
+        "gap40": 85,
+        "gap100": 4,
+        "gap1s": 0,
+        "observedSpanSeconds": 3274.6596858501434,
+        "gap40PerObservedHour": 93.44482460947954,
+        "stages": {
+          "wake": {
+            "p50": 1103,
+            "p99": 1948,
+            "max": 81448
+          },
+          "source": {
+            "p50": 1,
+            "p99": 2,
+            "max": 2263
+          },
+          "daveRoundTrip": {
+            "p50": 31,
+            "p99": 71,
+            "max": 89736
+          },
+          "daveWall": {
+            "p50": 11,
+            "p99": 33,
+            "max": 12310
+          },
+          "daveCpu": {
+            "p50": 8,
+            "p99": 27,
+            "max": 12307
+          },
+          "crypto": {
+            "p50": 5,
+            "p99": 17,
+            "max": 38475
+          },
+          "udp": {
+            "p50": 34,
+            "p99": 71,
+            "max": 17098
+          }
+        },
+        "checkpointSeconds": 3179.999302148819,
+        "checkpointDelta": {
+          "frames_sent": 158771,
+          "silence_frames_sent": 0,
+          "frames_unavailable": 0,
+          "send_failures": 0,
+          "source_overruns": 0,
+          "active_send_gaps_40ms": 85,
+          "active_send_gaps_100ms": 4,
+          "active_send_gaps_1s": 0
+        },
+        "host": {
+          "seconds": 3240.2052240371704,
+          "samples": 55,
+          "pssMedianMiB": 16.4111328125,
+          "cpuPercent": 3.8136473295983566,
+          "stealPercent": 0.4059372574965451
+        },
+        "collectors": {
+          "default-worker-stream-20260923-journal.service": {
+            "cpuPercent": 0.03299599642851928,
+            "maxMiB": 52.16796875,
+            "maxEvents": 0,
+            "oomKills": 0,
+            "missing": 0
+          },
+          "default-worker-stream-20260923-kernel.service": {
+            "cpuPercent": 0.010203798128195572,
+            "maxMiB": 18.78515625,
+            "maxEvents": 0,
+            "oomKills": 0,
+            "missing": 0
+          }
+        }
+      },
+      "plannedSixHours": {
+        "records": 169834,
+        "maxGapUs": 110886,
+        "missing": 0,
+        "sequenceJumps": 0,
+        "timestampJumps": 0,
+        "silence": 0,
+        "first": 1790130649.953447,
+        "last": 1790134051.273771,
+        "gap40": 86,
+        "gap100": 4,
+        "gap1s": 0,
+        "observedSpanSeconds": 3401.320323944092,
+        "gap40PerObservedHour": 91.02347633080176,
+        "stages": {
+          "wake": {
+            "p50": 1105,
+            "p99": 1948,
+            "max": 81448
+          },
+          "source": {
+            "p50": 1,
+            "p99": 2,
+            "max": 2263
+          },
+          "daveRoundTrip": {
+            "p50": 32,
+            "p99": 71,
+            "max": 89736
+          },
+          "daveWall": {
+            "p50": 11,
+            "p99": 33,
+            "max": 12310
+          },
+          "daveCpu": {
+            "p50": 8,
+            "p99": 27,
+            "max": 12307
+          },
+          "crypto": {
+            "p50": 5,
+            "p99": 17,
+            "max": 38475
+          },
+          "udp": {
+            "p50": 34,
+            "p99": 71,
+            "max": 17098
+          }
+        },
+        "checkpointSeconds": 3359.999871969223,
+        "checkpointDelta": {
+          "frames_sent": 167768,
+          "silence_frames_sent": 0,
+          "frames_unavailable": 0,
+          "send_failures": 0,
+          "source_overruns": 0,
+          "active_send_gaps_40ms": 86,
+          "active_send_gaps_100ms": 4,
+          "active_send_gaps_1s": 0
+        },
+        "host": {
+          "seconds": 21541.212193965912,
+          "samples": 360,
+          "pssMedianMiB": 16.1650390625,
+          "cpuPercent": 0.6324620860387946,
+          "stealPercent": 0.12199834686430554
+        },
+        "collectors": {
+          "default-worker-stream-20260923-journal.service": {
+            "cpuPercent": 0.005212812491186293,
+            "maxMiB": 53.01953125,
+            "maxEvents": 0,
+            "oomKills": 0,
+            "missing": 0
+          },
+          "default-worker-stream-20260923-kernel.service": {
+            "cpuPercent": 0.001637294117082212,
+            "maxMiB": 18.78515625,
+            "maxEvents": 0,
+            "oomKills": 0,
+            "missing": 0
+          }
+        }
+      }
+    }
+  },
+  "worker": {
+    "receiverStatus": "completed",
+    "receiverSeconds": 21599.99998388672,
+    "receiverPrefix": {
+      "buckets": 54,
+      "seconds": 3239.450498046875,
+      "packets": 161824,
+      "lostNet": 0,
+      "positiveLoss": 3,
+      "concealedSamples": 185949,
+      "silentConcealedSamples": 4574,
+      "concealmentEvents": 131,
+      "concealmentMs": 3873.9375,
+      "silentConcealmentMs": 95.29166666666667,
+      "concealmentMsPerMinute": 71.75175238520859
+    },
+    "ringDropped": 0,
+    "windows": {
+      "first54Minutes": {
+        "records": 161852,
+        "maxGapUs": 82319,
+        "missing": 0,
+        "sequenceJumps": 0,
+        "timestampJumps": 0,
+        "silence": 2,
+        "first": 1790105868.274754,
+        "last": 1790109108.253372,
+        "gap40": 61,
+        "gap100": 0,
+        "gap1s": 0,
+        "observedSpanSeconds": 3239.9786179065704,
+        "gap40PerObservedHour": 67.77822507417933,
+        "stages": {
+          "wake": {
+            "p50": 1393,
+            "p99": 1954,
+            "max": 53283
+          },
+          "source": {
+            "p50": 15,
+            "p99": 45,
+            "max": 58550
+          },
+          "daveRoundTrip": {
+            "p50": 23,
+            "p99": 58,
+            "max": 5315
+          },
+          "daveWall": {
+            "p50": 11,
+            "p99": 33,
+            "max": 2390
+          },
+          "daveCpu": {
+            "p50": 9,
+            "p99": 28,
+            "max": 2361
+          },
+          "crypto": {
+            "p50": 4,
+            "p99": 17,
+            "max": 15491
+          },
+          "udp": {
+            "p50": 37,
+            "p99": 95,
+            "max": 19075
+          }
+        },
+        "checkpointSeconds": 3179.998957157135,
+        "checkpointDelta": {
+          "frames_sent": 158852,
+          "silence_frames_sent": 2,
+          "frames_unavailable": 2,
+          "send_failures": 0,
+          "source_overruns": 0,
+          "active_send_gaps_40ms": 60,
+          "active_send_gaps_100ms": 0,
+          "active_send_gaps_1s": 0
+        },
+        "host": {
+          "seconds": 3180.2223320007324,
+          "samples": 54,
+          "pssMedianMiB": 15.828125,
+          "cpuPercent": 4.1739220137005715,
+          "stealPercent": 0.40630425398505865
+        },
+        "collectors": {
+          "queued-worker-stream-20260922-journal.service": {
+            "cpuPercent": 0.034470451608656506,
+            "maxMiB": 23.5703125,
+            "maxEvents": 0,
+            "oomKills": 0,
+            "missing": 0
+          },
+          "queued-worker-stream-20260922-kernel.service": {
+            "cpuPercent": 0.009982886944896997,
+            "maxMiB": 2.84375,
+            "maxEvents": 0,
+            "oomKills": 0,
+            "missing": 0
+          }
+        }
+      },
+      "receiverSegment": {
+        "records": 1079299,
+        "maxGapUs": 96253,
+        "missing": 0,
+        "sequenceJumps": 0,
+        "timestampJumps": 0,
+        "silence": 2,
+        "first": 1790105868.274754,
+        "last": 1790127468.21403,
+        "gap40": 287,
+        "gap100": 0,
+        "gap1s": 0,
+        "observedSpanSeconds": 21599.939275979996,
+        "gap40PerObservedHour": 47.83346780742852,
+        "stages": {
+          "wake": {
+            "p50": 1300,
+            "p99": 1986,
+            "max": 76187
+          },
+          "source": {
+            "p50": 15,
+            "p99": 43,
+            "max": 58550
+          },
+          "daveRoundTrip": {
+            "p50": 23,
+            "p99": 56,
+            "max": 37216
+          },
+          "daveWall": {
+            "p50": 11,
+            "p99": 32,
+            "max": 13966
+          },
+          "daveCpu": {
+            "p50": 9,
+            "p99": 27,
+            "max": 13961
+          },
+          "crypto": {
+            "p50": 4,
+            "p99": 17,
+            "max": 15491
+          },
+          "udp": {
+            "p50": 36,
+            "p99": 88,
+            "max": 59417
+          }
+        },
+        "checkpointSeconds": 21539.99944615364,
+        "checkpointDelta": {
+          "frames_sent": 1076449,
+          "silence_frames_sent": 2,
+          "frames_unavailable": 2,
+          "send_failures": 0,
+          "source_overruns": 0,
+          "active_send_gaps_40ms": 218,
+          "active_send_gaps_100ms": 0,
+          "active_send_gaps_1s": 0
+        },
+        "host": {
+          "seconds": 21541.306710004807,
+          "samples": 360,
+          "pssMedianMiB": 15.828125,
+          "cpuPercent": 4.10249021518065,
+          "stealPercent": 0.3069188313584445
+        },
+        "collectors": {
+          "queued-worker-stream-20260922-journal.service": {
+            "cpuPercent": 0.0334046494805161,
+            "maxMiB": 64.0,
+            "maxEvents": 229,
+            "oomKills": 0,
+            "missing": 0
+          },
+          "queued-worker-stream-20260922-kernel.service": {
+            "cpuPercent": 0.010076143611993143,
+            "maxMiB": 2.9140625,
+            "maxEvents": 0,
+            "oomKills": 0,
+            "missing": 0
+          }
+        }
+      },
+      "plannedSixHours": {
+        "records": 1079299,
+        "maxGapUs": 96253,
+        "missing": 0,
+        "sequenceJumps": 0,
+        "timestampJumps": 0,
+        "silence": 2,
+        "first": 1790105868.274754,
+        "last": 1790127468.21403,
+        "gap40": 287,
+        "gap100": 0,
+        "gap1s": 0,
+        "observedSpanSeconds": 21599.939275979996,
+        "gap40PerObservedHour": 47.83346780742852,
+        "stages": {
+          "wake": {
+            "p50": 1300,
+            "p99": 1986,
+            "max": 76187
+          },
+          "source": {
+            "p50": 15,
+            "p99": 43,
+            "max": 58550
+          },
+          "daveRoundTrip": {
+            "p50": 23,
+            "p99": 56,
+            "max": 37216
+          },
+          "daveWall": {
+            "p50": 11,
+            "p99": 32,
+            "max": 13966
+          },
+          "daveCpu": {
+            "p50": 9,
+            "p99": 27,
+            "max": 13961
+          },
+          "crypto": {
+            "p50": 4,
+            "p99": 17,
+            "max": 15491
+          },
+          "udp": {
+            "p50": 36,
+            "p99": 88,
+            "max": 59417
+          }
+        },
+        "checkpointSeconds": 21539.99944615364,
+        "checkpointDelta": {
+          "frames_sent": 1076449,
+          "silence_frames_sent": 2,
+          "frames_unavailable": 2,
+          "send_failures": 0,
+          "source_overruns": 0,
+          "active_send_gaps_40ms": 218,
+          "active_send_gaps_100ms": 0,
+          "active_send_gaps_1s": 0
+        },
+        "host": {
+          "seconds": 21541.306710004807,
+          "samples": 360,
+          "pssMedianMiB": 15.828125,
+          "cpuPercent": 4.10249021518065,
+          "stealPercent": 0.3069188313584445
+        },
+        "collectors": {
+          "queued-worker-stream-20260922-journal.service": {
+            "cpuPercent": 0.0334046494805161,
+            "maxMiB": 64.0,
+            "maxEvents": 229,
+            "oomKills": 0,
+            "missing": 0
+          },
+          "queued-worker-stream-20260922-kernel.service": {
+            "cpuPercent": 0.010076143611993143,
+            "maxMiB": 2.9140625,
+            "maxEvents": 0,
+            "oomKills": 0,
+            "missing": 0
+          }
+        }
+      }
+    }
+  }
+}
