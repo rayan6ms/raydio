@@ -1,0 +1,12 @@
+Removed "/run/systemd/system/apt-daily.service".
+Removed "/run/systemd/system/apt-daily-upgrade.service".
+Removed "/run/systemd/system/apt-daily.timer".
+Removed "/run/systemd/system/apt-daily-upgrade.timer".
+Removed "/run/systemd/system/fwupd-refresh.service".
+Removed "/run/systemd/system/fwupd-refresh.timer".
+Removed "/run/systemd/system/motd-news.service".
+Removed "/run/systemd/system/motd-news.timer".
+inactive
+inactive
+activating
+activating

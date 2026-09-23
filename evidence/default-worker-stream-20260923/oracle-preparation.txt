@@ -1,0 +1,17 @@
+Backend check passed
+Running timer as unit: default-worker-stream-20260923-restore.timer
+Will run service as unit: default-worker-stream-20260923-restore.service
+Created symlink /run/systemd/system/apt-daily.service → /dev/null.
+Created symlink /run/systemd/system/apt-daily-upgrade.service → /dev/null.
+Created symlink /run/systemd/system/apt-daily.timer → /dev/null.
+Created symlink /run/systemd/system/apt-daily-upgrade.timer → /dev/null.
+Created symlink /run/systemd/system/fwupd-refresh.service → /dev/null.
+Created symlink /run/systemd/system/fwupd-refresh.timer → /dev/null.
+Created symlink /run/systemd/system/motd-news.service → /dev/null.
+Created symlink /run/systemd/system/motd-news.timer → /dev/null.
+Running as unit: default-worker-stream-20260923-journal.service; invocation ID: d1145d30edcc4e058bc75b7be6262c37
+Running as unit: default-worker-stream-20260923-kernel.service; invocation ID: a6b5f647606a40d186f8f4b048457e25
+Running timer as unit: default-worker-stream-20260923-finalize.timer
+Will run service as unit: default-worker-stream-20260923-finalize.service
+Running as unit: default-worker-stream-20260923-resources.service; invocation ID: 6357c75df040444398c4ce3f939ea344
+candidate_pid=58789 run_id=default-worker-stream-20260923

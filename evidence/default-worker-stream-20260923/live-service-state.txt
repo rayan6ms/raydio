@@ -1,0 +1,10 @@
+MainPID=58789
+NRestarts=0
+Id=raydio-isolated-six-hour.service
+ActiveState=active
+
+MainPID=0
+NRestarts=0
+Id=raydio.service
+ActiveState=inactive
+[2m2026-09-23T02:30:05.686796Z[0m [32m INFO[0m [2mraydio::backend[0m[2m:[0m voice execution configuration [3misolated_audio_worker[0m[2m=[0mfalse

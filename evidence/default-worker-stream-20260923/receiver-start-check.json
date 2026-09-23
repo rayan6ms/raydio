@@ -1,0 +1,51 @@
+{
+  "requestedAt": "2026-09-23T02:30:47.711Z",
+  "startedAt": "2026-09-23T02:30:49.945Z",
+  "status": "running",
+  "elapsedSeconds": 96.12940991210938,
+  "pcmEnabled": true,
+  "sampleRate": 48000,
+  "receiverIdentity": {
+    "id": "IT01A8269",
+    "ssrc": 8269,
+    "trackIdentifier": "ffd0ade4-5ba7-4f10-8560-064b1fe76fe4"
+  },
+  "codec": {
+    "mimeType": "audio/opus",
+    "clockRate": 48000,
+    "channels": 2
+  },
+  "current": {
+    "timestamp": 1790130746074.932,
+    "packetsReceived": 5858,
+    "packetsLost": 0,
+    "bytesReceived": 1530428,
+    "packetsDiscarded": 0,
+    "nackCount": 5,
+    "fecPacketsReceived": 0,
+    "fecPacketsDiscarded": 0,
+    "concealedSamples": 16163,
+    "silentConcealedSamples": 0,
+    "concealmentEvents": 13,
+    "totalSamplesReceived": 5642880,
+    "jitterBufferDelay": 448780.8,
+    "jitterBufferEmittedCount": 5618880,
+    "insertedSamplesForDeceleration": 13721,
+    "removedSamplesForAcceleration": 5699,
+    "jitterBufferTargetDelay": 578937.6,
+    "jitterBufferMinimumDelay": 578937.6
+  },
+  "pcm": {
+    "samples": 9312768,
+    "squared": 90974.99538995548,
+    "peak": 0.5683156847953796,
+    "nearFullScale": 0,
+    "nonFinite": 0,
+    "emptyFrames": 0,
+    "longestQuietMs": 10,
+    "ongoingQuietMs": 0,
+    "reports": 387,
+    "frames": 4656384,
+    "endWallMs": 96995.56666667262
+  }
+}

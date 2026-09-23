@@ -1,0 +1,14 @@
+[
+  {
+    "crate": "raydio-e868f477d6c6b293",
+    "features": "[]"
+  },
+  {
+    "crate": "oto-e2487be027117ca9",
+    "features": "[]"
+  },
+  {
+    "crate": "crust-server-543567e933c43c23",
+    "features": "[\"default\", \"oto-voice\", \"real-mantle\"]"
+  }
+]
