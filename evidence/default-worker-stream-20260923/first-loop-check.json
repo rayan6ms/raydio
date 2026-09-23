@@ -1,0 +1,32 @@
+{
+  "at": "2026-09-23T02:34:09.050Z",
+  "checkpoint": {
+    "errors": 0,
+    "saved": 4
+  },
+  "elapsed": 198.29429614257813,
+  "panel": [
+    "━━━━━━━━━━━━━━━━━━\n0:03 / 3:33\nChannel\nRick Astley\nRequested by\nmigole\nUp next\nNothing queued\nVolume\n70%\nPlaying • Loop: ON • refreshes every second\nPrevious\n,\nPause\n,\nNext\n,\nStop\n,\n,\nQueue\n,\nLoop: ON\n,\nLeave\n,\n,\n(edited)\nTuesday, 22 September 2026 at 11:34 pm"
+  ],
+  "pcm": {
+    "emptyFrames": 0,
+    "endWallMs": 199017.5,
+    "frames": 9553408,
+    "longestQuietMs": 1028.8333333333333,
+    "nearFullScale": 0,
+    "nonFinite": 0,
+    "ongoingQuietMs": 0,
+    "peak": 0.5683156847953796,
+    "reports": 794,
+    "samples": 19106816,
+    "squared": 144109.68396882247
+  },
+  "phase": {
+    "durationSeconds": 213,
+    "label": "middle",
+    "loop": true,
+    "playing": true,
+    "positionSeconds": 3
+  },
+  "sessionStatus": "recording"
+}
