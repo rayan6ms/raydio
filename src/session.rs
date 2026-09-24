@@ -900,10 +900,11 @@ impl GuildSession {
         self.events[0] = self.events[0].saturating_add(1);
         if started {
             if let Err(error) = self.start_current().await {
+                let error_chain = error_chain(&error);
                 tracing::warn!(
                     guild = self.id,
                     generation = self.generation,
-                    error = %error,
+                    error = %error_chain,
                     "track start exhausted retries"
                 );
                 request
@@ -1035,11 +1036,12 @@ impl GuildSession {
                 return Ok(());
             }
             if let Err(error) = &result {
+                let error_chain = error_chain(error);
                 tracing::warn!(
                     guild = self.id,
                     generation = self.generation,
                     attempt,
-                    error = %error,
+                    error = %error_chain,
                     "Crust rejected the player update while starting a track"
                 );
             }
@@ -1476,6 +1478,13 @@ impl GuildSession {
 }
 fn random_token() -> String {
     format!("{:016x}", rand::random::<u64>())
+}
+fn error_chain(error: &anyhow::Error) -> String {
+    error
+        .chain()
+        .map(ToString::to_string)
+        .collect::<Vec<_>>()
+        .join(": ")
 }
 fn failure_message(error: Failure) -> &'static str {
     match error {
