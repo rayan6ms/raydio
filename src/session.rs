@@ -899,11 +899,17 @@ impl GuildSession {
         self.idle_at = None;
         self.events[0] = self.events[0].saturating_add(1);
         if started {
-            if self.start_current().await.is_err() {
+            if let Err(error) = self.start_current().await {
+                tracing::warn!(
+                    guild = self.id,
+                    generation = self.generation,
+                    error = %error,
+                    "track start exhausted retries"
+                );
                 request
                     .error(
                         &self.shared.http,
-                        "I joined, but Lavalink could not start that track.",
+                        "I joined, but Raydio could not start that track.",
                     )
                     .await;
                 return;
@@ -1005,7 +1011,9 @@ impl GuildSession {
     }
     async fn start_current(&mut self) -> anyhow::Result<()> {
         let mut failed = false;
+        let mut attempt = 0u32;
         loop {
+            attempt = attempt.saturating_add(1);
             self.generation = self.generation.wrapping_add(1);
             self.position_ms = 0;
             self.position_at = Instant::now();
@@ -1025,6 +1033,15 @@ impl GuildSession {
                     anyhow::bail!("No queued track could start");
                 }
                 return Ok(());
+            }
+            if let Err(error) = &result {
+                tracing::warn!(
+                    guild = self.id,
+                    generation = self.generation,
+                    attempt,
+                    error = %error,
+                    "Crust rejected the player update while starting a track"
+                );
             }
             if self.queue.current.is_none() {
                 self.idle_at = Some(Instant::now());
@@ -1118,10 +1135,12 @@ impl GuildSession {
             "TrackExceptionEvent" | "TrackStuckEvent" => {
                 // Never log exception text, encoded tracks or source URLs.
                 tracing::warn!(
+                    backend = "crust",
+                    component = "mantle",
                     event = kind,
                     generation = self.generation,
                     position_ms = self.position_ms,
-                    "track source failed or stalled"
+                    "Crust reported a Mantle track failure or stall"
                 );
                 self.track_failure().await;
             }

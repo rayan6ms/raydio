@@ -187,6 +187,7 @@ impl Node {
             Some(update),
         )
         .await
+        .context("Crust player update")
     }
     pub async fn destroy(&self, guild: u64) -> Result<()> {
         let health = self.health();
