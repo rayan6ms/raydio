@@ -198,7 +198,7 @@ impl GuildSession {
                     .respond(
                         &self.shared.http,
                         View::text(format!(
-                            "Pong! Discord: {discord}. Lavalink: {}.",
+                            "Pong! Discord: {discord}. Raydio: {}.",
                             if self.shared.node.health().ready {
                                 "ready"
                             } else {

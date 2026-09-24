@@ -14,5 +14,5 @@
 **Session and utility**
 `/leave` — disconnect and clear the session
 `/diagnostics` — private connection and playback health for server managers
-`/ping` — show Discord and Lavalink readiness
+`/ping` — show Discord and Raydio readiness
 `/help` — show this menu
