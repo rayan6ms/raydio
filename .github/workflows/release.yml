@@ -43,7 +43,9 @@ jobs:
       - run: cargo clippy --locked --all-targets -- -D warnings
       - name: Deployment lifecycle tests (disposable container)
         run: RAYDIO_DEPLOY_TEST=1 bash deploy/test-install.sh
-      - run: cargo build --locked --release --bin raydio
+      # The Oracle production candidate uses the isolated audio worker. Keep
+      # published packages aligned with the release we qualify and deploy.
+      - run: cargo build --locked --release --bin raydio --features experimental-audio-worker
       - name: Package and offline smoke test
         env:
           RAYDIO_REVISION: ${{ github.sha }}
