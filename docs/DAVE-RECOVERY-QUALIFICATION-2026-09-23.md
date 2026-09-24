@@ -24,4 +24,8 @@ Crust Oto adapter: 16 passed, one ignored.
 
 Raydio: 53 tests passed (50 library, one binary, one backend, one reconnect integration). Lockfile changes are limited to the intended git revisions and removal of duplicate Oto/Davey test dependencies.
 
-Live qualification: pending final build. Evidence is under `evidence/dave-recovery-20260923/`; the failed first live candidate is retained separately from final qualification.
+Live qualification follow-up: see [September 24 sender results](DAVE-RECOVERY-RESULTS-2026-09-24.md). The first empty-room candidate resumed encrypted sending but exposed a separate track-end watchdog bug. The final candidate includes its fix and survived a later real membership interruption; receiver qualification is still pending. Evidence is under `evidence/dave-recovery-20260923/`; the failed first live candidate is retained separately from final qualification.
+
+## Playback watchdog follow-up
+
+The first empty-room candidate reached its original wall-clock end deadline while only 144,840 ms of a 213,000 ms song had played. Recovery time was incorrectly counted as playback time. Raydio now freezes displayed position while disconnected, suspends the watchdog during established-track recovery, and reschedules from reported media progress. Identical connected position updates do not extend a stalled source indefinitely. The additional regression and all bot tests pass (51 library + three binary/integration tests). The immediately following source exception in the earlier forced replacement has no captured error classification; its exact lower-level cause is not established merely by fixing the premature watchdog trigger.

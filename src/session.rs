@@ -652,7 +652,7 @@ impl GuildSession {
     }
     fn position(&self) -> u64 {
         self.position_ms
-            .saturating_add(if self.paused || !self.started {
+            .saturating_add(if self.paused || !self.started || !self.connected {
                 0
             } else {
                 self.position_at.elapsed().as_millis() as u64
@@ -663,7 +663,7 @@ impl GuildSession {
             .queue
             .current
             .as_ref()
-            .filter(|track| !track.stream && !self.paused)
+            .filter(|track| !track.stream && !self.paused && (!self.started || self.connected))
             .and_then(|track| {
                 Instant::now().checked_add(Duration::from_millis(
                     track
@@ -1043,11 +1043,20 @@ impl GuildSession {
             return;
         }
         if payload["op"] == "playerUpdate" {
+            let previous_position = self.position_ms;
+            let was_connected = self.connected;
             self.position_ms = payload["state"]["position"]
                 .as_u64()
                 .unwrap_or(self.position_ms);
             self.position_at = Instant::now();
             self.connected = payload["state"]["connected"].as_bool().unwrap_or(false);
+            // Encryption recovery suspends media consumption. Wall time alone
+            // must not skip the retained track while it still has audio left.
+            // Unchanged connected updates do not extend a genuinely stalled
+            // source's watchdog indefinitely.
+            if self.position_ms != previous_position || self.connected != was_connected {
+                self.schedule_end();
+            }
             return;
         }
         let kind = payload["type"].as_str().unwrap_or("");
@@ -2377,6 +2386,39 @@ mod tests {
         assert!(session.start_current().await.is_err());
         assert!(session.queue.is_empty());
         assert_eq!(session.queue.consecutive_failures, 3);
+        owner.shutdown().await;
+        backend.shutdown().await.unwrap();
+    }
+    #[tokio::test]
+    async fn recovery_suspends_end_watchdog_but_stalled_updates_do_not_extend_it() {
+        let (shared, backend, owner, _events) = Shared::fixture().await;
+        let mut session = GuildSession::new(1, shared);
+        session.channel = Some(3);
+        session.queue.enqueue(vec![track("one")], 1000);
+        session.started = true;
+        session.connected = true;
+        session.position_ms = 5_000;
+        session.schedule_end();
+        session
+            .backend(json!({"op":"playerUpdate","state":{"position":5000,"connected":false}}))
+            .await;
+        assert!(session.end_deadline.is_none());
+        session.position_at = Instant::now() - Duration::from_secs(40);
+        assert_eq!(session.position(), 5_000);
+        session
+            .backend(json!({"op":"playerUpdate","state":{"position":5000,"connected":true}}))
+            .await;
+        let resumed = session.end_deadline.unwrap();
+        assert!((29..=30).contains(&resumed.duration_since(Instant::now()).as_secs()));
+        session
+            .backend(json!({"op":"playerUpdate","state":{"position":5000,"connected":true}}))
+            .await;
+        assert_eq!(session.end_deadline, Some(resumed));
+        session.end_deadline = Some(Instant::now() - Duration::from_secs(1));
+        session
+            .backend(json!({"op":"playerUpdate","state":{"position":6000,"connected":true}}))
+            .await;
+        assert!(session.end_deadline.unwrap() > Instant::now());
         owner.shutdown().await;
         backend.shutdown().await.unwrap();
     }

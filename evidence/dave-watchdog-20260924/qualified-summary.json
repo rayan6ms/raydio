@@ -1,0 +1,228 @@
+{
+  "candidate": {
+    "raydioBase": "d40ade6",
+    "uncommittedAtDeployment": "src/session.rs watchdog fix; committed with this report",
+    "crust": "617da27a3217c88c0a3f2a82f0f50ec211666429",
+    "oto": "e84d316e07ab64c62f0737ae6818d55f627527da",
+    "binarySha256": "49553da476b6e312d56378691b71b8a1121a7caa32e535b41bac2ca806fce85d",
+    "experimentalWorker": false
+  },
+  "windows": {
+    "first54Minutes": {
+      "records": 161945,
+      "silence": 0,
+      "missing": 0,
+      "sequenceJumps": 0,
+      "timestampJumps": 0,
+      "reversed": 0,
+      "first": 1790199241.148473,
+      "last": 1790202481.133183,
+      "maxGapUs": 59955,
+      "spanSeconds": 3239.9847099781036,
+      "gap40": 28,
+      "gap100": 0,
+      "gap1s": 0,
+      "gap40PerHour": 31.11125792957252,
+      "stages": {
+        "wake": {
+          "p50": 984,
+          "p99": 1833,
+          "max": 40468
+        },
+        "source": {
+          "p50": 1,
+          "p99": 2,
+          "max": 2139
+        },
+        "daveRoundTrip": {
+          "p50": 32,
+          "p99": 72,
+          "max": 38462
+        },
+        "daveWall": {
+          "p50": 11,
+          "p99": 34,
+          "max": 18894
+        },
+        "daveCpu": {
+          "p50": 9,
+          "p99": 28,
+          "max": 18876
+        },
+        "crypto": {
+          "p50": 5,
+          "p99": 18,
+          "max": 13051
+        },
+        "udp": {
+          "p50": 36,
+          "p99": 73,
+          "max": 12679
+        }
+      },
+      "resources": {
+        "samples": 54,
+        "sampledSeconds": 3180.176838159561,
+        "pssMedianMiB": 16.814453125,
+        "pssMinMiB": 16.529296875,
+        "pssMaxMiB": 16.837890625,
+        "cpuPercent": 3.8463269882434994,
+        "stealPercent": 0.24493319073128703,
+        "pidCount": 1,
+        "samplerErrors": 0,
+        "maxSampleGapSeconds": 60.00566291809082,
+        "udpDelta": {
+          "InDatagrams": 3625,
+          "NoPorts": 0,
+          "InErrors": 0,
+          "OutDatagrams": 159395,
+          "RcvbufErrors": 0,
+          "SndbufErrors": 0,
+          "InCsumErrors": 0,
+          "IgnoredMulti": 0,
+          "MemErrors": 0
+        },
+        "oomKills": 0
+      },
+      "collectors": {
+        "dave-watchdog-20260923-journal.service": {
+          "cpuPercent": 0.03464131260818666,
+          "oomKills": 0,
+          "maxEvents": 0,
+          "missing": 0
+        },
+        "dave-watchdog-20260923-kernel.service": {
+          "cpuPercent": 0.008502608935309564,
+          "oomKills": 0,
+          "maxEvents": 0,
+          "missing": 0
+        }
+      },
+      "startUtc": "2026-09-23T21:34:01.148473+00:00",
+      "endUtc": "2026-09-23T22:28:01.133183+00:00",
+      "trackStarts": 16
+    },
+    "all": {
+      "records": 1077621,
+      "silence": 1,
+      "missing": 0,
+      "sequenceJumps": 0,
+      "timestampJumps": 0,
+      "reversed": 0,
+      "first": 1790199241.148473,
+      "last": 1790220841.133101,
+      "maxGapUs": 32686712,
+      "spanSeconds": 21599.984627962112,
+      "gap40": 307,
+      "gap100": 2,
+      "gap1s": 1,
+      "gap40PerHour": 51.16670308039344,
+      "stages": {
+        "wake": {
+          "p50": 1002,
+          "p99": 1850,
+          "max": 79935
+        },
+        "source": {
+          "p50": 1,
+          "p99": 2,
+          "max": 4028
+        },
+        "daveRoundTrip": {
+          "p50": 33,
+          "p99": 74,
+          "max": 59222
+        },
+        "daveWall": {
+          "p50": 11,
+          "p99": 34,
+          "max": 39094
+        },
+        "daveCpu": {
+          "p50": 9,
+          "p99": 29,
+          "max": 18876
+        },
+        "crypto": {
+          "p50": 5,
+          "p99": 18,
+          "max": 46101
+        },
+        "udp": {
+          "p50": 36,
+          "p99": 75,
+          "max": 39623
+        }
+      },
+      "resources": {
+        "samples": 359,
+        "sampledSeconds": 21481.20087814331,
+        "pssMedianMiB": 16.986328125,
+        "pssMinMiB": 13.701171875,
+        "pssMaxMiB": 17.423828125,
+        "cpuPercent": 3.8644953078235527,
+        "stealPercent": 0.33289721055497945,
+        "pidCount": 1,
+        "samplerErrors": 0,
+        "maxSampleGapSeconds": 60.00802707672119,
+        "udpDelta": {
+          "InDatagrams": 24519,
+          "NoPorts": 0,
+          "InErrors": 0,
+          "OutDatagrams": 1074654,
+          "RcvbufErrors": 0,
+          "SndbufErrors": 0,
+          "InCsumErrors": 0,
+          "IgnoredMulti": 0,
+          "MemErrors": 0
+        },
+        "oomKills": 0
+      },
+      "collectors": {
+        "dave-watchdog-20260923-journal.service": {
+          "cpuPercent": 0.035275336993426755,
+          "oomKills": 0,
+          "maxEvents": 167,
+          "missing": 0
+        },
+        "dave-watchdog-20260923-kernel.service": {
+          "cpuPercent": 0.008647123643306064,
+          "oomKills": 0,
+          "maxEvents": 0,
+          "missing": 0
+        }
+      },
+      "startUtc": "2026-09-23T21:34:01.148473+00:00",
+      "endUtc": "2026-09-24T03:34:01.133101+00:00",
+      "trackStarts": 102
+    }
+  },
+  "recovery": {
+    "leftUtc": "2026-09-24T02:37:05.743714Z",
+    "membersReturnedUtc": "2026-09-24T02:37:38.279389Z",
+    "readyUtc": "2026-09-24T02:37:38.419420Z",
+    "nextSentUtc": "2026-09-24T02:37:38.419492Z",
+    "rawGapMs": 32686.712,
+    "sourceGeneration": 86,
+    "raydioGeneration": 88,
+    "naturalFinishUtc": "2026-09-24T02:40:05.801743Z",
+    "newHandshakeAttempts": 0
+  },
+  "activeSending": {
+    "gapsAtLeast40Ms": 306,
+    "gapsAtLeast100Ms": 1,
+    "maxGapMs": 100.022,
+    "maxGapUtc": "2026-09-24T03:13:26.192017Z"
+  },
+  "completedLoops": 101,
+  "receiverRecorded": false,
+  "ringDropped": 0,
+  "malformedBatches": 0,
+  "limitations": [
+    "No receiver metrics were recorded; no packet-loss/concealment/clipping claim is possible.",
+    "Export began 2026-09-24T02:59:31.610587Z during the final 35 minutes; only earlier data precedes that activity.",
+    "Journal collector hit its 64 MiB cgroup limit (167 max events, zero OOM kills); zero missing trace records does not establish zero observer impact.",
+    "The 32.687-second gap is retained and classified by DAVE membership/lifecycle evidence, not removed as song silence.",
+    "A pre-loop trial 21:30:12\u201321:33:45 ended and was restarted; the six-hour window starts with the next audio epoch at21:34:01.148473Z."
+  ]
+}
