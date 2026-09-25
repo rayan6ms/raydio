@@ -3,6 +3,7 @@ use crust::routeplanner::RoutePlanner;
 use crust_mantle_adapter::{MantleAdapterOptions, RealMantleAdapter};
 use crust_oto_adapter::OtoVoiceBackend;
 use crust_server::{CrustServer, config::ServerConfig};
+use mantle_media::YoutubeAuthentication;
 use std::{
     net::{IpAddr, Ipv4Addr, SocketAddr},
     sync::Arc,
@@ -24,12 +25,14 @@ impl Backend {
         // Copy small finite compressed tracks to an anonymous file before
         // playback, so source HTTP stalls cannot interrupt their audio frames.
         // One completed input per player is reused on a natural repeat.
-        let media = Arc::new(RealMantleAdapter::with_options(
+        let authentication = youtube_authentication_from_env()?;
+        let media = Arc::new(RealMantleAdapter::with_options_and_authentication(
             RoutePlanner::disabled(),
             MantleAdapterOptions {
                 staging_max_bytes: 16 * 1024 * 1024,
                 ..MantleAdapterOptions::default()
             },
+            authentication,
         )?);
         let mut voice = OtoVoiceBackend::with_defaults(100, 4)?;
         if std::env::var("RAYDIO_SEND_TRACE").as_deref() == Ok("1") {
@@ -97,6 +100,23 @@ impl Backend {
         }
         Ok(())
     }
+}
+
+fn optional_secret(name: &str) -> Option<String> {
+    std::env::var(name)
+        .ok()
+        .filter(|value| !value.trim().is_empty())
+}
+
+fn youtube_authentication_from_env() -> Result<YoutubeAuthentication> {
+    YoutubeAuthentication::with_credentials(
+        optional_secret("RAYDIO_YOUTUBE_OAUTH_ACCESS_TOKEN"),
+        optional_secret("RAYDIO_YOUTUBE_OAUTH_REFRESH_TOKEN"),
+        optional_secret("RAYDIO_YOUTUBE_COOKIES"),
+        optional_secret("RAYDIO_YOUTUBE_PO_TOKEN"),
+        optional_secret("RAYDIO_YOUTUBE_VISITOR_DATA"),
+    )
+    .map_err(|_| anyhow::anyhow!("invalid YouTube authentication configuration"))
 }
 
 impl Drop for Backend {

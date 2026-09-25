@@ -21,6 +21,10 @@ installation and runtime validation.
   The runtime requests Guilds and Guild Voice States; no privileged intent is required.
 - Put only the **production** token in `/etc/raydio/env` as `DISCORD_TOKEN=...`.
   Never commit this file or pass the token on a command line. Testbot is separate.
+- Optional YouTube authentication is supported through `RAYDIO_YOUTUBE_OAUTH_*`,
+  `RAYDIO_YOUTUBE_PO_TOKEN` + `RAYDIO_YOUTUBE_VISITOR_DATA`, or
+  `RAYDIO_YOUTUBE_COOKIES`. Keep these values in the same root-owned `0600`
+  environment file; see [`docs/YOUTUBE-AUTHENTICATION.md`](../docs/YOUTUBE-AUTHENTICATION.md).
 
 The active deployment uses one Always Free `VM.Standard.E2.1.Micro` instance
 with 1 GiB RAM, Ubuntu 24.04 x86-64, and a 47 GiB boot volume in São Paulo.
