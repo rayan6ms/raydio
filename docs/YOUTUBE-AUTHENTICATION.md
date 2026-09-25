@@ -16,7 +16,9 @@ For Raydio, place the resulting refresh token in `/etc/raydio/env` as `RAYDIO_YO
 
 ## Proof-of-origin
 
-The Lavalink YouTube source points to [youtube-trusted-session-generator](https://github.com/iv-org/youtube-trusted-session-generator). Run it locally or in its documented container, and keep the printed `poToken` and matching `visitorData` together. Install them as `RAYDIO_YOUTUBE_PO_TOKEN` and `RAYDIO_YOUTUBE_VISITOR_DATA` in the Oracle secret file, then restart Raydio.
+The older [youtube-trusted-session-generator](https://github.com/iv-org/youtube-trusted-session-generator) repository is now marked deprecated and may no longer produce tokens accepted by YouTube. Prefer the current [Invidious Companion](https://github.com/iv-org/invidious-companion) workflow or another actively maintained generator. Run it on the same public egress IP as Oracle, keep the returned `poToken` and matching `visitorData` together, and install them as `RAYDIO_YOUTUBE_PO_TOKEN` and `RAYDIO_YOUTUBE_VISITOR_DATA` in the Oracle secret file. Restart Raydio after changing them.
+
+Tokens are tied to the generating session and may expire or be rejected after YouTube changes its checks. Treat both values as secrets and never paste them into chat, a ticket, or the repository.
 
 ## Cookies
 
