@@ -17,6 +17,10 @@ use tokio_tungstenite::{
 };
 use tokio_util::sync::CancellationToken;
 
+const MUSIC_RESPONSE_LIMIT: usize = 2 * 1024 * 1024;
+const MUSIC_ERROR_BODY_LIMIT: usize = 16 * 1024;
+const MUSIC_ERROR_MESSAGE_LIMIT: usize = 256;
+
 #[derive(Clone, Debug, Default)]
 pub struct Health {
     pub ready: bool,
@@ -143,19 +147,33 @@ impl Node {
             .send()
             .await
             .map_err(|_| anyhow::anyhow!("music service request failed"))?;
-        if !response.status().is_success() {
-            bail!("music service returned HTTP {}", response.status().as_u16());
-        }
+        let status = response.status();
+        let is_success = status.is_success();
+        let body_limit = if is_success {
+            MUSIC_RESPONSE_LIMIT
+        } else {
+            MUSIC_ERROR_BODY_LIMIT
+        };
         let mut bytes = Vec::new();
         while let Some(chunk) = response
             .chunk()
             .await
             .map_err(|_| anyhow::anyhow!("music response interrupted"))?
         {
-            if bytes.len() + chunk.len() > 2 * 1024 * 1024 {
+            if bytes.len() + chunk.len() > body_limit {
+                if !is_success {
+                    break;
+                }
                 bail!("music service response exceeds limit");
             }
             bytes.extend_from_slice(&chunk);
+        }
+        if !is_success {
+            let detail = response_error_message(&bytes);
+            if let Some(detail) = detail {
+                bail!("music service returned HTTP {}: {detail}", status.as_u16());
+            }
+            bail!("music service returned HTTP {}", status.as_u16());
         }
         if bytes.is_empty() {
             Ok(Value::Null)
@@ -202,6 +220,46 @@ impl Node {
         }
         Ok(())
     }
+}
+
+/// Extract only a short, human-readable message from a music-service error.
+///
+/// Crust may include request-specific data in its response body. Keep that data
+/// out of logs by accepting the JSON `message` field only, removing control
+/// characters, and bounding the resulting text.
+fn response_error_message(body: &[u8]) -> Option<String> {
+    let value: Value = serde_json::from_slice(body).ok()?;
+    let message = value.get("message")?.as_str()?;
+    let mut sanitized = String::with_capacity(message.len().min(MUSIC_ERROR_MESSAGE_LIMIT));
+    for (character_count, character) in message.chars().enumerate() {
+        if character_count >= MUSIC_ERROR_MESSAGE_LIMIT {
+            break;
+        }
+        if character.is_control() {
+            if character == '\n' || character == '\r' || character == '\t' {
+                sanitized.push(' ');
+            }
+        } else {
+            sanitized.push(character);
+        }
+    }
+    let sanitized = sanitized
+        .split_whitespace()
+        .map(|word| {
+            let looks_like_url = word.contains("://") || word.starts_with("www.");
+            let looks_like_opaque_token = word.len() >= 48
+                && word
+                    .bytes()
+                    .all(|byte| byte.is_ascii_alphanumeric() || matches!(byte, b'-' | b'_' | b'='));
+            if looks_like_url || looks_like_opaque_token {
+                "[redacted]"
+            } else {
+                word
+            }
+        })
+        .collect::<Vec<_>>()
+        .join(" ");
+    (!sanitized.is_empty()).then_some(sanitized)
 }
 
 async fn run(
@@ -373,5 +431,31 @@ mod tests {
             ),
             (2, 2999, 0, 0)
         );
+    }
+
+    #[test]
+    fn response_error_message_is_bounded_and_redacts_sensitive_values() {
+        let body = json!({
+            "message": "invalid track\nhttps://example.test/watch?v=secret abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        })
+        .to_string();
+        let message = response_error_message(body.as_bytes()).unwrap();
+        assert_eq!(message, "invalid track [redacted] [redacted]");
+
+        let long_message = json!({
+            "message": (0..200)
+                .map(|_| "x")
+                .collect::<Vec<_>>()
+                .join(" ")
+        });
+        let message = response_error_message(long_message.to_string().as_bytes()).unwrap();
+        assert!(message.chars().count() <= MUSIC_ERROR_MESSAGE_LIMIT);
+        assert!(message.chars().count() >= MUSIC_ERROR_MESSAGE_LIMIT - 1);
+    }
+
+    #[test]
+    fn response_error_message_requires_a_string_message() {
+        assert_eq!(response_error_message(br#"{"error":"bad"}"#), None);
+        assert_eq!(response_error_message(br#"not json"#), None);
     }
 }
