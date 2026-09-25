@@ -228,8 +228,14 @@ impl Node {
 /// out of logs by accepting the JSON `message` field only, removing control
 /// characters, and bounding the resulting text.
 fn response_error_message(body: &[u8]) -> Option<String> {
-    let value: Value = serde_json::from_slice(body).ok()?;
-    let message = value.get("message")?.as_str()?;
+    let message = match serde_json::from_slice::<Value>(body) {
+        Ok(value) => find_error_message(&value).map(str::to_owned),
+        Err(_) => std::str::from_utf8(body)
+            .ok()
+            .map(str::trim)
+            .filter(|message| !message.is_empty())
+            .map(str::to_owned),
+    }?;
     let mut sanitized = String::with_capacity(message.len().min(MUSIC_ERROR_MESSAGE_LIMIT));
     for (character_count, character) in message.chars().enumerate() {
         if character_count >= MUSIC_ERROR_MESSAGE_LIMIT {
@@ -260,6 +266,24 @@ fn response_error_message(body: &[u8]) -> Option<String> {
         .collect::<Vec<_>>()
         .join(" ");
     (!sanitized.is_empty()).then_some(sanitized)
+}
+
+fn find_error_message(value: &Value) -> Option<&str> {
+    if let Some(message) = value.get("message").and_then(Value::as_str) {
+        return Some(message);
+    }
+    if let Some(message) = value.get("error").and_then(Value::as_str) {
+        return Some(message);
+    }
+    for key in ["error", "data", "cause"] {
+        let Some(child) = value.get(key) else {
+            continue;
+        };
+        if let Some(message) = find_error_message(child) {
+            return Some(message);
+        }
+    }
+    None
 }
 
 async fn run(
@@ -455,7 +479,21 @@ mod tests {
 
     #[test]
     fn response_error_message_requires_a_string_message() {
-        assert_eq!(response_error_message(br#"{"error":"bad"}"#), None);
-        assert_eq!(response_error_message(br#"not json"#), None);
+        assert_eq!(
+            response_error_message(br#"{"error":"bad"}"#),
+            Some("bad".into())
+        );
+        assert_eq!(
+            response_error_message(br#"not json"#),
+            Some("not json".into())
+        );
+    }
+
+    #[test]
+    fn response_error_message_accepts_nested_crust_errors() {
+        assert_eq!(
+            response_error_message(br#"{"data":{"cause":{"message":"bad track"}}}"#),
+            Some("bad track".into())
+        );
     }
 }
