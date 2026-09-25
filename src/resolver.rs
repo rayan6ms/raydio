@@ -160,8 +160,13 @@ pub fn normalize(
 pub fn identifiers(input: &str) -> Result<(String, Option<String>, bool), Failure> {
     match classify(input) {
         Input::Search(query) if !query.is_empty() => Ok((
-            format!("ytmsearch:{query}"),
-            Some(format!("ytsearch:{query}")),
+            // Ordinary YouTube search is the most reliable playback route.  The
+            // Music search endpoint can return an "official audio" result whose
+            // metadata loads successfully but whose media request is challenged
+            // by YouTube on cloud IPs.  Keep Music search as a fallback for
+            // queries where ordinary search has no usable result.
+            format!("ytsearch:{query}"),
+            Some(format!("ytmsearch:{query}")),
             false,
         )),
         Input::Search(_) => Err(Failure::NoMatch),
@@ -263,5 +268,13 @@ mod tests {
             .unwrap_err(),
             Failure::NoMatch
         );
+    }
+
+    #[test]
+    fn ordinary_search_is_primary_with_music_fallback() {
+        let (first, fallback, playlist) = identifiers("chop suey").unwrap();
+        assert_eq!(first, "ytsearch:chop suey");
+        assert_eq!(fallback.as_deref(), Some("ytmsearch:chop suey"));
+        assert!(!playlist);
     }
 }
