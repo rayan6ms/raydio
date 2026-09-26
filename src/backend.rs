@@ -109,12 +109,25 @@ fn optional_secret(name: &str) -> Option<String> {
 }
 
 fn youtube_authentication_from_env() -> Result<YoutubeAuthentication> {
+    let oauth_access_token = optional_secret("RAYDIO_YOUTUBE_OAUTH_ACCESS_TOKEN");
+    let oauth_refresh_token = optional_secret("RAYDIO_YOUTUBE_OAUTH_REFRESH_TOKEN");
+    let cookies = optional_secret("RAYDIO_YOUTUBE_COOKIES");
+    let po_token = optional_secret("RAYDIO_YOUTUBE_PO_TOKEN");
+    let visitor_data = optional_secret("RAYDIO_YOUTUBE_VISITOR_DATA");
+    tracing::info!(
+        oauth_access_token = oauth_access_token.is_some(),
+        oauth_refresh_token = oauth_refresh_token.is_some(),
+        cookies = cookies.is_some(),
+        po_token = po_token.is_some(),
+        visitor_data = visitor_data.is_some(),
+        "YouTube authentication material loaded"
+    );
     YoutubeAuthentication::with_credentials(
-        optional_secret("RAYDIO_YOUTUBE_OAUTH_ACCESS_TOKEN"),
-        optional_secret("RAYDIO_YOUTUBE_OAUTH_REFRESH_TOKEN"),
-        optional_secret("RAYDIO_YOUTUBE_COOKIES"),
-        optional_secret("RAYDIO_YOUTUBE_PO_TOKEN"),
-        optional_secret("RAYDIO_YOUTUBE_VISITOR_DATA"),
+        oauth_access_token,
+        oauth_refresh_token,
+        cookies,
+        po_token,
+        visitor_data,
     )
     .map_err(|_| anyhow::anyhow!("invalid YouTube authentication configuration"))
 }
