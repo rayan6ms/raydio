@@ -546,7 +546,7 @@ checksum = "61803da095bee82a81bb1a452ecc25d3b2f1416d1897eb86430c6159ef717c17"
 [[package]]
 name = "crust"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=29de284#29de284b40e70df2daf4411576a0a8253b784abe"
+source = "git+https://github.com/rayan6ms/crust?rev=fa9aee0#fa9aee0481ba31729144fadca9a9acc32dad98fd"
 dependencies = [
  "num-bigint",
  "num-traits",
@@ -559,7 +559,7 @@ dependencies = [
 [[package]]
 name = "crust-mantle-adapter"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=29de284#29de284b40e70df2daf4411576a0a8253b784abe"
+source = "git+https://github.com/rayan6ms/crust?rev=fa9aee0#fa9aee0481ba31729144fadca9a9acc32dad98fd"
 dependencies = [
  "base64 0.22.1",
  "crust",
@@ -571,12 +571,13 @@ dependencies = [
  "serde_json",
  "tokio",
  "tokio-util",
+ "tracing",
 ]
 
 [[package]]
 name = "crust-oto-adapter"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=29de284#29de284b40e70df2daf4411576a0a8253b784abe"
+source = "git+https://github.com/rayan6ms/crust?rev=fa9aee0#fa9aee0481ba31729144fadca9a9acc32dad98fd"
 dependencies = [
  "crust",
  "futures-util",
@@ -589,7 +590,7 @@ dependencies = [
 [[package]]
 name = "crust-protocol"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=29de284#29de284b40e70df2daf4411576a0a8253b784abe"
+source = "git+https://github.com/rayan6ms/crust?rev=fa9aee0#fa9aee0481ba31729144fadca9a9acc32dad98fd"
 dependencies = [
  "serde",
  "serde_json",
@@ -598,7 +599,7 @@ dependencies = [
 [[package]]
 name = "crust-server"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=29de284#29de284b40e70df2daf4411576a0a8253b784abe"
+source = "git+https://github.com/rayan6ms/crust?rev=fa9aee0#fa9aee0481ba31729144fadca9a9acc32dad98fd"
 dependencies = [
  "axum",
  "base64 0.22.1",
@@ -624,7 +625,7 @@ dependencies = [
 [[package]]
 name = "crust-testkit"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=29de284#29de284b40e70df2daf4411576a0a8253b784abe"
+source = "git+https://github.com/rayan6ms/crust?rev=fa9aee0#fa9aee0481ba31729144fadca9a9acc32dad98fd"
 dependencies = [
  "crust",
  "serde_json",
