@@ -26,10 +26,10 @@ twilight-gateway = { version = "0.17.1", default-features = false, features = ["
 twilight-http = { version = "0.17.1", default-features = false, features = ["rustls-native-roots"] }
 twilight-model = "0.17.1"
 url = "2.5.8"
-crust = { git = "https://github.com/rayan6ms/crust", rev = "5abdabc" }
-crust-server = { git = "https://github.com/rayan6ms/crust", rev = "5abdabc" }
-crust-mantle-adapter = { git = "https://github.com/rayan6ms/crust", rev = "5abdabc" }
-crust-oto-adapter = { git = "https://github.com/rayan6ms/crust", rev = "5abdabc" }
+crust = { git = "https://github.com/rayan6ms/crust", rev = "4728605" }
+crust-server = { git = "https://github.com/rayan6ms/crust", rev = "4728605" }
+crust-mantle-adapter = { git = "https://github.com/rayan6ms/crust", rev = "4728605" }
+crust-oto-adapter = { git = "https://github.com/rayan6ms/crust", rev = "4728605" }
 mantle-media = { git = "https://github.com/rayan6ms/mantle", rev = "8113341" }
 
 [patch.crates-io]
@@ -49,7 +49,7 @@ opt-level = "s"
 # dominate resident executable pages on small Oracle instances.
 
 [dev-dependencies]
-crust-testkit = { git = "https://github.com/rayan6ms/crust", rev = "5abdabc" }
+crust-testkit = { git = "https://github.com/rayan6ms/crust", rev = "4728605" }
 axum = { version = "0.8.4", features = ["ws"] }
 oto = { git = "https://github.com/rayan6ms/oto", rev = "e84d316e07ab64c62f0737ae6818d55f627527da" }
 mantle-core = { git = "https://github.com/rayan6ms/mantle", rev = "8113341" }

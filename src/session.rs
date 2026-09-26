@@ -907,11 +907,15 @@ impl GuildSession {
                     error = %error_chain,
                     "track start exhausted retries"
                 );
+                let user_message = if error_chain
+                    .contains("YouTube rejected playback authentication or this server's egress")
+                {
+                    "YouTube rejected playback from this server. Try again later or configure a permitted YouTube session."
+                } else {
+                    "I joined, but Raydio could not start that track."
+                };
                 request
-                    .error(
-                        &self.shared.http,
-                        "I joined, but Raydio could not start that track.",
-                    )
+                    .error(&self.shared.http, user_message)
                     .await;
                 return;
             }
