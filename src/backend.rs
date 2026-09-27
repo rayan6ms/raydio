@@ -3,7 +3,7 @@ use crust::routeplanner::RoutePlanner;
 use crust_mantle_adapter::{MantleAdapterOptions, RealMantleAdapter};
 use crust_oto_adapter::OtoVoiceBackend;
 use crust_server::{CrustServer, config::ServerConfig};
-use mantle_media::YoutubeAuthentication;
+use mantle_media::{YoutubeAuthentication, YoutubeCipherResolver, YoutubeProcessCipherOptions, YoutubeProcessCipherResolver};
 use std::{
     net::{IpAddr, Ipv4Addr, SocketAddr},
     sync::Arc,
@@ -26,13 +26,15 @@ impl Backend {
         // playback, so source HTTP stalls cannot interrupt their audio frames.
         // One completed input per player is reused on a natural repeat.
         let authentication = youtube_authentication_from_env()?;
-        let media = Arc::new(RealMantleAdapter::with_options_and_authentication(
+        let cipher_resolver = youtube_cipher_resolver_from_env()?;
+        let media = Arc::new(RealMantleAdapter::with_options_authentication_and_cipher_resolver(
             RoutePlanner::disabled(),
             MantleAdapterOptions {
                 staging_max_bytes: 16 * 1024 * 1024,
                 ..MantleAdapterOptions::default()
             },
             authentication,
+            cipher_resolver,
         )?);
         let mut voice = OtoVoiceBackend::with_defaults(100, 4)?;
         if std::env::var("RAYDIO_SEND_TRACE").as_deref() == Ok("1") {
@@ -106,6 +108,25 @@ fn optional_secret(name: &str) -> Option<String> {
     std::env::var(name)
         .ok()
         .filter(|value| !value.trim().is_empty())
+}
+
+fn youtube_cipher_resolver_from_env() -> Result<Option<Arc<dyn YoutubeCipherResolver>>> {
+    let deno = optional_secret("RAYDIO_YOUTUBE_DENO_BIN");
+    let adapter = optional_secret("RAYDIO_YOUTUBE_EJS_ADAPTER");
+    match (deno, adapter) {
+        (None, None) => Ok(None),
+        (Some(deno), Some(adapter)) => {
+            let resolver = YoutubeProcessCipherResolver::deno(
+                deno,
+                adapter,
+                YoutubeProcessCipherOptions::default(),
+            )
+            .map_err(|_| anyhow::anyhow!("invalid YouTube cipher resolver configuration"))?;
+            tracing::info!("isolated YouTube cipher fallback enabled");
+            Ok(Some(Arc::new(resolver)))
+        }
+        _ => anyhow::bail!("both YouTube cipher resolver paths must be configured"),
+    }
 }
 
 fn youtube_authentication_from_env() -> Result<YoutubeAuthentication> {

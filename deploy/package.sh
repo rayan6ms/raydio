@@ -11,12 +11,14 @@ mkdir -p "$out" dist
 stage=$(mktemp -d "$out/stage.XXXXXXXX")
 trap 'rm -rf "$stage"' EXIT
 chmod 755 "$stage"
-mkdir -p "$stage/bin" "$stage/deploy"
+mkdir -p "$stage/bin" "$stage/deploy" "$stage/youtube-ejs"
 install -m755 "$binary" "$stage/bin/raydio"
 install -m755 deploy/raydioctl "$stage/deploy/raydioctl"
 install -m644 deploy/raydio-system.service "$stage/deploy/raydio.service"
 install -m644 .env.example "$stage/deploy/env.example"
 install -m644 LICENSE "$stage/LICENSE"
+install -m644 deploy/youtube-ejs/mantle-youtube-ejs.js "$stage/youtube-ejs/mantle-youtube-ejs.js"
+install -m644 deploy/youtube-ejs/LICENSE "$stage/youtube-ejs/LICENSE"
 printf '%s\n' "$revision" > "$stage/REVISION"
 {
     printf 'source=%s\narchitecture=%s\n' "$revision" "$arch"
