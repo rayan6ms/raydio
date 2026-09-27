@@ -546,7 +546,7 @@ checksum = "61803da095bee82a81bb1a452ecc25d3b2f1416d1897eb86430c6159ef717c17"
 [[package]]
 name = "crust"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=4728605#472860599496cc639313aab2fbd2affed6dd0e09"
+source = "git+https://github.com/rayan6ms/crust?rev=3fe919e#3fe919e3e8f712d81fd2195c919b8cc35d0366aa"
 dependencies = [
  "num-bigint",
  "num-traits",
@@ -559,7 +559,7 @@ dependencies = [
 [[package]]
 name = "crust-mantle-adapter"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=4728605#472860599496cc639313aab2fbd2affed6dd0e09"
+source = "git+https://github.com/rayan6ms/crust?rev=3fe919e#3fe919e3e8f712d81fd2195c919b8cc35d0366aa"
 dependencies = [
  "base64 0.22.1",
  "crust",
@@ -577,7 +577,7 @@ dependencies = [
 [[package]]
 name = "crust-oto-adapter"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=4728605#472860599496cc639313aab2fbd2affed6dd0e09"
+source = "git+https://github.com/rayan6ms/crust?rev=3fe919e#3fe919e3e8f712d81fd2195c919b8cc35d0366aa"
 dependencies = [
  "crust",
  "futures-util",
@@ -590,7 +590,7 @@ dependencies = [
 [[package]]
 name = "crust-protocol"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=4728605#472860599496cc639313aab2fbd2affed6dd0e09"
+source = "git+https://github.com/rayan6ms/crust?rev=3fe919e#3fe919e3e8f712d81fd2195c919b8cc35d0366aa"
 dependencies = [
  "serde",
  "serde_json",
@@ -599,7 +599,7 @@ dependencies = [
 [[package]]
 name = "crust-server"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=4728605#472860599496cc639313aab2fbd2affed6dd0e09"
+source = "git+https://github.com/rayan6ms/crust?rev=3fe919e#3fe919e3e8f712d81fd2195c919b8cc35d0366aa"
 dependencies = [
  "axum",
  "base64 0.22.1",
@@ -625,7 +625,7 @@ dependencies = [
 [[package]]
 name = "crust-testkit"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/crust?rev=4728605#472860599496cc639313aab2fbd2affed6dd0e09"
+source = "git+https://github.com/rayan6ms/crust?rev=3fe919e#3fe919e3e8f712d81fd2195c919b8cc35d0366aa"
 dependencies = [
  "crust",
  "serde_json",
@@ -1852,7 +1852,7 @@ checksum = "0ceec5bc11778974d1bcb055b18002eba7f4b3518b6a0081b3af5f21666da9ad"
 [[package]]
 name = "mantle-audio"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/mantle?rev=8113341#8113341d26f4d3b1b0eb5da82c64ad5b3f625fe0"
+source = "git+https://github.com/rayan6ms/mantle?rev=1515537#151553746bff8c98154a0db409c0cdee55bc993c"
 dependencies = [
  "mantle-opus",
  "rtrb",
@@ -1862,12 +1862,12 @@ dependencies = [
 [[package]]
 name = "mantle-core"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/mantle?rev=8113341#8113341d26f4d3b1b0eb5da82c64ad5b3f625fe0"
+source = "git+https://github.com/rayan6ms/mantle?rev=1515537#151553746bff8c98154a0db409c0cdee55bc993c"
 
 [[package]]
 name = "mantle-media"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/mantle?rev=8113341#8113341d26f4d3b1b0eb5da82c64ad5b3f625fe0"
+source = "git+https://github.com/rayan6ms/mantle?rev=1515537#151553746bff8c98154a0db409c0cdee55bc993c"
 dependencies = [
  "aes 0.9.2",
  "cbc",
@@ -1889,7 +1889,7 @@ dependencies = [
 [[package]]
 name = "mantle-opus"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/mantle?rev=8113341#8113341d26f4d3b1b0eb5da82c64ad5b3f625fe0"
+source = "git+https://github.com/rayan6ms/mantle?rev=1515537#151553746bff8c98154a0db409c0cdee55bc993c"
 dependencies = [
  "opus-head-sys",
 ]
@@ -1897,7 +1897,7 @@ dependencies = [
 [[package]]
 name = "mantle-symphonia-isomp4"
 version = "0.6.1"
-source = "git+https://github.com/rayan6ms/mantle?rev=8113341#8113341d26f4d3b1b0eb5da82c64ad5b3f625fe0"
+source = "git+https://github.com/rayan6ms/mantle?rev=1515537#151553746bff8c98154a0db409c0cdee55bc993c"
 dependencies = [
  "log",
  "symphonia-common",
@@ -1908,7 +1908,7 @@ dependencies = [
 [[package]]
 name = "mantle-xaac"
 version = "0.0.0"
-source = "git+https://github.com/rayan6ms/mantle?rev=8113341#8113341d26f4d3b1b0eb5da82c64ad5b3f625fe0"
+source = "git+https://github.com/rayan6ms/mantle?rev=1515537#151553746bff8c98154a0db409c0cdee55bc993c"
 
 [[package]]
 name = "matchers"
