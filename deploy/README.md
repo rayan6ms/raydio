@@ -5,7 +5,13 @@ Start with one OCPU and 1 GiB RAM for a small bot; the
 provided service caps the bot at 256 MiB. Raise limits deliberately for many guilds.
 The binary is built natively for each architecture on Debian 12 (glibc 2.36),
 and includes the media codecs. Runtime dependencies are libc, libgcc, libm, and
-the OS CA certificate bundle. No JVM, Node, ffmpeg, or Rust compiler is needed.
+the OS CA certificate bundle. No JVM, Node, ffmpeg, or Rust compiler is needed
+for ordinary playback.
+The production YouTube configuration also enables a bounded signature fallback;
+that optional path requires the pinned Deno executable and reviewed EJS adapter
+at the paths named by `RAYDIO_YOUTUBE_DENO_BIN` and
+`RAYDIO_YOUTUBE_EJS_ADAPTER` in `/etc/raydio/env`. Keep Deno outside the release
+archive, install it root-owned, and verify its version during provisioning.
 Use Ubuntu 24.04 for the validated deployment path. The examined artifacts need
 glibc symbols through 2.34, but other distributions have not received the same
 installation and runtime validation.
