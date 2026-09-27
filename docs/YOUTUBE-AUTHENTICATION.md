@@ -25,3 +25,13 @@ Tokens are tied to the generating session and may expire or be rejected after Yo
 Cookies are a fallback for an account-backed browser session. Export only the YouTube cookies needed by the source using a trusted local browser tool, keep the complete `name=value; name=value` header in a root-owned secret file, and never paste it into chat, commit it, or include it in a bug report. Cookies expire and may invalidate the account session; OAuth or a proof-of-origin pair is preferred.
 
 Authentication is not a guarantee: YouTube can still rate-limit an account or egress address. If a credential is rejected, remove it and return to the unauthenticated client fallback.
+
+## Oracle browser-page fallback
+
+When `RAYDIO_YOUTUBE_COOKIES` is present, Mantle first tries the normal bounded InnerTube client
+profiles. If Oracle's datacenter egress returns `LOGIN_REQUIRED` from those player calls, it makes
+one bounded request to the canonical signed-in watch page and extracts the embedded player
+response without executing page JavaScript. The existing format ranking and player-script cipher
+resolver then handle the returned media URL. This is why the cookie header must come from a browser
+session that is valid through Oracle's public IP; cookies alone cannot make an unrelated session
+playable. HTML is size-limited and malformed or oversized embedded data fails closed.
