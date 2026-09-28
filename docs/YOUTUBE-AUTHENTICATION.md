@@ -5,6 +5,7 @@ Raydio accepts credentials through the deployment environment. They are intentio
 - `RAYDIO_YOUTUBE_OAUTH_ACCESS_TOKEN` or `RAYDIO_YOUTUBE_OAUTH_REFRESH_TOKEN`
 - `RAYDIO_YOUTUBE_PO_TOKEN` together with `RAYDIO_YOUTUBE_VISITOR_DATA`
 - `RAYDIO_YOUTUBE_COOKIES` as a browser `Cookie` header value
+- `RAYDIO_YOUTUBE_COMPANION_URL` together with `RAYDIO_YOUTUBE_COMPANION_TOKEN`
 
 OAuth and proof-of-origin are alternatives. Do not combine unrelated values from different browser sessions.
 
@@ -25,6 +26,23 @@ Tokens are tied to the generating session and may expire or be rejected after Yo
 Cookies are a fallback for an account-backed browser session. Export only the YouTube cookies needed by the source using a trusted local browser tool, keep the complete `name=value; name=value` header in a root-owned secret file, and never paste it into chat, commit it, or include it in a bug report. Cookies expire and may invalidate the account session; OAuth or a proof-of-origin pair is preferred.
 
 Authentication is not a guarantee: YouTube can still rate-limit an account or egress address. If a credential is rejected, remove it and return to the unauthenticated client fallback.
+
+## Invidious Companion
+
+For a complete proof-of-origin flow, run the maintained Invidious Companion service on the same
+egress as Raydio with its YouTube session PoToken job enabled. Companion performs BotGuard setup,
+refreshes the session material, and mints a separate content PoToken for each video. Configure
+Raydio with the Companion base URL and its 16-character server secret:
+
+```dotenv
+RAYDIO_YOUTUBE_COMPANION_URL=http://127.0.0.1:8282/companion
+RAYDIO_YOUTUBE_COMPANION_TOKEN=<companion-server-secret>
+```
+
+Raydio sends only the video ID and the bearer secret to Companion. When this integration is
+enabled, Companion is tried first for playback discovery and the ordinary Mantle clients remain a
+bounded fallback. The secret and endpoint are never logged. Do not enable this mode until
+Companion's own validator reports a playable format from the deployment egress.
 
 ## Oracle browser-page fallback
 

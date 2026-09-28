@@ -192,22 +192,34 @@ fn youtube_authentication_from_env() -> Result<YoutubeAuthentication> {
     let cookies = optional_secret("RAYDIO_YOUTUBE_COOKIES");
     let po_token = optional_secret("RAYDIO_YOUTUBE_PO_TOKEN");
     let visitor_data = optional_secret("RAYDIO_YOUTUBE_VISITOR_DATA");
+    let companion_url = optional_secret("RAYDIO_YOUTUBE_COMPANION_URL");
+    let companion_token = optional_secret("RAYDIO_YOUTUBE_COMPANION_TOKEN");
     tracing::info!(
         oauth_access_token = oauth_access_token.is_some(),
         oauth_refresh_token = oauth_refresh_token.is_some(),
         cookies = cookies.is_some(),
         po_token = po_token.is_some(),
         visitor_data = visitor_data.is_some(),
+        companion = companion_url.is_some() && companion_token.is_some(),
         "YouTube authentication material loaded"
     );
-    YoutubeAuthentication::with_credentials(
+    let authentication = YoutubeAuthentication::with_credentials(
         oauth_access_token,
         oauth_refresh_token,
         cookies,
         po_token,
         visitor_data,
     )
-    .map_err(|_| anyhow::anyhow!("invalid YouTube authentication configuration"))
+    .map_err(|_| anyhow::anyhow!("invalid YouTube authentication configuration"))?;
+    match (companion_url, companion_token) {
+        (None, None) => Ok(authentication),
+        (Some(url), Some(token)) => authentication
+            .with_companion_endpoint(url, token)
+            .map_err(|_| anyhow::anyhow!("invalid YouTube Companion configuration")),
+        _ => anyhow::bail!(
+            "RAYDIO_YOUTUBE_COMPANION_URL and RAYDIO_YOUTUBE_COMPANION_TOKEN must be configured together"
+        ),
+    }
 }
 
 impl Drop for Backend {
