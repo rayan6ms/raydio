@@ -29,7 +29,9 @@ installation and runtime validation.
   Never commit this file or pass the token on a command line. Testbot is separate.
 - Optional YouTube authentication is supported through `RAYDIO_YOUTUBE_OAUTH_*`,
   `RAYDIO_YOUTUBE_PO_TOKEN` + `RAYDIO_YOUTUBE_VISITOR_DATA`, or
-  `RAYDIO_YOUTUBE_COOKIES`. Keep these values in the same root-owned `0600`
+  `RAYDIO_YOUTUBE_COOKIES`. A complete dynamic proof-of-origin flow can use
+  `RAYDIO_YOUTUBE_COMPANION_URL` + `RAYDIO_YOUTUBE_COMPANION_TOKEN` with a
+  separately managed Invidious Companion sidecar. Keep these values in the same root-owned `0600`
   environment file; see [`docs/YOUTUBE-AUTHENTICATION.md`](../docs/YOUTUBE-AUTHENTICATION.md).
 
 The active deployment uses one Always Free `VM.Standard.E2.1.Micro` instance
