@@ -1,9 +1,12 @@
 use anyhow::{Context, Result};
-use crust::routeplanner::RoutePlanner;
+use crust::routeplanner::{RoutePlanner, RoutePlannerConfig, RoutePlannerStrategy};
 use crust_mantle_adapter::{MantleAdapterOptions, RealMantleAdapter};
 use crust_oto_adapter::OtoVoiceBackend;
 use crust_server::{CrustServer, config::ServerConfig};
-use mantle_media::{YoutubeAuthentication, YoutubeCipherResolver, YoutubeProcessCipherOptions, YoutubeProcessCipherResolver};
+use mantle_media::{
+    YoutubeAuthentication, YoutubeCipherResolver, YoutubeProcessCipherOptions,
+    YoutubeProcessCipherResolver,
+};
 use std::{
     net::{IpAddr, Ipv4Addr, SocketAddr},
     sync::Arc,
@@ -26,16 +29,19 @@ impl Backend {
         // playback, so source HTTP stalls cannot interrupt their audio frames.
         // One completed input per player is reused on a natural repeat.
         let authentication = youtube_authentication_from_env()?;
+        let route_planner = youtube_route_planner_from_env()?;
         let cipher_resolver = youtube_cipher_resolver_from_env()?;
-        let media = Arc::new(RealMantleAdapter::with_options_authentication_and_cipher_resolver(
-            RoutePlanner::disabled(),
-            MantleAdapterOptions {
-                staging_max_bytes: 16 * 1024 * 1024,
-                ..MantleAdapterOptions::default()
-            },
-            authentication,
-            cipher_resolver,
-        )?);
+        let media = Arc::new(
+            RealMantleAdapter::with_options_authentication_and_cipher_resolver(
+                route_planner,
+                MantleAdapterOptions {
+                    staging_max_bytes: 16 * 1024 * 1024,
+                    ..MantleAdapterOptions::default()
+                },
+                authentication,
+                cipher_resolver,
+            )?,
+        );
         let mut voice = OtoVoiceBackend::with_defaults(100, 4)?;
         if std::env::var("RAYDIO_SEND_TRACE").as_deref() == Ok("1") {
             voice = voice.with_send_trace();
@@ -108,6 +114,57 @@ fn optional_secret(name: &str) -> Option<String> {
     std::env::var(name)
         .ok()
         .filter(|value| !value.trim().is_empty())
+}
+
+/// Builds the Lavalink-style local-address route planner when an operator supplies
+/// a real pool of source addresses. Leaving the address pool unset keeps the
+/// existing single-route behavior; the planner cannot manufacture new egress IPs.
+fn youtube_route_planner_from_env() -> Result<RoutePlanner> {
+    let Some(blocks) = optional_secret("RAYDIO_ROUTE_PLANNER_IP_BLOCKS") else {
+        return Ok(RoutePlanner::disabled());
+    };
+    let strategy_name = optional_secret("RAYDIO_ROUTE_PLANNER_STRATEGY")
+        .unwrap_or_else(|| "rotate_on_ban".to_owned())
+        .to_ascii_lowercase();
+    let strategy = match strategy_name.as_str() {
+        "rotate_on_ban" | "rotating" => RoutePlannerStrategy::RotateOnBan,
+        "load_balance" | "balancing" => RoutePlannerStrategy::LoadBalance,
+        "nano_switch" | "nano" => RoutePlannerStrategy::NanoSwitch,
+        "rotating_nano_switch" | "rotating_nano" => RoutePlannerStrategy::RotatingNanoSwitch,
+        _ => anyhow::bail!(
+            "invalid RAYDIO_ROUTE_PLANNER_STRATEGY: expected rotate_on_ban, load_balance, nano_switch, or rotating_nano_switch"
+        ),
+    };
+    let mut config = RoutePlannerConfig::new(
+        strategy,
+        blocks
+            .split(',')
+            .map(str::trim)
+            .filter(|block| !block.is_empty()),
+    );
+    if let Some(excluded) = optional_secret("RAYDIO_ROUTE_PLANNER_EXCLUDED_ADDRESSES") {
+        config.excluded_addresses = excluded
+            .split(',')
+            .map(str::trim)
+            .filter(|address| !address.is_empty())
+            .map(str::parse)
+            .collect::<std::result::Result<Vec<IpAddr>, _>>()
+            .map_err(|_| anyhow::anyhow!("invalid RAYDIO_ROUTE_PLANNER_EXCLUDED_ADDRESSES"))?;
+    }
+    if let Some(value) = optional_secret("RAYDIO_ROUTE_PLANNER_SEARCH_TRIGGERS_FAIL") {
+        config.search_triggers_fail = value
+            .parse::<bool>()
+            .map_err(|_| anyhow::anyhow!("invalid RAYDIO_ROUTE_PLANNER_SEARCH_TRIGGERS_FAIL"))?;
+    }
+    if let Some(value) = optional_secret("RAYDIO_ROUTE_PLANNER_MAX_FAILURES") {
+        config.max_failures = value
+            .parse::<usize>()
+            .map_err(|_| anyhow::anyhow!("invalid RAYDIO_ROUTE_PLANNER_MAX_FAILURES"))?;
+    }
+    let planner = RoutePlanner::configured(config)
+        .map_err(|error| anyhow::anyhow!("invalid YouTube route planner configuration: {error}"))?;
+    tracing::info!(strategy = %strategy_name, "YouTube route planner enabled");
+    Ok(planner)
 }
 
 fn youtube_cipher_resolver_from_env() -> Result<Option<Arc<dyn YoutubeCipherResolver>>> {
