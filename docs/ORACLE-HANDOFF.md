@@ -1,7 +1,7 @@
 # Oracle VM handoff
 
-Verified 2026-09-15: the same single instance is running. Raydio is active on
-release `06c8eb92d319ebd5abc9c6b937180463db04ba16` (v0.2.2), Testbot is inactive,
+Verified 2026-09-28: the same single instance is running. Raydio is active on
+release `cae0919b711627ac5e063dd8c3eede1a1053988c` (v0.2.2), Testbot is inactive,
 and the VM has about 562 MiB available RAM. Six short sender-queue **loopback**
 experiments ran as separate unprivileged processes and completed; no service
 was restarted or deployed. See `docs/SENDER-QUEUE-VALIDATION-2026-09-15.md`.
@@ -15,11 +15,11 @@ create a second instance or select a paid shape.
 
 - Region: `sa-saopaulo-1` (São Paulo)
 - Shape: `VM.Standard.E2.1.Micro` (x86-64; Oracle reports 1 GiB RAM)
-- Public IP: `137.131.202.133`
+- Public IP: `163.176.89.211` (rotated 2026-09-28; the instance and private IP are unchanged)
 - Instance OCID: `ocid1.instance.oc1.sa-saopaulo-1.antxeljrqqeoexqcd6trhgcgtbmvhtfvi52yx6o6vhseawv2iv3iuucsrwpq`
 - Compartment OCID: `ocid1.tenancy.oc1..aaaaaaaaohhfxm2tjcamdbzrkzq5izjrrifreosj2r6okw7o5wp6j6scibxq`
 - OS: Ubuntu 24.04 x86-64; boot disk about 45 GiB (41 GiB free at handoff)
-- SSH: `ubuntu@137.131.202.133`, local private key `/home/rayan/.ssh/id_ed25519`
+- SSH: `ubuntu@163.176.89.211`, local private key `/home/rayan/.ssh/id_ed25519`
 - Existing service account: `raydio`; state `/var/lib/raydio`
 
 Raydio currently owns `raydio.service`, enabled at boot, with its binary under
