@@ -121,9 +121,9 @@ async fn probe_backend() -> Result<()> {
         .timeout(std::time::Duration::from_secs(45))
         .build()?;
     for input in [
-        "ytmsearch:Daft Punk Get Lucky",
-        "ytsearch:Daft Punk Get Lucky",
+        "ytsearch:chop suey",
         "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "https://www.youtube.com/watch?v=Ifq4NQWwVpg&list=RDUfiYPq7-M3E&index=1",
     ] {
         let start = std::time::Instant::now();
         let response = http
