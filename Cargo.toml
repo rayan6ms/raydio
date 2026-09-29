@@ -23,11 +23,11 @@ twilight-gateway = { version = "0.17.1", default-features = false, features = ["
 twilight-http = { version = "0.17.1", default-features = false, features = ["rustls-native-roots"] }
 twilight-model = "0.17.1"
 url = "2.5.8"
-crust = { git = "https://github.com/rayan6ms/crust", rev = "7899d6b" }
-crust-server = { git = "https://github.com/rayan6ms/crust", rev = "7899d6b" }
-crust-mantle-adapter = { git = "https://github.com/rayan6ms/crust", rev = "7899d6b" }
-crust-oto-adapter = { git = "https://github.com/rayan6ms/crust", rev = "7899d6b" }
-mantle-media = { git = "https://github.com/rayan6ms/mantle", rev = "ef6f0c5" }
+crust = { git = "https://github.com/rayan6ms/crust", rev = "05bc664" }
+crust-server = { git = "https://github.com/rayan6ms/crust", rev = "05bc664" }
+crust-mantle-adapter = { git = "https://github.com/rayan6ms/crust", rev = "05bc664" }
+crust-oto-adapter = { git = "https://github.com/rayan6ms/crust", rev = "05bc664" }
+mantle-media = { git = "https://github.com/rayan6ms/mantle", rev = "bcf1b3a" }
 
 [patch.crates-io]
 openmls_rust_crypto = { git = "https://github.com/rayan6ms/oto", rev = "e205f9a3f44be36fab2fa3cd48ef113cbb0f4d1f" }
@@ -46,8 +46,8 @@ opt-level = "s"
 # dominate resident executable pages on small Oracle instances.
 
 [dev-dependencies]
-crust-testkit = { git = "https://github.com/rayan6ms/crust", rev = "7899d6b" }
+crust-testkit = { git = "https://github.com/rayan6ms/crust", rev = "05bc664" }
 axum = { version = "0.8.4", features = ["ws"] }
 oto = { git = "https://github.com/rayan6ms/oto", rev = "e205f9a3f44be36fab2fa3cd48ef113cbb0f4d1f" }
-mantle-core = { git = "https://github.com/rayan6ms/mantle", rev = "ef6f0c5" }
-mantle-media = { git = "https://github.com/rayan6ms/mantle", rev = "ef6f0c5" }
+mantle-core = { git = "https://github.com/rayan6ms/mantle", rev = "bcf1b3a" }
+mantle-media = { git = "https://github.com/rayan6ms/mantle", rev = "bcf1b3a" }
