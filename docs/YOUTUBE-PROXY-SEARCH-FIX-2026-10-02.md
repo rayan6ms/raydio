@@ -33,3 +33,17 @@ The Oracle release probe passed all four cases:
 The full Raydio suite passed 50 library tests, the main test, backend integration,
 reconnect integration, and doc tests. The deployed service is active at revision
 `acb385ccaa21f0f8762241102f495f5d075aa2cd`.
+
+## Follow-up playback handoff retry
+
+The first live `akcent` attempt reached source playback but the Companion media
+handoff returned `InvalidResponse`. Crust labeled that response as the Web client
+and asked Mantle for the next client. Mantle retried Companion before applying the
+skip list, so the same handoff failed twice and Raydio reported its generic start
+error.
+
+Mantle revision `3b23f30` now honors a skipped Web client before entering the
+Companion path, allowing the next configured playback client to run. Crust revision
+`5ca95fd` and Raydio's follow-up pin carry that fix. The new Mantle regression test
+proves that a skipped Web client goes directly to Android VR without another
+Companion request.
