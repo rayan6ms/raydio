@@ -122,6 +122,7 @@ async fn probe_backend() -> Result<()> {
         .build()?;
     for input in [
         "ytsearch:chop suey",
+        "ytsearch:akcent",
         "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         "https://www.youtube.com/watch?v=Ifq4NQWwVpg&list=RDUfiYPq7-M3E&index=1",
     ] {
@@ -136,7 +137,7 @@ async fn probe_backend() -> Result<()> {
         let body: serde_json::Value = response.json().await?;
         println!(
             "{}",
-            serde_json::json!({"input":input,"status":status.as_u16(),"elapsedMs":start.elapsed().as_millis(),"loadType":body["loadType"],"trackCount":body["data"].as_array().map(Vec::len),"failed":body["loadType"]=="error"})
+            serde_json::json!({"input":input,"status":status.as_u16(),"elapsedMs":start.elapsed().as_millis(),"loadType":body["loadType"],"trackCount":body["data"].as_array().map(Vec::len),"errorMessage":body["data"]["message"],"failed":body["loadType"]=="error"})
         );
     }
     backend.shutdown().await
