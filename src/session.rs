@@ -571,7 +571,8 @@ impl GuildSession {
                 _ = self.shared.cancel.cancelled() => break,
                 message = receiver.recv() => match message {
                     Some(Message::Interaction(request, ack)) => {
-                        if matches!(timeout(Duration::from_secs(4), ack).await, Ok(Ok(true))) { self.interaction(request).await; }
+                        if matches!(timeout(Duration::from_secs(5), ack).await, Ok(Ok(true))) { self.interaction(request).await; }
+                        else { self.shared.interaction_errors.fetch_add(1, Ordering::Relaxed); tracing::warn!(guild = self.id, interaction = request.interaction.id.get(), "Command discarded because acknowledgement could not be confirmed"); }
                     }
                     Some(Message::Backend(payload)) => self.backend(payload).await,
                     Some(Message::VoiceChanged) => self.voice_changed().await,
@@ -715,14 +716,21 @@ impl GuildSession {
             .saturating_sub(self.queue.len());
         let shared = self.shared.clone();
         let sequence = pending.sequence;
+        let guild = self.id;
         self.loading = Some(pending);
         self.loaders.spawn(async move {
-            (
+            let started = Instant::now();
+            let result = timeout(Duration::from_secs(45), shared.resolve(&input, capacity, 1))
+                .await
+                .unwrap_or(Err(Failure::Unavailable));
+            tracing::info!(
+                guild,
                 sequence,
-                timeout(Duration::from_secs(45), shared.resolve(&input, capacity, 1))
-                    .await
-                    .unwrap_or(Err(Failure::Unavailable)),
-            )
+                elapsed_ms = started.elapsed().as_millis() as u64,
+                success = result.is_ok(),
+                "Play source resolution completed"
+            );
+            (sequence, result)
         });
     }
     async fn invalidate(&mut self) {
@@ -747,6 +755,11 @@ impl GuildSession {
         }
     }
     async fn prepare_play(&mut self, request: Request) {
+        tracing::info!(
+            guild = self.id,
+            interaction = request.interaction.id.get(),
+            "Play request preparing"
+        );
         if !self.shared.node.health().ready {
             request
                 .error(
@@ -774,28 +787,7 @@ impl GuildSession {
                 .await;
             return;
         }
-        // Fetch only when the guild snapshot did not include our own membership.
-        let needs_member = self
-            .shared
-            .cache
-            .read()
-            .unwrap()
-            .guilds
-            .get(&self.id)
-            .is_some_and(|guild| guild.bot_roles.is_none());
-        if needs_member
-            && let Ok(Ok(response)) = timeout(
-                Duration::from_secs(5),
-                self.shared
-                    .http
-                    .guild_member(Id::new(self.id), Id::new(self.shared.bot)),
-            )
-            .await
-            && let Ok(member) = response.model().await
-            && let Some(guild) = self.shared.cache.write().unwrap().guilds.get_mut(&self.id)
-        {
-            guild.member(&member);
-        }
+        self.shared.ensure_bot_membership(self.id).await;
         match self.shared.access(self.id, request.user(), None) {
             Ok(channel) if self.channel.is_some_and(|active| active != channel) => {
                 request
@@ -816,8 +808,20 @@ impl GuildSession {
                     epoch: self.epoch,
                     sequence: self.sequence,
                 });
+                tracing::info!(
+                    guild = self.id,
+                    sequence = self.sequence,
+                    "Play request admitted"
+                );
             }
-            Err(error) => request.error(&self.shared.http, &error).await,
+            Err(error) => {
+                tracing::info!(
+                    guild = self.id,
+                    interaction = request.interaction.id.get(),
+                    "Play request denied by voice access"
+                );
+                request.error(&self.shared.http, &error).await;
+            }
         }
     }
     async fn commit(&mut self, pending: Pending, resolution: Result<Resolution, Failure>) {

@@ -163,9 +163,75 @@ impl Shared {
         }
         result
     }
-    async fn autocomplete(&self, request: Request) {
+    pub(crate) async fn ensure_bot_membership(&self, id: u64) -> bool {
+        let missing = self
+            .cache
+            .read()
+            .unwrap()
+            .guilds
+            .get(&id)
+            .is_some_and(|guild| guild.available && guild.bot_roles.is_none());
+        if !missing {
+            return true;
+        }
+        let result = timeout(Duration::from_secs(5), async {
+            self.http
+                .guild_member(
+                    twilight_model::id::Id::new(id),
+                    twilight_model::id::Id::new(self.bot),
+                )
+                .await?
+                .model()
+                .await
+                .map_err(anyhow::Error::from)
+        })
+        .await;
+        match result {
+            Ok(Ok(member)) => {
+                if let Some(guild) = self.cache.write().unwrap().guilds.get_mut(&id) {
+                    guild.member(&member);
+                }
+                tracing::info!(guild = id, "Bot server membership loaded");
+                true
+            }
+            _ => {
+                tracing::warn!(
+                    guild = id,
+                    timed_out = result.is_err(),
+                    "Bot server membership could not be loaded"
+                );
+                false
+            }
+        }
+    }
+    async fn autocomplete_choices(&self, request: &Request) -> Vec<CommandOptionChoice> {
         let query = request.option("request").trim();
         let guild = request.interaction.guild_id.map(|id| id.get());
+        if query.len() < 2
+            || query.len() > 500
+            || !matches!(urls::classify(query), urls::Input::Search(_))
+            || !self.node.health().ready
+        {
+            return vec![];
+        }
+        // GUILD_CREATE need not include our member in larger/older servers.
+        // Hydrate the same roles used by /play before denying autocomplete.
+        let missing = guild.is_some_and(|id| {
+            self.cache.read().unwrap().guilds.get(&id).is_some_and(|g| {
+                g.available && g.bot_roles.is_none() && g.caller_channel(request.user()).is_ok()
+            })
+        });
+        if missing {
+            let Ok(_permit) = self.searches.try_acquire() else {
+                return vec![];
+            };
+            if !self
+                .ensure_bot_membership(guild.expect("guild for membership"))
+                .await
+            {
+                return vec![];
+            }
+        }
         let access = guild.and_then(|id| {
             let cache = self.cache.read().unwrap();
             let guild = cache.guilds.get(&id)?;
@@ -182,13 +248,7 @@ impl Shared {
                 .is_none_or(|active| active == channel)
                 .then_some((id, channel))
         });
-        let valid = query.len() >= 2
-            && query.len() <= 500
-            && matches!(urls::classify(query), urls::Input::Search(_))
-            && access.is_some()
-            && self.node.health().ready;
-        let choices = if valid {
-            let (guild, channel) = access.expect("valid autocomplete has voice access");
+        if let Some((guild, channel)) = access {
             // Search results are scoped to the same guild/channel as the
             // TypeScript implementation. A query can otherwise reuse a
             // result while the caller is in a different voice session.
@@ -203,8 +263,8 @@ impl Shared {
             if let Some(choices) = cached {
                 choices
             } else if let Ok(_permit) = self.searches.try_acquire() {
-                match timeout(Duration::from_millis(1900), self.resolve(query, 10, 10)).await {
-                    Ok(Ok(result)) => {
+                match self.resolve(query, 10, 10).await {
+                    Ok(result) => {
                         let choices = crate::views::search_choices(result.tracks);
                         let mut cache = self.autocomplete.lock().unwrap();
                         cache.retain(|_, (at, _)| at.elapsed() < Duration::from_secs(30));
@@ -226,7 +286,16 @@ impl Shared {
             }
         } else {
             vec![]
-        };
+        }
+    }
+    async fn autocomplete(&self, request: Request) {
+        // Includes membership fetch, search, and body decoding in one budget.
+        let choices = timeout(
+            Duration::from_millis(1900),
+            self.autocomplete_choices(&request),
+        )
+        .await
+        .unwrap_or_default();
         let response = InteractionResponse {
             kind: InteractionResponseType::ApplicationCommandAutocompleteResult,
             data: Some(InteractionResponseData {
@@ -383,6 +452,7 @@ pub async fn run(config: Config, cancel: CancellationToken) -> Result<()> {
                         }
                         if !matches!(interaction.kind, InteractionType::ApplicationCommand | InteractionType::MessageComponent) { continue; }
                         let request = Request::new(interaction.clone());
+                        tracing::info!(guild, interaction = interaction.id.get(), command = request.name, "Command received");
                         // Check administrator-only diagnostics before acknowledging publicly.
                         let denied = request.name == "diagnostics" && !interaction.member.as_ref().and_then(|m| m.permissions).is_some_and(|p| p.intersects(Permissions::MANAGE_GUILD | Permissions::ADMINISTRATOR));
                         if denied || !shared.loaded(guild) {
@@ -439,4 +509,100 @@ pub async fn run(config: Config, cancel: CancellationToken) -> Result<()> {
     owner.shutdown().await;
     backend.shutdown().await?;
     outcome
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::voice::{Guild, Voice};
+    use serde_json::json;
+    use twilight_model::{channel::Channel, id::Id};
+
+    #[tokio::test]
+    async fn autocomplete_hydrates_missing_bot_roles_before_voice_admission() {
+        let gets = Arc::new(AtomicU64::new(0));
+        let count = gets.clone();
+        let router = axum::Router::new().route("/api/v10/guilds/1/members/9", axum::routing::get(move || {
+            count.fetch_add(1, Ordering::Relaxed);
+            async { axum::Json(json!({"flags":0,"deaf":false,"mute":false,"roles":["11"],"user":{"id":"9","username":"bot","discriminator":"0001","bot":true}})) }
+        }));
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let address = listener.local_addr().unwrap();
+        let server = tokio::spawn(async move { axum::serve(listener, router).await.unwrap() });
+        let (mut shared, backend, owner, _events) = Shared::fixture().await;
+        Arc::get_mut(&mut shared).unwrap().http = Client::builder()
+            .token("fixture".into())
+            .proxy(address.to_string(), true)
+            .ratelimiter(None)
+            .build();
+        let channel: Channel = serde_json::from_value(json!({"id":"3","type":2})).unwrap();
+        let permission = Permissions::VIEW_CHANNEL | Permissions::CONNECT | Permissions::SPEAK;
+        shared.cache.write().unwrap().guilds.insert(
+            1,
+            Guild {
+                available: true,
+                channels: HashMap::from([(3, (&channel).into())]),
+                roles: HashMap::from([(1, Permissions::empty()), (11, permission)]),
+                bot_roles: None,
+                voices: HashMap::from([(
+                    2,
+                    Voice {
+                        channel: 3,
+                        bot: false,
+                        session: String::new(),
+                    },
+                )]),
+                ..Default::default()
+            },
+        );
+        let choices = vec![CommandOptionChoice {
+            name: "Stay With Me — Akcent".into(),
+            name_localizations: None,
+            value: twilight_model::application::command::CommandOptionChoiceValue::String(
+                "https://www.youtube.com/watch?v=fixture".into(),
+            ),
+        }];
+        shared.autocomplete.lock().unwrap().insert(
+            "1:3:akcent stay with me".into(),
+            (Instant::now(), choices.clone()),
+        );
+        let request = Request::new(Arc::new(serde_json::from_value(json!({
+            "id":"100","application_id":"9","type":4,"token":"fixture-only","version":1,"guild_id":"1",
+            "channel":{"id":"10","type":0},"authorizing_integration_owners":{},"entitlements":[],
+            "member":{"flags":0,"deaf":false,"mute":false,"roles":[],"user":{"id":"2","username":"listener","discriminator":"0001"}},
+            "data":{"id":"30","name":"play","type":1,"options":[{"name":"request","type":3,"value":"akcent stay with me","focused":true}]}
+        })).unwrap()));
+        assert_eq!(shared.autocomplete_choices(&request).await, choices);
+        assert_eq!(gets.load(Ordering::Relaxed), 1);
+        assert_eq!(
+            shared.cache.read().unwrap().guilds[&1].bot_roles,
+            Some(vec![11])
+        );
+        assert_eq!(shared.autocomplete_choices(&request).await, choices);
+        assert_eq!(
+            gets.load(Ordering::Relaxed),
+            1,
+            "do not fetch membership on every keystroke"
+        );
+        shared
+            .cache
+            .write()
+            .unwrap()
+            .guilds
+            .get_mut(&1)
+            .unwrap()
+            .roles
+            .insert(11, Permissions::empty());
+        assert!(
+            shared.autocomplete_choices(&request).await.is_empty(),
+            "cached choices cannot bypass denied voice access"
+        );
+        let mut elsewhere = request;
+        Arc::make_mut(&mut elsewhere.interaction).guild_id = Some(Id::new(999));
+        assert!(shared.autocomplete_choices(&elsewhere).await.is_empty());
+        owner.shutdown().await;
+        backend.shutdown().await.unwrap();
+        server.abort();
+        let _ = server.await;
+    }
 }

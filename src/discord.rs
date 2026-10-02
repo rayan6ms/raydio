@@ -1,7 +1,11 @@
 //! Discord response helpers. Twilight owns Bot authentication and rate limiting.
 use crate::views::View;
 use anyhow::Result;
-use std::{collections::HashMap, sync::Arc, time::Duration};
+use std::{
+    collections::HashMap,
+    sync::Arc,
+    time::{Duration, Instant},
+};
 use tokio::time::timeout;
 use twilight_http::Client;
 use twilight_model::{
@@ -84,6 +88,10 @@ impl Request {
             .is_some_and(|id| !(id.starts_with("raydio:player:") && id.ends_with(":queue")))
     }
     pub async fn acknowledge(&self, http: &Client) -> bool {
+        self.acknowledge_with_deadline(http, Duration::from_secs(3))
+            .await
+    }
+    async fn acknowledge_with_deadline(&self, http: &Client, deadline: Duration) -> bool {
         let response = InteractionResponse {
             kind: if self.updates_message() {
                 InteractionResponseType::DeferredUpdateMessage
@@ -101,15 +109,56 @@ impl Request {
                 None
             },
         };
-        matches!(
-            timeout(
-                Duration::from_secs(3),
-                http.interaction(self.interaction.application_id)
-                    .create_response(self.interaction.id, &self.interaction.token, &response)
-            )
-            .await,
-            Ok(Ok(_))
+        let started = Instant::now();
+        let result = timeout(
+            deadline,
+            http.interaction(self.interaction.application_id)
+                .create_response(self.interaction.id, &self.interaction.token, &response),
         )
+        .await;
+        if matches!(result, Ok(Ok(_))) {
+            tracing::info!(
+                guild = self.interaction.guild_id.map(|id| id.get()),
+                interaction = self.interaction.id.get(),
+                elapsed_ms = started.elapsed().as_millis() as u64,
+                "Interaction acknowledged"
+            );
+            return true;
+        }
+        // A lost/slow HTTP response does not imply Discord rejected the defer.
+        // Verify the original response before dropping an accepted command.
+        let ambiguous = match &result {
+            Err(_) => true,
+            Ok(Err(error)) => recoverable_ack_error(error),
+            _ => false,
+        };
+        if ambiguous
+            && matches!(
+                timeout(Duration::from_secs(1), async {
+                    http.interaction(self.interaction.application_id)
+                        .response(&self.interaction.token)
+                        .await?
+                        .bytes()
+                        .await
+                        .map_err(anyhow::Error::from)
+                })
+                .await,
+                Ok(Ok(_))
+            )
+        {
+            tracing::warn!(
+                guild = self.interaction.guild_id.map(|id| id.get()),
+                interaction = self.interaction.id.get(),
+                "Recovered accepted interaction after acknowledgement response failure"
+            );
+            return true;
+        }
+        match result {
+            Ok(Err(error)) => self.log_error("acknowledge", &error.into()),
+            Err(error) => self.log_error("acknowledge", &error.into()),
+            _ => {}
+        }
+        false
     }
     /// Reject before deferring, so admission failures stay private and never edit a panel.
     pub async fn reject(&self, http: &Client, text: &str) {
@@ -143,16 +192,63 @@ impl Request {
         .await;
     }
     pub async fn respond(&self, http: &Client, view: View) -> Result<Message> {
-        let response = timeout(
-            Duration::from_secs(8),
+        self.respond_with_deadline(http, view, Duration::from_secs(8))
+            .await
+    }
+    async fn respond_with_deadline(
+        &self,
+        http: &Client,
+        view: View,
+        deadline: Duration,
+    ) -> Result<Message> {
+        let result = timeout(deadline, async {
             http.interaction(self.interaction.application_id)
                 .update_response(&self.interaction.token)
                 .content(view.content.as_deref())
                 .embeds(Some(&view.embeds))
-                .components(Some(&view.components)),
-        )
-        .await??;
-        Ok(response.model().await?)
+                .components(Some(&view.components))
+                .await?
+                .model()
+                .await
+                .map_err(anyhow::Error::from)
+        })
+        .await
+        .map_err(anyhow::Error::from)
+        .and_then(|result| result);
+        if let Err(error) = &result {
+            self.log_error("respond", error);
+        } else {
+            tracing::info!(
+                guild = self.interaction.guild_id.map(|id| id.get()),
+                interaction = self.interaction.id.get(),
+                "Interaction response completed"
+            );
+        }
+        result
+    }
+    fn log_error(&self, operation: &'static str, error: &anyhow::Error) {
+        // Never format HTTP errors: their bodies/URLs may contain credentials.
+        let (kind, status, code) = error
+            .downcast_ref::<twilight_http::Error>()
+            .map(http_error_summary)
+            .unwrap_or((
+                if error.is::<tokio::time::error::Elapsed>() {
+                    "timeout"
+                } else {
+                    "decode"
+                },
+                None,
+                None,
+            ));
+        tracing::warn!(
+            guild = self.interaction.guild_id.map(|id| id.get()),
+            interaction = self.interaction.id.get(),
+            operation,
+            kind,
+            status,
+            code,
+            "Discord interaction response failed"
+        );
     }
     /// Edit a deferred player component through the same channel route as its
     /// periodic refresh. Mixing webhook and channel edits allowed Discord to
@@ -188,9 +284,45 @@ impl Request {
             )
             .await;
         } else {
-            let _ = self.respond(http, View::text(text)).await;
+            if let Err(error) = self.respond(http, View::text(text)).await
+                && transient_response_error(&error)
+            {
+                // Editing the original is idempotent; one bounded retry also
+                // clears a defer whose successful HTTP response was lost.
+                let _ = self.respond(http, View::text(text)).await;
+            }
         }
     }
+}
+fn http_error_summary(error: &twilight_http::Error) -> (&'static str, Option<u16>, Option<u64>) {
+    use twilight_http::{api_error::ApiError, error::ErrorType};
+    match error.kind() {
+        ErrorType::Response { status, error, .. } => (
+            "http",
+            Some(status.get()),
+            match error {
+                ApiError::General(error) => Some(error.code),
+                _ => None,
+            },
+        ),
+        ErrorType::Parsing { .. } => ("decode", None, None),
+        ErrorType::Validation => ("validation", None, None),
+        ErrorType::Unauthorized => ("unauthorized", None, None),
+        _ => ("transport", None, None),
+    }
+}
+fn recoverable_ack_error(error: &twilight_http::Error) -> bool {
+    let (kind, status, code) = http_error_summary(error);
+    kind == "transport" || status.is_some_and(|s| s >= 500) || code == Some(40060)
+}
+fn transient_response_error(error: &anyhow::Error) -> bool {
+    error.is::<tokio::time::error::Elapsed>()
+        || error
+            .downcast_ref::<twilight_http::Error>()
+            .is_some_and(|error| {
+                let (kind, status, _) = http_error_summary(error);
+                kind == "transport" || status.is_some_and(|s| s >= 500)
+            })
 }
 pub fn no_mentions() -> AllowedMentions {
     AllowedMentions {
@@ -198,5 +330,108 @@ pub fn no_mentions() -> AllowedMentions {
         replied_user: false,
         roles: vec![],
         users: vec![],
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use axum::{
+        Router,
+        http::{Method, StatusCode},
+    };
+    use serde_json::json;
+    use std::sync::atomic::{AtomicUsize, Ordering};
+
+    fn request() -> Request {
+        Request::new(Arc::new(serde_json::from_value(json!({
+            "id":"100","application_id":"9","type":2,"token":"fixture-only","version":1,
+            "guild_id":"1","channel":{"id":"10","type":0},"authorizing_integration_owners":{},"entitlements":[],
+            "member":{"flags":0,"deaf":false,"mute":false,"roles":[],"user":{"id":"2","username":"listener","discriminator":"0001"}},
+            "data":{"id":"30","name":"play","type":1,"options":[]}
+        })).unwrap()))
+    }
+    async fn fixture(router: Router) -> (Client, tokio::task::JoinHandle<()>) {
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let address = listener.local_addr().unwrap();
+        let server = tokio::spawn(async move { axum::serve(listener, router).await.unwrap() });
+        (
+            Client::builder()
+                .token("fixture".into())
+                .proxy(address.to_string(), true)
+                .ratelimiter(None)
+                .build(),
+            server,
+        )
+    }
+    #[tokio::test]
+    async fn acknowledgement_checks_acceptance_when_http_response_is_lost() {
+        for accepted in [true, false] {
+            let calls = Arc::new(AtomicUsize::new(0));
+            let observed = calls.clone();
+            let router = Router::new().fallback(move |method: Method| {
+                let calls = observed.clone();
+                async move {
+                    calls.fetch_add(1, Ordering::Relaxed);
+                    if method == Method::POST {
+                        // Discord created the defer, but its HTTP reply is slow.
+                        tokio::time::sleep(Duration::from_millis(100)).await;
+                        (StatusCode::NO_CONTENT, axum::Json(json!(null)))
+                    } else if accepted {
+                        (StatusCode::OK, axum::Json(json!({"flags":128})))
+                    } else {
+                        (
+                            StatusCode::NOT_FOUND,
+                            axum::Json(json!({"code":10015,"message":"Unknown Webhook"})),
+                        )
+                    }
+                }
+            });
+            let (http, server) = fixture(router).await;
+            assert_eq!(
+                request()
+                    .acknowledge_with_deadline(&http, Duration::from_millis(50))
+                    .await,
+                accepted
+            );
+            assert_eq!(calls.load(Ordering::Relaxed), 2);
+            server.abort();
+            let _ = server.await;
+        }
+    }
+    #[tokio::test]
+    async fn terminal_acknowledgement_errors_do_not_execute_a_command() {
+        let calls = Arc::new(AtomicUsize::new(0));
+        let observed = calls.clone();
+        let router = Router::new().fallback(move || {
+            observed.fetch_add(1, Ordering::Relaxed);
+            async {
+                (
+                    StatusCode::NOT_FOUND,
+                    axum::Json(json!({"code":10062,"message":"Unknown interaction"})),
+                )
+            }
+        });
+        let (http, server) = fixture(router).await;
+        assert!(!request().acknowledge(&http).await);
+        assert_eq!(calls.load(Ordering::Relaxed), 1);
+        server.abort();
+        let _ = server.await;
+    }
+    #[tokio::test]
+    async fn response_body_is_included_in_the_completion_deadline() {
+        let router = Router::new().fallback(|| async {
+            let chunks = futures_util::stream::once(async { Ok::<_, std::io::Error>("{") });
+            let stalled = futures_util::stream::pending::<Result<&str, std::io::Error>>();
+            use futures_util::StreamExt;
+            axum::body::Body::from_stream(chunks.chain(stalled))
+        });
+        let (http, server) = fixture(router).await;
+        let result = request()
+            .respond_with_deadline(&http, View::text("fixture"), Duration::from_millis(50))
+            .await;
+        assert!(result.unwrap_err().is::<tokio::time::error::Elapsed>());
+        server.abort();
+        let _ = server.await;
     }
 }
