@@ -113,3 +113,38 @@ Evidence: `progressive-buffering-20261002/baseline/`. Optional diagnostics are
 the existing bounded Oto header/timing trace, one-second procfs samples and
 aggregated receiver statistics, never payload interception or stored PCM.
 Both clocks report NTP synchronized; exact inter-host offset remains unmeasured.
+
+## Deployed candidate and pending live measurement
+
+Raydio `80f4ec627181171d224d5d3389cd2a86c553c578` was atomically deployed on
+Oracle at 23:26 UTC, with successful offline backend and Discord readiness checks,
+no automatic restarts, and the previous `bc6131d` release retained for rollback.
+The startup log confirms a 262,144-byte prefix and 16,777,216-byte cache ceiling.
+The native package is 7.3 MiB. Testbot remains stopped.
+
+The controlled receiver is signed in and joined to General. The user has been
+asked to submit the same URL and enable Loop; no automated command entry is used.
+A bounded visible-panel observer will start the five-minute audit only when the
+fresh matching player is playing with Loop ON. It clears its polling timer before
+recording. A one-shot verifier then checks that the actual advancing report was
+persisted and collector lifetime is sufficient. No live improvement is claimed yet.
+
+Candidate collection locations (not completed results):
+
+- Receiver/checkpoints/manifest: `/tmp/raydio-progressive-candidate-20261002/`.
+- Oracle host samples: `/var/lib/raydio/progressive-candidate-20261002/resources.jsonl`.
+- Receiver unit: `raydio-progressive-candidate-receiver-20261002.service` (user).
+- Oracle host unit: `raydio-progressive-candidate-host-20261002.service`.
+- Browser: `raydioEndurance`, `raydioCheckpoint`, `raydioProgressiveQualification`.
+
+Both host samplers are bounded to 30 minutes at one-second resolution. The
+playback observer expires after 20 minutes, leaving sufficient recording time.
+If playback is requested later, prepare new uniquely named collectors and rearm
+the observer rather than treating the expired setup as a completed test. Preserve
+and inspect the final report, actual persistence verification, coverage and host
+identity. Collect the safe service log from 23:26:20 UTC through recording end,
+then summarize/correlate using the saved source reference. Stop the checkpoint
+timer and samplers after collection; remove the temporary diagnostic override
+`/run/systemd/system/raydio.service.d/progressive-diagnostics.conf`. Removing the
+override only changes future starts; the current process's trace stays enabled
+until a subsequent normal restart. Do not restart during measurement.
