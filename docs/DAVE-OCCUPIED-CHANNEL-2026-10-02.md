@@ -85,14 +85,39 @@ revision.
 
 Raydio's complete locked test suite passed: 54 library tests, its main test,
 backend and reconnect integration tests, and doc tests. All-target Clippy passed
-with warnings denied, formatting and the release build passed, and the manifest/lock diff contains
-only the dependency alignment. The resolved graph contains one Oto, Davey and
+with warnings denied. Formatting and the release build passed, and the
+manifest/lock diff contains only the dependency alignment. The resolved graph
+contains one Oto, Davey and
 crypto backend revision, including the production adapter, rather than retaining
 the older duplicate test dependency.
 
 ## Deployment and live follow-up
 
-Oracle activation and live playback validation are pending. The live follow-up uses
-test or Romanvs only. A successful ordinary test-server join confirms deployment
-and playback, but does not by itself reproduce the historical THE CLUB control
+Release `5e39ef78acc477b27367532f10840a22d76e95f2` was pushed, packaged,
+and activated on the existing Oracle VM at 19:06:26 UTC. Package and remote
+backend checks passed, Discord readiness completed, and the service is active
+with no automatic restarts. The local and deployed binary SHA-256 match:
+`914ceb2bfdec6bc6f30a6a9b04aba6844086494480c84a1be37dd8eeecb4d112`.
+Testbot remains inactive, and the existing home-egress tunnel and Companion
+services remain active.
+
+The user submitted `/play` in test → #chat while joined to General. Interaction
+`1555657479105417396` was received at 19:07:25 UTC, acknowledged in 565 ms,
+admitted, and resolved successfully in 1483 ms. The DAVE exchange processed
+external sender (25), proposals (27), and Commit (29, transition zero), becoming
+ready at protocol version 1. The Web media handoff warning recovered through
+the existing fallback. At 19:07:52 UTC the reply completed and the track started.
+The browser showed Raydio in General, playing Akcent's “Stay With Me” at volume
+70 with advancing progress; the user enabled Loop.
+
+The short playback observation continued past five minutes. The natural finish
+at 19:12:00 UTC started generation 2 without a new source load. The 19:14:28 UTC
+checkpoint showed 19,860 sent frames, zero unavailable or silence frames, zero
+skipped deadlines, send failures or source overruns, and zero active send gaps
+over 40 ms. Voice remained connected with no DAVE failure or service restart.
+This is sender/lifecycle evidence; no fresh receiver packet-loss or perceptual
+audio measurement is inferred from the Discord player display.
+
+The live follow-up uses test or Romanvs only. A successful ordinary test-server
+join confirms deployment and playback, but does not reproduce the historical THE CLUB control
 sequence; the generated MLS and gateway regressions validate that protocol path.
