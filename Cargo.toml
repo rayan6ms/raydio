@@ -23,14 +23,14 @@ twilight-gateway = { version = "0.17.1", default-features = false, features = ["
 twilight-http = { version = "0.17.1", default-features = false, features = ["rustls-native-roots"] }
 twilight-model = "0.17.1"
 url = "2.5.8"
-crust = { git = "https://github.com/rayan6ms/crust", rev = "5ca95fd" }
-crust-server = { git = "https://github.com/rayan6ms/crust", rev = "5ca95fd" }
-crust-mantle-adapter = { git = "https://github.com/rayan6ms/crust", rev = "5ca95fd" }
-crust-oto-adapter = { git = "https://github.com/rayan6ms/crust", rev = "5ca95fd" }
+crust = { git = "https://github.com/rayan6ms/crust", rev = "666313d2e4597f143ff3e77c412a67f25881726b" }
+crust-server = { git = "https://github.com/rayan6ms/crust", rev = "666313d2e4597f143ff3e77c412a67f25881726b" }
+crust-mantle-adapter = { git = "https://github.com/rayan6ms/crust", rev = "666313d2e4597f143ff3e77c412a67f25881726b" }
+crust-oto-adapter = { git = "https://github.com/rayan6ms/crust", rev = "666313d2e4597f143ff3e77c412a67f25881726b" }
 mantle-media = { git = "https://github.com/rayan6ms/mantle", rev = "3b23f30" }
 
 [patch.crates-io]
-openmls_rust_crypto = { git = "https://github.com/rayan6ms/oto", rev = "e205f9a3f44be36fab2fa3cd48ef113cbb0f4d1f" }
+openmls_rust_crypto = { git = "https://github.com/rayan6ms/oto", rev = "62d2fc87e5dc239695a8b86a7372a4edc1caa933" }
 
 
 [profile.dev]
@@ -46,8 +46,8 @@ opt-level = "s"
 # dominate resident executable pages on small Oracle instances.
 
 [dev-dependencies]
-crust-testkit = { git = "https://github.com/rayan6ms/crust", rev = "5ca95fd" }
+crust-testkit = { git = "https://github.com/rayan6ms/crust", rev = "666313d2e4597f143ff3e77c412a67f25881726b" }
 axum = { version = "0.8.4", features = ["ws"] }
-oto = { git = "https://github.com/rayan6ms/oto", rev = "e205f9a3f44be36fab2fa3cd48ef113cbb0f4d1f" }
+oto = { git = "https://github.com/rayan6ms/oto", rev = "62d2fc87e5dc239695a8b86a7372a4edc1caa933" }
 mantle-core = { git = "https://github.com/rayan6ms/mantle", rev = "3b23f30" }
 mantle-media = { git = "https://github.com/rayan6ms/mantle", rev = "3b23f30" }
