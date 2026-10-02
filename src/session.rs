@@ -903,7 +903,7 @@ impl GuildSession {
                 request
                     .error(
                         &self.shared.http,
-                        "I joined, but Lavalink could not start that track.",
+                        "I joined, but Raydio could not start that track.",
                     )
                     .await;
                 return;
