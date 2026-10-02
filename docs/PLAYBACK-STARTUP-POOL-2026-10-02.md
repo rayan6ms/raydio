@@ -76,9 +76,9 @@ Mantle's full media suite and all-target Clippy with warnings denied pass, with
 existing live/process/environment exclusions unchanged. Regressions cover
 transport-policy mismatch, routed pooling exclusion, cancellation, exact bytes,
 incomplete-body recovery, stale metadata, changed identity, and real Opus/AAC
-replay. Deployment and a fresh user-submitted command are required to report
-whether total startup is below five seconds. No new six-hour or receiver result
-is inferred from these transport checks.
+replay. The deployed fresh-command and receiver results are reported separately
+below. Neither source-only transport checks nor a short live observation
+establish six-hour reliability.
 
 Published dependency pins: Mantle
 `775d64f85912bfcf96814ff404144300f34cb635`, Crust
@@ -91,6 +91,109 @@ and Oto's `62d2fc87e5dc239695a8b86a7372a4edc1caa933` correction.
 The bounded release build and backend self-check pass. The controlled browser
 is signed in to test → General, muted and undeafened. The existing receiver
 observer is installed before voice creation; its peer reports Connected. A
-one-hour, 96 MiB/10% CPU bounded loopback collector saves the five-minute audit
-independently of agent turns. Browser-to-collector health returns HTTP 200.
-Full persistence is verified again once a real advancing audit starts.
+one-hour, 96 MiB/10% CPU bounded loopback collector saved the five-minute audit
+independently of agent turns. Browser-to-collector health returned HTTP 200;
+full persistence was verified against the actual advancing report.
+
+## Deployment
+
+Raydio release `bc6131dabfe01ce30554f7013d9d3eeffb40f326` was published,
+packaged and activated on the existing Oracle VM at 21:38:52 UTC. Package and
+remote backend self-checks passed; the deployed binary SHA-256 matches the tested
+build: `465d47a048805aadbcfc357fc7ce59ced51a3e495b64ecf056ea74dd22ccae88`.
+The service reports Connected to Discord, active, zero automatic restarts.
+The previous release remains available for rollback. No download probes,
+compilers, restart or playback controls ran during the live observation.
+
+## Fresh live startup
+
+The user submitted the same Akcent URL and enabled Loop, then reported that it
+was “way better now”. Interaction `1555695742469935267` was received at
+21:39:28.579699 UTC. Metadata resolution took 153 ms, acknowledgement 403 ms,
+and DAVE was ready at 21:39:29.796658 UTC.
+
+| Measurement | Previous `5f23955` | Pooled `bc6131d` |
+| --- | ---: | ---: |
+| Command receipt → processing TrackStartEvent | 6.947476 s | 5.184758 s |
+| Source discovery | 133.638 ms | 113.050 ms |
+| Media response/opening and staging | 5637.977 ms | 3530.333 ms |
+| Total source preparation | 5771.615 ms | 3643.383 ms |
+| Failed media handoffs | 0 | 0 |
+
+The comparable logged startup improved **25.37%**. All 4,167,934 media bytes
+were staged at 21:39:33.427679 UTC, **4.848 seconds after command receipt**.
+Response setup took 894.214 ms and staging 2635.681 ms. The player-message
+response completed at 21:39:33.764364 UTC, immediately before the session
+processed its queued TrackStart event. That remaining ~336 ms includes Discord
+HTTP response work; changing only when this event is logged would not prove
+faster audio. No first-send trace or first-audible-frame timestamp was captured.
+Consequently **first audible playback below five seconds is not established**.
+
+These are uncontrolled live samples, not a latency guarantee or isolated causal
+estimate. The first media request after activation has no pooled media socket;
+CDN/cache/network variation can contribute to its improvement. Controlled
+keep-alive regressions establish the connection-reuse fix independently.
+
+## Five-minute receiver check
+
+The measured interval was 21:40:20.851–21:45:20.925 UTC, after playback had
+started. It contains 299.999 seconds of receiver counters and 300.011 seconds
+of PCM aggregates. Poll, PCM, event, track-phase and speaking-indicator coverage
+are complete; the connection remained uninterrupted. Persistence was verified
+while the report advanced, and the final report was saved successfully.
+
+| Receiver measurement | Result |
+| --- | ---: |
+| Received packets | 14,975 |
+| Net packet loss | 0 |
+| Positive loss / subsequent negative corrections | 3 / −3 |
+| Discarded packets / NACKs | 7 / 17 |
+| Concealed audio | 1177.833 ms (0.393% of observation) |
+| Silent concealed audio | 41.042 ms |
+| PCM empty frames / nonfinite samples / clipping-threshold hits | 0 / 0 / 0 |
+| Receiver long tasks / stale polls / missing PCM reports | 0 / 0 / 0 |
+| Maximum sampled jitter | 9 ms |
+
+Zero net loss does **not** imply every packet met its playout deadline. Retain
+concealment, discards and transient loss in the assessment. The receiver had one
+37.938 ms quiet interval in the middle of the track, overlapping concealment;
+no off-boundary quiet interval reached 100 ms. A single receiver and this short
+window cannot isolate a network hop or establish six-hour reliability. There is
+no matched prior receiver window for a causal audio-quality comparison.
+
+The longest quiet interval, **2258.063 ms**, ends at the natural Loop transition.
+After the receiver test completed, an independent decode fetched the same
+source bytes: its SHA-256 matches the predeployment source digest. At the same
+1e−5 stereo quiet threshold and volume 0.7, the source has **1931.792 ms of quiet
+tail and 265.188 ms of quiet head**, totaling **2196.979 ms**. The receiver differs
+by 61.083 ms, within the classifier's 100 ms tolerance. Finish/start processing
+was 1.409 ms apart. This is a source-tail candidate with no overlapping receiver
+anomaly, rather than an unexplained 2.26-second interruption; it remains in the
+raw measurements. Source/receiver waveform alignment is not claimed.
+
+Sender checkpoints within the interval span 21:40:30.085–21:44:30.085 UTC,
+leaving 9.234 seconds at the head and 50.765 at the tail uncovered by interior
+counter subtraction. They record zero unavailable/silence frames, source
+overruns, send failures or DAVE failure; nine gaps exceed 40 ms, none exceed
+100 ms, and 13 deadlines were skipped. The next checkpoint, **9.161 seconds
+after receiver coverage ended**, has 11 cumulative gaps over 40 ms, 17 skipped
+deadlines and a maximum gap of 61.277 ms, with the same zero-failure counters.
+Do not present that later checkpoint as an exact receiver-window delta.
+
+Receiver-host snapshots and checkpoint archives cover the observation, with no
+archive gaps or sampler errors. Sender-host resources were **not** sampled
+during it; the summary explicitly warns about missing sender-host coverage.
+A single post-observation sample at 21:49:47 UTC has PSS **16,739 KiB
+(16.35 MiB)** and RSS **19,328 KiB**. This is not a memory improvement or leak
+measurement. No bitrate, codec, DSP, pacing, worker or staging policy changed.
+
+Evidence is in [pool-receiver/summary.json](playback-startup-20261002/pool-receiver/summary.json),
+its raw report/archives, allowlisted credential-free `service.log`, and
+`source-reference.json`. Startup history is in
+[comparison.json](playback-startup-20261002/comparison.json).
+The temporary browser checkpoint timer and local collector were stopped after
+the completed report persisted. Normal Raydio and home-egress services remain
+running; Testbot remains inactive. Retain this deployment: startup is shorter,
+exact source packets are preserved in source-only tests, and the short live
+check verifies playback/Loop without a terminal failure. It does not prove
+artifact-free transmission or a guaranteed sub-five-second first audible frame.

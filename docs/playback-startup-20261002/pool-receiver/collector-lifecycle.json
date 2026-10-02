@@ -1,0 +1,12 @@
+{
+  "unit": "raydio-startup-receiver-20261002.service",
+  "startedUtc": "2026-10-02T21:36:08Z",
+  "finalReceiverSavedUtc": "2026-10-02T21:45:20.939487Z",
+  "manuallyStoppedUtc": "2026-10-02T21:46:16Z",
+  "exitStatus": 143,
+  "systemdResult": "exit-code",
+  "reason": "uv returned 128+SIGTERM when the completed temporary collector was deliberately stopped. This happened after final persistence, not during receiver coverage.",
+  "memoryPeakBytes": 68476928,
+  "cpuMs": 242,
+  "browserCheckpointErrors": 0
+}

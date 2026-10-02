@@ -48,17 +48,40 @@
       "handoffMs": 5637.976999,
       "preparationMs": 5771.615268,
       "failedHandoffs": 0
+    },
+    {
+      "revision": "bc6131dabfe01ce30554f7013d9d3eeffb40f326",
+      "change": "finalize completed HTTP bodies and safely reuse source HTTP connection pool",
+      "interaction": "1555695742469935267",
+      "receivedUtc": "2026-10-02T21:39:28.579699Z",
+      "startedUtc": "2026-10-02T21:39:33.764457Z",
+      "startupMs": 5184.758,
+      "input": "exact video URL",
+      "discoveryMs": 113.050207,
+      "handoffMs": 3530.332877,
+      "preparationMs": 3643.383495,
+      "failedHandoffs": 0,
+      "mediaOpenedUtc": "2026-10-02T21:39:33.427679Z",
+      "mediaOpenedAfterReceiptMs": 4847.98,
+      "sourcePreparedUtc": "2026-10-02T21:39:33.428100Z",
+      "sourcePreparedAfterReceiptMs": 4848.401,
+      "responseSetupMs": 894.214,
+      "completeStagingMs": 2635.681,
+      "firstAudibleAfterReceiptMs": null
     }
   ],
   "latestReductionPercent": {
-    "fromPrevious": 41.78707713056682,
-    "fromOriginal": 73.47027289417392
+    "fromPrevious": 25.372063178051995,
+    "fromOriginal": 80.20141201642889
   },
   "limitations": [
     "One live sample per revision; network and Companion/CDN caches were not controlled.",
     "Original sample used a search-result selection; subsequent samples used the exact video URL.",
     "Loop restart uses staged input and is not a fresh-request startup comparison.",
-    "Sender counters do not establish receiver packet loss or perceptual audio quality."
+    "Sender counters do not establish receiver packet loss or perceptual audio quality.",
+    "Media readiness is not first-sender-packet or first-audible-frame latency.",
+    "Net packet loss is zero in the latest short window, but discards/concealment remain; no artifact-free or causal quality claim.",
+    "Latest receiver window lacks in-window sender-host resource samples; post-observation PSS is not a memory-improvement measurement."
   ],
   "latestSenderCheck": {
     "observedUtc": "2026-10-02T20:31:13.046531Z",
@@ -75,6 +98,39 @@
     "maxSenderGapMs": 66.969998,
     "serviceRestarts": 0,
     "naturalLoopRestartUtc": "2026-10-02T20:29:27.692046Z",
-    "scope": "short sender and lifecycle observation; no receiver-loss or six-hour qualification"
+    "scope": "previous release short sender/lifecycle observation; retained historical evidence",
+    "revision": "5f239557667195dc58e994bd7b759ba00d4858f7"
+  },
+  "latestReceiverCheck": {
+    "summary": "pool-receiver/summary.json",
+    "scope": "five-minute receiver observation after playback start; no matched prior receiver control",
+    "completed": true,
+    "receiverSeconds": 299.9989758300781,
+    "netLostPackets": 0,
+    "concealedMs": 1177.8333333333333,
+    "silentConcealedMs": 41.041666666666664,
+    "discardedPackets": 7,
+    "clippingThresholdHits": 0,
+    "firstAudibleStartupMeasured": false,
+    "senderHostCoverageEstablished": false
+  },
+  "latestPooledSenderCheck": {
+    "inWindowCheckpointsFromUtc": "2026-10-02T21:40:30.085323Z",
+    "inWindowCheckpointsToUtc": "2026-10-02T21:44:30.084827Z",
+    "checkpointCounterDelta": {
+      "framesSent": 11981,
+      "silenceFrames": 0,
+      "unavailableFrames": 0,
+      "sourceOverruns": 0,
+      "sendFailures": 0,
+      "skippedDeadlines": 13,
+      "senderGapsOver40Ms": 9,
+      "senderGapsOver100Ms": 0
+    },
+    "nextCheckpointUtc": "2026-10-02T21:45:30.085590Z",
+    "nextCheckpointCumulativeGapsOver40Ms": 11,
+    "nextCheckpointMaximumGapMs": 61.277174,
+    "serviceRestarts": 0,
+    "scope": "interior minute checkpoints leave uncovered head and tail; following snapshot is after the receiver interval, not an exact interval delta"
   }
 }
