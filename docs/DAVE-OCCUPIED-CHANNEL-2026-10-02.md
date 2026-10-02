@@ -118,6 +118,14 @@ over 40 ms. Voice remained connected with no DAVE failure or service restart.
 This is sender/lifecycle evidence; no fresh receiver packet-loss or perceptual
 audio measurement is inferred from the Discord player display.
 
+Playback was left running during the subsequent startup investigation. At
+19:31:28 UTC the extended session showed 70,846 frames, seven send gaps over
+40 ms (maximum 61.981 ms), eleven skipped deadlines and no unavailable frames,
+source overruns, send failures or DAVE failure. Thus the clean five-minute
+window above must not be extrapolated to a gap-free longer run. The intentional
+19:32 deployment restart ended this observation; shutdown silence/unavailability
+counters are not a measurement of uninterrupted steady playback.
+
 The live follow-up uses test or Romanvs only. A successful ordinary test-server
 join confirms deployment and playback, but does not reproduce the historical THE CLUB control
 sequence; the generated MLS and gateway regressions validate that protocol path.
