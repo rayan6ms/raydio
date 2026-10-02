@@ -67,3 +67,33 @@ requests there should receive the relevant permission error instead of playback.
 
 Live testing is restricted to `test` and, if needed, `Romanvs 💪`. The user submits
 the playback commands; the controlled browser is used to inspect the result.
+
+## Deployment and live validation
+
+Release `acb277c1b1ad14b79ef2e0912ee57cb1ba9c022c` was pushed to
+`rewrite/rust-raydio` and deployed on the existing Oracle instance at 16:09 UTC.
+The deployed binary's SHA-256 matches the locally tested release. Raydio reported
+Discord readiness; Testbot remained inactive. All 54 library tests, the main
+test, backend and reconnect integration tests, and doc tests passed. Clippy across
+all targets passed with warnings denied.
+
+The user submitted a fresh playback request in `test → #chat` while connected
+to General. Interaction `1555613110176579707` was received at 16:11:07 UTC,
+acknowledged in 310 ms, admitted, and resolved successfully in 985 ms. The first
+Web media handoff returned `Source(InvalidResponse)`; the existing client fallback
+recovered. At 16:11:25 UTC the original reply completed and the backend reported
+the track started. The signed-in Discord UI showed Raydio in General and a
+progressing player for “Stay With Me” by Akcent - Topic at volume 70.
+
+This confirms successful playback and reply completion in the test server. The
+membership regression is covered by the fixture that explicitly omits bot roles;
+this live request does not establish the cause of the older THE CLUB incident.
+
+The user also tested `Romanvs 💪 → 🎵︱músicas` and confirmed normal search and
+playback in both servers. Romanvs interaction `1555613451597119620` was received
+at 16:12:28 UTC, acknowledged in 547 ms, and resolved in 1167 ms. Its Web media
+handoff also failed and recovered through the existing fallback; the reply
+completed and the track started at 16:12:45 UTC. The browser showed the official
+Akcent “Stay With Me” player progressing in Romanvs. Neither request produced
+an acknowledgement/reply error or a service restart. THE CLUB remained
+inspection-only throughout.
