@@ -117,6 +117,21 @@ The bounded release build and backend self-check also pass. Its binary SHA-256
 is `86e151e83187e4340711c5e3ceca5eb40dedfb627bb8c1a8303daf8fd6fa02d8`.
 Deployment will retain the previous release for rollback if readiness fails.
 
+## Companion correction deployment
+
+Release `03fad9e6db8782c322c9ac8eb494a29f3f4257da` was pushed, packaged and
+activated on Oracle at 19:58:32 UTC. Package and remote backend checks passed;
+the deployed binary hash matches the tested release above. Discord readiness
+completed, Raydio is active with zero automatic restarts, and Testbot is inactive.
+The same-video live measurement awaits the user's new command. No startup
+number for this additional fix is inferred from the regression alone.
+
+The last uninterrupted staging-only checkpoint at 19:57:37 UTC had 71,433 sent
+frames, 18 gaps over 40 ms (maximum unchanged at 76.858 ms), 28 skipped deadlines,
+zero unavailable/silence frames and no source/send/DAVE failure. The deliberate
+19:58:30 deployment shutdown added five unavailable/silence frames and a higher
+deadline count; those shutdown counters do not describe uninterrupted playback.
+
 The earlier staging-only build continued playing during this work. At
 19:46:37 UTC it had sent 38,435 frames with zero unavailable/silence frames,
 source overruns, send failures or DAVE failures. It had 17 sender gaps over
