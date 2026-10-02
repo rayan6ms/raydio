@@ -194,6 +194,15 @@ Registry versions and the fixed Oto revision are preserved.
 The bounded release build and backend self-check pass; binary SHA-256 is
 `9dc8d4854c84a87b4e2c459d176e0cead3a56bc016e7fcbf8ce577b1c1b177ad`.
 
+## Single-request deployment
+
+Release `5f239557667195dc58e994bd7b759ba00d4858f7` was pushed, packaged and
+activated on Oracle at 20:24:36 UTC. Package and remote backend checks passed,
+the deployed binary hash matches the tested build, and Discord readiness
+completed. Raydio is active with no automatic restarts, and Testbot is inactive.
+All local builds and transfer probes have completed before the next requested
+playback comparison. The user will submit the same video and enable Loop.
+
 The earlier staging-only build continued playing during this work. At
 19:46:37 UTC it had sent 38,435 frames with zero unavailable/silence frames,
 source overruns, send failures or DAVE failures. It had 17 sender gaps over
