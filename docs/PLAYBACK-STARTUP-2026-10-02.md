@@ -132,6 +132,68 @@ zero unavailable/silence frames and no source/send/DAVE failure. The deliberate
 19:58:30 deployment shutdown added five unavailable/silence frames and a higher
 deadline count; those shutdown counters do not describe uninterrupted playback.
 
+## Companion correction live comparison
+
+Interaction `1555670485457567855` was received at 19:59:06.849631 UTC and its
+TrackStart event was processed at 19:59:18.784225 UTC: **11,934.6 ms**. The user
+confirmed playback and Loop, but still considers the startup slow. Discovery
+took 198.279 ms, opening/staging took 10,454.705 ms and source preparation totaled
+10,652.984 ms. The first Web/Companion handoff succeeded with **zero failed
+handoffs**. Source metadata resolved in 216 ms; encrypted voice became ready
+about 1020 ms after command receipt. The double-decipher failure is removed,
+but one uncontrolled live sample cannot predict startup on every network.
+
+Natural finishes restarted at 20:03:28 and 20:07:37 UTC. At 20:07:07 UTC,
+23,449 frames had been sent with no unavailable/silence frames, source overruns,
+send failures or DAVE failure. Nine sender gaps exceeded 40 ms (maximum 58.962 ms),
+15 deadlines were skipped and none exceeded 100 ms. This is sender/lifecycle
+evidence, with no new receiver loss or subjective quality claim.
+
+## Further bottleneck: preliminary range request
+
+A bounded Oracle curl diagnostic through the configured home proxy selected
+the same itag-251, 142,217-bit/s, 4,167,934-byte source. With redirects followed,
+the 262,144-byte initial range took 1.775 seconds and its 3,905,790-byte remainder
+took 3.716 seconds (5.504 seconds overall, both HTTP 206). This is a transport
+probe, not an exact Rust-opening measurement; it demonstrates a material
+avoidable round trip. A first attempt that did not follow HTTP 302 downloaded
+no media and is excluded. Connection/CDN cache and external network variation
+were not controlled. Only safe timing/status/size fields were emitted.
+
+YouTube metadata already advertises the finite object's length. Mantle now uses
+that length for a single full range when the object fits the existing staging
+ceiling. Content-Range must confirm the exact length before bytes are accepted;
+invalid bounds fail before I/O, truncated bodies resume at the consumed offset,
+and changed identities fail closed. Files remain anonymous, the copy buffer
+remains 64 KiB, and complete staging still precedes playback. Missing lengths
+retain the initial probe; oversized objects retain windowed streaming.
+
+The new regression failed before the optimization: two requests / 70.886 ms.
+An isolated 4 MiB, 20 ms/request fixture comparison measured two requests /
+71.390 ms versus one request / 50.263 ms, about 29.6% less opening time. Exact
+bytes remain readable after the origin shuts down. Stale lengths, cancellation,
+recovery, oversized streaming and real Opus/AAC repeat regressions pass. The
+full Mantle media suite and all-target Clippy pass. Live deployment/comparison
+of this additional optimization is pending.
+
+The user set the fresh-playback target at about **five seconds or less**.
+Further same-source curl probes showed considerable variation: single full
+ranges took 15.263 and 9.017 seconds, both HTTP/1.1. A single/parallel/single
+sequence then took 6.144 / 5.535 / 5.081 seconds overall; the parallel transfer
+used two halves whose sizes summed to the original object. It did not beat both
+adjacent controls, so it provides no stable improvement worth adding here.
+These are transport diagnostics under uncontrolled network/CDN conditions;
+they are not bot startup results or audio qualification. The candidate keeps
+single-request staging, and the five-second target remains to be measured.
+
+Mantle `601eea7a372b54026beb5646004efd6662969d3c` and Crust
+`40ca9e9a8f455703badfd0c882a3830476be384c` are published. Crust's 32 adapter
+tests and all-target Clippy pass, with its two existing manual benchmarks excluded.
+Raydio's locked suite, all-target Clippy and formatting pass with this graph.
+Registry versions and the fixed Oto revision are preserved.
+The bounded release build and backend self-check pass; binary SHA-256 is
+`9dc8d4854c84a87b4e2c459d176e0cead3a56bc016e7fcbf8ce577b1c1b177ad`.
+
 The earlier staging-only build continued playing during this work. At
 19:46:37 UTC it had sent 38,435 frames with zero unavailable/silence frames,
 source overruns, send failures or DAVE failures. It had 17 sender gaps over
