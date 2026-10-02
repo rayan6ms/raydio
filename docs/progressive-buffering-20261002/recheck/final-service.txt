@@ -1,0 +1,6 @@
+MainPID=33541
+Result=success
+NRestarts=0
+MemoryCurrent=9560064
+ActiveState=active
+/opt/raydio/releases/80f4ec627181171d224d5d3389cd2a86c553c578

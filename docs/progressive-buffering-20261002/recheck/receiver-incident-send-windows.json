@@ -1,0 +1,20 @@
+[
+  {
+    "label": "short-delayed-reception",
+    "startUtc": "2026-10-02T23:40:11.439000+00:00",
+    "endUtc": "2026-10-02T23:40:14.439000+00:00",
+    "successfulSends": 150,
+    "maxSendGapMs": 20.81584930419922,
+    "sourceChanged": false,
+    "silencePackets": 0
+  },
+  {
+    "label": "ICE-disconnection",
+    "startUtc": "2026-10-02T23:41:11.439000+00:00",
+    "endUtc": "2026-10-02T23:41:28.439000+00:00",
+    "successfulSends": 850,
+    "maxSendGapMs": 31.91995620727539,
+    "sourceChanged": false,
+    "silencePackets": 0
+  }
+]

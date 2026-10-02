@@ -1,0 +1,33 @@
+{
+  "purpose": "second uninterrupted steady-state five-minute sample, no restart/control/source probe between samples",
+  "deploymentRevision": "80f4ec627181171d224d5d3389cd2a86c553c578",
+  "raydioSourceHead": "80f4ec627181171d224d5d3389cd2a86c553c578",
+  "mantleRevision": "7c7762ded1a984ca367c199f6bcfd68145babe91",
+  "crustRevision": "ebc863ad34e464f336fc8491f3b2bf14fc779b3f",
+  "otoRevision": "62d2fc87e5dc239695a8b86a7372a4edc1caa933",
+  "sourceVideoId": "4moWSMi1L_4",
+  "volume": 70,
+  "loop": true,
+  "progressiveBufferBytes": 262144,
+  "stagingMaxBytes": 16777216,
+  "hostIntervalSeconds": 1,
+  "sendTrace": "existing bounded Oto header and stage timings; no packet interposer",
+  "controlPolicy": "user submitted play+loop; no controls, builds or download probes during recording",
+  "clockChecksAtCollection": {
+    "local": "NTPSynchronized=yes",
+    "oracle": "NTPSynchronized=yes"
+  },
+  "limits": [
+    "NTP synchronized status is not a measurement of maximum clock offset.",
+    "Source reference was decoded earlier from the same finite source, not a new waveform recording.",
+    "Previous source reference is reused; this is not a newly captured decoded source waveform."
+  ],
+  "preparedAt": "2026-10-02T23:27:59Z",
+  "receiverStartPolicy": "explicit observer-only start after first complete recording; same continuing playback and Loop ON",
+  "productionPid": 33541,
+  "rollbackRevision": "bc6131dabfe01ce30554f7013d9d3eeffb40f326",
+  "packageBytes": 7644086,
+  "binaryBytes": 18805552,
+  "samplingPeriod": "steady-state recheck; not another fresh startup",
+  "journalProcessFilter": 33541
+}

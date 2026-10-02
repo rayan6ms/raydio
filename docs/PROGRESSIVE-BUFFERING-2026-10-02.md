@@ -102,7 +102,7 @@ smaps traversal remains at most once per ten seconds.
 
 ## Qualification
 
-The candidate needs the same user-submitted playback, five-minute untouched
+Qualification uses the same user-submitted playback, five-minute untouched
 receiver recording and sender/host timing collection. Compare command receipt
 to first send, prefix/completion phases, source waits, receiver loss/discards,
 concealment, PCM continuity and memory. Keep zero-prefix/full-stage rollback
@@ -114,37 +114,132 @@ the existing bounded Oto header/timing trace, one-second procfs samples and
 aggregated receiver statistics, never payload interception or stored PCM.
 Both clocks report NTP synchronized; exact inter-host offset remains unmeasured.
 
-## Deployed candidate and pending live measurement
+## Live Oracle comparison
 
-Raydio `80f4ec627181171d224d5d3389cd2a86c553c578` was atomically deployed on
-Oracle at 23:26 UTC, with successful offline backend and Discord readiness checks,
-no automatic restarts, and the previous `bc6131d` release retained for rollback.
-The startup log confirms a 262,144-byte prefix and 16,777,216-byte cache ceiling.
-The native package is 7.3 MiB. Testbot remains stopped.
+Raydio `80f4ec627181171d224d5d3389cd2a86c553c578` was atomically deployed
+with successful backend and Discord readiness checks. The unchanged baseline
+and candidate used the same public source, volume 70, Loop, Oto revision, audio
+worker, codec and pacing. The native package is 7.3 MiB. Testbot stayed stopped.
 
-The controlled receiver is signed in and joined to General. The user has been
-asked to submit the same URL and enable Loop; no automated command entry is used.
-A bounded visible-panel observer will start the five-minute audit only when the
-fresh matching player is playing with Loop ON. It clears its polling timer before
-recording. A one-shot verifier then checks that the actual advancing report was
-persisted and collector lifetime is sufficient. No live improvement is claimed yet.
+The first candidate recording completed from **23:30:58.693–23:35:58.694 UTC**.
+The observer started after the fresh matching player showed Playing and Loop ON;
+persistence verification checked the actual advancing report. Both sampler paths,
+receiver polls/PCM/events and sender traces cover the full five minutes. A second
+untouched sample ran from **23:38:27.439–23:43:27.441 UTC**, without a restart,
+source probe or playback control between samples. Its event/PCM coverage is
+complete, but its connection was not uninterrupted.
 
-Candidate collection locations (not completed results):
+| Measurement | Complete-stage baseline | Progressive candidate | Continuing-playback recheck |
+| --- | ---: | ---: | ---: |
+| Command → first successful send | 6.745446 s | **3.713194 s** | no fresh command |
+| Initial compressed buffering | 4715.639 ms | **279.813 ms** | already cached |
+| Media response setup | 967.694 ms | 1531.329 ms | no source reopen |
+| Received packets | 14,997 | 14,992 | 14,274 |
+| Net lost packets | 0 | 0 | -37 (corrections, not improvement) |
+| Positive / negative loss deltas | 0 / 0 | 1 / -1 | 27 / -64 |
+| Discards / NACKs | 2 / 9 | 3 / 17 | 41 / 25 |
+| Concealed audio | 79.6875 ms | **247.75 ms** | **15,649.958 ms** |
+| Silent concealed audio | 0 ms | 0 ms | **14,967.771 ms** |
+| Sender gaps ≥40 / ≥100 ms | 1 / 0 | 4 / 0 | 9 / 0 |
+| Largest in-window sender gap | 72.219 ms | 64.820 ms | 61.470 ms |
+| Playback PSS median | 16.194 MiB | 16.593 MiB | 16.679 MiB |
+| Bot CPU, one core equivalent | 4.148% | 3.851% | 3.818% |
+| Clipped / nonfinite samples | 0 / 0 | 0 / 0 | 0 / 0 |
 
-- Receiver/checkpoints/manifest: `/tmp/raydio-progressive-candidate-20261002/`.
-- Oracle host samples: `/var/lib/raydio/progressive-candidate-20261002/resources.jsonl`.
-- Receiver unit: `raydio-progressive-candidate-receiver-20261002.service` (user).
-- Oracle host unit: `raydio-progressive-candidate-host-20261002.service`.
-- Browser: `raydioEndurance`, `raydioCheckpoint`, `raydioProgressiveQualification`.
+Startup improves by **3.032252 s (44.95%)** in this single paired observation.
+The first successful send was at 23:30:49.125897 UTC; the owned downloader
+finished later at 23:30:52.972180 UTC, with every 4,167,934 source byte available
+and no failure. Thus playback began before the complete source was downloaded.
+Only the initial prefix wait was logged; source delivery did not stall afterward.
+Median playback PSS increases by about **0.398 MiB**, rather than decreasing.
+CPU figures are descriptive; the different host conditions preclude a causal
+CPU improvement claim. All comparison rows above retain the actual observations.
 
-Both host samplers are bounded to 30 minutes at one-second resolution. The
-playback observer expires after 20 minutes, leaving sufficient recording time.
-If playback is requested later, prepare new uniquely named collectors and rearm
-the observer rather than treating the expired setup as a completed test. Preserve
-and inspect the final report, actual persistence verification, coverage and host
-identity. Collect the safe service log from 23:26:20 UTC through recording end,
-then summarize/correlate using the saved source reference. Stop the checkpoint
-timer and samplers after collection; remove the temporary diagnostic override
-`/run/systemd/system/raydio.service.d/progressive-diagnostics.conf`. Removing the
-override only changes future starts; the current process's trace stays enabled
-until a subsequent normal restart. Do not restart during measurement.
+## Incident attribution and limits
+
+The first candidate's four sender gaps cluster at **23:33:42 UTC**. Source polls
+were 1 µs, with 39–46 ms wake lateness. The corresponding one-second host sample
+shows **24% CPU steal**. The downloader had exited roughly three minutes earlier.
+This points to host scheduling, not waiting for progressive source bytes. The
+cluster overlaps a 120.292 ms concealment poll. Smaller incidents without a
+≥40 ms sender gap remain downstream/client-path uncertainties. The first run
+has no silent concealment, clipping or off-boundary PCM quiet ≥100 ms.
+
+The recheck's nine gaps cluster around **23:40:02 UTC**, alongside **34.742% CPU
+steal**. Most delay lies in waking the sender; one record waits 38.681 ms for DAVE
+and another 38.282 ms for UDP completion. Encryption CPU remains microseconds,
+so these wall waits alone do not identify slow cryptography. Source polling stays
+at 1–21 µs, with no source underruns, source overruns or send failures. The bot's
+CPU usage also rises during those samples; steal identifies VM contention but
+is not, by itself, proof of the complete scheduling cause.
+
+A separate short receiver interruption at **23:40:12 UTC** reports 27 temporarily
+lost packets, corrected by -27 next poll, and a 130.313 ms quiet interval. In
+23:40:11.439–23:40:14.439 UTC the sender submitted **150 packets**, with a maximum
+20.816 ms interval and no silence packets. This is delayed reception beyond the
+sender's successful submission, not evidence of source starvation.
+
+The largest recheck interruption is **14,767.125 ms** off-boundary PCM quiet,
+ending around **23:41:27 UTC**. The browser reports ICE/connection disconnected
+at about 23:41:17 and reconnected around 23:41:27; zero incoming packets started
+before ICE declared the failure, consistent with its grace period. Oracle
+submitted **850 packets over 17 seconds** spanning this incident, with no source
+change, no silence packets, and a maximum 31.920 ms send interval. There was no
+receiver long task or missing PCM/poll coverage. This attributes the audible
+outage to a receiver connection failure beyond successful bot submission; it
+cannot distinguish the user's access network, Discord forwarding or another hop.
+The user was asked whether their home connection briefly interrupted. Negative
+loss corrections during recovery are retained, not presented as successful
+loss prevention. This recheck **fails uninterrupted receiver qualification**.
+
+All song-boundary quiet is retained. The first candidate has 2257.146 ms quiet
+matching the 2196.979 ms tail/head reference within the existing 100 ms tolerance,
+but an overlapping receiver discard keeps it classified as
+`boundary-quiet-with-overlapping-anomaly`. It is not counted as proved mid-song
+source failure or silently excluded. Both recheck natural boundaries match the
+reference without an overlapping anomaly. Its off-boundary quiet remains a
+failure and is explicitly reported.
+
+## Decision and diagnostic integrity
+
+Keep the bounded prefix for its demonstrated startup benefit and deterministic
+packet/timestamp preservation. This is **not a clean live no-degradation pass**:
+concealment/discards increased in the first run, and the recheck lost its receiver
+connection. The timing identifies scheduling and receiver-path problems rather
+than a reproduced cache defect. There is no evidence justifying a codec/bitrate,
+gain, pacing or buffer-capacity change from these samples. A clean repeated
+comparison under stable connectivity would be needed to claim unchanged live
+reception quality. Zero-prefix complete staging and the previous release remain
+available for comparison/rollback.
+
+The service logs are pinned to candidate process **33541**, not just the unit/time
+range: a unit-level query around deployment also includes the outgoing old
+process's final trace batch. Mixing it would corrupt first-send attribution and
+produce misleading missing-record counts. Candidate-only logs start with trace
+record 1 and show no missing, dropped, conflicting or reversed records, nor RTP
+sequence/timestamp jumps. Correlation retains missing coverage and cannot prove
+which downstream hop delayed or discarded packets.
+
+The candidate cgroup did not export throttle counters, so corresponding incident
+fields remain null rather than zero. The service's CPU quota is unlimited and
+its parent slice reports `max 100000`; these configuration observations are not
+a substitute for missing time-series counters. Both samplers retained their real
+one-second cadence, with memory traversal limited to once per ten seconds.
+
+Successful UDP submission is not first audibility. Only one fresh startup was
+measured per build, and response/network setup varied. The candidate receiver
+recording began after cache completion, so initial progressive delivery is
+covered by sender timing and deterministic gated-WebM tests, not receiver PCM.
+The source quiet reference comes from the earlier exact-byte decode, not a new
+waveform recording. Neither five-minute run proves six-hour reliability.
+
+Evidence is preserved in `progressive-buffering-20261002/candidate/` and
+`progressive-buffering-20261002/recheck/`, including raw final receiver reports,
+checkpoints/events/windows, sender/host traces, summaries, correlation and source
+reference. Credential/signed-URL scans passed before publication.
+
+After both recordings were saved, the checkpoint/host collectors stopped and the
+temporary trace override was removed. One normal restart disables the existing
+process's trace and ends looping test playback. Production remains on the tested
+progressive build, with Testbot stopped and the full-stage release retained for
+rollback. No restart or control occurred inside either measured window.

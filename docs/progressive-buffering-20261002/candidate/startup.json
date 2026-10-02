@@ -1,0 +1,36 @@
+{
+  "commandUtc": "2026-10-02T23:30:45.412703+00:00",
+  "firstSuccessfulSendUtc": "2026-10-02T23:30:49.125897+00:00",
+  "commandToFirstSendSeconds": 3.713193893432617,
+  "baselineCommandToFirstSendSeconds": 6.745446,
+  "differenceSeconds": 3.032252106567383,
+  "reductionPercent": 44.95258143890534,
+  "firstSendRecord": [
+    1,
+    743,
+    1,
+    1,
+    8567,
+    915811698,
+    37272,
+    false,
+    [
+      0,
+      0,
+      0,
+      624,
+      27,
+      21,
+      2,
+      18
+    ]
+  ],
+  "malformedTraceBatches": 0,
+  "receiverStartedAt": "2026-10-02T23:30:58.693Z",
+  "limitations": [
+    "Successful UDP submission is not first audibility.",
+    "One startup sample per build; response/network timing is variable.",
+    "The receiver recording began after the progressive cache completed; initial delivery is covered by sender trace, not receiver PCM."
+  ],
+  "journalProcessFilter": 33541
+}
