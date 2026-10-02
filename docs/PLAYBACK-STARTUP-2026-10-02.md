@@ -203,6 +203,43 @@ completed. Raydio is active with no automatic restarts, and Testbot is inactive.
 All local builds and transfer probes have completed before the next requested
 playback comparison. The user will submit the same video and enable Loop.
 
+## Single-request live result
+
+Interaction `1555677049618964520` was received at 20:25:11.796310 UTC; its
+TrackStart event was processed at 20:25:18.743786 UTC: **6,947.5 ms**. Discovery
+took 133.638 ms, opening/staging 5637.977 ms and total source preparation
+5771.615 ms, with zero failed handoffs. The user confirmed playback/Loop and
+described this startup as “kind of acceptable”. It remains above the requested
+five-second target.
+
+This observed startup is about **41.8% lower than 11,934.6 ms** on the preceding
+Companion-fixed build, and **73.5% lower than the original 26,187.5 ms** sample.
+Network/cache conditions were not controlled; these are measured live examples,
+not guaranteed latency or isolated causal effect sizes. The comparable
+timestamps and phase timings are preserved in
+[`playback-startup-20261002/comparison.json`](playback-startup-20261002/comparison.json).
+
+At 20:26:40 UTC, sampled playback RSS was 18,704 KiB and PSS 16,257 KiB; service
+cgroup memory was 8,536,064 bytes. These are different accounting measures and
+one sample, not a new memory improvement or leak claim. The source copy buffer
+remains 64 KiB and no persistent worker/queue was added.
+
+The final checkpoint at 20:31:13 UTC, about 5 minutes 54 seconds after TrackStart,
+shows 17,726 sent frames, zero unavailable/silence frames, source overruns, send
+failures or DAVE failure, and no service restart. The natural finish at
+20:29:27.690744 UTC started generation 2 at 20:29:27.692046 UTC without another
+network opening. There were **two sender gaps over 40 ms**, maximum 66.970 ms
+(the other 41.780 ms), three skipped deadlines and none over 100 ms. This is
+not a gap-free claim or a receiver packet-loss/perceptual measurement. The short
+check verifies normal source/voice/Loop operation; it does not qualify six-hour
+reliability. Raydio remains active on release `5f23955`, with Testbot inactive.
+
+Keep the measured improvement: the source and decoder behavior remain intact,
+startup is materially shorter, and the user considers this result acceptable.
+The five-second goal is not consistently established. Any further change should
+be justified by phase-specific timing and repeatable measurements under the
+required home egress, rather than extrapolating uncontrolled CDN timings.
+
 The earlier staging-only build continued playing during this work. At
 19:46:37 UTC it had sent 38,435 frames with zero unavailable/silence frames,
 source overruns, send failures or DAVE failures. It had 17 sender gaps over

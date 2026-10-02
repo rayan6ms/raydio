@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "scope": "First playback after bot activation on the existing Oracle instance",
+  "videoId": "4moWSMi1L_4",
+  "startupDefinition": "Command-receipt log to Raydio processing TrackStartEvent; not an exact receiver first-audible-frame measurement",
+  "targetMs": 5000,
+  "samples": [
+    {
+      "revision": "5e39ef78acc477b27367532f10840a22d76e95f2",
+      "change": "encrypted voice fix; original staging",
+      "interaction": "1555657479105417396",
+      "receivedUtc": "2026-10-02T19:07:25.888742Z",
+      "startedUtc": "2026-10-02T19:07:52.076256Z",
+      "startupMs": 26187.514,
+      "input": "selected search result"
+    },
+    {
+      "revision": "319e738a65d456043aa41ae9cca55740b686ec9e",
+      "change": "one staged remainder request after probe",
+      "interaction": "1555664060589281530",
+      "receivedUtc": "2026-10-02T19:33:34.983779Z",
+      "startedUtc": "2026-10-02T19:33:48.327052Z",
+      "startupMs": 13343.273,
+      "input": "exact video URL"
+    },
+    {
+      "revision": "03fad9e6db8782c322c9ac8eb494a29f3f4257da",
+      "change": "preserve resolved Companion URLs",
+      "interaction": "1555670485457567855",
+      "receivedUtc": "2026-10-02T19:59:06.849631Z",
+      "startedUtc": "2026-10-02T19:59:18.784225Z",
+      "startupMs": 11934.594,
+      "input": "exact video URL",
+      "discoveryMs": 198.278515,
+      "handoffMs": 10454.705259,
+      "preparationMs": 10652.984104,
+      "failedHandoffs": 0
+    },
+    {
+      "revision": "5f239557667195dc58e994bd7b759ba00d4858f7",
+      "change": "one validated full range using known metadata length",
+      "interaction": "1555677049618964520",
+      "receivedUtc": "2026-10-02T20:25:11.796310Z",
+      "startedUtc": "2026-10-02T20:25:18.743786Z",
+      "startupMs": 6947.476,
+      "input": "exact video URL",
+      "discoveryMs": 133.637979,
+      "handoffMs": 5637.976999,
+      "preparationMs": 5771.615268,
+      "failedHandoffs": 0
+    }
+  ],
+  "latestReductionPercent": {
+    "fromPrevious": 41.78707713056682,
+    "fromOriginal": 73.47027289417392
+  },
+  "limitations": [
+    "One live sample per revision; network and Companion/CDN caches were not controlled.",
+    "Original sample used a search-result selection; subsequent samples used the exact video URL.",
+    "Loop restart uses staged input and is not a fresh-request startup comparison.",
+    "Sender counters do not establish receiver packet loss or perceptual audio quality."
+  ],
+  "latestSenderCheck": {
+    "observedUtc": "2026-10-02T20:31:13.046531Z",
+    "secondsSinceTrackStart": 354.302745,
+    "framesSent": 17726,
+    "silenceFrames": 0,
+    "unavailableFrames": 0,
+    "sourceOverruns": 0,
+    "sendFailures": 0,
+    "daveFailure": null,
+    "skippedDeadlines": 3,
+    "senderGapsOver40Ms": 2,
+    "senderGapsOver100Ms": 0,
+    "maxSenderGapMs": 66.969998,
+    "serviceRestarts": 0,
+    "naturalLoopRestartUtc": "2026-10-02T20:29:27.692046Z",
+    "scope": "short sender and lifecycle observation; no receiver-loss or six-hour qualification"
+  }
+}
