@@ -87,10 +87,10 @@ async fn run() -> Result<()> {
     // Third-party HTTP/media debug logs may contain signed URLs. Keep those quiet.
     // The voice adapter emits only bounded, credential-free lifecycle summaries;
     // retain those counters so normal shutdowns can be correlated with playback.
-    // Only the source adapter's credential-free startup summary is also enabled.
+    // Enable only credential-free preparation and HTTP phase summaries.
     tracing_subscriber::fmt()
         .with_env_filter(format!(
-            "warn,raydio={level},crust_oto_adapter={level},crust_mantle_adapter::startup={level}"
+            "warn,raydio={level},crust_oto_adapter={level},crust_mantle_adapter::startup={level},mantle_media::startup={level}"
         ))
         .init();
     let cancel = CancellationToken::new();
