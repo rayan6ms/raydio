@@ -34,13 +34,16 @@ def host_snapshot(proc=Path('/proc')):
 
 
 class Collector:
-    def __init__(self, output, *, sample=host_snapshot, expires_at=None):
+    def __init__(self, output, *, sample=host_snapshot, expires_at=None, host_interval=60):
+        if not 1 <= host_interval <= 60:
+            raise ValueError('host interval must be 1..60 seconds')
         self.output = output
         self.sample = sample
         self.next_sample = 0
         self.host_samples = 0
         self.last_receiver = None
         self.expires_at = expires_at
+        self.host_interval = host_interval
         self.archive_run = None
         self.archived_sequence = 0
         self.archive_missing_events = 0
@@ -59,7 +62,7 @@ class Collector:
             f.write(json.dumps(row, separators=(',', ':')) + '\n')
         self.host_samples += 1
         # No catch-up burst after suspension or slow disk. Record the lateness.
-        self.next_sample = now + 60
+        self.next_sample = now + self.host_interval
 
     def save(self, data, size):
         if not isinstance(data, dict):
@@ -227,15 +230,19 @@ def main():
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--port', type=int, default=18766)
     p.add_argument('--seconds', type=int, default=25200)
+    p.add_argument('--host-interval', type=float, default=60,
+                   help='1..60 seconds; intervals below 60 require a short run (at most 30 minutes)')
     a = p.parse_args()
     if not 60 <= a.seconds <= 25200:
         p.error('seconds must be 60..25200')
+    if not 1 <= a.host_interval <= 60 or (a.host_interval < 60 and a.seconds > 1800):
+        p.error('host interval must be 1..60; faster sampling requires seconds <= 1800')
     # Each observation gets its own directory; never overwrite an earlier run.
     a.output.mkdir(parents=True, exist_ok=False, mode=0o700)
     os.chmod(a.output, 0o700)
     os.nice(19)
     started = time.monotonic()
-    collector = Collector(a.output, expires_at=started + a.seconds)
+    collector = Collector(a.output, expires_at=started + a.seconds, host_interval=a.host_interval)
     with Server(('127.0.0.1', a.port), handler_for(collector)) as server:
         server.timeout = 1
         while time.monotonic() - started < a.seconds:

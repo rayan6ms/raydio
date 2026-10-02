@@ -22,17 +22,28 @@ pub struct Backend {
 
 impl Backend {
     pub async fn start() -> Result<Self> {
-        // Copy small finite compressed tracks to an anonymous file before
-        // playback, so source HTTP stalls cannot interrupt their audio frames.
-        // One completed input per player is reused on a natural repeat.
+        // Cache finite compressed tracks in a bounded anonymous file. Start
+        // after a generous prefix, while the owned downloader fills the rest.
+        // The completed cache is reused on a natural repeat.
+        let prefix = progressive_buffer_bytes(
+            std::env::var("RAYDIO_PROGRESSIVE_BUFFER_KIB")
+                .ok()
+                .as_deref(),
+        )?;
         let media = Arc::new(RealMantleAdapter::with_options_and_authentication(
             RoutePlanner::disabled(),
             MantleAdapterOptions {
                 staging_max_bytes: 16 * 1024 * 1024,
+                progressive_buffer_bytes: prefix,
                 ..MantleAdapterOptions::default()
             },
             youtube_authentication()?,
         )?);
+        tracing::info!(
+            progressive_buffer_bytes = prefix,
+            staging_max_bytes = 16 * 1024 * 1024,
+            "finite source buffering configured"
+        );
         let mut voice = OtoVoiceBackend::with_defaults(100, 4)?;
         if std::env::var("RAYDIO_SEND_TRACE").as_deref() == Ok("1") {
             voice = voice.with_send_trace();
@@ -97,6 +108,18 @@ impl Backend {
     }
 }
 
+fn progressive_buffer_bytes(value: Option<&str>) -> Result<u64> {
+    let kib = value
+        .unwrap_or("256")
+        .parse::<u64>()
+        .context("RAYDIO_PROGRESSIVE_BUFFER_KIB must be 0 or an integer in 16..1024")?;
+    anyhow::ensure!(
+        kib == 0 || (16..=1024).contains(&kib),
+        "RAYDIO_PROGRESSIVE_BUFFER_KIB must be 0 or an integer in 16..1024"
+    );
+    Ok(kib * 1024)
+}
+
 fn youtube_authentication() -> Result<YoutubeAuthentication> {
     fn optional(name: &str) -> Option<String> {
         std::env::var(name).ok().filter(|value| !value.is_empty())
@@ -126,6 +149,25 @@ impl Drop for Backend {
         self.cancel.cancel();
         if let Some(task) = &self.task {
             task.abort();
+        }
+    }
+}
+
+#[cfg(test)]
+mod buffering_tests {
+    use super::progressive_buffer_bytes;
+
+    #[test]
+    fn prefix_is_bounded_and_complete_staging_remains_available() {
+        assert_eq!(progressive_buffer_bytes(None).unwrap(), 256 * 1024);
+        for kib in [0, 16, 256, 1024] {
+            assert_eq!(
+                progressive_buffer_bytes(Some(&kib.to_string())).unwrap(),
+                kib * 1024
+            );
+        }
+        for invalid in ["", "-1", "15", "1025", "18446744073709551615", "words"] {
+            assert!(progressive_buffer_bytes(Some(invalid)).is_err());
         }
     }
 }

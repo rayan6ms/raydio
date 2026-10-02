@@ -1,0 +1,2952 @@
+{
+  "receiverStatus": "completed",
+  "receiverSeconds": 299.99948291015625,
+  "trace": {
+    "streams": [
+      {
+        "epochUnixMicros": 1790979986517901,
+        "records": 18876,
+        "missingRecords": 0,
+        "ringDroppedRecords": 0,
+        "conflictingRecords": 0,
+        "sequenceJumps": 0,
+        "timestampJumps": 0,
+        "clockReversals": 0,
+        "maxGapMicros": 72219,
+        "gapsAtLeast40Ms": [
+          {
+            "unixMicros": 1790980301192313,
+            "gapMicros": 72219,
+            "beforeIndex": 15731,
+            "afterIndex": 15732,
+            "sourceChanged": false,
+            "includesSilencePacket": false,
+            "timingMicros": [
+              1,
+              54127,
+              2,
+              39,
+              15,
+              12,
+              7,
+              32
+            ]
+          },
+          {
+            "unixMicros": 1790980362292049,
+            "gapMicros": 57600,
+            "beforeIndex": 18784,
+            "afterIndex": 18785,
+            "sourceChanged": false,
+            "includesSilencePacket": false,
+            "timingMicros": [
+              1,
+              1283,
+              1,
+              38384,
+              13,
+              9,
+              6,
+              57
+            ]
+          },
+          {
+            "unixMicros": 1790980362492923,
+            "gapMicros": 59042,
+            "beforeIndex": 18791,
+            "afterIndex": 18792,
+            "sourceChanged": false,
+            "includesSilencePacket": false,
+            "timingMicros": [
+              1,
+              39863,
+              1,
+              918,
+              890,
+              89,
+              6,
+              41
+            ]
+          },
+          {
+            "unixMicros": 1790980362692629,
+            "gapMicros": 57928,
+            "beforeIndex": 18799,
+            "afterIndex": 18800,
+            "sourceChanged": false,
+            "includesSilencePacket": false,
+            "timingMicros": [
+              1,
+              1060,
+              1,
+              38589,
+              38500,
+              37978,
+              5,
+              45
+            ]
+          },
+          {
+            "unixMicros": 1790980363292111,
+            "gapMicros": 57472,
+            "beforeIndex": 18826,
+            "afterIndex": 18827,
+            "sourceChanged": false,
+            "includesSilencePacket": false,
+            "timingMicros": [
+              1,
+              38880,
+              1,
+              31,
+              12,
+              9,
+              6,
+              42
+            ]
+          },
+          {
+            "unixMicros": 1790980363392043,
+            "gapMicros": 58127,
+            "beforeIndex": 18829,
+            "afterIndex": 18830,
+            "sourceChanged": false,
+            "includesSilencePacket": false,
+            "timingMicros": [
+              1,
+              39820,
+              1,
+              37,
+              13,
+              10,
+              6,
+              62
+            ]
+          }
+        ],
+        "stageTimingMicros": {
+          "wakeLateness": {
+            "count": 18875,
+            "max": 54127,
+            "p50": 1534,
+            "p99": 2095
+          },
+          "sourcePoll": {
+            "count": 18875,
+            "max": 466,
+            "p50": 1,
+            "p99": 2
+          },
+          "daveRoundTrip": {
+            "count": 18875,
+            "max": 38589,
+            "p50": 37,
+            "p99": 87
+          },
+          "daveWorkWall": {
+            "count": 18875,
+            "max": 38500,
+            "p50": 13,
+            "p99": 38
+          },
+          "daveWorkCpu": {
+            "count": 18875,
+            "max": 37978,
+            "p50": 10,
+            "p99": 32
+          },
+          "transportCrypto": {
+            "count": 18875,
+            "max": 195,
+            "p50": 5,
+            "p99": 19
+          },
+          "udpWait": {
+            "count": 18875,
+            "max": 4032,
+            "p50": 41,
+            "p99": 88
+          }
+        },
+        "firstUnixMicros": 1790979986518100,
+        "lastUnixMicros": 1790980364312916
+      }
+    ],
+    "malformedBatches": 0,
+    "limitations": [
+      "Successful UDP submission is not confirmation of delivery.",
+      "Gaps include pauses/control/source transitions; correlate lifecycle and receiver events.",
+      "Clock anchor has sampling and cross-host synchronization uncertainty.",
+      "A missing final batch cannot be detected from this trace alone."
+    ]
+  },
+  "aligned": {
+    "packets": 14998,
+    "gapsAtLeast40Ms": [
+      {
+        "utc": "2026-10-02T22:31:41.192313+00:00",
+        "gapMs": 72.219,
+        "sourceChanged": false,
+        "includesSilence": false,
+        "timingMicros": [
+          1,
+          54127,
+          2,
+          39,
+          15,
+          12,
+          7,
+          32
+        ]
+      }
+    ],
+    "hostDeltas": [
+      {
+        "fromUtc": "2026-10-02T22:27:26.526036+00:00",
+        "toUtc": "2026-10-02T22:27:27.528044+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39909,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:27.528044+00:00",
+        "toUtc": "2026-10-02T22:27:28.529993+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 38889,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:28.529993+00:00",
+        "toUtc": "2026-10-02T22:27:29.531985+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 44321,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:29.531985+00:00",
+        "toUtc": "2026-10-02T22:27:30.533940+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39004,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:30.533940+00:00",
+        "toUtc": "2026-10-02T22:27:31.535902+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 41040,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:31.535902+00:00",
+        "toUtc": "2026-10-02T22:27:32.537879+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 45113,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:32.537879+00:00",
+        "toUtc": "2026-10-02T22:27:33.540887+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41508,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:33.540887+00:00",
+        "toUtc": "2026-10-02T22:27:34.542867+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 37855,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:34.542867+00:00",
+        "toUtc": "2026-10-02T22:27:35.544936+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 38338,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:35.544936+00:00",
+        "toUtc": "2026-10-02T22:27:36.546942+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 38180,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:36.546942+00:00",
+        "toUtc": "2026-10-02T22:27:37.549141+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 38322,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:37.549141+00:00",
+        "toUtc": "2026-10-02T22:27:38.551076+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39738,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:38.551076+00:00",
+        "toUtc": "2026-10-02T22:27:39.553042+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 38035,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:39.553042+00:00",
+        "toUtc": "2026-10-02T22:27:40.555051+00:00",
+        "stealPercent": 1.4851485148514851,
+        "throttledMicros": 0,
+        "botCpuMicros": 49796,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:40.555051+00:00",
+        "toUtc": "2026-10-02T22:27:41.557150+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40336,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:41.557150+00:00",
+        "toUtc": "2026-10-02T22:27:42.559201+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 42297,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:42.559201+00:00",
+        "toUtc": "2026-10-02T22:27:43.562326+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40667,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:43.562326+00:00",
+        "toUtc": "2026-10-02T22:27:44.564456+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 38934,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:44.564456+00:00",
+        "toUtc": "2026-10-02T22:27:45.566472+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42878,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:45.566472+00:00",
+        "toUtc": "2026-10-02T22:27:46.568437+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 40572,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:46.568437+00:00",
+        "toUtc": "2026-10-02T22:27:47.570559+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39416,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:47.570559+00:00",
+        "toUtc": "2026-10-02T22:27:48.572699+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 43446,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:48.572699+00:00",
+        "toUtc": "2026-10-02T22:27:49.574760+00:00",
+        "stealPercent": 0.9950248756218906,
+        "throttledMicros": 0,
+        "botCpuMicros": 46182,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:49.574760+00:00",
+        "toUtc": "2026-10-02T22:27:50.576762+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39608,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:50.576762+00:00",
+        "toUtc": "2026-10-02T22:27:51.578737+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39881,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:51.578737+00:00",
+        "toUtc": "2026-10-02T22:27:52.581256+00:00",
+        "stealPercent": 0.9950248756218906,
+        "throttledMicros": 0,
+        "botCpuMicros": 40854,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:52.581256+00:00",
+        "toUtc": "2026-10-02T22:27:53.584131+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39497,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:53.584131+00:00",
+        "toUtc": "2026-10-02T22:27:54.586136+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40312,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:54.586136+00:00",
+        "toUtc": "2026-10-02T22:27:55.588120+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40795,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:55.588120+00:00",
+        "toUtc": "2026-10-02T22:27:56.590106+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 44854,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:56.590106+00:00",
+        "toUtc": "2026-10-02T22:27:57.592259+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41581,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:57.592259+00:00",
+        "toUtc": "2026-10-02T22:27:58.594273+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41307,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:58.594273+00:00",
+        "toUtc": "2026-10-02T22:27:59.596367+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40468,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:27:59.596367+00:00",
+        "toUtc": "2026-10-02T22:28:00.598446+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 44110,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:00.598446+00:00",
+        "toUtc": "2026-10-02T22:28:01.600464+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 43985,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:01.600464+00:00",
+        "toUtc": "2026-10-02T22:28:02.602472+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 43319,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:02.602472+00:00",
+        "toUtc": "2026-10-02T22:28:03.605404+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40267,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:03.605404+00:00",
+        "toUtc": "2026-10-02T22:28:04.607388+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 46370,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:04.607388+00:00",
+        "toUtc": "2026-10-02T22:28:05.609395+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39378,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:05.609395+00:00",
+        "toUtc": "2026-10-02T22:28:06.611446+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 42943,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:06.611446+00:00",
+        "toUtc": "2026-10-02T22:28:07.613505+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39009,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:07.613505+00:00",
+        "toUtc": "2026-10-02T22:28:08.615540+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 39356,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:08.615540+00:00",
+        "toUtc": "2026-10-02T22:28:09.617606+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42277,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:09.617606+00:00",
+        "toUtc": "2026-10-02T22:28:10.619658+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 43780,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:10.619658+00:00",
+        "toUtc": "2026-10-02T22:28:11.622047+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41625,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:11.622047+00:00",
+        "toUtc": "2026-10-02T22:28:12.624034+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 41574,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:12.624034+00:00",
+        "toUtc": "2026-10-02T22:28:13.626926+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 43870,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:13.626926+00:00",
+        "toUtc": "2026-10-02T22:28:14.629068+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 41077,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:14.629068+00:00",
+        "toUtc": "2026-10-02T22:28:15.631094+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 54327,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:15.631094+00:00",
+        "toUtc": "2026-10-02T22:28:16.633087+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 42968,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:16.633087+00:00",
+        "toUtc": "2026-10-02T22:28:17.635116+00:00",
+        "stealPercent": 0.9900990099009901,
+        "throttledMicros": 0,
+        "botCpuMicros": 43139,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:17.635116+00:00",
+        "toUtc": "2026-10-02T22:28:18.637108+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42307,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:18.637108+00:00",
+        "toUtc": "2026-10-02T22:28:19.639135+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42943,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:19.639135+00:00",
+        "toUtc": "2026-10-02T22:28:20.641723+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 42131,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:20.641723+00:00",
+        "toUtc": "2026-10-02T22:28:21.643668+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41337,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:21.643668+00:00",
+        "toUtc": "2026-10-02T22:28:22.645616+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41397,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:22.645616+00:00",
+        "toUtc": "2026-10-02T22:28:23.648482+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40809,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:23.648482+00:00",
+        "toUtc": "2026-10-02T22:28:24.650495+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39493,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:24.650495+00:00",
+        "toUtc": "2026-10-02T22:28:25.652461+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 37372,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:25.652461+00:00",
+        "toUtc": "2026-10-02T22:28:26.654470+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 38313,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:26.654470+00:00",
+        "toUtc": "2026-10-02T22:28:27.656483+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40347,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:27.656483+00:00",
+        "toUtc": "2026-10-02T22:28:28.658496+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41129,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:28.658496+00:00",
+        "toUtc": "2026-10-02T22:28:29.662817+00:00",
+        "stealPercent": 0.9852216748768473,
+        "throttledMicros": 0,
+        "botCpuMicros": 40048,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:29.662817+00:00",
+        "toUtc": "2026-10-02T22:28:30.664787+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42767,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:30.664787+00:00",
+        "toUtc": "2026-10-02T22:28:31.666859+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 45056,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:31.666859+00:00",
+        "toUtc": "2026-10-02T22:28:32.668898+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41736,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:32.668898+00:00",
+        "toUtc": "2026-10-02T22:28:33.671776+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 44090,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:33.671776+00:00",
+        "toUtc": "2026-10-02T22:28:34.673790+00:00",
+        "stealPercent": 1.0050251256281406,
+        "throttledMicros": 0,
+        "botCpuMicros": 43467,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:34.673790+00:00",
+        "toUtc": "2026-10-02T22:28:35.675948+00:00",
+        "stealPercent": 0.49504950495049505,
+        "throttledMicros": 0,
+        "botCpuMicros": 40304,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:35.675948+00:00",
+        "toUtc": "2026-10-02T22:28:36.677938+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39711,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:36.677938+00:00",
+        "toUtc": "2026-10-02T22:28:37.679923+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41830,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:37.679923+00:00",
+        "toUtc": "2026-10-02T22:28:38.681866+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 41676,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:38.681866+00:00",
+        "toUtc": "2026-10-02T22:28:39.683867+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 43266,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:39.683867+00:00",
+        "toUtc": "2026-10-02T22:28:40.685881+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 41445,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:40.685881+00:00",
+        "toUtc": "2026-10-02T22:28:41.687836+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 38932,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:41.687836+00:00",
+        "toUtc": "2026-10-02T22:28:42.689804+00:00",
+        "stealPercent": 0.9950248756218906,
+        "throttledMicros": 0,
+        "botCpuMicros": 41050,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:42.689804+00:00",
+        "toUtc": "2026-10-02T22:28:43.692730+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39718,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:43.692730+00:00",
+        "toUtc": "2026-10-02T22:28:44.694739+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42140,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:44.694739+00:00",
+        "toUtc": "2026-10-02T22:28:45.696760+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 39568,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:45.696760+00:00",
+        "toUtc": "2026-10-02T22:28:46.698804+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41396,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:46.698804+00:00",
+        "toUtc": "2026-10-02T22:28:47.701395+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42834,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:47.701395+00:00",
+        "toUtc": "2026-10-02T22:28:48.703417+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 40865,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:48.703417+00:00",
+        "toUtc": "2026-10-02T22:28:49.705410+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 51341,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:49.705410+00:00",
+        "toUtc": "2026-10-02T22:28:50.707441+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 39236,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:50.707441+00:00",
+        "toUtc": "2026-10-02T22:28:51.709445+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 38710,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:51.709445+00:00",
+        "toUtc": "2026-10-02T22:28:52.711504+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39314,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:52.711504+00:00",
+        "toUtc": "2026-10-02T22:28:53.714426+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 38848,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:53.714426+00:00",
+        "toUtc": "2026-10-02T22:28:54.716463+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 45759,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:54.716463+00:00",
+        "toUtc": "2026-10-02T22:28:55.718578+00:00",
+        "stealPercent": 0.49504950495049505,
+        "throttledMicros": 0,
+        "botCpuMicros": 41723,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:55.718578+00:00",
+        "toUtc": "2026-10-02T22:28:56.720692+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41986,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:56.720692+00:00",
+        "toUtc": "2026-10-02T22:28:57.722705+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 41556,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:57.722705+00:00",
+        "toUtc": "2026-10-02T22:28:58.724703+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 40557,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:58.724703+00:00",
+        "toUtc": "2026-10-02T22:28:59.727337+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40106,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:28:59.727337+00:00",
+        "toUtc": "2026-10-02T22:29:00.729323+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 42093,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:00.729323+00:00",
+        "toUtc": "2026-10-02T22:29:01.731287+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39105,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:01.731287+00:00",
+        "toUtc": "2026-10-02T22:29:02.733327+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 38987,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:02.733327+00:00",
+        "toUtc": "2026-10-02T22:29:03.736223+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 38681,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:03.736223+00:00",
+        "toUtc": "2026-10-02T22:29:04.738211+00:00",
+        "stealPercent": 0.9950248756218906,
+        "throttledMicros": 0,
+        "botCpuMicros": 54614,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:04.738211+00:00",
+        "toUtc": "2026-10-02T22:29:05.740681+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41520,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:05.740681+00:00",
+        "toUtc": "2026-10-02T22:29:06.742646+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39071,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:06.742646+00:00",
+        "toUtc": "2026-10-02T22:29:07.744803+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 40247,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:07.744803+00:00",
+        "toUtc": "2026-10-02T22:29:08.746840+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 37619,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:08.746840+00:00",
+        "toUtc": "2026-10-02T22:29:09.748898+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40293,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:09.748898+00:00",
+        "toUtc": "2026-10-02T22:29:10.751044+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40869,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:10.751044+00:00",
+        "toUtc": "2026-10-02T22:29:11.753298+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 45129,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:11.753298+00:00",
+        "toUtc": "2026-10-02T22:29:12.755324+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 41150,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:12.755324+00:00",
+        "toUtc": "2026-10-02T22:29:13.758272+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40574,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:13.758272+00:00",
+        "toUtc": "2026-10-02T22:29:14.760279+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41890,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:14.760279+00:00",
+        "toUtc": "2026-10-02T22:29:15.762306+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39290,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:15.762306+00:00",
+        "toUtc": "2026-10-02T22:29:16.764407+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 43523,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:16.764407+00:00",
+        "toUtc": "2026-10-02T22:29:17.766388+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 48989,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:17.766388+00:00",
+        "toUtc": "2026-10-02T22:29:18.768481+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40742,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:18.768481+00:00",
+        "toUtc": "2026-10-02T22:29:19.770645+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 45720,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:19.770645+00:00",
+        "toUtc": "2026-10-02T22:29:20.772865+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 42502,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:20.772865+00:00",
+        "toUtc": "2026-10-02T22:29:21.774851+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40780,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:21.774851+00:00",
+        "toUtc": "2026-10-02T22:29:22.777054+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 40449,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:22.777054+00:00",
+        "toUtc": "2026-10-02T22:29:23.779937+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40714,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:23.779937+00:00",
+        "toUtc": "2026-10-02T22:29:24.781953+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39038,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:24.781953+00:00",
+        "toUtc": "2026-10-02T22:29:25.783916+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 38449,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:25.783916+00:00",
+        "toUtc": "2026-10-02T22:29:26.785896+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41231,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:26.785896+00:00",
+        "toUtc": "2026-10-02T22:29:27.787867+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41139,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:27.787867+00:00",
+        "toUtc": "2026-10-02T22:29:28.789853+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 39375,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:28.789853+00:00",
+        "toUtc": "2026-10-02T22:29:29.791801+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 38437,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:29.791801+00:00",
+        "toUtc": "2026-10-02T22:29:30.793880+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40774,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:30.793880+00:00",
+        "toUtc": "2026-10-02T22:29:31.795900+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 39427,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:31.795900+00:00",
+        "toUtc": "2026-10-02T22:29:32.798918+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 40736,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:32.798918+00:00",
+        "toUtc": "2026-10-02T22:29:33.802107+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40468,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:33.802107+00:00",
+        "toUtc": "2026-10-02T22:29:34.804834+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41704,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:34.804834+00:00",
+        "toUtc": "2026-10-02T22:29:35.806935+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40701,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:35.806935+00:00",
+        "toUtc": "2026-10-02T22:29:36.808902+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41568,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:36.808902+00:00",
+        "toUtc": "2026-10-02T22:29:37.810923+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 42693,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:37.810923+00:00",
+        "toUtc": "2026-10-02T22:29:38.813276+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39087,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:38.813276+00:00",
+        "toUtc": "2026-10-02T22:29:39.815304+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 41926,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:39.815304+00:00",
+        "toUtc": "2026-10-02T22:29:40.817348+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40971,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:40.817348+00:00",
+        "toUtc": "2026-10-02T22:29:41.819622+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 43668,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:41.819622+00:00",
+        "toUtc": "2026-10-02T22:29:42.821978+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 42119,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:42.821978+00:00",
+        "toUtc": "2026-10-02T22:29:43.824852+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39727,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:43.824852+00:00",
+        "toUtc": "2026-10-02T22:29:44.827050+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 37732,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:44.827050+00:00",
+        "toUtc": "2026-10-02T22:29:45.829265+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 38857,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:45.829265+00:00",
+        "toUtc": "2026-10-02T22:29:46.831297+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 38936,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:46.831297+00:00",
+        "toUtc": "2026-10-02T22:29:47.833300+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 38654,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:47.833300+00:00",
+        "toUtc": "2026-10-02T22:29:48.835304+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 38226,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:48.835304+00:00",
+        "toUtc": "2026-10-02T22:29:49.837325+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 38931,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:49.837325+00:00",
+        "toUtc": "2026-10-02T22:29:50.839389+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42773,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:50.839389+00:00",
+        "toUtc": "2026-10-02T22:29:51.841395+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41048,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:51.841395+00:00",
+        "toUtc": "2026-10-02T22:29:52.843828+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 43108,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:52.843828+00:00",
+        "toUtc": "2026-10-02T22:29:53.847193+00:00",
+        "stealPercent": 0.9803921568627451,
+        "throttledMicros": 0,
+        "botCpuMicros": 41305,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:53.847193+00:00",
+        "toUtc": "2026-10-02T22:29:54.849162+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42186,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:54.849162+00:00",
+        "toUtc": "2026-10-02T22:29:55.851332+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 42551,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:55.851332+00:00",
+        "toUtc": "2026-10-02T22:29:56.853346+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42077,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:56.853346+00:00",
+        "toUtc": "2026-10-02T22:29:57.855679+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 44350,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:57.855679+00:00",
+        "toUtc": "2026-10-02T22:29:58.857799+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42061,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:58.857799+00:00",
+        "toUtc": "2026-10-02T22:29:59.859932+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 44228,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:29:59.859932+00:00",
+        "toUtc": "2026-10-02T22:30:00.862282+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41765,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:00.862282+00:00",
+        "toUtc": "2026-10-02T22:30:01.864356+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 42910,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:01.864356+00:00",
+        "toUtc": "2026-10-02T22:30:02.866432+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 44282,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:02.866432+00:00",
+        "toUtc": "2026-10-02T22:30:03.869564+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 40179,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:03.869564+00:00",
+        "toUtc": "2026-10-02T22:30:04.871687+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40126,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:04.871687+00:00",
+        "toUtc": "2026-10-02T22:30:05.873732+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40561,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:05.873732+00:00",
+        "toUtc": "2026-10-02T22:30:06.875799+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 41963,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:06.875799+00:00",
+        "toUtc": "2026-10-02T22:30:07.877846+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 43294,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:07.877846+00:00",
+        "toUtc": "2026-10-02T22:30:08.880189+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40179,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:08.880189+00:00",
+        "toUtc": "2026-10-02T22:30:09.882319+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 41055,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:09.882319+00:00",
+        "toUtc": "2026-10-02T22:30:10.884366+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42024,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:10.884366+00:00",
+        "toUtc": "2026-10-02T22:30:11.886744+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41451,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:11.886744+00:00",
+        "toUtc": "2026-10-02T22:30:12.888737+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41266,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:12.888737+00:00",
+        "toUtc": "2026-10-02T22:30:13.891755+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 44835,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:13.891755+00:00",
+        "toUtc": "2026-10-02T22:30:14.893843+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 40684,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:14.893843+00:00",
+        "toUtc": "2026-10-02T22:30:15.895887+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41534,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:15.895887+00:00",
+        "toUtc": "2026-10-02T22:30:16.898432+00:00",
+        "stealPercent": 0.9900990099009901,
+        "throttledMicros": 0,
+        "botCpuMicros": 45411,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:16.898432+00:00",
+        "toUtc": "2026-10-02T22:30:17.901202+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41222,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:17.901202+00:00",
+        "toUtc": "2026-10-02T22:30:18.903198+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 41010,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:18.903198+00:00",
+        "toUtc": "2026-10-02T22:30:19.905242+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40047,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:19.905242+00:00",
+        "toUtc": "2026-10-02T22:30:20.907320+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41798,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:20.907320+00:00",
+        "toUtc": "2026-10-02T22:30:21.909418+00:00",
+        "stealPercent": 0.9900990099009901,
+        "throttledMicros": 0,
+        "botCpuMicros": 43665,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:21.909418+00:00",
+        "toUtc": "2026-10-02T22:30:22.911450+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 40292,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:22.911450+00:00",
+        "toUtc": "2026-10-02T22:30:23.914561+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41929,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:23.914561+00:00",
+        "toUtc": "2026-10-02T22:30:24.916587+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 48391,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:24.916587+00:00",
+        "toUtc": "2026-10-02T22:30:25.918572+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 44692,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:25.918572+00:00",
+        "toUtc": "2026-10-02T22:30:26.920658+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 46286,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:26.920658+00:00",
+        "toUtc": "2026-10-02T22:30:27.922635+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 42585,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:27.922635+00:00",
+        "toUtc": "2026-10-02T22:30:28.924655+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42364,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:28.924655+00:00",
+        "toUtc": "2026-10-02T22:30:29.926649+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40736,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:29.926649+00:00",
+        "toUtc": "2026-10-02T22:30:30.928687+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 41000,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:30.928687+00:00",
+        "toUtc": "2026-10-02T22:30:31.930735+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 38297,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:31.930735+00:00",
+        "toUtc": "2026-10-02T22:30:32.932781+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 40282,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:32.932781+00:00",
+        "toUtc": "2026-10-02T22:30:33.935723+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 33939,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:33.935723+00:00",
+        "toUtc": "2026-10-02T22:30:34.937748+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 28082,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:34.937748+00:00",
+        "toUtc": "2026-10-02T22:30:35.939793+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 34982,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:35.939793+00:00",
+        "toUtc": "2026-10-02T22:30:36.942076+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 41285,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:36.942076+00:00",
+        "toUtc": "2026-10-02T22:30:37.944211+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41092,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:37.944211+00:00",
+        "toUtc": "2026-10-02T22:30:38.947928+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 43158,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:38.947928+00:00",
+        "toUtc": "2026-10-02T22:30:39.949952+00:00",
+        "stealPercent": 1.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 54551,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:39.949952+00:00",
+        "toUtc": "2026-10-02T22:30:40.951903+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 44194,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:40.951903+00:00",
+        "toUtc": "2026-10-02T22:30:41.953892+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42579,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:41.953892+00:00",
+        "toUtc": "2026-10-02T22:30:42.955936+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 43042,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:42.955936+00:00",
+        "toUtc": "2026-10-02T22:30:43.958924+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41730,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:43.958924+00:00",
+        "toUtc": "2026-10-02T22:30:44.961177+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 43613,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:44.961177+00:00",
+        "toUtc": "2026-10-02T22:30:45.963184+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 41461,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:45.963184+00:00",
+        "toUtc": "2026-10-02T22:30:46.965165+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 41822,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:46.965165+00:00",
+        "toUtc": "2026-10-02T22:30:47.967193+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 42251,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:47.967193+00:00",
+        "toUtc": "2026-10-02T22:30:48.969232+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41404,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:48.969232+00:00",
+        "toUtc": "2026-10-02T22:30:49.971606+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40562,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:49.971606+00:00",
+        "toUtc": "2026-10-02T22:30:50.973851+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41485,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:50.973851+00:00",
+        "toUtc": "2026-10-02T22:30:51.976037+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 38383,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:51.976037+00:00",
+        "toUtc": "2026-10-02T22:30:52.977996+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39843,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:52.977996+00:00",
+        "toUtc": "2026-10-02T22:30:53.981242+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 43116,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:53.981242+00:00",
+        "toUtc": "2026-10-02T22:30:54.983200+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41435,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:54.983200+00:00",
+        "toUtc": "2026-10-02T22:30:55.985225+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41795,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:55.985225+00:00",
+        "toUtc": "2026-10-02T22:30:56.987368+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 47916,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:56.987368+00:00",
+        "toUtc": "2026-10-02T22:30:57.989364+00:00",
+        "stealPercent": 0.9900990099009901,
+        "throttledMicros": 0,
+        "botCpuMicros": 41763,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:57.989364+00:00",
+        "toUtc": "2026-10-02T22:30:58.991489+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 39988,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:58.991489+00:00",
+        "toUtc": "2026-10-02T22:30:59.993505+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42284,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:30:59.993505+00:00",
+        "toUtc": "2026-10-02T22:31:00.995647+00:00",
+        "stealPercent": 1.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42671,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:00.995647+00:00",
+        "toUtc": "2026-10-02T22:31:01.998288+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42897,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:01.998288+00:00",
+        "toUtc": "2026-10-02T22:31:03.001474+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 44471,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:03.001474+00:00",
+        "toUtc": "2026-10-02T22:31:04.004475+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 43325,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:04.004475+00:00",
+        "toUtc": "2026-10-02T22:31:05.006784+00:00",
+        "stealPercent": 1.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 60729,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:05.006784+00:00",
+        "toUtc": "2026-10-02T22:31:06.008849+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40949,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:06.008849+00:00",
+        "toUtc": "2026-10-02T22:31:07.011060+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 43899,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:07.011060+00:00",
+        "toUtc": "2026-10-02T22:31:08.013122+00:00",
+        "stealPercent": 0.49504950495049505,
+        "throttledMicros": 0,
+        "botCpuMicros": 45635,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:08.013122+00:00",
+        "toUtc": "2026-10-02T22:31:09.015187+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41501,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:09.015187+00:00",
+        "toUtc": "2026-10-02T22:31:10.017286+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 49240,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:10.017286+00:00",
+        "toUtc": "2026-10-02T22:31:11.019400+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 46544,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:11.019400+00:00",
+        "toUtc": "2026-10-02T22:31:12.021410+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42371,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:12.021410+00:00",
+        "toUtc": "2026-10-02T22:31:13.023373+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40863,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:13.023373+00:00",
+        "toUtc": "2026-10-02T22:31:14.026303+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 39956,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:14.026303+00:00",
+        "toUtc": "2026-10-02T22:31:15.028746+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40314,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:15.028746+00:00",
+        "toUtc": "2026-10-02T22:31:16.031029+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39871,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:16.031029+00:00",
+        "toUtc": "2026-10-02T22:31:17.033032+00:00",
+        "stealPercent": 1.0101010101010102,
+        "throttledMicros": 0,
+        "botCpuMicros": 58264,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:17.033032+00:00",
+        "toUtc": "2026-10-02T22:31:18.034990+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42611,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:18.034990+00:00",
+        "toUtc": "2026-10-02T22:31:19.036987+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 42524,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:19.036987+00:00",
+        "toUtc": "2026-10-02T22:31:20.038991+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42881,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:20.038991+00:00",
+        "toUtc": "2026-10-02T22:31:21.040986+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41320,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:21.040986+00:00",
+        "toUtc": "2026-10-02T22:31:22.043492+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41689,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:22.043492+00:00",
+        "toUtc": "2026-10-02T22:31:23.045589+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 39693,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:23.045589+00:00",
+        "toUtc": "2026-10-02T22:31:24.048537+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39781,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:24.048537+00:00",
+        "toUtc": "2026-10-02T22:31:25.050586+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41062,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:25.050586+00:00",
+        "toUtc": "2026-10-02T22:31:26.052587+00:00",
+        "stealPercent": 1.477832512315271,
+        "throttledMicros": 0,
+        "botCpuMicros": 41191,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:26.052587+00:00",
+        "toUtc": "2026-10-02T22:31:27.054591+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39278,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:27.054591+00:00",
+        "toUtc": "2026-10-02T22:31:28.056728+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 41203,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:28.056728+00:00",
+        "toUtc": "2026-10-02T22:31:29.058870+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40029,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:29.058870+00:00",
+        "toUtc": "2026-10-02T22:31:30.061586+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 43699,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:30.061586+00:00",
+        "toUtc": "2026-10-02T22:31:31.063801+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 39442,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:31.063801+00:00",
+        "toUtc": "2026-10-02T22:31:32.065753+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40868,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:32.065753+00:00",
+        "toUtc": "2026-10-02T22:31:33.067778+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 51177,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:33.067778+00:00",
+        "toUtc": "2026-10-02T22:31:34.070841+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 39732,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:34.070841+00:00",
+        "toUtc": "2026-10-02T22:31:35.072833+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 44491,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:35.072833+00:00",
+        "toUtc": "2026-10-02T22:31:36.074919+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42071,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:36.074919+00:00",
+        "toUtc": "2026-10-02T22:31:37.076884+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 39282,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:37.076884+00:00",
+        "toUtc": "2026-10-02T22:31:38.079031+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40097,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:38.079031+00:00",
+        "toUtc": "2026-10-02T22:31:39.081755+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 38615,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:39.081755+00:00",
+        "toUtc": "2026-10-02T22:31:40.083836+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 43627,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:40.083836+00:00",
+        "toUtc": "2026-10-02T22:31:41.085842+00:00",
+        "stealPercent": 0.9900990099009901,
+        "throttledMicros": 0,
+        "botCpuMicros": 40127,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:41.085842+00:00",
+        "toUtc": "2026-10-02T22:31:42.087870+00:00",
+        "stealPercent": 6.467661691542289,
+        "throttledMicros": 0,
+        "botCpuMicros": 38101,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:42.087870+00:00",
+        "toUtc": "2026-10-02T22:31:43.089857+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39249,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:43.089857+00:00",
+        "toUtc": "2026-10-02T22:31:44.093060+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 45926,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:44.093060+00:00",
+        "toUtc": "2026-10-02T22:31:45.095037+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41126,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:45.095037+00:00",
+        "toUtc": "2026-10-02T22:31:46.097157+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39570,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:46.097157+00:00",
+        "toUtc": "2026-10-02T22:31:47.099397+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42017,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:47.099397+00:00",
+        "toUtc": "2026-10-02T22:31:48.101418+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 39916,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:48.101418+00:00",
+        "toUtc": "2026-10-02T22:31:49.103390+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 37374,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:49.103390+00:00",
+        "toUtc": "2026-10-02T22:31:50.105372+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 38065,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:50.105372+00:00",
+        "toUtc": "2026-10-02T22:31:51.107402+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 38495,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:51.107402+00:00",
+        "toUtc": "2026-10-02T22:31:52.109495+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40351,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:52.109495+00:00",
+        "toUtc": "2026-10-02T22:31:53.111542+00:00",
+        "stealPercent": 0.9900990099009901,
+        "throttledMicros": 0,
+        "botCpuMicros": 42172,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:53.111542+00:00",
+        "toUtc": "2026-10-02T22:31:54.115144+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39444,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:54.115144+00:00",
+        "toUtc": "2026-10-02T22:31:55.117162+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 44291,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:55.117162+00:00",
+        "toUtc": "2026-10-02T22:31:56.119618+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39752,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:56.119618+00:00",
+        "toUtc": "2026-10-02T22:31:57.121596+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40516,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:57.121596+00:00",
+        "toUtc": "2026-10-02T22:31:58.123586+00:00",
+        "stealPercent": 0.49504950495049505,
+        "throttledMicros": 0,
+        "botCpuMicros": 39642,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:58.123586+00:00",
+        "toUtc": "2026-10-02T22:31:59.125694+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40722,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:31:59.125694+00:00",
+        "toUtc": "2026-10-02T22:32:00.127682+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39422,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:00.127682+00:00",
+        "toUtc": "2026-10-02T22:32:01.129719+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40881,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:01.129719+00:00",
+        "toUtc": "2026-10-02T22:32:02.132420+00:00",
+        "stealPercent": 0.9900990099009901,
+        "throttledMicros": 0,
+        "botCpuMicros": 39162,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:02.132420+00:00",
+        "toUtc": "2026-10-02T22:32:03.135090+00:00",
+        "stealPercent": 1.477832512315271,
+        "throttledMicros": 0,
+        "botCpuMicros": 43600,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:03.135090+00:00",
+        "toUtc": "2026-10-02T22:32:04.137986+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 40229,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:04.137986+00:00",
+        "toUtc": "2026-10-02T22:32:05.139963+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 44331,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:05.139963+00:00",
+        "toUtc": "2026-10-02T22:32:06.142250+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 42939,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:06.142250+00:00",
+        "toUtc": "2026-10-02T22:32:07.144567+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40316,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:07.144567+00:00",
+        "toUtc": "2026-10-02T22:32:08.146599+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 41364,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:08.146599+00:00",
+        "toUtc": "2026-10-02T22:32:09.148677+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 44072,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:09.148677+00:00",
+        "toUtc": "2026-10-02T22:32:10.150863+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 42975,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:10.150863+00:00",
+        "toUtc": "2026-10-02T22:32:11.152863+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 42567,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:11.152863+00:00",
+        "toUtc": "2026-10-02T22:32:12.154922+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 38135,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:12.154922+00:00",
+        "toUtc": "2026-10-02T22:32:13.156929+00:00",
+        "stealPercent": 0.49504950495049505,
+        "throttledMicros": 0,
+        "botCpuMicros": 35755,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:13.156929+00:00",
+        "toUtc": "2026-10-02T22:32:14.159816+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 37272,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:14.159816+00:00",
+        "toUtc": "2026-10-02T22:32:15.161779+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 36751,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:15.161779+00:00",
+        "toUtc": "2026-10-02T22:32:16.163763+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39859,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:16.163763+00:00",
+        "toUtc": "2026-10-02T22:32:17.165744+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 39419,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:17.165744+00:00",
+        "toUtc": "2026-10-02T22:32:18.167723+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40191,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:18.167723+00:00",
+        "toUtc": "2026-10-02T22:32:19.169721+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 39162,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:19.169721+00:00",
+        "toUtc": "2026-10-02T22:32:20.171715+00:00",
+        "stealPercent": 0.5,
+        "throttledMicros": 0,
+        "botCpuMicros": 42866,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:20.171715+00:00",
+        "toUtc": "2026-10-02T22:32:21.173697+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40269,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:21.173697+00:00",
+        "toUtc": "2026-10-02T22:32:22.175869+00:00",
+        "stealPercent": 0.5025125628140703,
+        "throttledMicros": 0,
+        "botCpuMicros": 42189,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:22.175869+00:00",
+        "toUtc": "2026-10-02T22:32:23.177834+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 40561,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:23.177834+00:00",
+        "toUtc": "2026-10-02T22:32:24.180733+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 36708,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:24.180733+00:00",
+        "toUtc": "2026-10-02T22:32:25.182689+00:00",
+        "stealPercent": 0.9900990099009901,
+        "throttledMicros": 0,
+        "botCpuMicros": 38327,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:25.182689+00:00",
+        "toUtc": "2026-10-02T22:32:26.184690+00:00",
+        "stealPercent": 0.9900990099009901,
+        "throttledMicros": 0,
+        "botCpuMicros": 41093,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:26.184690+00:00",
+        "toUtc": "2026-10-02T22:32:27.186660+00:00",
+        "stealPercent": 0.4975124378109453,
+        "throttledMicros": 0,
+        "botCpuMicros": 38453,
+        "hostError": false
+      },
+      {
+        "fromUtc": "2026-10-02T22:32:27.186660+00:00",
+        "toUtc": "2026-10-02T22:32:28.188686+00:00",
+        "stealPercent": 0.0,
+        "throttledMicros": 0,
+        "botCpuMicros": 36870,
+        "hostError": false
+      }
+    ],
+    "missingTraceRecords": 0,
+    "senderCoverage": true
+  },
+  "incidents": [
+    {
+      "receiver": {
+        "sequence": 3,
+        "ms": 165382,
+        "kind": "receiver",
+        "phase": {
+          "positionSeconds": 225,
+          "durationSeconds": 249,
+          "label": "middle",
+          "playing": true,
+          "loop": true
+        },
+        "windowMs": 1001.43115234375,
+        "packets": 51,
+        "lost": 0,
+        "concealedMs": 17.208333333333332,
+        "silentConcealedMs": 0,
+        "jitterMs": 4,
+        "discarded": 1,
+        "nacks": 1,
+        "fecReceived": 0,
+        "fecDiscarded": 0,
+        "insertedMs": 0,
+        "removedMs": 0,
+        "emittedSamples": 47040,
+        "receivedSamples": 48000,
+        "meanBufferMs": 47.14285714285912
+      },
+      "senderAndHost": {
+        "packets": 100,
+        "gapsAtLeast40Ms": [],
+        "hostDeltas": [
+          {
+            "fromUtc": "2026-10-02T22:30:10.884366+00:00",
+            "toUtc": "2026-10-02T22:30:11.886744+00:00",
+            "stealPercent": 0.0,
+            "throttledMicros": 0,
+            "botCpuMicros": 41451,
+            "hostError": false
+          },
+          {
+            "fromUtc": "2026-10-02T22:30:11.886744+00:00",
+            "toUtc": "2026-10-02T22:30:12.888737+00:00",
+            "stealPercent": 0.0,
+            "throttledMicros": 0,
+            "botCpuMicros": 41266,
+            "hostError": false
+          },
+          {
+            "fromUtc": "2026-10-02T22:30:12.888737+00:00",
+            "toUtc": "2026-10-02T22:30:13.891755+00:00",
+            "stealPercent": 0.0,
+            "throttledMicros": 0,
+            "botCpuMicros": 44835,
+            "hostError": false
+          }
+        ],
+        "missingTraceRecords": 0,
+        "senderCoverage": true
+      },
+      "interpretation": "no traced sender gap >=40 ms in this window; downstream/client cause remains unresolved"
+    },
+    {
+      "receiver": {
+        "sequence": 4,
+        "ms": 167384.79999999702,
+        "kind": "receiver",
+        "phase": {
+          "positionSeconds": 227,
+          "durationSeconds": 249,
+          "label": "middle",
+          "playing": true,
+          "loop": true
+        },
+        "windowMs": 1001.3310546875,
+        "packets": 50,
+        "lost": 0,
+        "concealedMs": 1.9375,
+        "silentConcealedMs": 0,
+        "jitterMs": 4,
+        "discarded": 0,
+        "nacks": 1,
+        "fecReceived": 0,
+        "fecDiscarded": 0,
+        "insertedMs": 0,
+        "removedMs": 0,
+        "emittedSamples": 48000,
+        "receivedSamples": 48480,
+        "meanBufferMs": 47.60000000000097
+      },
+      "senderAndHost": {
+        "packets": 101,
+        "gapsAtLeast40Ms": [],
+        "hostDeltas": [
+          {
+            "fromUtc": "2026-10-02T22:30:12.888737+00:00",
+            "toUtc": "2026-10-02T22:30:13.891755+00:00",
+            "stealPercent": 0.0,
+            "throttledMicros": 0,
+            "botCpuMicros": 44835,
+            "hostError": false
+          },
+          {
+            "fromUtc": "2026-10-02T22:30:13.891755+00:00",
+            "toUtc": "2026-10-02T22:30:14.893843+00:00",
+            "stealPercent": 0.4975124378109453,
+            "throttledMicros": 0,
+            "botCpuMicros": 40684,
+            "hostError": false
+          },
+          {
+            "fromUtc": "2026-10-02T22:30:14.893843+00:00",
+            "toUtc": "2026-10-02T22:30:15.895887+00:00",
+            "stealPercent": 0.0,
+            "throttledMicros": 0,
+            "botCpuMicros": 41534,
+            "hostError": false
+          }
+        ],
+        "missingTraceRecords": 0,
+        "senderCoverage": true
+      },
+      "interpretation": "no traced sender gap >=40 ms in this window; downstream/client cause remains unresolved"
+    },
+    {
+      "receiver": {
+        "sequence": 9,
+        "ms": 254540.8999999985,
+        "kind": "receiver",
+        "phase": {
+          "positionSeconds": 58,
+          "durationSeconds": 249,
+          "label": "middle",
+          "playing": true,
+          "loop": true
+        },
+        "windowMs": 1001.10400390625,
+        "packets": 48,
+        "lost": 0,
+        "concealedMs": 24.208333333333332,
+        "silentConcealedMs": 0,
+        "jitterMs": 1,
+        "discarded": 0,
+        "nacks": 0,
+        "fecReceived": 0,
+        "fecDiscarded": 0,
+        "insertedMs": 0,
+        "removedMs": 0,
+        "emittedSamples": 47040,
+        "receivedSamples": 48000,
+        "meanBufferMs": 23.877551020407175
+      },
+      "senderAndHost": {
+        "packets": 98,
+        "gapsAtLeast40Ms": [
+          {
+            "utc": "2026-10-02T22:31:41.192313+00:00",
+            "gapMs": 72.219,
+            "sourceChanged": false,
+            "includesSilence": false,
+            "timingMicros": [
+              1,
+              54127,
+              2,
+              39,
+              15,
+              12,
+              7,
+              32
+            ]
+          }
+        ],
+        "hostDeltas": [
+          {
+            "fromUtc": "2026-10-02T22:31:40.083836+00:00",
+            "toUtc": "2026-10-02T22:31:41.085842+00:00",
+            "stealPercent": 0.9900990099009901,
+            "throttledMicros": 0,
+            "botCpuMicros": 40127,
+            "hostError": false
+          },
+          {
+            "fromUtc": "2026-10-02T22:31:41.085842+00:00",
+            "toUtc": "2026-10-02T22:31:42.087870+00:00",
+            "stealPercent": 6.467661691542289,
+            "throttledMicros": 0,
+            "botCpuMicros": 38101,
+            "hostError": false
+          },
+          {
+            "fromUtc": "2026-10-02T22:31:42.087870+00:00",
+            "toUtc": "2026-10-02T22:31:43.089857+00:00",
+            "stealPercent": 0.0,
+            "throttledMicros": 0,
+            "botCpuMicros": 39249,
+            "hostError": false
+          }
+        ],
+        "missingTraceRecords": 0,
+        "senderCoverage": true
+      },
+      "interpretation": "sender gap overlaps the incident window; inspect stage timing and host scheduling"
+    },
+    {
+      "receiver": {
+        "sequence": 10,
+        "ms": 255542.19999999553,
+        "kind": "receiver",
+        "phase": {
+          "positionSeconds": 58,
+          "durationSeconds": 249,
+          "label": "middle",
+          "playing": true,
+          "loop": true
+        },
+        "windowMs": 1001.242919921875,
+        "packets": 50,
+        "lost": 0,
+        "concealedMs": 27.541666666666668,
+        "silentConcealedMs": 0,
+        "jitterMs": 1,
+        "discarded": 1,
+        "nacks": 1,
+        "fecReceived": 0,
+        "fecDiscarded": 0,
+        "insertedMs": 0,
+        "removedMs": 0,
+        "emittedSamples": 47040,
+        "receivedSamples": 48000,
+        "meanBufferMs": 27.75510204081583
+      },
+      "senderAndHost": {
+        "packets": 100,
+        "gapsAtLeast40Ms": [],
+        "hostDeltas": [
+          {
+            "fromUtc": "2026-10-02T22:31:41.085842+00:00",
+            "toUtc": "2026-10-02T22:31:42.087870+00:00",
+            "stealPercent": 6.467661691542289,
+            "throttledMicros": 0,
+            "botCpuMicros": 38101,
+            "hostError": false
+          },
+          {
+            "fromUtc": "2026-10-02T22:31:42.087870+00:00",
+            "toUtc": "2026-10-02T22:31:43.089857+00:00",
+            "stealPercent": 0.0,
+            "throttledMicros": 0,
+            "botCpuMicros": 39249,
+            "hostError": false
+          },
+          {
+            "fromUtc": "2026-10-02T22:31:43.089857+00:00",
+            "toUtc": "2026-10-02T22:31:44.093060+00:00",
+            "stealPercent": 0.5025125628140703,
+            "throttledMicros": 0,
+            "botCpuMicros": 45926,
+            "hostError": false
+          }
+        ],
+        "missingTraceRecords": 0,
+        "senderCoverage": true
+      },
+      "interpretation": "no traced sender gap >=40 ms in this window; downstream/client cause remains unresolved"
+    },
+    {
+      "receiver": {
+        "sequence": 13,
+        "ms": 285578,
+        "kind": "receiver",
+        "phase": {
+          "positionSeconds": 95,
+          "durationSeconds": 249,
+          "label": "middle",
+          "playing": true,
+          "loop": true
+        },
+        "windowMs": 1001.19189453125,
+        "packets": 51,
+        "lost": 0,
+        "concealedMs": 8.791666666666666,
+        "silentConcealedMs": 0,
+        "jitterMs": 1,
+        "discarded": 0,
+        "nacks": 1,
+        "fecReceived": 0,
+        "fecDiscarded": 0,
+        "insertedMs": 0,
+        "removedMs": 13.041666666666666,
+        "emittedSamples": 48000,
+        "receivedSamples": 48000,
+        "meanBufferMs": 73.79999999999806
+      },
+      "senderAndHost": {
+        "packets": 101,
+        "gapsAtLeast40Ms": [],
+        "hostDeltas": [
+          {
+            "fromUtc": "2026-10-02T22:32:11.152863+00:00",
+            "toUtc": "2026-10-02T22:32:12.154922+00:00",
+            "stealPercent": 0.0,
+            "throttledMicros": 0,
+            "botCpuMicros": 38135,
+            "hostError": false
+          },
+          {
+            "fromUtc": "2026-10-02T22:32:12.154922+00:00",
+            "toUtc": "2026-10-02T22:32:13.156929+00:00",
+            "stealPercent": 0.49504950495049505,
+            "throttledMicros": 0,
+            "botCpuMicros": 35755,
+            "hostError": false
+          },
+          {
+            "fromUtc": "2026-10-02T22:32:13.156929+00:00",
+            "toUtc": "2026-10-02T22:32:14.159816+00:00",
+            "stealPercent": 0.0,
+            "throttledMicros": 0,
+            "botCpuMicros": 37272,
+            "hostError": false
+          }
+        ],
+        "missingTraceRecords": 0,
+        "senderCoverage": true
+      },
+      "interpretation": "no traced sender gap >=40 ms in this window; downstream/client cause remains unresolved"
+    }
+  ],
+  "limitations": [
+    "Successful UDP submission is not confirmation of delivery.",
+    "One receiver cannot distinguish Discord forwarding from the listener network/client.",
+    "Incident windows include 500 ms tolerance; overlap does not prove a cause.",
+    "Host counters have their actual sample resolution; missing coverage is retained.",
+    "UTC anchors require synchronized clocks; neither sampling nor PCM resets proves inter-host clock accuracy."
+  ],
+  "malformedTraceBatches": 0
+}

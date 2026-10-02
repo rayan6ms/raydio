@@ -8,6 +8,17 @@ from receiver_checkpoint import Collector, host_snapshot
 
 
 class Checkpoints(unittest.TestCase):
+    def test_short_diagnostic_interval_is_bounded_and_has_no_catchup(self):
+        with TemporaryDirectory() as directory:
+            collector = Collector(Path(directory), sample=lambda: {}, host_interval=1)
+            for now in (10, 10.5, 11, 20, 20):
+                collector.tick(now)
+            self.assertEqual(collector.host_samples, 3)
+            self.assertEqual(collector.next_sample, 21)
+            for interval in (0, 0.5, 61):
+                with self.assertRaises(ValueError):
+                    Collector(Path(directory), host_interval=interval)
+
     def test_browser_absent_failed_preflight_then_real_run(self):
         with TemporaryDirectory() as directory:
             root = Path(directory)

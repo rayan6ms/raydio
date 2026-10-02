@@ -16,9 +16,12 @@ parser.add_argument('--expected-exe', type=Path, required=True)
 parser.add_argument('--seconds', type=int, default=22200)
 parser.add_argument('--output', type=Path, required=True)
 parser.add_argument('--peer-pid', type=int, help='Optional production process sharing the instance')
+parser.add_argument('--interval', type=float, default=60, help='1..60 seconds; faster sampling limited to runs <=30 minutes')
 args = parser.parse_args()
 if not 60 <= args.seconds <= 25200:
     parser.error('seconds must be 60..25200')
+if not 1 <= args.interval <= 60 or (args.interval < 60 and args.seconds > 1800):
+    parser.error('interval must be 1..60; faster sampling requires seconds <=1800')
 root = Path(f'/proc/{args.pid}')
 expected = args.expected_exe.resolve(strict=True)
 if (root / 'exe').resolve(strict=True) != expected:
@@ -33,6 +36,7 @@ peer_identity = (peer_root / 'stat').read_text().split(') ', 1)[1].split()[19] i
 peer_exe = (peer_root / 'exe').resolve(strict=True) if peer_root else None
 os.nice(19)
 started = time.monotonic()
+next_memory_sample = 0
 with args.output.open('x') as output:
     while True:
         row = dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
@@ -44,9 +48,20 @@ with args.output.open('x') as output:
                 raise RuntimeError('Sampled process identity changed')
             row.update(cpuSeconds=(int(stat[11]) + int(stat[12])) / os.sysconf('SC_CLK_TCK'),
                        threads=int(stat[17]))
-            for line in (root / 'smaps_rollup').read_text().splitlines():
-                if line.startswith('Rss:'): row['rssKiB'] = int(line.split()[1])
-                elif line.startswith('Pss:'): row['pssKiB'] = int(line.split()[1])
+            # Packet-timing diagnostics need scheduling/cgroup deltas each
+            # second, but smaps traversal remains at most once per ten seconds.
+            if time.monotonic() >= next_memory_sample:
+                for line in (root / 'smaps_rollup').read_text().splitlines():
+                    if line.startswith('Rss:'): row['rssKiB'] = int(line.split()[1])
+                    elif line.startswith('Pss:'): row['pssKiB'] = int(line.split()[1])
+                next_memory_sample = time.monotonic() + 10
+            for name in ('schedstat', 'status'):
+                if name == 'schedstat':
+                    row['processSchedstat'] = list(map(int, (root / name).read_text().split()))
+                else:
+                    row['contextSwitches'] = {line.split(':')[0]:int(line.split()[1])
+                        for line in (root / name).read_text().splitlines()
+                        if line.startswith(('voluntary_ctxt_switches:', 'nonvoluntary_ctxt_switches:'))}
             if cgroup is not None:
                 row['cgroupBytes'] = int((cgroup / 'memory.current').read_text())
                 memory = dict(line.split() for line in (cgroup / 'memory.stat').read_text().splitlines())
@@ -94,4 +109,4 @@ with args.output.open('x') as output:
         output.flush()
         if 'error' in row or time.monotonic() - started >= args.seconds:
             break
-        time.sleep(min(60, max(0, args.seconds - (time.monotonic() - started))))
+        time.sleep(min(args.interval, max(0, args.seconds - (time.monotonic() - started))))

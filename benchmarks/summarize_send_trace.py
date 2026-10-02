@@ -10,7 +10,7 @@ import re
 import sys
 
 
-def summarize(lines):
+def parse_traces(lines):
     streams = {}
     malformed = 0
     for raw in lines:
@@ -36,6 +36,11 @@ def summarize(lines):
                 stream['records'][row[0]] = row
         except (ValueError, TypeError, SyntaxError, IndexError):
             malformed += 1
+    return streams, malformed
+
+
+def summarize(lines):
+    streams, malformed = parse_traces(lines)
     output = []
     for epoch, stream in sorted(streams.items()):
         rows = [stream['records'][i] for i in sorted(stream['records'])]
