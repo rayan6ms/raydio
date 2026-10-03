@@ -6,6 +6,10 @@ rust-version = "1.97.1"
 license = "MIT"
 description = "A lightweight YouTube-first Discord music bot powered by Crust, Mantle, and Oto"
 
+[features]
+# Opt in explicitly until matched receiver measurements qualify this path.
+experimental-audio-worker = ["crust-server/experimental-audio-worker"]
+
 [dependencies]
 anyhow = "1.0.104"
 dotenvy = "0.15.7"

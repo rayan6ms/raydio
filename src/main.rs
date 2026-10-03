@@ -33,9 +33,10 @@ async fn run() -> Result<()> {
             "--check" => check = true,
             "--version" | "-V" => {
                 println!(
-                    "raydio {} {}",
+                    "raydio {} {} isolated_audio_worker={}",
                     env!("CARGO_PKG_VERSION"),
-                    std::env::consts::ARCH
+                    std::env::consts::ARCH,
+                    cfg!(feature = "experimental-audio-worker")
                 );
                 return Ok(());
             }
