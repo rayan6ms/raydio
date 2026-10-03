@@ -1,0 +1,107 @@
+{
+  "status": "completed",
+  "originalSetting": null,
+  "restored": true,
+  "windows": [
+    {
+      "index": 0,
+      "setting": null,
+      "startedAt": "2026-10-03T11:34:20.781Z",
+      "seconds": 119.99909497070313,
+      "concealedMs": 50.041666666666664,
+      "meanBufferMs": 66.98682674670671,
+      "meanTargetBufferMs": 58.959479739869984,
+      "packetsReceived": 6000,
+      "packetsDiscarded": 0,
+      "packetsLostNet": 0,
+      "positiveLoss": 0,
+      "negativeLoss": 0,
+      "coverage": {
+        "completeEventHistory": true,
+        "completePcmCoverage": true,
+        "completePollCoverage": false,
+        "completeSpeakingObservation": true,
+        "completeTrackPhaseObservation": true,
+        "droppedDiagnosticWindows": 0,
+        "pcmSeconds": 120.01066666666667,
+        "receiverSeconds": 119.99909497070313,
+        "retainedDiagnosticWindows": 0,
+        "uninterruptedConnection": true
+      },
+      "receiverIdentity": {
+        "id": "IT01A9597",
+        "ssrc": 9597,
+        "trackIdentifier": "3af11c66-cbb7-4464-aa97-d6e5de31b9d0"
+      }
+    },
+    {
+      "index": 1,
+      "setting": 120,
+      "startedAt": "2026-10-03T11:36:28.048Z",
+      "seconds": 119.99957885742188,
+      "concealedMs": 0.0,
+      "meanBufferMs": 103.16552758793138,
+      "meanTargetBufferMs": 119.99999999999996,
+      "packetsReceived": 6000,
+      "packetsDiscarded": 0,
+      "packetsLostNet": 0,
+      "positiveLoss": 1,
+      "negativeLoss": -1,
+      "coverage": {
+        "completeEventHistory": true,
+        "completePcmCoverage": true,
+        "completePollCoverage": true,
+        "completeSpeakingObservation": true,
+        "completeTrackPhaseObservation": true,
+        "droppedDiagnosticWindows": 0,
+        "pcmSeconds": 120.01066666666667,
+        "receiverSeconds": 119.99957885742188,
+        "retainedDiagnosticWindows": 2,
+        "uninterruptedConnection": true
+      },
+      "receiverIdentity": {
+        "id": "IT01A9597",
+        "ssrc": 9597,
+        "trackIdentifier": "3af11c66-cbb7-4464-aa97-d6e5de31b9d0"
+      }
+    },
+    {
+      "index": 2,
+      "setting": null,
+      "startedAt": "2026-10-03T11:38:35.317Z",
+      "seconds": 120.00015307617187,
+      "concealedMs": 101.29166666666667,
+      "meanBufferMs": 52.54333333333335,
+      "meanTargetBufferMs": 40.0,
+      "packetsReceived": 6000,
+      "packetsDiscarded": 0,
+      "packetsLostNet": 0,
+      "positiveLoss": 0,
+      "negativeLoss": 0,
+      "coverage": {
+        "completeEventHistory": true,
+        "completePcmCoverage": true,
+        "completePollCoverage": true,
+        "completeSpeakingObservation": true,
+        "completeTrackPhaseObservation": true,
+        "droppedDiagnosticWindows": 0,
+        "pcmSeconds": 120.01066666666667,
+        "receiverSeconds": 120.00015307617187,
+        "retainedDiagnosticWindows": 0,
+        "uninterruptedConnection": true
+      },
+      "receiverIdentity": {
+        "id": "IT01A9597",
+        "ssrc": 9597,
+        "trackIdentifier": "3af11c66-cbb7-4464-aa97-d6e5de31b9d0"
+      }
+    }
+  ],
+  "limitations": [
+    "First default window has one stale stats poll and fails strict completePollCoverage; retained as exploratory evidence.",
+    "One short sequential trial is not a statistically established or universal bot improvement.",
+    "Actual buffer delay is measured separately from requested target.",
+    "Receiver setting affects only this browser listener.",
+    "Quiet interval in target window coincides with track tail/restart and is not counted as network concealment."
+  ]
+}

@@ -16,6 +16,11 @@ def pcap(data):
 
 
 class HeaderCaptureTests(unittest.TestCase):
+    def test_negotiated_browser_payload_type(self):
+        data=bytearray(packet());data[43]=111
+        self.assertIsNone(rtp_header(bytes(data),7))
+        self.assertIsNotNone(rtp_header(bytes(data),7,111))
+        self.assertEqual(len(PcapHeaders(7,111).feed(pcap(bytes(data)))),1)
     def test_exact_header_has_no_payload_or_addresses(self):
         row=rtp_header(packet(),7)
         self.assertEqual(row['sequence'],65535)

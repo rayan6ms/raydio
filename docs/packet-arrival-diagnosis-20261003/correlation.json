@@ -1,0 +1,248 @@
+{
+  "valid": true,
+  "receiverStart": "2026-10-03T11:26:52.091Z",
+  "receiverSeconds": 119.9995419921875,
+  "sender": {
+    "packets": 6000,
+    "covered": true,
+    "maximumGapMs": 29.854,
+    "gapsAtLeast40Ms": 0,
+    "gapsAtLeast100Ms": 0,
+    "largestGaps": [
+      {
+        "endUnixMicros": 1791026860182905,
+        "gapMs": 29.854
+      },
+      {
+        "endUnixMicros": 1791026859101943,
+        "gapMs": 29.201
+      },
+      {
+        "endUnixMicros": 1791026926821966,
+        "gapMs": 28.892
+      },
+      {
+        "endUnixMicros": 1791026823161963,
+        "gapMs": 28.617
+      },
+      {
+        "endUnixMicros": 1791026849840746,
+        "gapMs": 27.86
+      },
+      {
+        "endUnixMicros": 1791026884159859,
+        "gapMs": 27.139
+      },
+      {
+        "endUnixMicros": 1791026868759871,
+        "gapMs": 27.005
+      },
+      {
+        "endUnixMicros": 1791026834157994,
+        "gapMs": 25.474
+      },
+      {
+        "endUnixMicros": 1791026826078532,
+        "gapMs": 25.329
+      },
+      {
+        "endUnixMicros": 1791026854318065,
+        "gapMs": 25.04
+      }
+    ]
+  },
+  "arrival": {
+    "packets": 6000,
+    "covered": true,
+    "maximumGapMs": 63.15,
+    "gapsAtLeast40Ms": 27,
+    "gapsAtLeast100Ms": 0,
+    "largestGaps": [
+      {
+        "endUnixMicros": 1791026896037642,
+        "gapMs": 63.15
+      },
+      {
+        "endUnixMicros": 1791026898814300,
+        "gapMs": 61.19
+      },
+      {
+        "endUnixMicros": 1791026898272327,
+        "gapMs": 60.566
+      },
+      {
+        "endUnixMicros": 1791026902593187,
+        "gapMs": 60.109
+      },
+      {
+        "endUnixMicros": 1791026892049007,
+        "gapMs": 56.613
+      },
+      {
+        "endUnixMicros": 1791026895650684,
+        "gapMs": 54.857
+      },
+      {
+        "endUnixMicros": 1791026877045141,
+        "gapMs": 53.207
+      },
+      {
+        "endUnixMicros": 1791026906770210,
+        "gapMs": 53.207
+      },
+      {
+        "endUnixMicros": 1791026906846648,
+        "gapMs": 52.301
+      },
+      {
+        "endUnixMicros": 1791026896182767,
+        "gapMs": 52.271
+      }
+    ]
+  },
+  "matchedReceiverPackets": 6000,
+  "unmatchedReceiverPackets": 0,
+  "duplicateSenderKeys": 0,
+  "recordCountsMatch": true,
+  "transitExcessOverObservedMinimumMs": {
+    "median": 3.3005000000000013,
+    "maximum": 76.555
+  },
+  "incidents": [
+    {
+      "receiver": {
+        "sequence": 6,
+        "ms": 80097,
+        "kind": "receiver",
+        "phase": {
+          "positionSeconds": 137,
+          "durationSeconds": 249,
+          "label": "middle",
+          "playing": true,
+          "loop": true
+        },
+        "windowMs": 1011.212890625,
+        "packets": 51,
+        "lost": 0,
+        "concealedMs": 19.0625,
+        "silentConcealedMs": 0,
+        "jitterMs": 3,
+        "discarded": 1,
+        "nacks": 1,
+        "fecReceived": 0,
+        "fecDiscarded": 0,
+        "insertedMs": 0,
+        "removedMs": 0,
+        "emittedSamples": 48000,
+        "receivedSamples": 48960,
+        "meanBufferMs": 56
+      },
+      "utc": "2026-10-03T11:28:12.188000+00:00",
+      "sender": {
+        "packets": 76,
+        "covered": true,
+        "maximumGapMs": 20.822,
+        "gapsAtLeast40Ms": 0,
+        "gapsAtLeast100Ms": 0,
+        "largestGaps": [
+          {
+            "endUnixMicros": 1791026891533437,
+            "gapMs": 20.822
+          },
+          {
+            "endUnixMicros": 1791026891953421,
+            "gapMs": 20.807
+          },
+          {
+            "endUnixMicros": 1791026892033447,
+            "gapMs": 20.794
+          },
+          {
+            "endUnixMicros": 1791026890933317,
+            "gapMs": 20.771
+          },
+          {
+            "endUnixMicros": 1791026891013344,
+            "gapMs": 20.767
+          },
+          {
+            "endUnixMicros": 1791026891453485,
+            "gapMs": 20.758
+          },
+          {
+            "endUnixMicros": 1791026891853278,
+            "gapMs": 20.709
+          },
+          {
+            "endUnixMicros": 1791026891073564,
+            "gapMs": 20.703
+          },
+          {
+            "endUnixMicros": 1791026892253347,
+            "gapMs": 20.686
+          },
+          {
+            "endUnixMicros": 1791026891593465,
+            "gapMs": 20.678
+          }
+        ]
+      },
+      "arrival": {
+        "packets": 76,
+        "covered": true,
+        "maximumGapMs": 56.613,
+        "gapsAtLeast40Ms": 1,
+        "gapsAtLeast100Ms": 0,
+        "largestGaps": [
+          {
+            "endUnixMicros": 1791026892049007,
+            "gapMs": 56.613
+          },
+          {
+            "endUnixMicros": 1791026892277013,
+            "gapMs": 25.098
+          },
+          {
+            "endUnixMicros": 1791026891796821,
+            "gapMs": 25.048
+          },
+          {
+            "endUnixMicros": 1791026891416976,
+            "gapMs": 24.827
+          },
+          {
+            "endUnixMicros": 1791026891136493,
+            "gapMs": 24.574
+          },
+          {
+            "endUnixMicros": 1791026891956632,
+            "gapMs": 24.482
+          },
+          {
+            "endUnixMicros": 1791026891876906,
+            "gapMs": 24.257
+          },
+          {
+            "endUnixMicros": 1791026892215956,
+            "gapMs": 24.048
+          },
+          {
+            "endUnixMicros": 1791026891035902,
+            "gapMs": 24.02
+          },
+          {
+            "endUnixMicros": 1791026892378337,
+            "gapMs": 24.002
+          }
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "Capture timestamps require stable clocks; absolute one-way latency is not claimed.",
+    "Extra arrival jitter localizes delay after sender capture, but cannot distinguish SFU forwarding from network hops.",
+    "An arrival gap is not necessarily permanent packet loss; subsequent late/reordered arrivals can fill it.",
+    "Overlap with a receiver poll is correlation; decoding/playout happens after kernel arrival.",
+    "Short, instrumented diagnostic window is not a production improvement or endurance qualification."
+  ]
+}

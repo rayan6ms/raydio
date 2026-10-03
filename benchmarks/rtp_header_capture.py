@@ -16,7 +16,7 @@ import subprocess
 import time
 
 
-def rtp_header(packet, ssrc):
+def rtp_header(packet, ssrc, payload_type=120):
     if len(packet) != 54 or packet[12:14] != b'\x08\x00' or packet[14] != 0x45 or packet[23] != 17:
         return None
     # IP fragments cannot be interpreted as an independent RTP packet.
@@ -26,7 +26,7 @@ def rtp_header(packet, ssrc):
     if udp < 20:
         return None
     header = packet[42:54]
-    if header[0] >> 6 != 2 or header[1] & 0x7f != 120:
+    if header[0] >> 6 != 2 or header[1] & 0x7f != payload_type:
         return None
     _, _, sequence, timestamp, identity = struct.unpack('!BBHII', header)
     if identity != ssrc:
@@ -36,10 +36,11 @@ def rtp_header(packet, ssrc):
 
 
 class PcapHeaders:
-    def __init__(self, ssrc):
+    def __init__(self, ssrc, payload_type=120):
         self.buffer = bytearray()
         self.endian = None
         self.ssrc = ssrc
+        self.payload_type = payload_type
         self.rejected = 0
 
     def feed(self, chunk):
@@ -64,7 +65,7 @@ class PcapHeaders:
                 raise ValueError('Invalid bounded capture record')
             if len(self.buffer) < 16+captured:
                 break
-            header = rtp_header(bytes(self.buffer[16:16+captured]), self.ssrc)
+            header = rtp_header(bytes(self.buffer[16:16+captured]), self.ssrc, self.payload_type)
             del self.buffer[:16+captured]
             if header:
                 rows.append(dict(unixMicros=seconds*1000000+micros, wireBytes=original, **header))
@@ -79,20 +80,21 @@ def main():
     p.add_argument('--peer', required=True)
     p.add_argument('--port', required=True, type=int)
     p.add_argument('--ssrc', required=True, type=int)
+    p.add_argument('--payload-type',type=int,default=120,help='Negotiated Opus RTP type; browser forwarding may use 111')
     p.add_argument('--direction', choices=('receive','send'), required=True)
     p.add_argument('--seconds',type=int,default=120)
     p.add_argument('--output',type=Path,required=True)
     a=p.parse_args()
     peer=ipaddress.IPv4Address(a.peer)
-    if not 10<=a.seconds<=180 or not 0<a.port<65536 or not 0<=a.ssrc<2**32:
-        p.error('Invalid duration, port or SSRC')
+    if not 10<=a.seconds<=180 or not 0<a.port<65536 or not 0<=a.ssrc<2**32 or not 0<=a.payload_type<=127:
+        p.error('Invalid duration, port, SSRC or payload type')
     if not a.interface or a.interface.startswith('-') or '/' in a.interface:
         p.error('Invalid interface')
     a.output.mkdir(parents=True,exist_ok=False,mode=0o700)
     direction='src' if a.direction=='receive' else 'dst'
     filt=(f'ip and udp and {direction} host {peer} and {direction} port {a.port}'
-          f' and udp[8] & 0xc0 = 0x80 and udp[9] & 0x7f = 120 and udp[16:4] = {a.ssrc}')
-    parser=PcapHeaders(a.ssrc)
+          f' and udp[8] & 0xc0 = 0x80 and udp[9] & 0x7f = {a.payload_type} and udp[16:4] = {a.ssrc}')
+    parser=PcapHeaders(a.ssrc,a.payload_type)
     started=time.monotonic()
     fd=os.open(a.output/'headers.jsonl',os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
     proc=None
@@ -124,6 +126,7 @@ def main():
             stderr=proc.stderr.read(4096).decode(errors='replace')
         else:stderr=''
         summary=dict(seconds=time.monotonic()-started,requestedSeconds=a.seconds,records=rows,
+                     payloadType=a.payload_type,ssrc=a.ssrc,
                      rejected=parser.rejected,incompleteRecordBytes=len(parser.buffer),error=error,
                      captureDiagnostics=stderr,exitCode=proc.returncode if proc else None,
                      limitations=['Kernel arrival/submission timestamp is not receiver playout time.',
