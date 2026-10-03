@@ -5,12 +5,14 @@ import assert from 'node:assert/strict';
 const source = readFileSync(new URL('./browser_endurance.js', import.meta.url), 'utf8');
 async function simulate(seconds, mode='normal') {
     let now=0, removed=0;
+    const sleepDurations=[];
     const listeners=new Map();
     const target={addEventListener(t,f){listeners.set(t,f);},removeEventListener(t){listeners.delete(t);removed++;}};
     const newRow=()=>({textContent:'bot1544468432907669644',className:'usernameSpeaking',isConnected:true,parentElement:{parentElement:{parentElement:{}}}});
     let row=newRow(), replaced=false;
     const track={...target,id:'track',readyState:'live'};
     const peer={...target,connectionState:'connected',getReceivers:()=>[{track}],async getStats(){
+        if(mode==='cached-stats')now+=3;
         if(now>7000){
             if(mode==='closed')peer.connectionState='closed';
             if(mode==='track-ended')track.readyState='ended';
@@ -18,7 +20,7 @@ async function simulate(seconds, mode='normal') {
             if(mode==='row-replaced'&&!replaced){row.isConnected=false;row=newRow();replaced=true;}
             if(mode==='row-missing')row.isConnected=now>13000;
         }
-        return new Map([['rtp',{id:'rtp',type:'inbound-rtp',kind:'audio',trackIdentifier:'track',timestamp:now,
+        return new Map([['rtp',{id:'rtp',type:'inbound-rtp',kind:'audio',trackIdentifier:'track',timestamp:mode==='cached-stats'?Math.floor(now/100)*100:now,
             ssrc:mode==='identity-change'&&now>7000?2:1,
             packetsReceived:mode==='counter-reset'&&now>7000?0:Math.floor(now/20),
             packetsLost:mode==='small-loss'&&now>7000&&now<10000?1:0,
@@ -30,11 +32,11 @@ async function simulate(seconds, mode='normal') {
     const sandbox={window,navigator:{onLine:true,mediaDevices:target},performance:{now:()=>now,timeOrigin:0},
         document:{...target,querySelectorAll:s=>s.includes('username')?(row.isConnected?[row]:[]):(mode==='row-missing'&&now>7000&&now<=13000?[]:[{innerText:'Raydio • Now Playing 1:00 / 3:33 Playing • Loop: ON'}])},
         MutationObserver:class {observe(){} disconnect(){}},
-        setTimeout:f=>{now+=1000;queueMicrotask(f);}, Date,console};
+        setTimeout:(f,ms)=>{sleepDurations.push(ms);now+=ms;queueMicrotask(f);}, Date,console};
     vm.runInNewContext(source,sandbox);
     const returned=await window.raydioEndurance.start({seconds,pcm:false,scheduling:false});
     assert.equal(returned,window.raydioEndurance.report,'return the complete persistable report');
-    return {report:window.raydioEndurance.report,listeners,removed};
+    return {report:window.raydioEndurance.report,listeners,removed,sleepDurations};
 }
 const long=await simulate(21600);
 assert.equal(long.report.status,'completed');
@@ -71,6 +73,11 @@ for(const mode of ['row-replaced','row-missing']){
 }
 const short=await simulate(10);
 assert.equal(short.report.coverage.uninterruptedConnection,true);
+const cached=await simulate(10,'cached-stats');
+assert.equal(cached.report.status,'completed');
+assert.equal(cached.report.coverage.completePollCoverage,true);
+assert.equal(cached.report.sampling.stalePolls,0);
+assert.ok(cached.sleepDurations.slice(0,-1).every(ms=>ms>=250),'never immediately reread cached terminal stats');
 for(const mode of ['small-loss','small-discard']){
     const measured=await simulate(20,mode);
     assert.equal(measured.report.status,'completed');

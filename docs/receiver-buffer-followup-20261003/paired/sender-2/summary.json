@@ -1,0 +1,17 @@
+{
+  "seconds": 170.01574633596465,
+  "requestedSeconds": 170,
+  "records": 8495,
+  "payloadType": 120,
+  "ssrc": 9597,
+  "rejected": 0,
+  "incompleteRecordBytes": 0,
+  "error": null,
+  "captureDiagnostics": "tcpdump: listening on ens3, link-type EN10MB (Ethernet), snapshot length 54 bytes\n8495 packets captured\n8496 packets received by filter\n0 packets dropped by kernel\n",
+  "exitCode": 0,
+  "limitations": [
+    "Kernel arrival/submission timestamp is not receiver playout time.",
+    "Only one selected IPv4 Ethernet RTP stream is retained.",
+    "No media payloads or credentials are saved."
+  ]
+}

@@ -1,0 +1,151 @@
+[
+  {
+    "index": 0,
+    "oracleSamples": 150,
+    "medianPssKiB": 17958.0,
+    "medianBotCpuPercentOfOneCore": 3.996003996003182,
+    "receiverLongTasks": {
+      "enabled": true,
+      "initialVisibility": "visible",
+      "longTasks": 8,
+      "longTasksSupported": true,
+      "maxLongTaskMs": 255,
+      "totalLongTaskMs": 857
+    },
+    "quietIntervals": [
+      {
+        "audioEndMs": 38913.85833333324,
+        "audioSeconds": 40.21066666666667,
+        "durationMs": 2260.5625,
+        "endFrame": 1868710,
+        "kind": "quiet",
+        "ms": 39086.5,
+        "phase": {
+          "durationSeconds": 249,
+          "label": "head",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 0
+        },
+        "reportDelayMs": 172.54166666666424,
+        "sequence": 6
+      },
+      {
+        "audioEndMs": 288149.72083333286,
+        "audioSeconds": 289.37333333333333,
+        "durationMs": 2258.0625,
+        "endFrame": 13832001,
+        "kind": "quiet",
+        "ms": 288250.50000000023,
+        "phase": {
+          "durationSeconds": 249,
+          "label": "tail",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 248
+        },
+        "reportDelayMs": 99.97916666662786,
+        "sequence": 37
+      }
+    ]
+  },
+  {
+    "index": 1,
+    "oracleSamples": 149,
+    "medianPssKiB": 17958.0,
+    "medianBotCpuPercentOfOneCore": 3.996003996003182,
+    "receiverLongTasks": {
+      "enabled": true,
+      "initialVisibility": "visible",
+      "longTasks": 1,
+      "longTasksSupported": true,
+      "maxLongTaskMs": 165,
+      "totalLongTaskMs": 165
+    },
+    "quietIntervals": [
+      {
+        "audioEndMs": 224801.7166666665,
+        "audioSeconds": 226.04,
+        "durationMs": 2258.0625,
+        "endFrame": 10791564,
+        "kind": "quiet",
+        "ms": 224830.7999999998,
+        "phase": {
+          "durationSeconds": 249,
+          "label": "tail",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 248
+        },
+        "reportDelayMs": 29.08333333331393,
+        "sequence": 8
+      }
+    ]
+  },
+  {
+    "index": 2,
+    "oracleSamples": 149,
+    "medianPssKiB": 17958.0,
+    "medianBotCpuPercentOfOneCore": 3.9940089865195665,
+    "receiverLongTasks": {
+      "enabled": true,
+      "initialVisibility": "visible",
+      "longTasks": 0,
+      "longTasksSupported": true,
+      "maxLongTaskMs": 0,
+      "totalLongTaskMs": 0
+    },
+    "quietIntervals": [
+      {
+        "audioEndMs": 161502.34999999963,
+        "audioSeconds": 162.81866666666667,
+        "durationMs": 2258.0625,
+        "endFrame": 7752460,
+        "kind": "quiet",
+        "ms": 161678.09999999963,
+        "phase": {
+          "durationSeconds": 249,
+          "label": "head",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 0
+        },
+        "reportDelayMs": 175.75,
+        "sequence": 4
+      }
+    ]
+  },
+  {
+    "index": 3,
+    "oracleSamples": 149,
+    "medianPssKiB": 17958,
+    "medianBotCpuPercentOfOneCore": 3.9960039960028415,
+    "receiverLongTasks": {
+      "enabled": true,
+      "initialVisibility": "visible",
+      "longTasks": 0,
+      "longTasksSupported": true,
+      "maxLongTaskMs": 0,
+      "totalLongTaskMs": 0
+    },
+    "quietIntervals": [
+      {
+        "audioEndMs": 98436.00000000001,
+        "audioSeconds": 99.61866666666667,
+        "durationMs": 2258.0625,
+        "endFrame": 4725544,
+        "kind": "quiet",
+        "ms": 98504.59999999963,
+        "phase": {
+          "durationSeconds": 249,
+          "label": "head",
+          "loop": true,
+          "playing": true,
+          "positionSeconds": 0
+        },
+        "reportDelayMs": 68.49999999998545,
+        "sequence": 4
+      }
+    ]
+  }
+]

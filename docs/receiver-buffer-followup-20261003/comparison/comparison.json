@@ -1,0 +1,302 @@
+{
+  "windows": [
+    {
+      "index": 0,
+      "targetMs": null,
+      "startedAt": "2026-10-03T11:54:21.853Z",
+      "seconds": 299.9941088867188,
+      "valid": true,
+      "status": "completed",
+      "coverage": {
+        "completeEventHistory": true,
+        "completePcmCoverage": true,
+        "completePollCoverage": true,
+        "completeSpeakingObservation": true,
+        "completeTrackPhaseObservation": true,
+        "droppedDiagnosticWindows": 0,
+        "pcmSeconds": 300.0106666666667,
+        "receiverSeconds": 299.9941088867188,
+        "retainedDiagnosticWindows": 5,
+        "uninterruptedConnection": true
+      },
+      "concealedMs": 135.27083333333334,
+      "silentConcealedMs": 0.0,
+      "meanBufferMs": 72.37514169500571,
+      "meanTargetMs": 65.98252983930122,
+      "received": 14999,
+      "netLost": 0,
+      "discarded": 3,
+      "nackCount": 26,
+      "positiveLoss": 1,
+      "negativeLoss": -1,
+      "insertedMs": 66.375,
+      "removedMs": 153.97916666666666,
+      "quietIntervals": [
+        {
+          "audioEndMs": 38913.85833333324,
+          "audioSeconds": 40.21066666666667,
+          "durationMs": 2260.5625,
+          "endFrame": 1868710,
+          "kind": "quiet",
+          "ms": 39086.5,
+          "phase": {
+            "durationSeconds": 249,
+            "label": "head",
+            "loop": true,
+            "playing": true,
+            "positionSeconds": 0
+          },
+          "reportDelayMs": 172.54166666666424,
+          "sequence": 6
+        },
+        {
+          "audioEndMs": 288149.72083333286,
+          "audioSeconds": 289.37333333333333,
+          "durationMs": 2258.0625,
+          "endFrame": 13832001,
+          "kind": "quiet",
+          "ms": 288250.50000000023,
+          "phase": {
+            "durationSeconds": 249,
+            "label": "tail",
+            "loop": true,
+            "playing": true,
+            "positionSeconds": 248
+          },
+          "reportDelayMs": 99.97916666662786,
+          "sequence": 37
+        }
+      ],
+      "pcmAnomalies": {
+        "nonFinite": 0,
+        "nearFullScale": 0,
+        "emptyFrames": 0
+      },
+      "receiverIdentity": {
+        "id": "IT01A9597",
+        "ssrc": 9597,
+        "trackIdentifier": "3af11c66-cbb7-4464-aa97-d6e5de31b9d0"
+      },
+      "error": null
+    },
+    {
+      "index": 1,
+      "targetMs": 120,
+      "startedAt": "2026-10-03T11:59:34.494Z",
+      "seconds": 299.9971018066406,
+      "valid": true,
+      "status": "completed",
+      "coverage": {
+        "completeEventHistory": true,
+        "completePcmCoverage": true,
+        "completePollCoverage": true,
+        "completeSpeakingObservation": true,
+        "completeTrackPhaseObservation": true,
+        "droppedDiagnosticWindows": 0,
+        "pcmSeconds": 300.02133333333336,
+        "receiverSeconds": 299.9971018066406,
+        "retainedDiagnosticWindows": 1,
+        "uninterruptedConnection": true
+      },
+      "concealedMs": 0.0,
+      "silentConcealedMs": 0.0,
+      "meanBufferMs": 122.73006134969329,
+      "meanTargetMs": 120.00000000000001,
+      "received": 14997,
+      "netLost": 0,
+      "discarded": 0,
+      "nackCount": 5,
+      "positiveLoss": 0,
+      "negativeLoss": 0,
+      "insertedMs": 78.02083333333333,
+      "removedMs": 0.0,
+      "quietIntervals": [
+        {
+          "audioEndMs": 224801.7166666665,
+          "audioSeconds": 226.04,
+          "durationMs": 2258.0625,
+          "endFrame": 10791564,
+          "kind": "quiet",
+          "ms": 224830.7999999998,
+          "phase": {
+            "durationSeconds": 249,
+            "label": "tail",
+            "loop": true,
+            "playing": true,
+            "positionSeconds": 248
+          },
+          "reportDelayMs": 29.08333333331393,
+          "sequence": 8
+        }
+      ],
+      "pcmAnomalies": {
+        "nonFinite": 0,
+        "nearFullScale": 0,
+        "emptyFrames": 0
+      },
+      "receiverIdentity": {
+        "id": "IT01A9597",
+        "ssrc": 9597,
+        "trackIdentifier": "3af11c66-cbb7-4464-aa97-d6e5de31b9d0"
+      },
+      "error": null
+    },
+    {
+      "index": 2,
+      "targetMs": null,
+      "startedAt": "2026-10-03T12:04:46.926Z",
+      "seconds": 299.9984189453125,
+      "valid": true,
+      "status": "completed",
+      "coverage": {
+        "completeEventHistory": true,
+        "completePcmCoverage": true,
+        "completePollCoverage": true,
+        "completeSpeakingObservation": true,
+        "completeTrackPhaseObservation": true,
+        "droppedDiagnosticWindows": 0,
+        "pcmSeconds": 300.0106666666667,
+        "receiverSeconds": 299.9984189453125,
+        "retainedDiagnosticWindows": 2,
+        "uninterruptedConnection": true
+      },
+      "concealedMs": 27.479166666666668,
+      "silentConcealedMs": 0.0,
+      "meanBufferMs": 53.41733333333331,
+      "meanTargetMs": 40.41466666666674,
+      "received": 15000,
+      "netLost": 0,
+      "discarded": 1,
+      "nackCount": 1,
+      "positiveLoss": 0,
+      "negativeLoss": 0,
+      "insertedMs": 0.0,
+      "removedMs": 53.125,
+      "quietIntervals": [
+        {
+          "audioEndMs": 161502.34999999963,
+          "audioSeconds": 162.81866666666667,
+          "durationMs": 2258.0625,
+          "endFrame": 7752460,
+          "kind": "quiet",
+          "ms": 161678.09999999963,
+          "phase": {
+            "durationSeconds": 249,
+            "label": "head",
+            "loop": true,
+            "playing": true,
+            "positionSeconds": 0
+          },
+          "reportDelayMs": 175.75,
+          "sequence": 4
+        }
+      ],
+      "pcmAnomalies": {
+        "nonFinite": 0,
+        "nearFullScale": 0,
+        "emptyFrames": 0
+      },
+      "receiverIdentity": {
+        "id": "IT01A9597",
+        "ssrc": 9597,
+        "trackIdentifier": "3af11c66-cbb7-4464-aa97-d6e5de31b9d0"
+      },
+      "error": null
+    },
+    {
+      "index": 3,
+      "targetMs": 120,
+      "startedAt": "2026-10-03T12:09:59.260Z",
+      "seconds": 299.99360205078125,
+      "valid": true,
+      "status": "completed",
+      "coverage": {
+        "completeEventHistory": true,
+        "completePcmCoverage": true,
+        "completePollCoverage": true,
+        "completeSpeakingObservation": true,
+        "completeTrackPhaseObservation": true,
+        "droppedDiagnosticWindows": 0,
+        "pcmSeconds": 300.0106666666667,
+        "receiverSeconds": 299.99360205078125,
+        "retainedDiagnosticWindows": 1,
+        "uninterruptedConnection": true
+      },
+      "concealedMs": 0.0,
+      "silentConcealedMs": 0.0,
+      "meanBufferMs": 117.28315221014726,
+      "meanTargetMs": 120.00000000000004,
+      "received": 14999,
+      "netLost": 0,
+      "discarded": 0,
+      "nackCount": 1,
+      "positiveLoss": 0,
+      "negativeLoss": 0,
+      "insertedMs": 0.0,
+      "removedMs": 0.0,
+      "quietIntervals": [
+        {
+          "audioEndMs": 98436.00000000001,
+          "audioSeconds": 99.61866666666667,
+          "durationMs": 2258.0625,
+          "endFrame": 4725544,
+          "kind": "quiet",
+          "ms": 98504.59999999963,
+          "phase": {
+            "durationSeconds": 249,
+            "label": "head",
+            "loop": true,
+            "playing": true,
+            "positionSeconds": 0
+          },
+          "reportDelayMs": 68.49999999998545,
+          "sequence": 4
+        }
+      ],
+      "pcmAnomalies": {
+        "nonFinite": 0,
+        "nearFullScale": 0,
+        "emptyFrames": 0
+      },
+      "receiverIdentity": {
+        "id": "IT01A9597",
+        "ssrc": 9597,
+        "trackIdentifier": "3af11c66-cbb7-4464-aa97-d6e5de31b9d0"
+      },
+      "error": null
+    }
+  ],
+  "groups": {
+    "default": {
+      "windows": 2,
+      "validWindows": 2,
+      "seconds": 599.9925278320313,
+      "concealedMs": 162.75,
+      "silentConcealedMs": 0.0,
+      "netLost": 0,
+      "discarded": 4,
+      "concealmentMsPerMinute": 16.275202685080313,
+      "meanBufferMs": 62.8952895289529
+    },
+    "120": {
+      "windows": 2,
+      "validWindows": 2,
+      "seconds": 599.9907038574219,
+      "concealedMs": 0.0,
+      "silentConcealedMs": 0.0,
+      "netLost": 0,
+      "discarded": 0,
+      "concealmentMsPerMinute": 0.0,
+      "meanBufferMs": 120.00633438906483
+    }
+  },
+  "sameReceiver": true,
+  "allValid": true,
+  "limitations": [
+    "The receiver target cannot be enforced by the bot for other Discord clients.",
+    "Mean buffer delay is not end-to-end audio latency.",
+    "Sequential trials remain subject to changing network conditions and buffer adaptation.",
+    "Quiet intervals are retained with track phase; track tails are not network concealment.",
+    "Net loss includes late corrections; zero does not establish zero lateness."
+  ]
+}

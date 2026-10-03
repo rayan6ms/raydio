@@ -1,0 +1,1954 @@
+[
+  {
+    "valid": false,
+    "receiverStart": "2026-10-03T12:17:27.510Z",
+    "receiverSeconds": 119.9980771484375,
+    "sender": {
+      "packets": 5251,
+      "covered": false,
+      "maximumGapMs": 32.039,
+      "gapsAtLeast40Ms": 0,
+      "gapsAtLeast100Ms": 0,
+      "largestGaps": [
+        {
+          "endUnixMicros": 1791029865404980,
+          "gapMs": 32.039
+        },
+        {
+          "endUnixMicros": 1791029934805014,
+          "gapMs": 31.707
+        },
+        {
+          "endUnixMicros": 1791029852201689,
+          "gapMs": 28.161
+        },
+        {
+          "endUnixMicros": 1791029949800147,
+          "gapMs": 27.455
+        },
+        {
+          "endUnixMicros": 1791029858100683,
+          "gapMs": 27.399
+        },
+        {
+          "endUnixMicros": 1791029862818946,
+          "gapMs": 26.212
+        },
+        {
+          "endUnixMicros": 1791029849815172,
+          "gapMs": 22.546
+        },
+        {
+          "endUnixMicros": 1791029852955190,
+          "gapMs": 22.529
+        },
+        {
+          "endUnixMicros": 1791029915654742,
+          "gapMs": 22.022
+        },
+        {
+          "endUnixMicros": 1791029914514461,
+          "gapMs": 21.771
+        }
+      ]
+    },
+    "arrival": {
+      "packets": 5140,
+      "covered": false,
+      "maximumGapMs": 57.473,
+      "gapsAtLeast40Ms": 9,
+      "gapsAtLeast100Ms": 0,
+      "largestGaps": [
+        {
+          "endUnixMicros": 1791029892050510,
+          "gapMs": 57.473
+        },
+        {
+          "endUnixMicros": 1791029877049838,
+          "gapMs": 56.286
+        },
+        {
+          "endUnixMicros": 1791029937045673,
+          "gapMs": 52.815
+        },
+        {
+          "endUnixMicros": 1791029907051152,
+          "gapMs": 51.828
+        },
+        {
+          "endUnixMicros": 1791029862049480,
+          "gapMs": 51.584
+        },
+        {
+          "endUnixMicros": 1791029922045416,
+          "gapMs": 51.192
+        },
+        {
+          "endUnixMicros": 1791029896801433,
+          "gapMs": 44.563
+        },
+        {
+          "endUnixMicros": 1791029891433362,
+          "gapMs": 40.818
+        },
+        {
+          "endUnixMicros": 1791029901831529,
+          "gapMs": 40.285
+        },
+        {
+          "endUnixMicros": 1791029881576833,
+          "gapMs": 39.95
+        }
+      ]
+    },
+    "matchedReceiverPackets": 5140,
+    "unmatchedReceiverPackets": 0,
+    "duplicateSenderKeys": 0,
+    "recordCountsMatch": true,
+    "transitExcessOverObservedMinimumMs": {
+      "median": 3.4154999999999998,
+      "maximum": 87.997
+    },
+    "incidents": [
+      {
+        "receiver": {
+          "concealedMs": 16.395833333333332,
+          "discarded": 0,
+          "emittedSamples": 48000,
+          "fecDiscarded": 0,
+          "fecReceived": 0,
+          "insertedMs": 0,
+          "jitterMs": 2,
+          "kind": "receiver",
+          "lost": 0,
+          "meanBufferMs": 64,
+          "ms": 15020.400000000373,
+          "nacks": 1,
+          "packets": 50,
+          "phase": {
+            "durationSeconds": 249,
+            "label": "middle",
+            "loop": true,
+            "playing": true,
+            "positionSeconds": 115
+          },
+          "receivedSamples": 48480,
+          "removedMs": 3.0416666666666665,
+          "sequence": 1,
+          "silentConcealedMs": 0,
+          "windowMs": 1000.967041015625
+        },
+        "utc": "2026-10-03T12:17:42.530400+00:00",
+        "sender": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 20.968,
+          "gapsAtLeast40Ms": 0,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791029861913542,
+              "gapMs": 20.968
+            },
+            {
+              "endUnixMicros": 1791029862113509,
+              "gapMs": 20.934
+            },
+            {
+              "endUnixMicros": 1791029862313459,
+              "gapMs": 20.861
+            },
+            {
+              "endUnixMicros": 1791029861553481,
+              "gapMs": 20.856
+            },
+            {
+              "endUnixMicros": 1791029862473498,
+              "gapMs": 20.817
+            },
+            {
+              "endUnixMicros": 1791029861433532,
+              "gapMs": 20.802
+            },
+            {
+              "endUnixMicros": 1791029862033412,
+              "gapMs": 20.781
+            },
+            {
+              "endUnixMicros": 1791029861333558,
+              "gapMs": 20.769
+            },
+            {
+              "endUnixMicros": 1791029862553551,
+              "gapMs": 20.762
+            },
+            {
+              "endUnixMicros": 1791029862393388,
+              "gapMs": 20.759
+            }
+          ]
+        },
+        "arrival": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 51.584,
+          "gapsAtLeast40Ms": 1,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791029862049480,
+              "gapMs": 51.584
+            },
+            {
+              "endUnixMicros": 1791029861398355,
+              "gapMs": 24.548
+            },
+            {
+              "endUnixMicros": 1791029861758110,
+              "gapMs": 24.288
+            },
+            {
+              "endUnixMicros": 1791029861878097,
+              "gapMs": 24.07
+            },
+            {
+              "endUnixMicros": 1791029861657916,
+              "gapMs": 23.997
+            },
+            {
+              "endUnixMicros": 1791029861717947,
+              "gapMs": 23.966
+            },
+            {
+              "endUnixMicros": 1791029862136606,
+              "gapMs": 23.914
+            },
+            {
+              "endUnixMicros": 1791029862576598,
+              "gapMs": 23.875
+            },
+            {
+              "endUnixMicros": 1791029861558515,
+              "gapMs": 23.424
+            },
+            {
+              "endUnixMicros": 1791029862716622,
+              "gapMs": 23.297
+            }
+          ]
+        }
+      },
+      {
+        "receiver": {
+          "concealedMs": 29.895833333333332,
+          "discarded": 1,
+          "emittedSamples": 48000,
+          "fecDiscarded": 0,
+          "fecReceived": 0,
+          "insertedMs": 0,
+          "jitterMs": 2,
+          "kind": "receiver",
+          "lost": 0,
+          "meanBufferMs": 56.19999999999224,
+          "ms": 30037.60000000056,
+          "nacks": 1,
+          "packets": 50,
+          "phase": {
+            "durationSeconds": 249,
+            "label": "middle",
+            "loop": true,
+            "playing": true,
+            "positionSeconds": 129
+          },
+          "receivedSamples": 48480,
+          "removedMs": 0,
+          "sequence": 2,
+          "silentConcealedMs": 0,
+          "windowMs": 1000.98193359375
+        },
+        "utc": "2026-10-03T12:17:57.547600+00:00",
+        "sender": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 20.961,
+          "gapsAtLeast40Ms": 0,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791029876913578,
+              "gapMs": 20.961
+            },
+            {
+              "endUnixMicros": 1791029876713539,
+              "gapMs": 20.882
+            },
+            {
+              "endUnixMicros": 1791029877473532,
+              "gapMs": 20.807
+            },
+            {
+              "endUnixMicros": 1791029877713524,
+              "gapMs": 20.803
+            },
+            {
+              "endUnixMicros": 1791029876813498,
+              "gapMs": 20.795
+            },
+            {
+              "endUnixMicros": 1791029877593549,
+              "gapMs": 20.793
+            },
+            {
+              "endUnixMicros": 1791029877793606,
+              "gapMs": 20.778
+            },
+            {
+              "endUnixMicros": 1791029877393365,
+              "gapMs": 20.759
+            },
+            {
+              "endUnixMicros": 1791029877053441,
+              "gapMs": 20.758
+            },
+            {
+              "endUnixMicros": 1791029876353482,
+              "gapMs": 20.734
+            }
+          ]
+        },
+        "arrival": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 56.286,
+          "gapsAtLeast40Ms": 1,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791029877049838,
+              "gapMs": 56.286
+            },
+            {
+              "endUnixMicros": 1791029876737120,
+              "gapMs": 24.596
+            },
+            {
+              "endUnixMicros": 1791029877776922,
+              "gapMs": 24.302
+            },
+            {
+              "endUnixMicros": 1791029876977371,
+              "gapMs": 24.271
+            },
+            {
+              "endUnixMicros": 1791029876836583,
+              "gapMs": 24.155
+            },
+            {
+              "endUnixMicros": 1791029876496482,
+              "gapMs": 24.093
+            },
+            {
+              "endUnixMicros": 1791029877396569,
+              "gapMs": 24.01
+            },
+            {
+              "endUnixMicros": 1791029876576601,
+              "gapMs": 23.983
+            },
+            {
+              "endUnixMicros": 1791029877236552,
+              "gapMs": 23.979
+            },
+            {
+              "endUnixMicros": 1791029876397413,
+              "gapMs": 23.977
+            }
+          ]
+        }
+      },
+      {
+        "receiver": {
+          "concealedMs": 9.458333333333334,
+          "discarded": 0,
+          "emittedSamples": 47040,
+          "fecDiscarded": 0,
+          "fecReceived": 0,
+          "insertedMs": 0,
+          "jitterMs": 1,
+          "kind": "receiver",
+          "lost": 0,
+          "meanBufferMs": 60.40816326529821,
+          "ms": 60085.200000000186,
+          "nacks": 1,
+          "packets": 50,
+          "phase": {
+            "durationSeconds": 249,
+            "label": "middle",
+            "loop": true,
+            "playing": true,
+            "positionSeconds": 159
+          },
+          "receivedSamples": 47520,
+          "removedMs": 0,
+          "sequence": 4,
+          "silentConcealedMs": 0,
+          "windowMs": 1000.909912109375
+        },
+        "utc": "2026-10-03T12:18:27.595200+00:00",
+        "sender": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 20.909,
+          "gapsAtLeast40Ms": 0,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791029906893486,
+              "gapMs": 20.909
+            },
+            {
+              "endUnixMicros": 1791029907733540,
+              "gapMs": 20.903
+            },
+            {
+              "endUnixMicros": 1791029907053522,
+              "gapMs": 20.864
+            },
+            {
+              "endUnixMicros": 1791029907273516,
+              "gapMs": 20.835
+            },
+            {
+              "endUnixMicros": 1791029907433550,
+              "gapMs": 20.796
+            },
+            {
+              "endUnixMicros": 1791029907373459,
+              "gapMs": 20.794
+            },
+            {
+              "endUnixMicros": 1791029906713580,
+              "gapMs": 20.787
+            },
+            {
+              "endUnixMicros": 1791029907813511,
+              "gapMs": 20.783
+            },
+            {
+              "endUnixMicros": 1791029907193382,
+              "gapMs": 20.765
+            },
+            {
+              "endUnixMicros": 1791029906553393,
+              "gapMs": 20.746
+            }
+          ]
+        },
+        "arrival": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 51.828,
+          "gapsAtLeast40Ms": 1,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791029907051152,
+              "gapMs": 51.828
+            },
+            {
+              "endUnixMicros": 1791029906999324,
+              "gapMs": 28.0
+            },
+            {
+              "endUnixMicros": 1791029906379761,
+              "gapMs": 25.534
+            },
+            {
+              "endUnixMicros": 1791029906616943,
+              "gapMs": 24.377
+            },
+            {
+              "endUnixMicros": 1791029906835532,
+              "gapMs": 24.202
+            },
+            {
+              "endUnixMicros": 1791029906458321,
+              "gapMs": 24.191
+            },
+            {
+              "endUnixMicros": 1791029906755430,
+              "gapMs": 24.183
+            },
+            {
+              "endUnixMicros": 1791029906917920,
+              "gapMs": 23.942
+            },
+            {
+              "endUnixMicros": 1791029907754100,
+              "gapMs": 23.802
+            },
+            {
+              "endUnixMicros": 1791029906859228,
+              "gapMs": 23.696
+            }
+          ]
+        }
+      },
+      {
+        "receiver": {
+          "concealedMs": 15.104166666666666,
+          "discarded": 1,
+          "emittedSamples": 47040,
+          "fecDiscarded": 0,
+          "fecReceived": 0,
+          "insertedMs": 0,
+          "jitterMs": 2,
+          "kind": "receiver",
+          "lost": 0,
+          "meanBufferMs": 51.83673469388547,
+          "ms": 75101.30000000075,
+          "nacks": 1,
+          "packets": 50,
+          "phase": {
+            "durationSeconds": 249,
+            "label": "middle",
+            "loop": true,
+            "playing": true,
+            "positionSeconds": 174
+          },
+          "receivedSamples": 48000,
+          "removedMs": 0,
+          "sequence": 5,
+          "silentConcealedMs": 0,
+          "windowMs": 1001.043212890625
+        },
+        "utc": "2026-10-03T12:18:42.611300+00:00",
+        "sender": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 20.914,
+          "gapsAtLeast40Ms": 0,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791029922053557,
+              "gapMs": 20.914
+            },
+            {
+              "endUnixMicros": 1791029922353538,
+              "gapMs": 20.902
+            },
+            {
+              "endUnixMicros": 1791029922253538,
+              "gapMs": 20.864
+            },
+            {
+              "endUnixMicros": 1791029921773507,
+              "gapMs": 20.861
+            },
+            {
+              "endUnixMicros": 1791029922113495,
+              "gapMs": 20.83
+            },
+            {
+              "endUnixMicros": 1791029922573516,
+              "gapMs": 20.772
+            },
+            {
+              "endUnixMicros": 1791029921653448,
+              "gapMs": 20.763
+            },
+            {
+              "endUnixMicros": 1791029921913439,
+              "gapMs": 20.762
+            },
+            {
+              "endUnixMicros": 1791029921553531,
+              "gapMs": 20.758
+            },
+            {
+              "endUnixMicros": 1791029921993585,
+              "gapMs": 20.741
+            }
+          ]
+        },
+        "arrival": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 51.192,
+          "gapsAtLeast40Ms": 1,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791029922045416,
+              "gapMs": 51.192
+            },
+            {
+              "endUnixMicros": 1791029922660559,
+              "gapMs": 28.0
+            },
+            {
+              "endUnixMicros": 1791029922236869,
+              "gapMs": 24.288
+            },
+            {
+              "endUnixMicros": 1791029922736579,
+              "gapMs": 24.013
+            },
+            {
+              "endUnixMicros": 1791029922616571,
+              "gapMs": 23.983
+            },
+            {
+              "endUnixMicros": 1791029922516560,
+              "gapMs": 23.982
+            },
+            {
+              "endUnixMicros": 1791029922176557,
+              "gapMs": 23.981
+            },
+            {
+              "endUnixMicros": 1791029922836588,
+              "gapMs": 23.968
+            },
+            {
+              "endUnixMicros": 1791029922296598,
+              "gapMs": 23.964
+            },
+            {
+              "endUnixMicros": 1791029922356677,
+              "gapMs": 23.819
+            }
+          ]
+        }
+      },
+      {
+        "receiver": {
+          "concealedMs": 21.875,
+          "discarded": 0,
+          "emittedSamples": 48000,
+          "fecDiscarded": 0,
+          "fecReceived": 0,
+          "insertedMs": 0,
+          "jitterMs": 1,
+          "kind": "receiver",
+          "lost": 0,
+          "meanBufferMs": 49.80000000000776,
+          "ms": 90119.80000000075,
+          "nacks": 1,
+          "packets": 50,
+          "phase": {
+            "durationSeconds": 249,
+            "label": "middle",
+            "loop": true,
+            "playing": true,
+            "positionSeconds": 189
+          },
+          "receivedSamples": 48000,
+          "removedMs": 14.645833333333334,
+          "sequence": 6,
+          "silentConcealedMs": 0,
+          "windowMs": 1000.89501953125
+        },
+        "utc": "2026-10-03T12:18:57.629800+00:00",
+        "sender": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 21.322,
+          "gapsAtLeast40Ms": 0,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791029936414239,
+              "gapMs": 21.322
+            },
+            {
+              "endUnixMicros": 1791029936973494,
+              "gapMs": 20.871
+            },
+            {
+              "endUnixMicros": 1791029937433487,
+              "gapMs": 20.844
+            },
+            {
+              "endUnixMicros": 1791029937173544,
+              "gapMs": 20.812
+            },
+            {
+              "endUnixMicros": 1791029937673538,
+              "gapMs": 20.798
+            },
+            {
+              "endUnixMicros": 1791029936713369,
+              "gapMs": 20.777
+            },
+            {
+              "endUnixMicros": 1791029937593313,
+              "gapMs": 20.768
+            },
+            {
+              "endUnixMicros": 1791029937053521,
+              "gapMs": 20.748
+            },
+            {
+              "endUnixMicros": 1791029937853347,
+              "gapMs": 20.748
+            },
+            {
+              "endUnixMicros": 1791029937353429,
+              "gapMs": 20.746
+            }
+          ]
+        },
+        "arrival": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 52.815,
+          "gapsAtLeast40Ms": 1,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791029937045673,
+              "gapMs": 52.815
+            },
+            {
+              "endUnixMicros": 1791029937644654,
+              "gapMs": 32.092
+            },
+            {
+              "endUnixMicros": 1791029936440769,
+              "gapMs": 28.104
+            },
+            {
+              "endUnixMicros": 1791029937120543,
+              "gapMs": 27.977
+            },
+            {
+              "endUnixMicros": 1791029936760624,
+              "gapMs": 27.721
+            },
+            {
+              "endUnixMicros": 1791029936876866,
+              "gapMs": 24.227
+            },
+            {
+              "endUnixMicros": 1791029937356561,
+              "gapMs": 23.991
+            },
+            {
+              "endUnixMicros": 1791029936516637,
+              "gapMs": 23.96
+            },
+            {
+              "endUnixMicros": 1791029936676601,
+              "gapMs": 23.921
+            },
+            {
+              "endUnixMicros": 1791029936956673,
+              "gapMs": 23.84
+            }
+          ]
+        }
+      },
+      {
+        "receiver": {
+          "concealedMs": 14.916666666666666,
+          "discarded": 0,
+          "emittedSamples": 39360,
+          "fecDiscarded": 0,
+          "fecReceived": 0,
+          "insertedMs": 0,
+          "jitterMs": 2,
+          "kind": "receiver",
+          "lost": 0,
+          "meanBufferMs": 62.926829268311614,
+          "ms": 120000.00000000093,
+          "nacks": 1,
+          "packets": 42,
+          "phase": {
+            "durationSeconds": 249,
+            "label": "middle",
+            "loop": true,
+            "playing": true,
+            "positionSeconds": 219
+          },
+          "receivedSamples": 40320,
+          "removedMs": 0,
+          "sequence": 8,
+          "silentConcealedMs": 0,
+          "windowMs": 848.84814453125
+        },
+        "utc": "2026-10-03T12:19:27.510000+00:00",
+        "sender": {
+          "packets": 0,
+          "covered": false,
+          "maximumGapMs": null,
+          "gapsAtLeast40Ms": 0,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": []
+        },
+        "arrival": {
+          "packets": 0,
+          "covered": false,
+          "maximumGapMs": null,
+          "gapsAtLeast40Ms": 0,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": []
+        }
+      }
+    ],
+    "limitations": [
+      "Capture timestamps require stable clocks; absolute one-way latency is not claimed.",
+      "Extra arrival jitter localizes delay after sender capture, but cannot distinguish SFU forwarding from network hops.",
+      "An arrival gap is not necessarily permanent packet loss; subsequent late/reordered arrivals can fill it.",
+      "Overlap with a receiver poll is correlation; decoding/playout happens after kernel arrival.",
+      "Short, instrumented diagnostic window is not a production improvement or endurance qualification."
+    ],
+    "index": 0,
+    "targetMs": null,
+    "concealedMs": 107.64583333333333,
+    "discarded": 2,
+    "lostNet": 0
+  },
+  {
+    "valid": true,
+    "receiverStart": "2026-10-03T12:20:54.131Z",
+    "receiverSeconds": 119.99948583984374,
+    "sender": {
+      "packets": 6000,
+      "covered": true,
+      "maximumGapMs": 31.649,
+      "gapsAtLeast40Ms": 0,
+      "gapsAtLeast100Ms": 0,
+      "largestGaps": [
+        {
+          "endUnixMicros": 1791030108004975,
+          "gapMs": 31.649
+        },
+        {
+          "endUnixMicros": 1791030132623045,
+          "gapMs": 30.047
+        },
+        {
+          "endUnixMicros": 1791030160102424,
+          "gapMs": 29.363
+        },
+        {
+          "endUnixMicros": 1791030157741957,
+          "gapMs": 28.523
+        },
+        {
+          "endUnixMicros": 1791030128740300,
+          "gapMs": 27.393
+        },
+        {
+          "endUnixMicros": 1791030056100249,
+          "gapMs": 27.295
+        },
+        {
+          "endUnixMicros": 1791030131117964,
+          "gapMs": 24.693
+        },
+        {
+          "endUnixMicros": 1791030145395766,
+          "gapMs": 23.035
+        },
+        {
+          "endUnixMicros": 1791030117055305,
+          "gapMs": 22.598
+        },
+        {
+          "endUnixMicros": 1791030107955594,
+          "gapMs": 22.155
+        }
+      ]
+    },
+    "arrival": {
+      "packets": 6000,
+      "covered": true,
+      "maximumGapMs": 55.436,
+      "gapsAtLeast40Ms": 8,
+      "gapsAtLeast100Ms": 0,
+      "largestGaps": [
+        {
+          "endUnixMicros": 1791030162048380,
+          "gapMs": 55.436
+        },
+        {
+          "endUnixMicros": 1791030132045069,
+          "gapMs": 53.813
+        },
+        {
+          "endUnixMicros": 1791030072042921,
+          "gapMs": 51.264
+        },
+        {
+          "endUnixMicros": 1791030117044573,
+          "gapMs": 51.118
+        },
+        {
+          "endUnixMicros": 1791030087049069,
+          "gapMs": 50.982
+        },
+        {
+          "endUnixMicros": 1791030102045878,
+          "gapMs": 49.641
+        },
+        {
+          "endUnixMicros": 1791030147041911,
+          "gapMs": 49.306
+        },
+        {
+          "endUnixMicros": 1791030057048382,
+          "gapMs": 48.494
+        },
+        {
+          "endUnixMicros": 1791030088461330,
+          "gapMs": 38.685
+        },
+        {
+          "endUnixMicros": 1791030091173594,
+          "gapMs": 37.475
+        }
+      ]
+    },
+    "matchedReceiverPackets": 6000,
+    "unmatchedReceiverPackets": 0,
+    "duplicateSenderKeys": 0,
+    "recordCountsMatch": true,
+    "transitExcessOverObservedMinimumMs": {
+      "median": 3.841000000000001,
+      "maximum": 80.73700000000001
+    },
+    "incidents": [],
+    "limitations": [
+      "Capture timestamps require stable clocks; absolute one-way latency is not claimed.",
+      "Extra arrival jitter localizes delay after sender capture, but cannot distinguish SFU forwarding from network hops.",
+      "An arrival gap is not necessarily permanent packet loss; subsequent late/reordered arrivals can fill it.",
+      "Overlap with a receiver poll is correlation; decoding/playout happens after kernel arrival.",
+      "Short, instrumented diagnostic window is not a production improvement or endurance qualification."
+    ],
+    "index": 1,
+    "targetMs": null,
+    "concealedMs": 0.0,
+    "discarded": 0,
+    "lostNet": 0
+  },
+  {
+    "valid": true,
+    "receiverStart": "2026-10-03T12:24:41.338Z",
+    "receiverSeconds": 119.9995361328125,
+    "sender": {
+      "packets": 6000,
+      "covered": true,
+      "maximumGapMs": 32.282,
+      "gapsAtLeast40Ms": 0,
+      "gapsAtLeast100Ms": 0,
+      "largestGaps": [
+        {
+          "endUnixMicros": 1791030308404955,
+          "gapMs": 32.282
+        },
+        {
+          "endUnixMicros": 1791030322504949,
+          "gapMs": 32.061
+        },
+        {
+          "endUnixMicros": 1791030335984591,
+          "gapMs": 31.75
+        },
+        {
+          "endUnixMicros": 1791030318002263,
+          "gapMs": 29.583
+        },
+        {
+          "endUnixMicros": 1791030283301907,
+          "gapMs": 28.881
+        },
+        {
+          "endUnixMicros": 1791030288020185,
+          "gapMs": 27.285
+        },
+        {
+          "endUnixMicros": 1791030326199838,
+          "gapMs": 27.262
+        },
+        {
+          "endUnixMicros": 1791030281878773,
+          "gapMs": 26.129
+        },
+        {
+          "endUnixMicros": 1791030326358493,
+          "gapMs": 25.39
+        },
+        {
+          "endUnixMicros": 1791030366518743,
+          "gapMs": 25.361
+        }
+      ]
+    },
+    "arrival": {
+      "packets": 6000,
+      "covered": true,
+      "maximumGapMs": 77.162,
+      "gapsAtLeast40Ms": 9,
+      "gapsAtLeast100Ms": 0,
+      "largestGaps": [
+        {
+          "endUnixMicros": 1791030327069782,
+          "gapMs": 77.162
+        },
+        {
+          "endUnixMicros": 1791030357053627,
+          "gapMs": 58.512
+        },
+        {
+          "endUnixMicros": 1791030342049094,
+          "gapMs": 55.841
+        },
+        {
+          "endUnixMicros": 1791030297051590,
+          "gapMs": 55.355
+        },
+        {
+          "endUnixMicros": 1791030282045104,
+          "gapMs": 53.834
+        },
+        {
+          "endUnixMicros": 1791030312048359,
+          "gapMs": 53.467
+        },
+        {
+          "endUnixMicros": 1791030387045250,
+          "gapMs": 52.529
+        },
+        {
+          "endUnixMicros": 1791030372045732,
+          "gapMs": 52.012
+        },
+        {
+          "endUnixMicros": 1791030337373199,
+          "gapMs": 40.404
+        },
+        {
+          "endUnixMicros": 1791030337551995,
+          "gapMs": 37.569
+        }
+      ]
+    },
+    "matchedReceiverPackets": 6000,
+    "unmatchedReceiverPackets": 0,
+    "duplicateSenderKeys": 0,
+    "recordCountsMatch": true,
+    "transitExcessOverObservedMinimumMs": {
+      "median": 4.5905000000000005,
+      "maximum": 119.074
+    },
+    "incidents": [],
+    "limitations": [
+      "Capture timestamps require stable clocks; absolute one-way latency is not claimed.",
+      "Extra arrival jitter localizes delay after sender capture, but cannot distinguish SFU forwarding from network hops.",
+      "An arrival gap is not necessarily permanent packet loss; subsequent late/reordered arrivals can fill it.",
+      "Overlap with a receiver poll is correlation; decoding/playout happens after kernel arrival.",
+      "Short, instrumented diagnostic window is not a production improvement or endurance qualification."
+    ],
+    "index": 2,
+    "targetMs": 120,
+    "concealedMs": 0.0,
+    "discarded": 0,
+    "lostNet": 0
+  },
+  {
+    "valid": true,
+    "receiverStart": "2026-10-03T12:28:16.421Z",
+    "receiverSeconds": 119.99971899414062,
+    "sender": {
+      "packets": 6000,
+      "covered": true,
+      "maximumGapMs": 29.255,
+      "gapsAtLeast40Ms": 0,
+      "gapsAtLeast100Ms": 0,
+      "largestGaps": [
+        {
+          "endUnixMicros": 1791030578562123,
+          "gapMs": 29.255
+        },
+        {
+          "endUnixMicros": 1791030609020292,
+          "gapMs": 26.997
+        },
+        {
+          "endUnixMicros": 1791030606638181,
+          "gapMs": 24.848
+        },
+        {
+          "endUnixMicros": 1791030577777049,
+          "gapMs": 24.252
+        },
+        {
+          "endUnixMicros": 1791030533816211,
+          "gapMs": 23.537
+        },
+        {
+          "endUnixMicros": 1791030606516542,
+          "gapMs": 23.517
+        },
+        {
+          "endUnixMicros": 1791030509815873,
+          "gapMs": 23.309
+        },
+        {
+          "endUnixMicros": 1791030603835900,
+          "gapMs": 23.177
+        },
+        {
+          "endUnixMicros": 1791030501776503,
+          "gapMs": 23.104
+        },
+        {
+          "endUnixMicros": 1791030553895533,
+          "gapMs": 22.918
+        }
+      ]
+    },
+    "arrival": {
+      "packets": 6001,
+      "covered": true,
+      "maximumGapMs": 62.608,
+      "gapsAtLeast40Ms": 12,
+      "gapsAtLeast100Ms": 0,
+      "largestGaps": [
+        {
+          "endUnixMicros": 1791030537054909,
+          "gapMs": 62.608
+        },
+        {
+          "endUnixMicros": 1791030582056920,
+          "gapMs": 61.856
+        },
+        {
+          "endUnixMicros": 1791030507052076,
+          "gapMs": 56.916
+        },
+        {
+          "endUnixMicros": 1791030552050150,
+          "gapMs": 56.56
+        },
+        {
+          "endUnixMicros": 1791030597046650,
+          "gapMs": 54.678
+        },
+        {
+          "endUnixMicros": 1791030552886850,
+          "gapMs": 53.19
+        },
+        {
+          "endUnixMicros": 1791030612046657,
+          "gapMs": 52.969
+        },
+        {
+          "endUnixMicros": 1791030567046522,
+          "gapMs": 51.694
+        },
+        {
+          "endUnixMicros": 1791030553021984,
+          "gapMs": 51.649
+        },
+        {
+          "endUnixMicros": 1791030522044850,
+          "gapMs": 48.828
+        }
+      ]
+    },
+    "matchedReceiverPackets": 6001,
+    "unmatchedReceiverPackets": 0,
+    "duplicateSenderKeys": 0,
+    "recordCountsMatch": true,
+    "transitExcessOverObservedMinimumMs": {
+      "median": 4.504999999999999,
+      "maximum": 97.598
+    },
+    "incidents": [
+      {
+        "receiver": {
+          "concealedMs": 14.979166666666666,
+          "discarded": 0,
+          "emittedSamples": 48960,
+          "fecDiscarded": 0,
+          "fecReceived": 0,
+          "insertedMs": 0,
+          "jitterMs": 3,
+          "kind": "receiver",
+          "lost": 0,
+          "meanBufferMs": 58.8235294117647,
+          "ms": 26028.400000000373,
+          "nacks": 1,
+          "packets": 50,
+          "phase": {
+            "durationSeconds": 249,
+            "label": "middle",
+            "loop": true,
+            "playing": true,
+            "positionSeconds": 19
+          },
+          "receivedSamples": 48000,
+          "removedMs": 11.520833333333334,
+          "sequence": 3,
+          "silentConcealedMs": 0,
+          "windowMs": 1000.9208984375
+        },
+        "utc": "2026-10-03T12:28:42.449400+00:00",
+        "sender": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 20.844,
+          "gapsAtLeast40Ms": 0,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791030522513464,
+              "gapMs": 20.844
+            },
+            {
+              "endUnixMicros": 1791030522313509,
+              "gapMs": 20.824
+            },
+            {
+              "endUnixMicros": 1791030521353397,
+              "gapMs": 20.804
+            },
+            {
+              "endUnixMicros": 1791030521833539,
+              "gapMs": 20.794
+            },
+            {
+              "endUnixMicros": 1791030521533354,
+              "gapMs": 20.789
+            },
+            {
+              "endUnixMicros": 1791030522073591,
+              "gapMs": 20.778
+            },
+            {
+              "endUnixMicros": 1791030522233304,
+              "gapMs": 20.728
+            },
+            {
+              "endUnixMicros": 1791030522433336,
+              "gapMs": 20.724
+            },
+            {
+              "endUnixMicros": 1791030521673552,
+              "gapMs": 20.717
+            },
+            {
+              "endUnixMicros": 1791030521753432,
+              "gapMs": 20.712
+            }
+          ]
+        },
+        "arrival": {
+          "packets": 76,
+          "covered": true,
+          "maximumGapMs": 48.828,
+          "gapsAtLeast40Ms": 1,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791030522044850,
+              "gapMs": 48.828
+            },
+            {
+              "endUnixMicros": 1791030521919725,
+              "gapMs": 28.436
+            },
+            {
+              "endUnixMicros": 1791030521199263,
+              "gapMs": 28.35
+            },
+            {
+              "endUnixMicros": 1791030521259098,
+              "gapMs": 27.987
+            },
+            {
+              "endUnixMicros": 1791030521298976,
+              "gapMs": 27.984
+            },
+            {
+              "endUnixMicros": 1791030521859606,
+              "gapMs": 27.79
+            },
+            {
+              "endUnixMicros": 1791030522297464,
+              "gapMs": 24.509
+            },
+            {
+              "endUnixMicros": 1791030521555537,
+              "gapMs": 24.288
+            },
+            {
+              "endUnixMicros": 1791030522436404,
+              "gapMs": 24.248
+            },
+            {
+              "endUnixMicros": 1791030521639655,
+              "gapMs": 24.225
+            }
+          ]
+        }
+      },
+      {
+        "receiver": {
+          "concealedMs": 26.0625,
+          "discarded": 1,
+          "emittedSamples": 47040,
+          "fecDiscarded": 0,
+          "fecReceived": 0,
+          "insertedMs": 0,
+          "jitterMs": 3,
+          "kind": "receiver",
+          "lost": 0,
+          "meanBufferMs": 50,
+          "ms": 41045.299999999814,
+          "nacks": 1,
+          "packets": 50,
+          "phase": {
+            "durationSeconds": 249,
+            "label": "middle",
+            "loop": true,
+            "playing": true,
+            "positionSeconds": 30
+          },
+          "receivedSamples": 48000,
+          "removedMs": 0,
+          "sequence": 4,
+          "silentConcealedMs": 0,
+          "windowMs": 1000.94677734375
+        },
+        "utc": "2026-10-03T12:28:57.466300+00:00",
+        "sender": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 20.841,
+          "gapsAtLeast40Ms": 0,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791030536353505,
+              "gapMs": 20.841
+            },
+            {
+              "endUnixMicros": 1791030537413483,
+              "gapMs": 20.796
+            },
+            {
+              "endUnixMicros": 1791030536853360,
+              "gapMs": 20.768
+            },
+            {
+              "endUnixMicros": 1791030537673476,
+              "gapMs": 20.768
+            },
+            {
+              "endUnixMicros": 1791030537033419,
+              "gapMs": 20.765
+            },
+            {
+              "endUnixMicros": 1791030536593368,
+              "gapMs": 20.744
+            },
+            {
+              "endUnixMicros": 1791030537313491,
+              "gapMs": 20.733
+            },
+            {
+              "endUnixMicros": 1791030536793430,
+              "gapMs": 20.731
+            },
+            {
+              "endUnixMicros": 1791030536253478,
+              "gapMs": 20.729
+            },
+            {
+              "endUnixMicros": 1791030537113444,
+              "gapMs": 20.717
+            }
+          ]
+        },
+        "arrival": {
+          "packets": 74,
+          "covered": true,
+          "maximumGapMs": 62.608,
+          "gapsAtLeast40Ms": 1,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791030537054909,
+              "gapMs": 62.608
+            },
+            {
+              "endUnixMicros": 1791030537697710,
+              "gapMs": 28.12
+            },
+            {
+              "endUnixMicros": 1791030537378837,
+              "gapMs": 24.749
+            },
+            {
+              "endUnixMicros": 1791030536676506,
+              "gapMs": 24.36
+            },
+            {
+              "endUnixMicros": 1791030537202994,
+              "gapMs": 24.234
+            },
+            {
+              "endUnixMicros": 1791030537554802,
+              "gapMs": 24.138
+            },
+            {
+              "endUnixMicros": 1791030537134967,
+              "gapMs": 24.05
+            },
+            {
+              "endUnixMicros": 1791030537158958,
+              "gapMs": 23.991
+            },
+            {
+              "endUnixMicros": 1791030536596209,
+              "gapMs": 23.955
+            },
+            {
+              "endUnixMicros": 1791030537278064,
+              "gapMs": 23.94
+            }
+          ]
+        }
+      },
+      {
+        "receiver": {
+          "concealedMs": 9.895833333333334,
+          "discarded": 0,
+          "emittedSamples": 47040,
+          "fecDiscarded": 0,
+          "fecReceived": 0,
+          "insertedMs": 0,
+          "jitterMs": 3,
+          "kind": "receiver",
+          "lost": 0,
+          "meanBufferMs": 55.71428571430155,
+          "ms": 56060.700000000186,
+          "nacks": 1,
+          "packets": 50,
+          "phase": {
+            "durationSeconds": 249,
+            "label": "middle",
+            "loop": true,
+            "playing": true,
+            "positionSeconds": 53
+          },
+          "receivedSamples": 48000,
+          "removedMs": 0,
+          "sequence": 5,
+          "silentConcealedMs": 0,
+          "windowMs": 1000.81689453125
+        },
+        "utc": "2026-10-03T12:29:12.481700+00:00",
+        "sender": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 20.97,
+          "gapsAtLeast40Ms": 0,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791030552513548,
+              "gapMs": 20.97
+            },
+            {
+              "endUnixMicros": 1791030551813521,
+              "gapMs": 20.852
+            },
+            {
+              "endUnixMicros": 1791030552113442,
+              "gapMs": 20.852
+            },
+            {
+              "endUnixMicros": 1791030551713466,
+              "gapMs": 20.822
+            },
+            {
+              "endUnixMicros": 1791030552213536,
+              "gapMs": 20.777
+            },
+            {
+              "endUnixMicros": 1791030552413360,
+              "gapMs": 20.762
+            },
+            {
+              "endUnixMicros": 1791030551893462,
+              "gapMs": 20.753
+            },
+            {
+              "endUnixMicros": 1791030552013377,
+              "gapMs": 20.747
+            },
+            {
+              "endUnixMicros": 1791030552633568,
+              "gapMs": 20.747
+            },
+            {
+              "endUnixMicros": 1791030551513558,
+              "gapMs": 20.743
+            }
+          ]
+        },
+        "arrival": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 56.56,
+          "gapsAtLeast40Ms": 1,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791030552050150,
+              "gapMs": 56.56
+            },
+            {
+              "endUnixMicros": 1791030551922757,
+              "gapMs": 28.237
+            },
+            {
+              "endUnixMicros": 1791030552438570,
+              "gapMs": 24.762
+            },
+            {
+              "endUnixMicros": 1791030551278800,
+              "gapMs": 24.244
+            },
+            {
+              "endUnixMicros": 1791030551946881,
+              "gapMs": 24.124
+            },
+            {
+              "endUnixMicros": 1791030551718766,
+              "gapMs": 24.094
+            },
+            {
+              "endUnixMicros": 1791030552278819,
+              "gapMs": 24.02
+            },
+            {
+              "endUnixMicros": 1791030552377948,
+              "gapMs": 24.019
+            },
+            {
+              "endUnixMicros": 1791030551618761,
+              "gapMs": 24.017
+            },
+            {
+              "endUnixMicros": 1791030552218815,
+              "gapMs": 24.014
+            }
+          ]
+        }
+      },
+      {
+        "receiver": {
+          "concealedMs": 18.270833333333332,
+          "discarded": 1,
+          "emittedSamples": 47040,
+          "fecDiscarded": 0,
+          "fecReceived": 0,
+          "insertedMs": 0,
+          "jitterMs": 3,
+          "kind": "receiver",
+          "lost": 0,
+          "meanBufferMs": 49.387755102064574,
+          "ms": 71076.10000000056,
+          "nacks": 1,
+          "packets": 50,
+          "phase": {
+            "durationSeconds": 249,
+            "label": "middle",
+            "loop": true,
+            "playing": true,
+            "positionSeconds": 66
+          },
+          "receivedSamples": 48000,
+          "removedMs": 0,
+          "sequence": 6,
+          "silentConcealedMs": 0,
+          "windowMs": 1001.005126953125
+        },
+        "utc": "2026-10-03T12:29:27.497100+00:00",
+        "sender": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 20.849,
+          "gapsAtLeast40Ms": 0,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791030567233468,
+              "gapMs": 20.849
+            },
+            {
+              "endUnixMicros": 1791030567473428,
+              "gapMs": 20.83
+            },
+            {
+              "endUnixMicros": 1791030566773438,
+              "gapMs": 20.825
+            },
+            {
+              "endUnixMicros": 1791030567613520,
+              "gapMs": 20.816
+            },
+            {
+              "endUnixMicros": 1791030567413491,
+              "gapMs": 20.81
+            },
+            {
+              "endUnixMicros": 1791030566553486,
+              "gapMs": 20.806
+            },
+            {
+              "endUnixMicros": 1791030566873500,
+              "gapMs": 20.747
+            },
+            {
+              "endUnixMicros": 1791030566633394,
+              "gapMs": 20.737
+            },
+            {
+              "endUnixMicros": 1791030567353403,
+              "gapMs": 20.713
+            },
+            {
+              "endUnixMicros": 1791030566373315,
+              "gapMs": 20.712
+            }
+          ]
+        },
+        "arrival": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 51.694,
+          "gapsAtLeast40Ms": 1,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791030567046522,
+              "gapMs": 51.694
+            },
+            {
+              "endUnixMicros": 1791030567445257,
+              "gapMs": 31.739
+            },
+            {
+              "endUnixMicros": 1791030567541295,
+              "gapMs": 26.524
+            },
+            {
+              "endUnixMicros": 1791030566398814,
+              "gapMs": 24.245
+            },
+            {
+              "endUnixMicros": 1791030566878603,
+              "gapMs": 24.182
+            },
+            {
+              "endUnixMicros": 1791030566718919,
+              "gapMs": 24.004
+            },
+            {
+              "endUnixMicros": 1791030566338819,
+              "gapMs": 23.896
+            },
+            {
+              "endUnixMicros": 1791030566938116,
+              "gapMs": 23.889
+            },
+            {
+              "endUnixMicros": 1791030566598507,
+              "gapMs": 23.673
+            },
+            {
+              "endUnixMicros": 1791030566978578,
+              "gapMs": 23.578
+            }
+          ]
+        }
+      },
+      {
+        "receiver": {
+          "concealedMs": 22.541666666666668,
+          "discarded": 1,
+          "emittedSamples": 47040,
+          "fecDiscarded": 0,
+          "fecReceived": 0,
+          "insertedMs": 0,
+          "jitterMs": 1,
+          "kind": "receiver",
+          "lost": 0,
+          "meanBufferMs": 50.408163265290284,
+          "ms": 86092.79999999981,
+          "nacks": 1,
+          "packets": 51,
+          "phase": {
+            "durationSeconds": 249,
+            "label": "middle",
+            "loop": true,
+            "playing": true,
+            "positionSeconds": 78
+          },
+          "receivedSamples": 48480,
+          "removedMs": 0,
+          "sequence": 7,
+          "silentConcealedMs": 0,
+          "windowMs": 1000.8779296875
+        },
+        "utc": "2026-10-03T12:29:42.513800+00:00",
+        "sender": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 20.798,
+          "gapsAtLeast40Ms": 0,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791030582413408,
+              "gapMs": 20.798
+            },
+            {
+              "endUnixMicros": 1791030581673346,
+              "gapMs": 20.794
+            },
+            {
+              "endUnixMicros": 1791030582213358,
+              "gapMs": 20.789
+            },
+            {
+              "endUnixMicros": 1791030581393378,
+              "gapMs": 20.788
+            },
+            {
+              "endUnixMicros": 1791030582073473,
+              "gapMs": 20.776
+            },
+            {
+              "endUnixMicros": 1791030581733407,
+              "gapMs": 20.759
+            },
+            {
+              "endUnixMicros": 1791030581813418,
+              "gapMs": 20.742
+            },
+            {
+              "endUnixMicros": 1791030581313299,
+              "gapMs": 20.734
+            },
+            {
+              "endUnixMicros": 1791030582013276,
+              "gapMs": 20.726
+            },
+            {
+              "endUnixMicros": 1791030582653348,
+              "gapMs": 20.721
+            }
+          ]
+        },
+        "arrival": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 61.856,
+          "gapsAtLeast40Ms": 1,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791030582056920,
+              "gapMs": 61.856
+            },
+            {
+              "endUnixMicros": 1791030581840167,
+              "gapMs": 26.473
+            },
+            {
+              "endUnixMicros": 1791030581862357,
+              "gapMs": 22.19
+            },
+            {
+              "endUnixMicros": 1791030581733941,
+              "gapMs": 21.645
+            },
+            {
+              "endUnixMicros": 1791030581595289,
+              "gapMs": 21.635
+            },
+            {
+              "endUnixMicros": 1791030581637923,
+              "gapMs": 21.634
+            },
+            {
+              "endUnixMicros": 1791030581536516,
+              "gapMs": 21.572
+            },
+            {
+              "endUnixMicros": 1791030581456393,
+              "gapMs": 21.531
+            },
+            {
+              "endUnixMicros": 1791030581674957,
+              "gapMs": 21.474
+            },
+            {
+              "endUnixMicros": 1791030581797643,
+              "gapMs": 21.47
+            }
+          ]
+        }
+      },
+      {
+        "receiver": {
+          "concealedMs": 25.25,
+          "discarded": 1,
+          "emittedSamples": 48000,
+          "fecDiscarded": 0,
+          "fecReceived": 0,
+          "insertedMs": 0,
+          "jitterMs": 2,
+          "kind": "receiver",
+          "lost": 0,
+          "meanBufferMs": 42,
+          "ms": 101138.29999999981,
+          "nacks": 1,
+          "packets": 49,
+          "phase": {
+            "durationSeconds": 249,
+            "label": "middle",
+            "loop": true,
+            "playing": true,
+            "positionSeconds": 101
+          },
+          "receivedSamples": 48480,
+          "removedMs": 0,
+          "sequence": 8,
+          "silentConcealedMs": 0,
+          "windowMs": 1000.797119140625
+        },
+        "utc": "2026-10-03T12:29:57.559300+00:00",
+        "sender": {
+          "packets": 75,
+          "covered": true,
+          "maximumGapMs": 20.852,
+          "gapsAtLeast40Ms": 0,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791030596593448,
+              "gapMs": 20.852
+            },
+            {
+              "endUnixMicros": 1791030597493428,
+              "gapMs": 20.816
+            },
+            {
+              "endUnixMicros": 1791030597693485,
+              "gapMs": 20.808
+            },
+            {
+              "endUnixMicros": 1791030597193515,
+              "gapMs": 20.799
+            },
+            {
+              "endUnixMicros": 1791030597313328,
+              "gapMs": 20.751
+            },
+            {
+              "endUnixMicros": 1791030596353436,
+              "gapMs": 20.74
+            },
+            {
+              "endUnixMicros": 1791030596833397,
+              "gapMs": 20.726
+            },
+            {
+              "endUnixMicros": 1791030597393483,
+              "gapMs": 20.724
+            },
+            {
+              "endUnixMicros": 1791030596953333,
+              "gapMs": 20.7
+            },
+            {
+              "endUnixMicros": 1791030597593314,
+              "gapMs": 20.7
+            }
+          ]
+        },
+        "arrival": {
+          "packets": 74,
+          "covered": true,
+          "maximumGapMs": 54.678,
+          "gapsAtLeast40Ms": 1,
+          "gapsAtLeast100Ms": 0,
+          "largestGaps": [
+            {
+              "endUnixMicros": 1791030597046650,
+              "gapMs": 54.678
+            },
+            {
+              "endUnixMicros": 1791030597078237,
+              "gapMs": 31.587
+            },
+            {
+              "endUnixMicros": 1791030597779485,
+              "gapMs": 26.779
+            },
+            {
+              "endUnixMicros": 1791030597678663,
+              "gapMs": 25.034
+            },
+            {
+              "endUnixMicros": 1791030597198068,
+              "gapMs": 24.087
+            },
+            {
+              "endUnixMicros": 1791030597536653,
+              "gapMs": 23.96
+            },
+            {
+              "endUnixMicros": 1791030597437520,
+              "gapMs": 23.954
+            },
+            {
+              "endUnixMicros": 1791030597134996,
+              "gapMs": 23.891
+            },
+            {
+              "endUnixMicros": 1791030597595385,
+              "gapMs": 23.884
+            },
+            {
+              "endUnixMicros": 1791030597355582,
+              "gapMs": 23.865
+            }
+          ]
+        }
+      }
+    ],
+    "limitations": [
+      "Capture timestamps require stable clocks; absolute one-way latency is not claimed.",
+      "Extra arrival jitter localizes delay after sender capture, but cannot distinguish SFU forwarding from network hops.",
+      "An arrival gap is not necessarily permanent packet loss; subsequent late/reordered arrivals can fill it.",
+      "Overlap with a receiver poll is correlation; decoding/playout happens after kernel arrival.",
+      "Short, instrumented diagnostic window is not a production improvement or endurance qualification."
+    ],
+    "index": 3,
+    "targetMs": null,
+    "concealedMs": 117.0,
+    "discarded": 4,
+    "lostNet": 0
+  }
+]

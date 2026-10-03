@@ -1,0 +1,124 @@
+{
+  "valid": true,
+  "receiverStart": "2026-10-03T12:24:41.338Z",
+  "receiverSeconds": 119.9995361328125,
+  "sender": {
+    "packets": 6000,
+    "covered": true,
+    "maximumGapMs": 32.282,
+    "gapsAtLeast40Ms": 0,
+    "gapsAtLeast100Ms": 0,
+    "largestGaps": [
+      {
+        "endUnixMicros": 1791030308404955,
+        "gapMs": 32.282
+      },
+      {
+        "endUnixMicros": 1791030322504949,
+        "gapMs": 32.061
+      },
+      {
+        "endUnixMicros": 1791030335984591,
+        "gapMs": 31.75
+      },
+      {
+        "endUnixMicros": 1791030318002263,
+        "gapMs": 29.583
+      },
+      {
+        "endUnixMicros": 1791030283301907,
+        "gapMs": 28.881
+      },
+      {
+        "endUnixMicros": 1791030288020185,
+        "gapMs": 27.285
+      },
+      {
+        "endUnixMicros": 1791030326199838,
+        "gapMs": 27.262
+      },
+      {
+        "endUnixMicros": 1791030281878773,
+        "gapMs": 26.129
+      },
+      {
+        "endUnixMicros": 1791030326358493,
+        "gapMs": 25.39
+      },
+      {
+        "endUnixMicros": 1791030366518743,
+        "gapMs": 25.361
+      }
+    ]
+  },
+  "arrival": {
+    "packets": 6000,
+    "covered": true,
+    "maximumGapMs": 77.162,
+    "gapsAtLeast40Ms": 9,
+    "gapsAtLeast100Ms": 0,
+    "largestGaps": [
+      {
+        "endUnixMicros": 1791030327069782,
+        "gapMs": 77.162
+      },
+      {
+        "endUnixMicros": 1791030357053627,
+        "gapMs": 58.512
+      },
+      {
+        "endUnixMicros": 1791030342049094,
+        "gapMs": 55.841
+      },
+      {
+        "endUnixMicros": 1791030297051590,
+        "gapMs": 55.355
+      },
+      {
+        "endUnixMicros": 1791030282045104,
+        "gapMs": 53.834
+      },
+      {
+        "endUnixMicros": 1791030312048359,
+        "gapMs": 53.467
+      },
+      {
+        "endUnixMicros": 1791030387045250,
+        "gapMs": 52.529
+      },
+      {
+        "endUnixMicros": 1791030372045732,
+        "gapMs": 52.012
+      },
+      {
+        "endUnixMicros": 1791030337373199,
+        "gapMs": 40.404
+      },
+      {
+        "endUnixMicros": 1791030337551995,
+        "gapMs": 37.569
+      }
+    ]
+  },
+  "matchedReceiverPackets": 6000,
+  "unmatchedReceiverPackets": 0,
+  "duplicateSenderKeys": 0,
+  "recordCountsMatch": true,
+  "transitExcessOverObservedMinimumMs": {
+    "median": 4.5905000000000005,
+    "maximum": 119.074
+  },
+  "incidents": [],
+  "limitations": [
+    "Capture timestamps require stable clocks; absolute one-way latency is not claimed.",
+    "Extra arrival jitter localizes delay after sender capture, but cannot distinguish SFU forwarding from network hops.",
+    "An arrival gap is not necessarily permanent packet loss; subsequent late/reordered arrivals can fill it.",
+    "Overlap with a receiver poll is correlation; decoding/playout happens after kernel arrival.",
+    "Short, instrumented diagnostic window is not a production improvement or endurance qualification."
+  ],
+  "index": 2,
+  "targetMs": 120,
+  "concealedMs": 0.0,
+  "discarded": 0,
+  "lostNet": 0
+}

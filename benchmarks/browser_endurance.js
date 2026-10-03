@@ -247,7 +247,11 @@
                 if(m.truncated){data.eventsTruncated=true;event('pcm-events-truncated');}
             };
             while(performance.now()-audioStarted<seconds*1000&&!stopped){
-                await sleep(Math.min(1000,Math.max(1,seconds*1000-(performance.now()-audioStarted))));
+                // A tiny final remainder can immediately reread Chrome's
+                // cached stats and falsely fail strict poll coverage. Keep
+                // every interval >=250 ms, including the final one; report
+                // the actual observed duration rather than rounding it down.
+                await sleep(Math.min(1000,Math.max(250,seconds*1000-(performance.now()-audioStarted))));
                 const report=await peer.getStats();
                 const raw=report.get(id);
                 // Read only safe connection metrics, never candidate addresses.
