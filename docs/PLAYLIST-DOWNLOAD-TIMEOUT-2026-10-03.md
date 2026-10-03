@@ -58,3 +58,71 @@ audits and no exemptions. Deployment and live playlist evidence follow below.
 This fix addresses the demonstrated permanent stop. Sender scheduling delays,
 downstream packet loss and receiver concealment require their own measurements;
 an incidental short live check cannot establish six-hour reliability.
+
+## Oracle deployment and live check
+
+Mantle `aba9bb1` and Crust `32b923b` are pinned by Raydio `a49eb65`. The
+Debian 12 / Rust 1.97.1 release passed offline backend checks, checksum
+verification and Discord readiness through the existing rollback-capable
+`raydioctl`. Package size is 7,541,268 bytes, SHA256
+`c47d3423cf792320a3537540f58638fcb24ea292e3b0190e5b58cc5b41f500d5`;
+maximum required glibc symbol version remains 2.34. Production is active as
+PID 37145 with zero automatic restarts; Testbot remains inactive.
+
+The supplied playlist was submitted through Discord's signed-in T3 browser in
+test / chat, with that browser joined to General. It queued 22 tracks. Loop
+remained off to preserve ordinary playlist behavior. First playback began at
+16:46:31.731 UTC, about 4.34 seconds after the send click returned.
+
+| Track | Source / fully cached bytes | Download time | Result |
+| --- | ---: | ---: | --- |
+| Megafunk GAITAÇO DJ João Vitor | 8,934,074 / 8,934,074 | 5.958 s | Continued beyond six minutes; no source failure |
+| MEGA GAITAÇO 2020 Part 9 - ( DJ Wellinton Olliveira ) | 9,731,564 / 9,731,564 | 11.613 s | Next control advanced the queue; continued beyond three minutes |
+
+These sources finished downloading within 30 seconds under the current network
+conditions. The paced-origin regression, not this live download speed, proves
+the corrected behavior when a healthy progressive transfer outlives the short
+deadline. The live check verifies deployment, playlist loading and playback.
+
+| Receiver metric | First track: 16:47:09–16:52:09 UTC | Second track: 16:55:08–16:56:28 UTC |
+| --- | ---: | ---: |
+| Receiver / PCM observation | 299.999 / 300.011 s | 79.999 / 80.000 s |
+| Received packets | 14,993 | 4,000 |
+| Net loss / discards | 0 / 3 | 0 / 0 |
+| Concealed / silently concealed audio | 150.063 / 0 ms | 0 / 0 ms |
+| Clipped / nonfinite / empty frames | 0 / 0 / 0 | 0 / 0 / 0 |
+| Longest PCM quiet interval | 10 ms | 10 ms |
+| Connection interruptions | 0 | 0 |
+
+Both recordings pass poll, PCM, speaking, track-phase, stable-buffer and event
+coverage. No test controls were touched during either measured interval. Builds,
+packet capture and network probes were absent. One mid-recording browser status
+read checked that collection was running; source/host logs were retrieved after
+each recording. Oracle's bounded sampler ran at nice 19 every ten seconds;
+smaps was read only at that cadence. Process PSS during the first measurement
+was stable at 16,766 KiB (16.37 MiB), with about 3.77% of one CPU core.
+
+The controlled browser used its previously accepted 120 ms receiver-buffer
+helper throughout, with no setting changes or browser long tasks. This preference
+does not configure other Discord clients. Tracks and network conditions differ
+from previous experiments, so no matched packet-quality improvement is claimed.
+
+The first recording retains four concealment events and three discarded packets.
+Oracle checkpoints also retain three sender gaps ≥40 ms (maximum 69.508 ms),
+six skipped deadlines, zero source overruns, zero unavailable frames, zero
+silence frames and zero send failures. The last 70.167 ms concealment event
+follows the recorded sender gap at 16:50:42.491 UTC; its ten-second host interval
+contains 29 CPU steal ticks. This is consistent with guest scheduling delay,
+but these aggregated samples do not establish exact scheduler attribution.
+The three earlier concealments/discards occurred before any recorded sender gap,
+and remain downstream timing incidents without a proven cause. No memory
+pressure or UDP error counter growth was observed in the sampled host window.
+
+Validation: 245 Mantle media tests passed with eight existing environment/live
+exclusions; 33 Crust adapter tests passed with two existing exclusions; all
+58 Raydio tests passed; three collector tests passed, including song-boundary
+classification with the additional guild/queue log fields. Relevant Clippy and
+Mantle advisory/license/vet checks passed. The temporary sampler finished by
+itself and both receiver observers completed. Raw aggregate reports, host
+samples, sanitized lifecycle logs and the derived summary are retained in
+[playlist-timeout-20261003](playlist-timeout-20261003/).

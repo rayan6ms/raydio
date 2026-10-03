@@ -1,0 +1,105 @@
+{
+  "deploymentRevision": "a49eb6598b273475fa343c752a962815564a372d",
+  "mantleRevision": "aba9bb1418210d912da951beb5ac5b048d456b56",
+  "crustRevision": "32b923bf0d1c533b1da46b25a47c1db0173a899e",
+  "packageSha256": "c47d3423cf792320a3537540f58638fcb24ea292e3b0190e5b58cc5b41f500d5",
+  "packageBytes": 7541268,
+  "controlledRegression": {
+    "before": "TimedOut after 49152 of 131072 bytes",
+    "after": "all 131072 identical bytes after about 0.7 seconds with 0.25 second request timeout"
+  },
+  "localChecks": {
+    "mantleMediaPassed": 245,
+    "mantleMediaExistingIgnored": 8,
+    "crustAdapterPassed": 33,
+    "crustAdapterExistingIgnored": 2,
+    "raydioPassed": 58,
+    "collectorPassed": 3,
+    "clippy": "pass",
+    "mantleAdvisoryLicenseVet": "pass; delta audits; zero exemptions"
+  },
+  "receiver": {
+    "startedAt": "2026-10-03T16:47:09.100Z",
+    "seconds": 299.9990671386719,
+    "packetsReceived": 14993,
+    "netPacketsLost": 0,
+    "discardedPackets": 3,
+    "concealedMs": 150.0625,
+    "silentConcealedMs": 0.0,
+    "pcmSeconds": 300.0106666666667,
+    "longestPcmQuietMs": 10,
+    "clipped": 0,
+    "nonfinite": 0,
+    "emptyFrames": 0,
+    "coverage": {
+      "completeEventHistory": true,
+      "completePcmCoverage": true,
+      "completePollCoverage": true,
+      "completeSpeakingObservation": true,
+      "completeTrackPhaseObservation": true,
+      "droppedDiagnosticWindows": 0,
+      "pcmSeconds": 300.0106666666667,
+      "receiverSeconds": 299.9990671386719,
+      "retainedDiagnosticWindows": 4,
+      "stableReceiverBuffer": true,
+      "uninterruptedConnection": true
+    },
+    "meanJitterBufferMs": 134.3888777755551,
+    "receiverBufferTargetMs": 120
+  },
+  "host": {
+    "pssKiBMin": 16766,
+    "pssKiBMax": 16766,
+    "pssKiBMedian": 16766.0,
+    "cpuPercentOfOneCore": 3.773375871681659,
+    "samplesDuringReceiverWindow": 30
+  },
+  "limits": [
+    "Different track and uncontrolled network: no matched packet-quality improvement claim.",
+    "Only five receiver minutes: not a six-hour reliability qualification.",
+    "Source downloaded in 5.96 seconds on this run: long-download correctness established by paced-origin regression.",
+    "Three sender gaps of at least 40ms (maximum69.51ms), six skipped deadlines and 150.06ms receiver concealment remain.",
+    "No per-packet trace was enabled; 10-second host samples support temporal association, not exact scheduler attribution."
+  ],
+  "secondTrack": {
+    "title": "MEGA GAITA\u00c7O 2020 Part 9 - ( DJ Wellinton Olliveira )",
+    "sourceBytes": 9731564,
+    "cachedBytes": 9731564,
+    "downloadSeconds": 11.612929,
+    "receiverStartedAt": "2026-10-03T16:55:08.844Z",
+    "receiverSeconds": 79.999201171875,
+    "netPacketsLost": 0,
+    "discardedPackets": 0,
+    "concealedMs": 0.0,
+    "silentConcealedMs": 0.0,
+    "longestPcmQuietMs": 10,
+    "clipped": 0,
+    "nonfinite": 0,
+    "coverage": {
+      "completeEventHistory": true,
+      "completePcmCoverage": true,
+      "completePollCoverage": true,
+      "completeSpeakingObservation": true,
+      "completeTrackPhaseObservation": true,
+      "droppedDiagnosticWindows": 0,
+      "pcmSeconds": 80,
+      "receiverSeconds": 79.999201171875,
+      "retainedDiagnosticWindows": 0,
+      "stableReceiverBuffer": true,
+      "uninterruptedConnection": true
+    }
+  },
+  "firstTrack": {
+    "title": "Megafunk GAITA\u00c7O DJ Jo\u00e3o Vitor",
+    "sourceBytes": 8934074,
+    "cachedBytes": 8934074,
+    "downloadSeconds": 5.957773,
+    "sourceFailure": null
+  },
+  "production": {
+    "active": true,
+    "pid": 37145,
+    "serviceRestarts": 0,
+    "testbot": "inactive"
+  }
+}
