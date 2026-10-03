@@ -77,7 +77,7 @@ remained off to preserve ordinary playlist behavior. First playback began at
 | Track | Source / fully cached bytes | Download time | Result |
 | --- | ---: | ---: | --- |
 | Megafunk GAITAÇO DJ João Vitor | 8,934,074 / 8,934,074 | 5.958 s | Continued beyond six minutes; no source failure |
-| MEGA GAITAÇO 2020 Part 9 - ( DJ Wellinton Olliveira ) | 9,731,564 / 9,731,564 | 11.613 s | Next control advanced the queue; continued beyond three minutes |
+| MEGA GAITAÇO 2020 Part 9 - ( DJ Wellinton Olliveira ) | 9,731,564 / 9,731,564 | 11.613 s | Next control advanced the queue; continued past the old failure point |
 
 These sources finished downloading within 30 seconds under the current network
 conditions. The paced-origin regression, not this live download speed, proves
@@ -117,6 +117,11 @@ but these aggregated samples do not establish exact scheduler attribution.
 The three earlier concealments/discards occurred before any recorded sender gap,
 and remain downstream timing incidents without a proven cause. No memory
 pressure or UDP error counter growth was observed in the sampled host window.
+
+After the manual Next control, sender counters increased by five unavailable
+frames and five silence frames (100 ms) while changing sources. This happened
+before the second recording and did not increase during it. That separate
+transition remains recorded; these tests do not claim gapless handoffs.
 
 Validation: 245 Mantle media tests passed with eight existing environment/live
 exclusions; 33 Crust adapter tests passed with two existing exclusions; all
