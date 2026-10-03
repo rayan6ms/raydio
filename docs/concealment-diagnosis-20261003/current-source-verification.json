@@ -1,0 +1,8 @@
+{
+  "pid": 34359,
+  "collectedAfterRecording": true,
+  "sourceBytes": 4167934,
+  "sha256": "a31c27999d21b6402368699057c277597e906ca88e4ab68ab3cf6322df685097",
+  "matchesPriorDecodedReference": true,
+  "method": "read-only SHA-256 of open finite media file descriptor matching reference size"
+}

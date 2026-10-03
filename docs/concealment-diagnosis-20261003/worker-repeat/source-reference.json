@@ -1,0 +1,29 @@
+{
+  "videoId": "4moWSMi1L_4",
+  "sourceBytes": 4167934,
+  "sha256": "a31c27999d21b6402368699057c277597e906ca88e4ab68ab3cf6322df685097",
+  "matchesPredeploymentSourceDigest": true,
+  "collectedAt": "2026-10-02T21:48:17.808816+00:00",
+  "decode": "ffmpeg at 48 kHz stereo, linear volume 0.7, one decoder thread",
+  "quietThreshold": 1e-05,
+  "seconds": 249.18666666666667,
+  "sourceHeadMs": 265.1875,
+  "sourceTailMs": 1931.7916666666667,
+  "longestQuietMs": 1931.7916666666667,
+  "quietIntervals": [
+    {
+      "startSeconds": 0.0,
+      "durationMs": 265.1875,
+      "atEnd": false
+    },
+    {
+      "startSeconds": 247.254875,
+      "durationMs": 1931.7916666666667,
+      "atEnd": true
+    }
+  ],
+  "limitations": [
+    "Fresh exact-byte media decode; receiver also includes bot DSP/Opus encode, Discord forwarding, jitter buffer and decode.",
+    "Temporal agreement is a source-tail candidate classification, not proof of network or receiver perfection."
+  ]
+}

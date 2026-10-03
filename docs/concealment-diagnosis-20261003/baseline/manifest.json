@@ -1,0 +1,17 @@
+{
+  "deploymentRevision": "80f4ec627181171d224d5d3389cd2a86c553c578",
+  "pid": 33775,
+  "isolatedAudioWorker": false,
+  "sendTrace": false,
+  "sourceVideoId": "4moWSMi1L_4",
+  "volume": 70,
+  "loop": true,
+  "durationSeconds": 300,
+  "hostIntervalSeconds": 1,
+  "controlsDuringObservation": false,
+  "buildsDuringObservation": false,
+  "networkProbesDuringObservation": false,
+  "sourceReference": "Prior exact-byte reference; current-read verification recorded separately",
+  "hostCollectorFailure": false,
+  "homeEgressAllowlistAndTunnelRepairBeforeCandidate": null
+}

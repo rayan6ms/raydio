@@ -1,0 +1,14 @@
+{
+  "deploymentRevision": "80f4ec627181171d224d5d3389cd2a86c553c578",
+  "pid": 34494,
+  "isolatedAudioWorker": false,
+  "sendTrace": true,
+  "durationSeconds": 180,
+  "purpose": "separate periodic-concealment diagnosis; excluded from candidate comparison",
+  "volume": 70,
+  "loop": true,
+  "hostIntervalSeconds": 1,
+  "controlsDuringObservation": false,
+  "buildsDuringObservation": false,
+  "networkProbesDuringObservation": false
+}

@@ -1,0 +1,66 @@
+[
+  {
+    "eventUtc": "2026-10-03T00:51:57.948600+00:00",
+    "concealedMs": 13.4375,
+    "window": "two seconds before to one second after poll (including predecessor packet)",
+    "packets": 151,
+    "maxGapMs": 25.371,
+    "maxStageMicros": {
+      "wakeLateness": 6303,
+      "sourcePoll": 2,
+      "daveRoundTrip": 92,
+      "daveWorkWall": 69,
+      "daveWorkCpu": 66,
+      "transportCrypto": 75,
+      "udpWait": 144
+    }
+  },
+  {
+    "eventUtc": "2026-10-03T00:52:12.972700+00:00",
+    "concealedMs": 24.354166666666668,
+    "window": "two seconds before to one second after poll (including predecessor packet)",
+    "packets": 151,
+    "maxGapMs": 21.555,
+    "maxStageMicros": {
+      "wakeLateness": 2241,
+      "sourcePoll": 2,
+      "daveRoundTrip": 260,
+      "daveWorkWall": 42,
+      "daveWorkCpu": 40,
+      "transportCrypto": 21,
+      "udpWait": 74
+    }
+  },
+  {
+    "eventUtc": "2026-10-03T00:52:58.037400+00:00",
+    "concealedMs": 16.541666666666668,
+    "window": "two seconds before to one second after poll (including predecessor packet)",
+    "packets": 151,
+    "maxGapMs": 21.984,
+    "maxStageMicros": {
+      "wakeLateness": 2249,
+      "sourcePoll": 2,
+      "daveRoundTrip": 141,
+      "daveWorkWall": 80,
+      "daveWorkCpu": 77,
+      "transportCrypto": 29,
+      "udpWait": 1175
+    }
+  },
+  {
+    "eventUtc": "2026-10-03T00:53:42.100800+00:00",
+    "concealedMs": 20.5625,
+    "window": "two seconds before to one second after poll (including predecessor packet)",
+    "packets": 151,
+    "maxGapMs": 24.056,
+    "maxStageMicros": {
+      "wakeLateness": 4970,
+      "sourcePoll": 45,
+      "daveRoundTrip": 317,
+      "daveWorkWall": 46,
+      "daveWorkCpu": 43,
+      "transportCrypto": 7,
+      "udpWait": 185
+    }
+  }
+]

@@ -37,11 +37,15 @@ peer_exe = (peer_root / 'exe').resolve(strict=True) if peer_root else None
 os.nice(19)
 started = time.monotonic()
 next_memory_sample = 0
+args.output.parent.mkdir(parents=True, exist_ok=True)
 with args.output.open('x') as output:
     while True:
+        cpu_rows = [line.split() for line in Path('/proc/stat').read_text().splitlines()
+                    if line.startswith('cpu')]
         row = dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
                    elapsedSeconds=round(time.monotonic() - started, 3), pid=args.pid,
-                   cpuTicks=list(map(int, Path('/proc/stat').read_text().splitlines()[0].split()[1:])))
+                   cpuTicks=list(map(int, cpu_rows[0][1:])),
+                   perCpuTicks={fields[0]: list(map(int, fields[1:])) for fields in cpu_rows[1:]})
         try:
             stat = (root / 'stat').read_text().split(') ', 1)[1].split()
             if stat[19] != identity or (root / 'exe').resolve(strict=True) != expected:
