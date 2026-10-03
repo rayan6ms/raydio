@@ -32,7 +32,8 @@ async function simulate(seconds, mode='normal') {
         MutationObserver:class {observe(){} disconnect(){}},
         setTimeout:f=>{now+=1000;queueMicrotask(f);}, Date,console};
     vm.runInNewContext(source,sandbox);
-    await window.raydioEndurance.start({seconds,pcm:false,scheduling:false});
+    const returned=await window.raydioEndurance.start({seconds,pcm:false,scheduling:false});
+    assert.equal(returned,window.raydioEndurance.report,'return the complete persistable report');
     return {report:window.raydioEndurance.report,listeners,removed};
 }
 const long=await simulate(21600);

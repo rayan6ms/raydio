@@ -1,0 +1,544 @@
+{
+  "receiverStart": "2026-10-03T01:38:13.696Z",
+  "receiverSeconds": 179.99977514648438,
+  "paths": {
+    "google": {
+      "samples": 896,
+      "minimumMs": 15.3,
+      "medianMs": 23.1,
+      "p95Ms": 36.3,
+      "maximumMs": 134.0,
+      "missingSequenceNumbers": 0
+    },
+    "cloudflare": {
+      "samples": 894,
+      "minimumMs": 15.3,
+      "medianMs": 22.7,
+      "p95Ms": 36.0,
+      "maximumMs": 141.0,
+      "missingSequenceNumbers": 2
+    },
+    "lan": {
+      "samples": 866,
+      "minimumMs": 0.254,
+      "medianMs": 0.442,
+      "p95Ms": 0.58,
+      "maximumMs": 1.35,
+      "missingSequenceNumbers": 0
+    }
+  },
+  "utcModulo15": {
+    "google": [
+      {
+        "phaseFromSeconds": 0,
+        "samples": 60,
+        "minimumMs": 15.9,
+        "medianMs": 24.05,
+        "p95Ms": 35.6,
+        "maximumMs": 40.3,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 1,
+        "samples": 60,
+        "minimumMs": 15.9,
+        "medianMs": 22.1,
+        "p95Ms": 39.3,
+        "maximumMs": 47.0,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 2,
+        "samples": 60,
+        "minimumMs": 15.3,
+        "medianMs": 22.65,
+        "p95Ms": 34.9,
+        "maximumMs": 43.2,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 3,
+        "samples": 60,
+        "minimumMs": 16.0,
+        "medianMs": 23.25,
+        "p95Ms": 34.4,
+        "maximumMs": 47.8,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 4,
+        "samples": 59,
+        "minimumMs": 16.2,
+        "medianMs": 23.0,
+        "p95Ms": 32.1,
+        "maximumMs": 40.9,
+        "missingSequenceNumbers": 768
+      },
+      {
+        "phaseFromSeconds": 5,
+        "samples": 60,
+        "minimumMs": 15.3,
+        "medianMs": 21.65,
+        "p95Ms": 34.3,
+        "maximumMs": 44.2,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 6,
+        "samples": 60,
+        "minimumMs": 15.6,
+        "medianMs": 23.1,
+        "p95Ms": 33.8,
+        "maximumMs": 46.8,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 7,
+        "samples": 60,
+        "minimumMs": 15.6,
+        "medianMs": 23.25,
+        "p95Ms": 34.0,
+        "maximumMs": 42.4,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 8,
+        "samples": 60,
+        "minimumMs": 15.9,
+        "medianMs": 23.4,
+        "p95Ms": 36.5,
+        "maximumMs": 40.9,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 9,
+        "samples": 60,
+        "minimumMs": 16.7,
+        "medianMs": 23.5,
+        "p95Ms": 33.7,
+        "maximumMs": 35.3,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 10,
+        "samples": 60,
+        "minimumMs": 16.2,
+        "medianMs": 23.05,
+        "p95Ms": 38.3,
+        "maximumMs": 43.6,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 11,
+        "samples": 59,
+        "minimumMs": 15.7,
+        "medianMs": 22.5,
+        "p95Ms": 42.4,
+        "maximumMs": 134.0,
+        "missingSequenceNumbers": 768
+      },
+      {
+        "phaseFromSeconds": 12,
+        "samples": 60,
+        "minimumMs": 16.6,
+        "medianMs": 24.8,
+        "p95Ms": 50.3,
+        "maximumMs": 72.5,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 13,
+        "samples": 59,
+        "minimumMs": 15.6,
+        "medianMs": 22.8,
+        "p95Ms": 42.5,
+        "maximumMs": 46.8,
+        "missingSequenceNumbers": 837
+      },
+      {
+        "phaseFromSeconds": 14,
+        "samples": 59,
+        "minimumMs": 15.7,
+        "medianMs": 23.2,
+        "p95Ms": 39.4,
+        "maximumMs": 40.8,
+        "missingSequenceNumbers": 768
+      }
+    ],
+    "cloudflare": [
+      {
+        "phaseFromSeconds": 0,
+        "samples": 59,
+        "minimumMs": 15.7,
+        "medianMs": 23.3,
+        "p95Ms": 35.5,
+        "maximumMs": 40.0,
+        "missingSequenceNumbers": 768
+      },
+      {
+        "phaseFromSeconds": 1,
+        "samples": 59,
+        "minimumMs": 16.1,
+        "medianMs": 23.3,
+        "p95Ms": 33.5,
+        "maximumMs": 46.0,
+        "missingSequenceNumbers": 768
+      },
+      {
+        "phaseFromSeconds": 2,
+        "samples": 60,
+        "minimumMs": 15.5,
+        "medianMs": 22.45,
+        "p95Ms": 37.4,
+        "maximumMs": 46.2,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 3,
+        "samples": 60,
+        "minimumMs": 15.5,
+        "medianMs": 22.05,
+        "p95Ms": 37.8,
+        "maximumMs": 41.7,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 4,
+        "samples": 60,
+        "minimumMs": 16.1,
+        "medianMs": 22.15,
+        "p95Ms": 33.2,
+        "maximumMs": 36.6,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 5,
+        "samples": 59,
+        "minimumMs": 15.5,
+        "medianMs": 23.8,
+        "p95Ms": 34.4,
+        "maximumMs": 42.7,
+        "missingSequenceNumbers": 768
+      },
+      {
+        "phaseFromSeconds": 6,
+        "samples": 60,
+        "minimumMs": 15.7,
+        "medianMs": 23.2,
+        "p95Ms": 38.0,
+        "maximumMs": 43.8,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 7,
+        "samples": 60,
+        "minimumMs": 16.3,
+        "medianMs": 23.05,
+        "p95Ms": 32.5,
+        "maximumMs": 37.7,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 8,
+        "samples": 60,
+        "minimumMs": 15.7,
+        "medianMs": 22.35,
+        "p95Ms": 36.5,
+        "maximumMs": 44.0,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 9,
+        "samples": 59,
+        "minimumMs": 15.4,
+        "medianMs": 21.8,
+        "p95Ms": 33.5,
+        "maximumMs": 40.2,
+        "missingSequenceNumbers": 768
+      },
+      {
+        "phaseFromSeconds": 10,
+        "samples": 60,
+        "minimumMs": 15.8,
+        "medianMs": 21.1,
+        "p95Ms": 35.2,
+        "maximumMs": 41.0,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 11,
+        "samples": 60,
+        "minimumMs": 15.3,
+        "medianMs": 22.6,
+        "p95Ms": 62.4,
+        "maximumMs": 141.0,
+        "missingSequenceNumbers": 767
+      },
+      {
+        "phaseFromSeconds": 12,
+        "samples": 59,
+        "minimumMs": 17.3,
+        "medianMs": 23.6,
+        "p95Ms": 49.6,
+        "maximumMs": 57.6,
+        "missingSequenceNumbers": 768
+      },
+      {
+        "phaseFromSeconds": 13,
+        "samples": 59,
+        "minimumMs": 15.7,
+        "medianMs": 23.1,
+        "p95Ms": 38.6,
+        "maximumMs": 46.0,
+        "missingSequenceNumbers": 837
+      },
+      {
+        "phaseFromSeconds": 14,
+        "samples": 60,
+        "minimumMs": 15.6,
+        "medianMs": 23.450000000000003,
+        "p95Ms": 35.6,
+        "maximumMs": 43.5,
+        "missingSequenceNumbers": 767
+      }
+    ],
+    "lan": [
+      {
+        "phaseFromSeconds": 0,
+        "samples": 58,
+        "minimumMs": 0.338,
+        "medianMs": 0.4625,
+        "p95Ms": 0.588,
+        "maximumMs": 0.714,
+        "missingSequenceNumbers": 741
+      },
+      {
+        "phaseFromSeconds": 1,
+        "samples": 56,
+        "minimumMs": 0.266,
+        "medianMs": 0.4465,
+        "p95Ms": 0.618,
+        "maximumMs": 0.66,
+        "missingSequenceNumbers": 742
+      },
+      {
+        "phaseFromSeconds": 2,
+        "samples": 58,
+        "minimumMs": 0.327,
+        "medianMs": 0.4365,
+        "p95Ms": 0.594,
+        "maximumMs": 1.34,
+        "missingSequenceNumbers": 740
+      },
+      {
+        "phaseFromSeconds": 3,
+        "samples": 59,
+        "minimumMs": 0.318,
+        "medianMs": 0.455,
+        "p95Ms": 0.608,
+        "maximumMs": 0.721,
+        "missingSequenceNumbers": 739
+      },
+      {
+        "phaseFromSeconds": 4,
+        "samples": 58,
+        "minimumMs": 0.324,
+        "medianMs": 0.436,
+        "p95Ms": 0.6,
+        "maximumMs": 0.621,
+        "missingSequenceNumbers": 740
+      },
+      {
+        "phaseFromSeconds": 5,
+        "samples": 57,
+        "minimumMs": 0.267,
+        "medianMs": 0.444,
+        "p95Ms": 0.577,
+        "maximumMs": 0.584,
+        "missingSequenceNumbers": 742
+      },
+      {
+        "phaseFromSeconds": 6,
+        "samples": 57,
+        "minimumMs": 0.296,
+        "medianMs": 0.442,
+        "p95Ms": 0.545,
+        "maximumMs": 0.669,
+        "missingSequenceNumbers": 742
+      },
+      {
+        "phaseFromSeconds": 7,
+        "samples": 58,
+        "minimumMs": 0.321,
+        "medianMs": 0.4415,
+        "p95Ms": 0.538,
+        "maximumMs": 0.623,
+        "missingSequenceNumbers": 740
+      },
+      {
+        "phaseFromSeconds": 8,
+        "samples": 58,
+        "minimumMs": 0.31,
+        "medianMs": 0.434,
+        "p95Ms": 0.56,
+        "maximumMs": 0.709,
+        "missingSequenceNumbers": 740
+      },
+      {
+        "phaseFromSeconds": 9,
+        "samples": 59,
+        "minimumMs": 0.334,
+        "medianMs": 0.455,
+        "p95Ms": 0.607,
+        "maximumMs": 0.624,
+        "missingSequenceNumbers": 739
+      },
+      {
+        "phaseFromSeconds": 10,
+        "samples": 56,
+        "minimumMs": 0.324,
+        "medianMs": 0.4325,
+        "p95Ms": 0.545,
+        "maximumMs": 0.608,
+        "missingSequenceNumbers": 742
+      },
+      {
+        "phaseFromSeconds": 11,
+        "samples": 58,
+        "minimumMs": 0.317,
+        "medianMs": 0.435,
+        "p95Ms": 0.549,
+        "maximumMs": 0.575,
+        "missingSequenceNumbers": 741
+      },
+      {
+        "phaseFromSeconds": 12,
+        "samples": 57,
+        "minimumMs": 0.254,
+        "medianMs": 0.424,
+        "p95Ms": 0.618,
+        "maximumMs": 1.35,
+        "missingSequenceNumbers": 741
+      },
+      {
+        "phaseFromSeconds": 13,
+        "samples": 60,
+        "minimumMs": 0.309,
+        "medianMs": 0.4415,
+        "p95Ms": 0.576,
+        "maximumMs": 0.619,
+        "missingSequenceNumbers": 806
+      },
+      {
+        "phaseFromSeconds": 14,
+        "samples": 57,
+        "minimumMs": 0.288,
+        "medianMs": 0.443,
+        "p95Ms": 0.579,
+        "maximumMs": 0.686,
+        "missingSequenceNumbers": 741
+      }
+    ]
+  },
+  "incidents": [
+    {
+      "utc": "2026-10-03T01:38:55.764500+00:00",
+      "concealedMs": 29.625,
+      "discarded": 0,
+      "paths": {
+        "google": {
+          "samples": 7,
+          "minimumMs": 20.6,
+          "medianMs": 30.4,
+          "p95Ms": 33.2,
+          "maximumMs": 33.2,
+          "missingSequenceNumbers": 0
+        },
+        "cloudflare": {
+          "samples": 7,
+          "minimumMs": 16.9,
+          "medianMs": 26.8,
+          "p95Ms": 35.4,
+          "maximumMs": 35.4,
+          "missingSequenceNumbers": 0
+        },
+        "lan": {
+          "samples": 8,
+          "minimumMs": 0.385,
+          "medianMs": 0.436,
+          "p95Ms": 0.568,
+          "maximumMs": 0.568,
+          "missingSequenceNumbers": 0
+        }
+      }
+    },
+    {
+      "utc": "2026-10-03T01:39:12.790600+00:00",
+      "concealedMs": 12.375,
+      "discarded": 1,
+      "paths": {
+        "google": {
+          "samples": 7,
+          "minimumMs": 20.1,
+          "medianMs": 24.2,
+          "p95Ms": 29.4,
+          "maximumMs": 29.4,
+          "missingSequenceNumbers": 0
+        },
+        "cloudflare": {
+          "samples": 7,
+          "minimumMs": 21.8,
+          "medianMs": 27.6,
+          "p95Ms": 35.6,
+          "maximumMs": 35.6,
+          "missingSequenceNumbers": 0
+        },
+        "lan": {
+          "samples": 8,
+          "minimumMs": 0.392,
+          "medianMs": 0.4595,
+          "p95Ms": 0.567,
+          "maximumMs": 0.567,
+          "missingSequenceNumbers": 0
+        }
+      }
+    },
+    {
+      "utc": "2026-10-03T01:40:17.895000+00:00",
+      "concealedMs": 56.729166666666664,
+      "discarded": 0,
+      "paths": {
+        "google": {
+          "samples": 8,
+          "minimumMs": 17.4,
+          "medianMs": 23.4,
+          "p95Ms": 38.1,
+          "maximumMs": 38.1,
+          "missingSequenceNumbers": 0
+        },
+        "cloudflare": {
+          "samples": 8,
+          "minimumMs": 16.3,
+          "medianMs": 22.85,
+          "p95Ms": 36.9,
+          "maximumMs": 36.9,
+          "missingSequenceNumbers": 0
+        },
+        "lan": {
+          "samples": 8,
+          "minimumMs": 0.365,
+          "medianMs": 0.44999999999999996,
+          "p95Ms": 0.547,
+          "maximumMs": 0.547,
+          "missingSequenceNumbers": 0
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "ICMP endpoints have different paths and treatment from Discord UDP.",
+    "Simultaneous independent WAN spikes with stable LAN support an access/ISP-path hypothesis; they do not isolate one hop.",
+    "Estimated send time subtracts RTT from reply timestamp; host scheduling and ping implementation add uncertainty.",
+    "Probes run only in a separate diagnostic window; exclude this window from unprobed observer comparisons."
+  ]
+}

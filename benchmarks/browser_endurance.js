@@ -78,7 +78,7 @@
     registerProcessor('raydio-endurance-meter',RaydioMeter);`;
     const api = window.raydioEndurance = {peers, report:null, running:false};
     api.start = async ({seconds=21600, botName='bot1544468432907669644', pcm=true, scheduling=false}={}) => {
-        if(api.running)throw Error('Audit already running');
+        if(api.running || window.raydioCounterAudit?.running)throw Error('Audit already running');
         if(!Number.isInteger(seconds)||seconds<10||seconds>21600)throw Error('Duration must be 10..21600 seconds');
         if(typeof pcm!=='boolean')throw Error('pcm must be boolean');
         if(typeof scheduling!=='boolean')throw Error('scheduling must be boolean');
@@ -349,7 +349,7 @@
                 droppedDiagnosticWindows:data.diagnosticWindowsDropped,
             };
         }
-        return {status:data.status,elapsedSeconds:data.elapsedSeconds,error:data.error};
+        return data;
     };
     api.summary=()=>{
         const d=api.report;if(!d)return {status:'not-started'};
@@ -359,4 +359,5 @@
             receiverScheduling:d.receiverScheduling,currentPhase:d.currentPhase,error:d.error,
             delta:d.current&&d.initial?Object.fromEntries(fields.map(k=>[k,d.current[k]-d.initial[k]])):null};
     };
+    return {installed:true};
 })();

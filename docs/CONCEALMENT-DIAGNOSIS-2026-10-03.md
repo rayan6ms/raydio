@@ -4,8 +4,9 @@
 
 No reliable reduction below the October 2 full-stage baseline of 79.6875 ms
 per five minutes has been demonstrated. Keep the progressive production build
-`80f4ec6` running on Oracle. Keep the isolated worker opt-in; do not change the
-release build to enable it based on these measurements.
+`80f4ec6` running on Oracle. The subsequent cleanup retired the worker option
+from Raydio's active build and CI; upstream opt-in library code and historical
+evidence remain preserved. See [the follow-up](CONCEALMENT-FOLLOWUP-2026-10-03.md).
 
 The worker protects against a blocked ordinary runtime in the controlled UDP
 benchmark. Live measurements do not establish a consistent receiver benefit.
@@ -154,9 +155,9 @@ quality or rule out an earlier interruption.
 
 ## Worker mechanism and build verification
 
-Raydio did not expose the feature in its current manifest. The evaluated feature
-now forwards `experimental-audio-worker` to `crust-server`, which forwards it to
-both adapters and Oto. `--version` reports its compiled state. The deployed
+Raydio initially did not expose the feature in its manifest. For this experiment,
+the evaluated feature forwarded `experimental-audio-worker` to `crust-server`,
+which forwarded it to both adapters and Oto. `--version` reported its compiled state. The deployed
 candidate package and live minute logs confirmed `isolated_audio_worker=true`.
 The restored production build uses the default path.
 
@@ -177,8 +178,9 @@ unrelated dirty changes in the old Oto checkout.
 
 The worker-enabled Raydio suite passed 58 tests and Clippy. Both adapter suites
 passed 50 non-ignored tests, including pause/drain, seek/replacement, shutdown,
-cancelled waiters and terminal failures. CI now checks both feature modes;
-release builds remain on the default mode until stronger qualification.
+cancelled waiters and terminal failures. At the time, CI checked both feature
+modes. The follow-up retired that candidate wiring; release builds use the
+default mode.
 
 ## Operational repairs and final state
 

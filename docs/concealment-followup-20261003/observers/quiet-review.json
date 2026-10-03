@@ -1,0 +1,111 @@
+[
+  {
+    "requestedAt": "2026-10-03T01:51:23.767Z",
+    "quietIntervals": [
+      {
+        "utc": "2026-10-03T01:51:55.033683+00:00",
+        "startMs": 26788.620833334826,
+        "endMs": 29056.683333334826,
+        "durationMs": 2268.0625,
+        "timestampBasis": "pcm-frame-clock",
+        "nearestStartOffsetSeconds": 0.5414763333348274,
+        "classification": "source-tail-candidate",
+        "naturalHandoff": {
+          "endMs": 28513.559999999998,
+          "startMs": 28515.207,
+          "previousGeneration": 13,
+          "generation": 14,
+          "eventHandoffMs": 1.647000000000844
+        },
+        "sourceBoundaryReferenceMs": 2196.9791999999998,
+        "excessOverReferenceAndToleranceMs": 0,
+        "overlappingAnomalies": [],
+        "causeProven": false
+      }
+    ],
+    "review": []
+  },
+  {
+    "requestedAt": "2026-10-03T01:46:00.911Z",
+    "quietIntervals": [
+      {
+        "utc": "2026-10-03T01:47:45.034887+00:00",
+        "startMs": 99656.82499999554,
+        "endMs": 101914.88749999554,
+        "durationMs": 2258.0625,
+        "timestampBasis": "pcm-frame-clock",
+        "nearestStartOffsetSeconds": 0.5057474999955448,
+        "classification": "source-tail-candidate",
+        "naturalHandoff": {
+          "endMs": 101407.084,
+          "startMs": 101409.14,
+          "previousGeneration": 12,
+          "generation": 13,
+          "eventHandoffMs": 2.055999999996857
+        },
+        "sourceBoundaryReferenceMs": 2196.9791999999998,
+        "excessOverReferenceAndToleranceMs": 0,
+        "overlappingAnomalies": [],
+        "causeProven": false
+      }
+    ],
+    "review": []
+  },
+  {
+    "requestedAt": "2026-10-03T01:38:11.486Z",
+    "quietIntervals": [
+      {
+        "utc": "2026-10-03T01:39:24.534833+00:00",
+        "startMs": 68580.77083333334,
+        "endMs": 70838.83333333334,
+        "durationMs": 2258.0625,
+        "timestampBasis": "pcm-frame-clock",
+        "nearestStartOffsetSeconds": 0.400307333333345,
+        "classification": "source-tail-candidate",
+        "naturalHandoff": {
+          "endMs": 70437.045,
+          "startMs": 70438.526,
+          "previousGeneration": 10,
+          "generation": 11,
+          "eventHandoffMs": 1.4809999999997672
+        },
+        "sourceBoundaryReferenceMs": 2196.9791999999998,
+        "excessOverReferenceAndToleranceMs": 0,
+        "overlappingAnomalies": [],
+        "causeProven": false
+      }
+    ],
+    "review": []
+  },
+  {
+    "requestedAt": "2026-10-03T01:31:24.873Z",
+    "quietIntervals": [],
+    "review": []
+  },
+  {
+    "requestedAt": "2026-10-03T01:28:22.599Z",
+    "quietIntervals": [
+      {
+        "utc": "2026-10-03T01:31:06.068154+00:00",
+        "startMs": 158997.09166666368,
+        "endMs": 161255.15416666368,
+        "durationMs": 2258.0625,
+        "timestampBasis": "pcm-frame-clock",
+        "nearestStartOffsetSeconds": 0.3729501666636788,
+        "classification": "source-tail-candidate",
+        "naturalHandoff": {
+          "endMs": 160880.731,
+          "startMs": 160882.204,
+          "previousGeneration": 8,
+          "generation": 9,
+          "eventHandoffMs": 1.4729999999981374
+        },
+        "sourceBoundaryReferenceMs": 2196.9791999999998,
+        "excessOverReferenceAndToleranceMs": 0,
+        "overlappingAnomalies": [],
+        "causeProven": false
+      }
+    ],
+    "review": []
+  }
+]

@@ -1,0 +1,115 @@
+{
+  "windows": [
+    {
+      "mode": "endpoint",
+      "index": 0,
+      "startedAt": "2026-10-03T01:25:22.590Z",
+      "status": "completed",
+      "valid": true,
+      "seconds": 180.00123388671875,
+      "concealmentMs": 165.875,
+      "concealmentMsPerMinute": 55.29128764896949,
+      "silentConcealmentMs": 0.0,
+      "received": 8999,
+      "netLost": 0,
+      "discarded": 2,
+      "pcmCoverage": null,
+      "identity": {
+        "id": "IT01A8948",
+        "ssrc": 8948,
+        "trackIdentifier": "1ec836b3-c608-4e35-9b41-8118eb21983b"
+      },
+      "error": null
+    },
+    {
+      "mode": "pcm",
+      "index": 1,
+      "startedAt": "2026-10-03T01:28:24.813Z",
+      "status": "completed",
+      "valid": true,
+      "seconds": 179.99989282226562,
+      "concealmentMs": 166.04166666666666,
+      "concealmentMsPerMinute": 55.34725517774119,
+      "silentConcealmentMs": 0.0,
+      "received": 9000,
+      "netLost": 0,
+      "discarded": 6,
+      "pcmCoverage": true,
+      "identity": {
+        "id": "IT01A8948",
+        "ssrc": 8948,
+        "trackIdentifier": "1ec836b3-c608-4e35-9b41-8118eb21983b"
+      },
+      "error": null
+    },
+    {
+      "mode": "pcm",
+      "index": 2,
+      "startedAt": "2026-10-03T01:31:27.083Z",
+      "status": "completed",
+      "valid": true,
+      "seconds": 179.9993659667969,
+      "concealmentMs": 234.39583333333334,
+      "concealmentMsPerMinute": 78.1322196578972,
+      "silentConcealmentMs": 0.0,
+      "received": 8997,
+      "netLost": 1,
+      "discarded": 6,
+      "pcmCoverage": true,
+      "identity": {
+        "id": "IT01A8948",
+        "ssrc": 8948,
+        "trackIdentifier": "1ec836b3-c608-4e35-9b41-8118eb21983b"
+      },
+      "error": null
+    },
+    {
+      "mode": "endpoint",
+      "index": 3,
+      "startedAt": "2026-10-03T01:34:28.246Z",
+      "status": "completed",
+      "valid": true,
+      "seconds": 180.00118310546875,
+      "concealmentMs": 100.20833333333333,
+      "concealmentMsPerMinute": 33.402558229170495,
+      "silentConcealmentMs": 0.0,
+      "received": 8998,
+      "netLost": 0,
+      "discarded": 5,
+      "pcmCoverage": null,
+      "identity": {
+        "id": "IT01A8948",
+        "ssrc": 8948,
+        "trackIdentifier": "1ec836b3-c608-4e35-9b41-8118eb21983b"
+      },
+      "error": null
+    }
+  ],
+  "groups": {
+    "endpoint": {
+      "windows": 2,
+      "validWindows": 2,
+      "seconds": 360.0024169921875,
+      "concealmentMs": 266.0833333333333,
+      "netLost": 0,
+      "discarded": 7,
+      "concealmentMsPerMinute": 44.34692448286107
+    },
+    "pcm": {
+      "windows": 2,
+      "validWindows": 2,
+      "seconds": 359.99925878906254,
+      "concealmentMs": 400.4375,
+      "netLost": 1,
+      "discarded": 12,
+      "concealmentMsPerMinute": 66.7397207450305
+    }
+  },
+  "sameReceiver": true,
+  "allValid": true,
+  "limitations": [
+    "Short sequential windows remain subject to time-varying network and host scheduling.",
+    "Endpoint mode has no PCM, quiet-interval or per-incident counter coverage.",
+    "Net lost packets retain late corrections; net zero does not prove no late packets."
+  ]
+}
