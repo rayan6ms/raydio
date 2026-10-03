@@ -36,6 +36,20 @@ pub struct Queue {
 }
 
 impl Queue {
+    /// Prepare only the immediate finite successor, within a bounded lead time.
+    /// Same-track repeats already reuse their completed compressed input.
+    pub fn preparation_target(&self, position_ms: u64) -> Option<&Track> {
+        let current = self.current.as_ref()?;
+        if current.stream
+            || self.loop_mode == LoopMode::Track
+            || current.duration_ms.saturating_sub(position_ms) > 45_000
+        {
+            return None;
+        }
+        self.upcoming
+            .first()
+            .filter(|next| !next.stream && next.encoded != current.encoded)
+    }
     pub fn len(&self) -> usize {
         usize::from(self.current.is_some()) + self.upcoming.len()
     }
@@ -307,5 +321,24 @@ mod tests {
     fn durations_are_stable() {
         assert_eq!(format_duration(3723000, false), "1:02:03");
         assert_eq!(format_duration(0, true), "LIVE");
+    }
+
+    #[test]
+    fn preparation_tracks_the_natural_successor_and_has_a_bounded_lead() {
+        let mut q = queue(3);
+        q.current.as_mut().unwrap().duration_ms = 120_000;
+        assert!(q.preparation_target(74_999).is_none());
+        assert_eq!(q.preparation_target(75_000), Some(&track(1)));
+        q.move_to(2, 1);
+        assert_eq!(q.preparation_target(90_000), Some(&track(2)));
+        q.remove(1);
+        assert_eq!(q.preparation_target(90_000), Some(&track(1)));
+        q.loop_mode = LoopMode::Track;
+        assert!(q.preparation_target(90_000).is_none());
+        q.loop_mode = LoopMode::Queue;
+        q.upcoming[0].stream = true;
+        assert!(q.preparation_target(90_000).is_none());
+        q.clear();
+        assert!(q.preparation_target(90_000).is_none());
     }
 }

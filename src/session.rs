@@ -86,6 +86,11 @@ pub(crate) struct GuildSession {
     pending: VecDeque<Pending>,
     loading: Option<Pending>,
     loaders: JoinSet<(u64, Result<Resolution, Failure>)>,
+    // One HTTP intent at a time; queue mutations coalesce instead of racing
+    // cancellation requests against an older preparation request.
+    preparations: JoinSet<(u64, Option<String>, bool)>,
+    preparation_target: Option<String>,
+    preparation_retry: Instant,
     responses: JoinSet<()>,
     // At most one progress edit, with newer snapshots coalesced in session state.
     panel_edits: JoinSet<PanelEdit>,
@@ -549,6 +554,9 @@ impl GuildSession {
             pending: VecDeque::new(),
             loading: None,
             loaders: JoinSet::new(),
+            preparations: JoinSet::new(),
+            preparation_target: None,
+            preparation_retry: Instant::now(),
             responses: JoinSet::new(),
             panel_edits: JoinSet::new(),
             panel_deletions: JoinSet::new(),
@@ -597,6 +605,18 @@ impl GuildSession {
                     }
                 }
                 Some(_) = self.responses.join_next(), if !self.responses.is_empty() => {},
+                Some(result) = self.preparations.join_next(), if !self.preparations.is_empty() => {
+                    match result {
+                        // Even an intent overtaken by Stop must be remembered:
+                        // the next pass then cancels it in HTTP submission order.
+                        Ok((_, target, true)) => self.preparation_target = target,
+                        Ok((epoch, _, false)) if epoch == self.epoch => {
+                            self.preparation_retry = Instant::now() + Duration::from_secs(5);
+                            tracing::warn!(guild_id = self.id, "Next-track preparation unavailable; normal loading remains active");
+                        }
+                        _ => {},
+                    }
+                },
                 Some(_) = self.panel_deletions.join_next(), if !self.panel_deletions.is_empty() => {},
                 Some(result) = self.panel_edits.join_next(), if !self.panel_edits.is_empty() => {
                     self.finish_refresh(result);
@@ -605,6 +625,7 @@ impl GuildSession {
                 _ = tick.tick() => self.tick().await,
             }
             self.start_load();
+            self.prepare_next();
             self.publish_activity();
             if !self
                 .shared
@@ -618,6 +639,7 @@ impl GuildSession {
             }
         }
         self.loaders.abort_all();
+        self.preparations.abort_all();
         let _ = timeout(Duration::from_secs(3), self.cleanup(None)).await;
         self.panel_edits.shutdown().await;
         // Allow all three one-second deletion attempts and their backoff to
@@ -658,6 +680,29 @@ impl GuildSession {
             } else {
                 self.position_at.elapsed().as_millis() as u64
             })
+    }
+    fn prepare_next(&mut self) {
+        if !self.preparations.is_empty() || Instant::now() < self.preparation_retry {
+            return;
+        }
+        let target = if self.started && !self.paused && self.channel.is_some() {
+            self.queue
+                .preparation_target(self.position())
+                .map(|track| track.encoded.as_str())
+        } else {
+            None
+        };
+        if target == self.preparation_target.as_deref() {
+            return;
+        }
+        let target = target.map(str::to_owned);
+        let node = self.shared.node.clone();
+        let guild = self.id;
+        let epoch = self.epoch;
+        self.preparations.spawn(async move {
+            let success = node.prepare(guild, target.as_deref()).await.is_ok();
+            (epoch, target, success)
+        });
     }
     fn schedule_end(&mut self) {
         self.end_deadline = self
@@ -1254,6 +1299,9 @@ impl GuildSession {
         }
     }
     async fn cleanup(&mut self, notification: Option<&str>) {
+        self.preparations.abort_all();
+        self.preparation_target = None;
+        self.preparation_retry = Instant::now();
         self.invalidate().await;
         self.remove_panel().await;
         let active = self.channel.take().is_some();

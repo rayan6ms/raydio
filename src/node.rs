@@ -201,6 +201,23 @@ impl Node {
         }
         Ok(())
     }
+    pub async fn prepare(&self, guild: u64, encoded: Option<&str>) -> Result<()> {
+        let health = self.health();
+        if !health.ready {
+            bail!("music service unavailable");
+        }
+        self.request(
+            Method::POST,
+            &format!(
+                "/crust/v1/sessions/{}/players/{guild}/prepare",
+                health.session
+            ),
+            &[],
+            Some(json!({"encoded":encoded})),
+        )
+        .await?;
+        Ok(())
+    }
 }
 
 async fn run(
@@ -346,6 +363,41 @@ impl Drop for NodeOwner {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[tokio::test]
+    async fn preparation_extension_uses_the_active_session_and_preserves_playback() {
+        let backend = crate::backend::Backend::start_fixture().await.unwrap();
+        let (node, owner, _events) = Node::start(
+            backend.address,
+            backend.password.clone(),
+            300000000000000898,
+        )
+        .unwrap();
+        node.wait_ready().await.unwrap();
+        let guild = 800000000000000898;
+        let before = node
+            .update(guild, json!({"track":{"identifier":"fixture:current"}}))
+            .await
+            .unwrap();
+        let next = node.load("fixture:next").await.unwrap();
+        let encoded = next["data"]["encoded"].as_str().unwrap();
+        node.prepare(guild, Some(encoded)).await.unwrap();
+        node.prepare(guild, None).await.unwrap();
+        let health = node.health();
+        let after = node
+            .request(
+                Method::GET,
+                &format!("/v4/sessions/{}/players/{guild}", health.session),
+                &[],
+                None,
+            )
+            .await
+            .unwrap();
+        assert_eq!(after["track"]["encoded"], before["track"]["encoded"]);
+        node.destroy(guild).await.unwrap();
+        assert!(node.prepare(guild, Some(encoded)).await.is_err());
+        owner.shutdown().await;
+        backend.shutdown().await.unwrap();
+    }
     #[test]
     fn audio_windows_replace_values_and_ignore_incomplete_samples() {
         let mut health = AudioHealth::default();
