@@ -100,6 +100,8 @@
                 'No PCM is recorded; source defects and perceptual quality need separate evidence']};
         let ctx,source,meter,observer,peer,stateListener,longTaskObserver,visibilityListener,stopped=false;
         const listeners=[];const history=[];
+        let receiverBufferGeneration;
+        const bufferSetting = () => window.raydioReceiverBuffer?.status() || {installed:false,enabled:false};
         const listen=(target,type,handler)=>{target.addEventListener(type,handler);listeners.push(()=>target.removeEventListener(type,handler));};
         const started=performance.now();let audioStarted=started, priorPosition=null,minute,pcmLastAt=started,resetSent=started,resetAck=started,eventSequence=0;
         const panel=()=>[...document.querySelectorAll('main article')].filter(e=>e.innerText.includes('Raydio • Now Playing')).at(-1);
@@ -196,6 +198,10 @@
             if(['timestamp','packetsReceived','packetsLost','concealedSamples','silentConcealedSamples','totalSamplesReceived'].some(k=>typeof initialRaw[k]!=='number'))
                 throw Error('Required receiver quality counters unavailable');
             data.receiverIdentity={id,ssrc:initialRaw.ssrc,trackIdentifier:initialRaw.trackIdentifier};
+            data.receiverBuffer={initial:bufferSetting(), initialTargetMs:receiver.jitterBufferTarget??null,
+                settingChanges:0, helperChanges:0};
+            receiverBufferGeneration=data.receiverBuffer.initial.generation;
+            let lastBufferTarget=data.receiverBuffer.initialTargetMs;
             data.missingCounters=fields.filter(k=>typeof initialRaw[k]!=='number');
             let last=counters(initialRaw);data.initial=last;
             let speaking=row.className.includes('usernameSpeaking');
@@ -265,6 +271,10 @@
                 if(ctx&&ctx.state!=='running')throw Error('Audio context stopped running');
                 if(raw.ssrc!==data.receiverIdentity.ssrc||raw.trackIdentifier!==data.receiverIdentity.trackIdentifier)
                     throw Error('Receiver identity changed');
+                const target=receiver.jitterBufferTarget??null;
+                const bufferGeneration=window.raydioReceiverBuffer?.generation;
+                if(target!==lastBufferTarget){data.receiverBuffer.settingChanges++;event('receiver-buffer-change',{targetMs:target});lastBufferTarget=target;}
+                if(bufferGeneration!==receiverBufferGeneration){data.receiverBuffer.helperChanges++;event('receiver-buffer-helper-change',{generation:bufferGeneration});receiverBufferGeneration=bufferGeneration;}
                 if(data.availableCounters.some(k=>typeof raw[k]!=='number'))throw Error('Receiver counter disappeared');
                 const now=counters(raw),dt=now.timestamp-last.timestamp;
                 if(data.availableCounters.filter(k=>k!=='packetsLost'&&k!=='timestamp').some(k=>now[k]<last[k]))
@@ -330,6 +340,7 @@
             observer?.disconnect();if(peer&&stateListener)peer.removeEventListener('connectionstatechange',stateListener);
             meter?.disconnect();source?.disconnect();if(ctx)await ctx.close();api.running=false;
             data.finishedAt=new Date().toISOString();
+            if(data.receiverBuffer)data.receiverBuffer.final=bufferSetting();
             data.observationWallSeconds=(performance.now()-audioStarted)/1000;
             data.pcm.audioSeconds=data.pcm.frames/(data.sampleRate||48000);
             if(data.current&&data.initial)data.delta=Object.fromEntries(fields.map(k=>[k,data.current[k]-data.initial[k]]));
@@ -349,6 +360,7 @@
                 completeEventHistory:!data.eventsTruncated,
                 completeSpeakingObservation:data.uiObservation.rowRebindings===0&&data.uiObservation.missingRowPolls===0,
                 completeTrackPhaseObservation:data.uiObservation.unknownPhasePolls===0,
+                stableReceiverBuffer:data.receiverBuffer ? data.receiverBuffer.settingChanges===0&&data.receiverBuffer.helperChanges===0 : null,
                 retainedDiagnosticWindows:data.diagnosticWindows.length,
                 droppedDiagnosticWindows:data.diagnosticWindowsDropped,
             };

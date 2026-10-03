@@ -11,9 +11,11 @@ async function simulate(seconds, mode='normal') {
     const newRow=()=>({textContent:'bot1544468432907669644',className:'usernameSpeaking',isConnected:true,parentElement:{parentElement:{parentElement:{}}}});
     let row=newRow(), replaced=false;
     const track={...target,id:'track',readyState:'live'};
-    const peer={...target,connectionState:'connected',getReceivers:()=>[{track}],async getStats(){
+    const receiver={track,jitterBufferTarget:null};
+    const peer={...target,connectionState:'connected',getReceivers:()=>[receiver],async getStats(){
         if(mode==='cached-stats')now+=3;
         if(now>7000){
+            if(mode==='buffer-change')receiver.jitterBufferTarget=120;
             if(mode==='closed')peer.connectionState='closed';
             if(mode==='track-ended')track.readyState='ended';
             if(mode==='stats-missing')return new Map();
@@ -29,6 +31,9 @@ async function simulate(seconds, mode='normal') {
             totalSamplesReceived:now*48,jitterBufferEmittedCount:now*48,jitterBufferDelay:now*.048,jitter:.003}]]);
     }};
     const window={...target,raydioEndurance:{peers:[peer],running:false},RTCPeerConnection:class{}};
+    if(mode==='helper-change')window.raydioReceiverBuffer={
+        get generation(){return now>7000?2:1;},
+        status:()=>({installed:true,enabled:now<=7000,generation:now>7000?2:1})};
     const sandbox={window,navigator:{onLine:true,mediaDevices:target},performance:{now:()=>now,timeOrigin:0},
         document:{...target,querySelectorAll:s=>s.includes('username')?(row.isConnected?[row]:[]):(mode==='row-missing'&&now>7000&&now<=13000?[]:[{innerText:'Raydio • Now Playing 1:00 / 3:33 Playing • Loop: ON'}])},
         MutationObserver:class {observe(){} disconnect(){}},
@@ -73,6 +78,15 @@ for(const mode of ['row-replaced','row-missing']){
 }
 const short=await simulate(10);
 assert.equal(short.report.coverage.uninterruptedConnection,true);
+assert.equal(short.report.coverage.stableReceiverBuffer,true);
+assert.equal(short.report.receiverBuffer.initial.installed,false);
+for(const mode of ['buffer-change','helper-change']){
+    const changed=await simulate(20,mode);
+    assert.equal(changed.report.status,'completed');
+    assert.equal(changed.report.coverage.stableReceiverBuffer,false);
+    assert.equal(changed.report.receiverBuffer[mode==='buffer-change'?'settingChanges':'helperChanges'],1);
+    assert.ok(changed.report.events.some(e=>e.kind===(mode==='buffer-change'?'receiver-buffer-change':'receiver-buffer-helper-change')));
+}
 const cached=await simulate(10,'cached-stats');
 assert.equal(cached.report.status,'completed');
 assert.equal(cached.report.coverage.completePollCoverage,true);

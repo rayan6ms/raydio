@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Raydio listener buffer",
+  "version": "1.0.0",
+  "minimum_chrome_version": "111",
+  "description": "Opt-in 120 ms receive buffering for Discord web audio on this browser.",
+  "content_scripts": [{
+    "matches": ["https://discord.com/*"],
+    "js": ["receiver_buffer.js"],
+    "run_at": "document_start",
+    "world": "MAIN"
+  }]
+}

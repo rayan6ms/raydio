@@ -6,6 +6,8 @@
     const endpoint = 'http://127.0.0.1:18766';
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     api.start = async ({seconds = 300, targets = [null, 120, null, 120], warmupSeconds = 10} = {}) => {
+        if (window.raydioReceiverBuffer?.status().enabled)
+            throw Error('Disable the persistent receiver buffer before running a comparison');
         if (api.running || window.raydioEndurance?.running || window.raydioCounterAudit?.running
             || window.raydioObserverTrial?.running || window.raydioCheckpoint?.timer)
             throw Error('Another observer or checkpoint is active');
@@ -69,7 +71,8 @@
                 if (report.coverage?.uninterruptedConnection !== true
                     || report.coverage?.completePollCoverage !== true
                     || report.coverage?.completePcmCoverage !== true
-                    || report.coverage?.completeEventHistory !== true)
+                    || report.coverage?.completeEventHistory !== true
+                    || report.coverage?.stableReceiverBuffer === false)
                     throw Error('Incomplete receiver coverage; terminal report retained');
             }
             data.status = 'completed';

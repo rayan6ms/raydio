@@ -20,6 +20,7 @@ def compare(reports):
                  and seconds >= report.get('requestedSeconds', 0) - .1
                  and all(coverage.get(k) is True for k in ('completePollCoverage', 'completePcmCoverage',
                          'completeEventHistory', 'uninterruptedConnection'))
+                 and coverage.get('stableReceiverBuffer', True) is True
                  and delta['packetsReceived'] > 0
                  and 'actualSettingMs' in trial and trial['actualSettingMs'] == trial['targetMs'])
         ms = lambda k: delta[k] * 1000 / clock if clock and k in delta else None

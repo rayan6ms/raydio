@@ -1,0 +1,411 @@
+{
+  "previousMatchedComparison": {
+    "default": {
+      "windows": 2,
+      "validWindows": 2,
+      "seconds": 599.9925278320313,
+      "concealedMs": 162.75,
+      "silentConcealedMs": 0.0,
+      "netLost": 0,
+      "discarded": 4,
+      "concealmentMsPerMinute": 16.275202685080313,
+      "meanBufferMs": 62.8952895289529
+    },
+    "120": {
+      "windows": 2,
+      "validWindows": 2,
+      "seconds": 599.9907038574219,
+      "concealedMs": 0.0,
+      "silentConcealedMs": 0.0,
+      "netLost": 0,
+      "discarded": 0,
+      "concealmentMsPerMinute": 0.0,
+      "meanBufferMs": 120.00633438906483
+    }
+  },
+  "implementationRuns": [
+    {
+      "name": "initial",
+      "startedAt": "2026-10-03T13:09:42.316Z",
+      "finishedAt": "2026-10-03T13:14:42.408Z",
+      "seconds": 299.9991030273437,
+      "status": "completed",
+      "coverage": {
+        "receiverSeconds": 299.9991030273437,
+        "pcmSeconds": 299.46666666666664,
+        "completePollCoverage": true,
+        "completePcmCoverage": false,
+        "uninterruptedConnection": true,
+        "completeEventHistory": true,
+        "completeSpeakingObservation": true,
+        "completeTrackPhaseObservation": true,
+        "stableReceiverBuffer": true,
+        "retainedDiagnosticWindows": 2,
+        "droppedDiagnosticWindows": 0
+      },
+      "receiverIdentity": {
+        "id": "IT01A9597",
+        "ssrc": 9597,
+        "trackIdentifier": "3af11c66-cbb7-4464-aa97-d6e5de31b9d0"
+      },
+      "receiverBuffer": {
+        "initial": {
+          "installed": true,
+          "enabled": true,
+          "targetMs": 120,
+          "generation": 1,
+          "peers": 1,
+          "scope": "All incoming audio in this Discord tab",
+          "persistence": "Voice reconnects; page reload requires the optional extension",
+          "receivers": [
+            {
+              "trackId": "46aa2069-99ed-4e7c-9e6a-63e7afc119ae",
+              "live": true,
+              "originalMs": null,
+              "appliedMs": 120,
+              "matches": true
+            },
+            {
+              "trackId": "3af11c66-cbb7-4464-aa97-d6e5de31b9d0",
+              "live": true,
+              "originalMs": null,
+              "appliedMs": 120,
+              "matches": true
+            }
+          ],
+          "changedReceivers": 2,
+          "unsupportedCount": 0,
+          "failedApplications": 0,
+          "failedRestorations": 0,
+          "errors": []
+        },
+        "initialTargetMs": 120,
+        "settingChanges": 0,
+        "helperChanges": 0,
+        "final": {
+          "installed": true,
+          "enabled": true,
+          "targetMs": 120,
+          "generation": 1,
+          "peers": 1,
+          "scope": "All incoming audio in this Discord tab",
+          "persistence": "Voice reconnects; page reload requires the optional extension",
+          "receivers": [
+            {
+              "trackId": "46aa2069-99ed-4e7c-9e6a-63e7afc119ae",
+              "live": true,
+              "originalMs": null,
+              "appliedMs": 120,
+              "matches": true
+            },
+            {
+              "trackId": "3af11c66-cbb7-4464-aa97-d6e5de31b9d0",
+              "live": true,
+              "originalMs": null,
+              "appliedMs": 120,
+              "matches": true
+            }
+          ],
+          "changedReceivers": 2,
+          "unsupportedCount": 0,
+          "failedApplications": 0,
+          "failedRestorations": 0,
+          "errors": []
+        }
+      },
+      "packetsReceived": 15000,
+      "netLost": 0,
+      "positiveLoss": 0,
+      "negativeLoss": 0,
+      "discarded": 0,
+      "nacks": 19,
+      "concealedMs": 0.0,
+      "silentConcealedMs": 0.0,
+      "meanBufferMs": 115.93533333333339,
+      "insertedMs": 0.0,
+      "removedMs": 0.0,
+      "pcm": {
+        "samples": 28748800,
+        "squared": 884139.6232334374,
+        "peak": 0.6291695833206177,
+        "nearFullScale": 0,
+        "nonFinite": 0,
+        "emptyFrames": 0,
+        "longestQuietMs": 2258.0625,
+        "ongoingQuietMs": 0,
+        "reports": 1195,
+        "frames": 14374400,
+        "endWallMs": 300001.69999999925,
+        "audioSeconds": 299.46666666666664,
+        "rms": 0.17536808772138743
+      },
+      "sampling": {
+        "polls": 300,
+        "stalePolls": 0,
+        "maxPollMs": 1044.072021484375,
+        "positiveLossDeltas": 0,
+        "negativeLossDeltas": 0,
+        "maxConcealedMsPerPoll": 0,
+        "pcmReportsMissing": 0
+      },
+      "scheduling": {
+        "enabled": true,
+        "longTasksSupported": true,
+        "longTasks": 5,
+        "totalLongTaskMs": 1314,
+        "maxLongTaskMs": 545,
+        "initialVisibility": "visible"
+      },
+      "quietIntervals": [
+        {
+          "sequence": 4,
+          "ms": 7013.199999999255,
+          "kind": "quiet",
+          "phase": {
+            "positionSeconds": 239,
+            "durationSeconds": 249,
+            "label": "middle",
+            "playing": true,
+            "loop": true
+          },
+          "durationMs": 2258.0625,
+          "endFrame": 329388,
+          "audioEndMs": 6856.683333332961,
+          "reportDelayMs": 156.41666666666606,
+          "audioSeconds": 8.178666666666667
+        },
+        {
+          "sequence": 28,
+          "ms": 256738.89999999944,
+          "kind": "quiet",
+          "phase": {
+            "positionSeconds": 247,
+            "durationSeconds": 249,
+            "label": "tail",
+            "playing": true,
+            "loop": true
+          },
+          "durationMs": 2258.0625,
+          "endFrame": 12291468,
+          "audioEndMs": 256346.01666666628,
+          "reportDelayMs": 109.08333333334303,
+          "audioSeconds": 257.34133333333335
+        }
+      ],
+      "restarts": [
+        {
+          "sequence": 6,
+          "ms": 15025.699999999255,
+          "kind": "track-restart",
+          "phase": {
+            "positionSeconds": 6,
+            "durationSeconds": 249,
+            "label": "middle",
+            "playing": true,
+            "loop": true
+          },
+          "priorPosition": 247
+        },
+        {
+          "sequence": 30,
+          "ms": 265419.7999999998,
+          "kind": "track-restart",
+          "phase": {
+            "positionSeconds": 6,
+            "durationSeconds": 249,
+            "label": "middle",
+            "playing": true,
+            "loop": true
+          },
+          "priorPosition": 248
+        }
+      ],
+      "connectionEvents": []
+    },
+    {
+      "name": "verification",
+      "startedAt": "2026-10-03T13:17:25.324Z",
+      "finishedAt": "2026-10-03T13:22:25.420Z",
+      "seconds": 299.9988720703125,
+      "status": "completed",
+      "coverage": {
+        "receiverSeconds": 299.9988720703125,
+        "pcmSeconds": 300.02133333333336,
+        "completePollCoverage": true,
+        "completePcmCoverage": true,
+        "uninterruptedConnection": true,
+        "completeEventHistory": true,
+        "completeSpeakingObservation": true,
+        "completeTrackPhaseObservation": true,
+        "stableReceiverBuffer": true,
+        "retainedDiagnosticWindows": 2,
+        "droppedDiagnosticWindows": 0
+      },
+      "receiverIdentity": {
+        "id": "IT01A9597",
+        "ssrc": 9597,
+        "trackIdentifier": "3af11c66-cbb7-4464-aa97-d6e5de31b9d0"
+      },
+      "receiverBuffer": {
+        "initial": {
+          "installed": true,
+          "enabled": true,
+          "targetMs": 120,
+          "generation": 1,
+          "peers": 1,
+          "scope": "All incoming audio in this Discord tab",
+          "persistence": "Voice reconnects; page reload requires the optional extension",
+          "receivers": [
+            {
+              "trackId": "46aa2069-99ed-4e7c-9e6a-63e7afc119ae",
+              "live": true,
+              "originalMs": null,
+              "appliedMs": 120,
+              "matches": true
+            },
+            {
+              "trackId": "3af11c66-cbb7-4464-aa97-d6e5de31b9d0",
+              "live": true,
+              "originalMs": null,
+              "appliedMs": 120,
+              "matches": true
+            }
+          ],
+          "changedReceivers": 3,
+          "unsupportedCount": 0,
+          "failedApplications": 0,
+          "failedRestorations": 0,
+          "errors": []
+        },
+        "initialTargetMs": 120,
+        "settingChanges": 0,
+        "helperChanges": 0,
+        "final": {
+          "installed": true,
+          "enabled": true,
+          "targetMs": 120,
+          "generation": 1,
+          "peers": 1,
+          "scope": "All incoming audio in this Discord tab",
+          "persistence": "Voice reconnects; page reload requires the optional extension",
+          "receivers": [
+            {
+              "trackId": "46aa2069-99ed-4e7c-9e6a-63e7afc119ae",
+              "live": true,
+              "originalMs": null,
+              "appliedMs": 120,
+              "matches": true
+            },
+            {
+              "trackId": "3af11c66-cbb7-4464-aa97-d6e5de31b9d0",
+              "live": true,
+              "originalMs": null,
+              "appliedMs": 120,
+              "matches": true
+            }
+          ],
+          "changedReceivers": 3,
+          "unsupportedCount": 0,
+          "failedApplications": 0,
+          "failedRestorations": 0,
+          "errors": []
+        }
+      },
+      "packetsReceived": 14996,
+      "netLost": 0,
+      "positiveLoss": 0,
+      "negativeLoss": 0,
+      "discarded": 0,
+      "nacks": 18,
+      "concealedMs": 0.0,
+      "silentConcealedMs": 0.0,
+      "meanBufferMs": 111.00086684003472,
+      "insertedMs": 70.3125,
+      "removedMs": 0.0,
+      "pcm": {
+        "samples": 28802048,
+        "squared": 893583.2035046489,
+        "peak": 0.6291695833206177,
+        "nearFullScale": 0,
+        "nonFinite": 0,
+        "emptyFrames": 0,
+        "longestQuietMs": 2268.0625,
+        "ongoingQuietMs": 0,
+        "reports": 1197,
+        "frames": 14401024,
+        "endWallMs": 300005.2000000002,
+        "audioSeconds": 300.02133333333336,
+        "rms": 0.17613911645270688
+      },
+      "sampling": {
+        "polls": 300,
+        "stalePolls": 0,
+        "maxPollMs": 1012.973876953125,
+        "positiveLossDeltas": 0,
+        "negativeLossDeltas": 0,
+        "maxConcealedMsPerPoll": 0,
+        "pcmReportsMissing": 0
+      },
+      "scheduling": {
+        "enabled": true,
+        "longTasksSupported": true,
+        "longTasks": 1,
+        "totalLongTaskMs": 56,
+        "maxLongTaskMs": 56,
+        "initialVisibility": "visible"
+      },
+      "quietIntervals": [
+        {
+          "sequence": 4,
+          "ms": 42350.59999999963,
+          "kind": "quiet",
+          "phase": {
+            "positionSeconds": 238,
+            "durationSeconds": 249,
+            "label": "middle",
+            "playing": true,
+            "loop": true
+          },
+          "durationMs": 2268.0625,
+          "endFrame": 2032443,
+          "audioEndMs": 42325.0625,
+          "reportDelayMs": 25.4375,
+          "audioSeconds": 43.522666666666666
+        },
+        {
+          "sequence": 26,
+          "ms": 291757.7999999998,
+          "kind": "quiet",
+          "phase": {
+            "positionSeconds": 248,
+            "durationSeconds": 249,
+            "label": "tail",
+            "playing": true,
+            "loop": true
+          },
+          "durationMs": 2258.0625,
+          "endFrame": 13994043,
+          "audioEndMs": 291524.36249999976,
+          "reportDelayMs": 233.4375000000582,
+          "audioSeconds": 292.936
+        }
+      ],
+      "restarts": [
+        {
+          "sequence": 6,
+          "ms": 44064.700000000186,
+          "kind": "track-restart",
+          "phase": {
+            "positionSeconds": 0,
+            "durationSeconds": 249,
+            "label": "head",
+            "playing": true,
+            "loop": true
+          },
+          "priorPosition": 238
+        }
+      ],
+      "connectionEvents": []
+    }
+  ]
+}

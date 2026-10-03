@@ -43,6 +43,11 @@ class BufferComparisonTests(unittest.TestCase):
         self.assertEqual(result['groups']['default']['validWindows'], 0)
         self.assertIsNone(result['groups']['default']['concealmentMsPerMinute'])
 
+    def test_setting_change_is_not_a_valid_comparison(self):
+        report = copy.deepcopy(self.report)
+        report['coverage']['stableReceiverBuffer'] = False
+        self.assertFalse(compare([report])['allValid'])
+
     def test_receiver_changes_and_empty_input_are_not_matched(self):
         report = copy.deepcopy(self.report)
         report['receiverBufferTrial']['index'] = 1

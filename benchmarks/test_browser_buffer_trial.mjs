@@ -3,7 +3,7 @@ import vm from 'node:vm';
 import assert from 'node:assert/strict';
 const source = readFileSync(new URL('./browser_buffer_trial.js', import.meta.url), 'utf8');
 async function simulate({busy = false, shortLife = false, saveFails = false,
-    coverageFails = false, identityChanges = false, setterFails = false} = {}) {
+    coverageFails = false, identityChanges = false, setterFails = false, persistent = false} = {}) {
     let packets = 0, setting = null;
     const calls = [], saves = [];
     const identity = {id: 'rtp', ssrc: 1, trackIdentifier: 'track'};
@@ -18,12 +18,14 @@ async function simulate({busy = false, shortLife = false, saveFails = false,
             coverage: {uninterruptedConnection: true, completePollCoverage: !coverageFails,
                 completePcmCoverage: true, completeEventHistory: true}};
     }}};
+    if (persistent) window.raydioReceiverBuffer = {status: () => ({enabled: true})};
     vm.runInNewContext(source, {window, Date, AbortSignal, JSON, setTimeout: f => queueMicrotask(f),
         fetch: async (url, options) => {
             if (url.endsWith('/health')) return {ok: true, json: async () => ({remainingSeconds: shortLife ? 1 : 1800})};
             saves.push(JSON.parse(options.body)); return {ok: !saveFails, status: saveFails ? 500 : 204};
         }});
     if (busy) {await assert.rejects(window.raydioBufferTrial.start({seconds: 10}), /Another observer/); return;}
+    if (persistent) {await assert.rejects(window.raydioBufferTrial.start({seconds: 10}), /persistent receiver buffer/); assert.equal(calls.length, 0); return;}
     const result = await window.raydioBufferTrial.start({seconds: 10});
     assert.equal(window.raydioBufferTrial.running, false);
     assert.equal(setting, null, 'restore original setting after success or failure');
@@ -40,5 +42,5 @@ async function simulate({busy = false, shortLife = false, saveFails = false,
     }
 }
 for (const options of [{}, {busy: true}, {shortLife: true}, {saveFails: true},
-    {coverageFails: true}, {identityChanges: true}, {setterFails: true}]) await simulate(options);
+    {coverageFails: true}, {identityChanges: true}, {setterFails: true}, {persistent: true}]) await simulate(options);
 console.log('PASS: repeated targets, persistence, strict coverage and identity guards, restoration on failures');

@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-03T13:24:30.595Z",
+  "connected": true,
+  "helper": {
+    "changedReceivers": 3,
+    "enabled": true,
+    "errors": [],
+    "failedApplications": 0,
+    "failedRestorations": 0,
+    "generation": 1,
+    "installed": true,
+    "peers": 1,
+    "persistence": "Voice reconnects; page reload requires the optional extension",
+    "receivers": [
+      {
+        "appliedMs": 120,
+        "live": true,
+        "matches": true,
+        "originalMs": null,
+        "trackId": "46aa2069-99ed-4e7c-9e6a-63e7afc119ae"
+      },
+      {
+        "appliedMs": 120,
+        "live": true,
+        "matches": true,
+        "originalMs": null,
+        "trackId": "3af11c66-cbb7-4464-aa97-d6e5de31b9d0"
+      }
+    ],
+    "scope": "All incoming audio in this Discord tab",
+    "targetMs": 120,
+    "unsupportedCount": 0
+  },
+  "loopOn": true,
+  "nativeSmoke": {
+    "afterPeers": 1,
+    "beforePeers": 1,
+    "cachedReceiverTargetMs": 120,
+    "errors": [],
+    "nativeCloseReturnIsUndefined": true,
+    "nativePromise": true,
+    "restorationFailures": 0
+  },
+  "observerRunning": false,
+  "verificationSaved": true
+}
