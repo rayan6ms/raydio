@@ -1,0 +1,18 @@
+2026-10-03T17:55:41.359188Z  INFO raydio::runtime: Raydio ready bot_id=1536086112421019729
+Started raydio.service - Raydio Discord music bot.
+2026-10-03T17:55:58.655385Z  INFO raydio::runtime: Command received guild=1544468012491346110 interaction=1556001884894929076 command="play"
+2026-10-03T17:55:59.048425Z  INFO raydio::discord: Interaction acknowledged guild=1544468012491346110 interaction=1556001884894929076 elapsed_ms=392
+2026-10-03T17:55:59.048544Z  INFO raydio::session: Play request preparing guild=1544468012491346110 interaction=1556001884894929076
+2026-10-03T17:55:59.048560Z  INFO raydio::session: Play request admitted guild=1544468012491346110 sequence=1
+2026-10-03T17:56:00.105231Z  INFO raydio::session: Play source resolution completed guild=1544468012491346110 sequence=1 elapsed_ms=1056 success=true
+2026-10-03T17:56:00.774535Z  INFO crust_oto_adapter: DAVE control processed and replies written connection_generation=1 opcode=25 transition_id=None epoch=None replies=1
+2026-10-03T17:56:00.779515Z  INFO crust_oto_adapter: DAVE control processed and replies written connection_generation=1 opcode=27 transition_id=None epoch=None replies=1
+2026-10-03T17:56:00.784582Z  INFO crust_oto_adapter: DAVE lifecycle transition connection_generation=1 opcode=29 before=DaveContext { active_version: 0, transition_pending: false, ready: false } after=DaveContext { active_version: 1, transition_pending: false, ready: true }
+2026-10-03T17:56:00.784607Z  INFO crust_oto_adapter: DAVE control processed and replies written connection_generation=1 opcode=29 transition_id=Some(0) epoch=None replies=0
+2026-10-03T17:56:03.403270Z  INFO mantle_media::startup: progressive cache wait: position_bytes=0 needed_bytes=262144 wait_ms=500.708
+2026-10-03T17:56:03.403300Z  INFO mantle_media::startup: HTTP media opened: source_bytes=8934074 response_ms=1055.282 staging_ms=500.979 staged=true
+2026-10-03T17:56:03.403774Z  INFO crust_mantle_adapter::startup: YouTube playback prepared client=Web discovery_ms=1075.168004 handoff_ms=1556.742763 total_ms=2631.911137 failed_handoffs=0
+2026-10-03T17:56:03.741378Z  INFO raydio::discord: Interaction response completed guild=1544468012491346110 interaction=1556001884894929076
+2026-10-03T17:56:03.741509Z  INFO raydio::session: track started generation=1 guild_id=1544468012491346110 queued_tracks=21
+2026-10-03T17:56:21.391320Z  INFO mantle_media::startup: progressive cache finished: source_bytes=8934074 available_bytes=8934074 elapsed_ms=18488.706 failure=None
+2026-10-03T17:57:01.674141Z  INFO crust_oto_adapter: voice diagnostic checkpoint connection_generation=1 connection_phase=Connected failure=None audio=Some(AudioSnapshot { generation: SourceGeneration(1), phase: Sending, failure: None, dave_failure: None, dave_context: None, stats: AudioStats { frames_sent: 2914, silence_frames_sent: 0, frames_unavailable: 0, skipped_deadlines: 0, send_failures: 0, source_overruns: 0, max_lateness: 14.28354ms, last_source_overrun_wall: 0ns, last_source_overrun_cpu: 0ns, active_send_gaps_40ms: 0, active_send_gaps_100ms: 0, active_send_gaps_1s: 0, max_active_send_gap: 0ns, last_active_send_gap: 0ns, last_active_send_gap_unix_ms: 0 } }) audio_queue_pending_ms=20 isolated_audio_worker=false

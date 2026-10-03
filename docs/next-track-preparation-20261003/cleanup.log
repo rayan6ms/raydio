@@ -1,0 +1,10 @@
+2026-10-03T18:08:01.674507Z  INFO crust_oto_adapter: voice diagnostic checkpoint connection_generation=1 connection_phase=Connected failure=None audio=Some(AudioSnapshot { generation: SourceGeneration(2), phase: Sending, failure: None, dave_failure: None, dave_context: None, stats: AudioStats { frames_sent: 35910, silence_frames_sent: 0, frames_unavailable: 0, skipped_deadlines: 3, send_failures: 0, source_overruns: 0, max_lateness: 39.556828ms, last_source_overrun_wall: 0ns, last_source_overrun_cpu: 0ns, active_send_gaps_40ms: 2, active_send_gaps_100ms: 0, active_send_gaps_1s: 0, max_active_send_gap: 57.797559ms, last_active_send_gap: 57.797559ms, last_active_send_gap_unix_ms: 1791050862492 } }) audio_queue_pending_ms=20 isolated_audio_worker=false
+2026-10-03T18:09:01.673811Z  INFO crust_oto_adapter: voice diagnostic checkpoint connection_generation=1 connection_phase=Connected failure=None audio=Some(AudioSnapshot { generation: SourceGeneration(2), phase: Sending, failure: None, dave_failure: None, dave_context: None, stats: AudioStats { frames_sent: 38910, silence_frames_sent: 0, frames_unavailable: 0, skipped_deadlines: 3, send_failures: 0, source_overruns: 0, max_lateness: 39.556828ms, last_source_overrun_wall: 0ns, last_source_overrun_cpu: 0ns, active_send_gaps_40ms: 2, active_send_gaps_100ms: 0, active_send_gaps_1s: 0, max_active_send_gap: 57.797559ms, last_active_send_gap: 57.797559ms, last_active_send_gap_unix_ms: 1791050862492 } }) audio_queue_pending_ms=20 isolated_audio_worker=false
+2026-10-03T18:09:34.225794Z  INFO raydio::runtime: Command received guild=1544468012491346110 interaction=1556005305941233795 command=""
+2026-10-03T18:09:34.412332Z  INFO raydio::discord: Interaction acknowledged guild=1544468012491346110 interaction=1556005305941233795 elapsed_ms=186
+2026-10-03T18:09:34.513654Z  INFO crust_oto_adapter: audio sender stopped frames_sent=40547 silence_frames_sent=5 frames_unavailable=5 skipped_deadlines=3 send_failures=0 source_overruns=0 max_lateness_us=39556 phase=Stopped failure=None dave_failure=None dave_context=None
+MainPID=37427
+NRestarts=0
+active
+LoadState=not-found
+inactive
