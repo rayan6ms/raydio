@@ -1090,7 +1090,12 @@ impl GuildSession {
         }
         match kind {
             "TrackStartEvent" => {
-                tracing::info!(generation = self.generation, "track started");
+                tracing::info!(
+                    generation = self.generation,
+                    guild_id = self.id,
+                    queued_tracks = self.queue.upcoming.len(),
+                    "track started"
+                );
                 self.started = true;
                 self.position_at = Instant::now();
                 self.schedule_end();
@@ -1100,6 +1105,8 @@ impl GuildSession {
                 tracing::info!(
                     generation = self.generation,
                     position_ms = self.position_ms,
+                    guild_id = self.id,
+                    queued_tracks = self.queue.upcoming.len(),
                     "track finished"
                 );
                 self.queue.finish();
@@ -1107,13 +1114,22 @@ impl GuildSession {
                 let _ = self.start_current().await;
             }
             "TrackEndEvent" if payload["reason"] == "loadFailed" => {
-                tracing::warn!(generation = self.generation, "track load failed");
+                tracing::warn!(
+                    generation = self.generation,
+                    guild_id = self.id,
+                    queued_tracks = self.queue.upcoming.len(),
+                    "track load failed"
+                );
                 self.track_failure().await;
             }
             "TrackExceptionEvent" | "TrackStuckEvent" => {
                 // Never log exception text, encoded tracks or source URLs.
                 tracing::warn!(
                     event = kind,
+                    duration_ms = self.queue.current.as_ref().map(|track| track.duration_ms),
+                    consecutive_failures = self.queue.consecutive_failures,
+                    guild_id = self.id,
+                    queued_tracks = self.queue.upcoming.len(),
                     generation = self.generation,
                     position_ms = self.position_ms,
                     "track source failed or stalled"
@@ -1213,6 +1229,8 @@ impl GuildSession {
         {
             self.events[5] = self.events[5].saturating_add(1);
             tracing::warn!(
+                guild_id = self.id,
+                queued_tracks = self.queue.upcoming.len(),
                 generation = self.generation,
                 position_ms = self.position_ms,
                 duration_ms = self.queue.current.as_ref().map(|track| track.duration_ms),

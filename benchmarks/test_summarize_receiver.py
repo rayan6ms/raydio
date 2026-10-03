@@ -91,8 +91,8 @@ class SummaryTests(unittest.TestCase):
             ]))
             (root / 'receiver.json').write_text(json.dumps(receiver))
             (root / 'service.log').write_text(''.join(
-                f'2026-09-09T00:00:{second-1:02d}.999Z INFO track finished generation={generation}\n'
-                f'2026-09-09T00:00:{second:02d}Z INFO track started generation={generation+1}\n'
+                f'2026-09-09T00:00:{second-1:02d}.999Z INFO track finished generation={generation} guild_id=1544468012491346110 queued_tracks=5\n'
+                f'2026-09-09T00:00:{second:02d}Z INFO track started generation={generation+1} guild_id=1544468012491346110 queued_tracks=5\n'
                 for generation, second in enumerate((20, 30, 40), 1)))
             (root / 'resources.jsonl').write_text('')
             (root / 'checkpoints.jsonl').write_text('\n'.join(
