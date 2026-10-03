@@ -1,0 +1,18 @@
+{
+  "crust_revision": "a22951576491d90f934bfc24c4a32c60e8f13944",
+  "raydio_revision": "2e669b4c99e000a9131b65dd2bbf61b3569190e2",
+  "mantle_revision": "aba9bb1418210d912da951beb5ac5b048d456b56",
+  "oto_revision": "62d2fc87e5dc239695a8b86a7372a4edc1caa933",
+  "adapter_passed": 38,
+  "adapter_existing_ignored": 2,
+  "server_passed": 84,
+  "raydio_passed": 60,
+  "clippy_warnings_denied": true,
+  "fixture_cold_ms": 202.103,
+  "fixture_prepared_ms": 0.083,
+  "package_bytes": 7566748,
+  "package_sha256": "aeaa70f47ddde49a199fa460ec5cd6c2378d8fc1ed4e9bb0a6d760d6245eb1b7",
+  "maximum_required_glibc": "2.34",
+  "build_cpu_limit": 1,
+  "build_memory_limit_mib": 1536
+}
