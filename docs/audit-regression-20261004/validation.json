@@ -1,0 +1,8 @@
+{
+  "actualRunMetricsVerified": 4,
+  "identityFilteredCheckpointSavesPerRun": 7,
+  "restoredRuntimeDigestsVerified": 5,
+  "evidenceCredentialScanMatches": 0,
+  "pythonDiagnosticTestsPassed": 10,
+  "browserDiagnosticTestProgramsPassed": 8
+}

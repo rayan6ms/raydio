@@ -9,7 +9,9 @@ vm.runInNewContext(source,{window,Date,performance:{now:()=>0},AbortSignal,
     setInterval:f=>(tick=f,1),clearInterval:()=>{cleared++;},
     setTimeout:f=>(deadline=f,2),clearTimeout:()=>{},
     fetch:async url=>{if(url.endsWith('/health'))return {ok:true,json:async()=>health};writes++;return {ok:!fail,status:fail?503:204};}});
-await tick();assert.equal(writes,1);assert.equal(cleared,0);
+await tick();assert.equal(writes,0);assert.equal(cleared,0); // stale terminal report excluded
+window.raydioEndurance.report={...failed};
+await tick();assert.equal(writes,1); // new failed preflight retained
 await tick();assert.equal(writes,1); // no duplicate terminal save
 const running={requestedSeconds:21600,status:'running',lastProgressAt:'1'};
 window.raydioEndurance.report=running;
@@ -40,4 +42,17 @@ health.hostSamples=2;
 assert.equal((await window.raydioCheckpoint.verify()).verified,true);
 deadline();assert.equal(window.raydioCheckpoint.timer,null);
 await assert.rejects(window.raydioCheckpoint.verify(),/lifetime/);
-console.log('PASS: failed preflight -> new run -> progress/retry -> final save; deduplication and bounded lifetime');
+for (const status of ['completed','failed','stopped','running']) {
+    const attachedWindow={raydioEndurance:{report:{requestedSeconds:300,status,requestedAt:'attached'}}};
+    let attachedTick,attachedWrites=0;
+    vm.runInNewContext(source,{window:attachedWindow,Date,performance:{now:()=>0},AbortSignal,
+        setInterval:f=>(attachedTick=f,1),clearInterval:()=>{},
+        setTimeout:()=>2,clearTimeout:()=>{},
+        fetch:async()=>{attachedWrites++;return {ok:true};}});
+    await attachedTick();
+    assert.equal(attachedWrites,status==='running'?1:0,`initial ${status} report`);
+    attachedWindow.raydioEndurance.report={requestedSeconds:300,status:'failed',requestedAt:'new-preflight'};
+    await attachedTick();
+    assert.equal(attachedWrites,status==='running'?2:1,'new report remains eligible');
+}
+console.log('PASS: stale terminal excluded; existing running report recovered; new preflight retained; progress/retry/final persistence, deduplication and bounded lifetime');

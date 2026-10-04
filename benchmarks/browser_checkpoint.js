@@ -2,11 +2,17 @@
 // Independent of the agent turn; at most one loopback request per minute.
 (() => {
     if (window.raydioCheckpoint?.timer) throw Error('Checkpoint timer already active');
+    // A fresh collector must not archive a terminal report left by a prior run.
+    // Existing running reports are still eligible for mid-run recovery.
+    const priorTerminalReports = new WeakSet();
+    if (['completed', 'failed', 'stopped'].includes(window.raydioEndurance?.report?.status))
+        priorTerminalReports.add(window.raydioEndurance.report);
     const state = window.raydioCheckpoint = {saved:0, errors:0, maxSerializeMs:0, busy:false, lastSavedReport:null, lastSavedRevision:null};
     state.deadlineAt = Date.now() + 25200000;
     state.deadlineMonotonic = performance.now() + 25200000;
     state.save = async () => {
         const data = window.raydioEndurance?.report;
+        if (priorTerminalReports.has(data)) return;
         if (!data || !Number.isInteger(data.requestedSeconds) || data.requestedSeconds < 10 || data.requestedSeconds > 21600 || state.busy) return;
         const revision = [data.status, data.lastProgressAt, data.finishedAt].join('|');
         if (state.lastSavedReport === data && state.lastSavedRevision === revision) return;

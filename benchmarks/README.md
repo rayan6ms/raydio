@@ -65,7 +65,10 @@ marked `lateMs` and is not replaced with invented catch-up samples.
 
 Install `browser_checkpoint.js` before the receiver audit. It observes replacement
 reports after failed preflights, retries failed writes, and stays armed for seven
-hours. It accepts the same 10–21,600 second durations as the audit so the full
+hours. Installation ignores a completed, failed or stopped report left by a
+previous observation. A new failed preflight is still saved, and attachment to
+an already-running report supports collector recovery. It accepts the same
+10–21,600 second durations as the audit so the full
 persistence path can be checked in a short run. After starting the **actual**
 report, call `raydioCheckpoint.save()` and verify `/health` from the Discord tab:
 `lastReceiver.requestedAt` must match `raydioEndurance.report.requestedAt`, with

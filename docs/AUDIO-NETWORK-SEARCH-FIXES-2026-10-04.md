@@ -1,5 +1,11 @@
 # Audio, voice-event and search audit repairs — October 4, 2026
 
+**Rollout status: withdrawn pending qualification.** The previous runtime is
+restored on Oracle and `main`. The implementation below is preserved on
+`candidate/audio-audit-20261004`; the earlier acceptance statement is superseded
+by [the repeated comparison and rollback report](AUDIO-AUDIT-REGRESSION-RETEST-2026-10-04.md).
+The seven audit faults remain pending in the restored production build.
+
 All seven findings from [the original audit](AUDIO-NETWORK-SEARCH-AUDIT-2026-10-04.md)
 have implementation fixes and regression evidence. These are corrections to
 reproduced faults; they do not establish that historical packet loss or receiver

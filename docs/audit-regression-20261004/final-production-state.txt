@@ -1,0 +1,10 @@
+MainPID=40678
+Result=success
+NRestarts=0
+ActiveState=active
+inactive
+/opt/raydio/releases/c4654c51ed67a77aa8145abad52c396f28b7c2a4
+ee17f6259de1c1c2a3fd7f8e99049a036aeb36cc716d0b3455255e2f3401fe08  /opt/raydio/current/bin/raydio
+0178a83db6e0df67f57d147475c275e4bd52bae04f6bb6cde7049850ddd15296  /etc/raydio/env
+40678
+active

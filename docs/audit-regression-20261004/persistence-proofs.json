@@ -1,0 +1,118 @@
+{
+  "a1": {
+    "health": {
+      "elapsedSeconds": 43.0676708984375,
+      "hostSamples": 110,
+      "remainingSeconds": 789.0020416309999,
+      "requestedAt": "2026-10-04T15:17:19.771Z",
+      "verified": true
+    },
+    "completed": {
+      "concealmentMs": 29.125,
+      "coverage": {
+        "completeEventHistory": true,
+        "completePcmCoverage": true,
+        "completePollCoverage": true,
+        "completeSpeakingObservation": true,
+        "completeTrackPhaseObservation": true,
+        "droppedDiagnosticWindows": 0,
+        "pcmSeconds": 300.0106666666667,
+        "receiverSeconds": 299.9999248046875,
+        "retainedDiagnosticWindows": 2,
+        "stableReceiverBuffer": true,
+        "uninterruptedConnection": true
+      },
+      "finishedAt": "2026-10-04T15:22:22.032Z",
+      "lostNet": 0,
+      "startedAt": "2026-10-04T15:17:21.981Z",
+      "status": "completed"
+    }
+  },
+  "b1": {
+    "health": {
+      "elapsedSeconds": 42.11790307617188,
+      "hostSamples": 84,
+      "remainingSeconds": 815.7075423240021,
+      "requestedAt": "2026-10-04T15:25:56.941Z",
+      "verified": true
+    },
+    "completed": {
+      "concealmentMs": 393.8541666666667,
+      "coverage": {
+        "completeEventHistory": true,
+        "completePcmCoverage": true,
+        "completePollCoverage": true,
+        "completeSpeakingObservation": true,
+        "completeTrackPhaseObservation": true,
+        "droppedDiagnosticWindows": 0,
+        "pcmSeconds": 300.0106666666667,
+        "receiverSeconds": 300.0000310058594,
+        "retainedDiagnosticWindows": 8,
+        "stableReceiverBuffer": true,
+        "uninterruptedConnection": true
+      },
+      "finishedAt": "2026-10-04T15:30:59.205Z",
+      "lostNet": 0,
+      "startedAt": "2026-10-04T15:25:59.152Z",
+      "status": "completed"
+    }
+  },
+  "b2": {
+    "health": {
+      "elapsedSeconds": 26.084795166015624,
+      "hostSamples": 66,
+      "remainingSeconds": 833.4744577189995,
+      "requestedAt": "2026-10-04T15:33:38.330Z",
+      "verified": true
+    },
+    "completed": {
+      "concealmentMs": 125.8125,
+      "coverage": {
+        "completeEventHistory": true,
+        "completePcmCoverage": true,
+        "completePollCoverage": true,
+        "completeSpeakingObservation": true,
+        "completeTrackPhaseObservation": true,
+        "droppedDiagnosticWindows": 0,
+        "pcmSeconds": 300.0106666666667,
+        "receiverSeconds": 299.99940307617186,
+        "retainedDiagnosticWindows": 8,
+        "stableReceiverBuffer": true,
+        "uninterruptedConnection": true
+      },
+      "finishedAt": "2026-10-04T15:38:40.592Z",
+      "lostNet": 0,
+      "startedAt": "2026-10-04T15:33:40.541Z",
+      "status": "completed"
+    }
+  },
+  "a2": {
+    "health": {
+      "elapsedSeconds": 123.39552490234375,
+      "hostSamples": 161,
+      "remainingSeconds": 737.3014144150002,
+      "requestedAt": "2026-10-04T15:43:27.730Z",
+      "verified": true
+    },
+    "completed": {
+      "concealmentMs": 604.125,
+      "coverage": {
+        "completeEventHistory": true,
+        "completePcmCoverage": true,
+        "completePollCoverage": true,
+        "completeSpeakingObservation": true,
+        "completeTrackPhaseObservation": true,
+        "droppedDiagnosticWindows": 0,
+        "pcmSeconds": 300.192,
+        "receiverSeconds": 300.17974389648435,
+        "retainedDiagnosticWindows": 5,
+        "stableReceiverBuffer": true,
+        "uninterruptedConnection": true
+      },
+      "finishedAt": "2026-10-04T15:48:30.173Z",
+      "lostNet": 0,
+      "startedAt": "2026-10-04T15:43:29.941Z",
+      "status": "completed"
+    }
+  }
+}

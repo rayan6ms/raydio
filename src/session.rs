@@ -33,28 +33,6 @@ struct Pending {
     epoch: u64,
     sequence: u64,
 }
-const MAX_RESPONSES: usize = 32;
-struct Acknowledging {
-    request: Request,
-    ack: oneshot::Receiver<bool>,
-    deadline: Instant,
-}
-enum Response {
-    Done,
-    Created {
-        intent: u64,
-        epoch: u64,
-        panel: Option<Panel>,
-    },
-    Updated {
-        intent: u64,
-        epoch: u64,
-        channel: u64,
-        message: u64,
-        view: View,
-        delivered: bool,
-    },
-}
 struct Panel {
     channel: u64,
     message: u64,
@@ -115,12 +93,7 @@ pub(crate) struct GuildSession {
     preparations: JoinSet<(u64, Option<String>, bool)>,
     preparation_target: Option<String>,
     preparation_retry: Instant,
-    acknowledgements: VecDeque<Acknowledging>,
-    responses: JoinSet<Response>,
-    panel_intent: u64,
-    panel_pending: Option<u64>,
-    panel_task: Option<tokio::task::Id>,
-    panel_writes: Arc<tokio::sync::Mutex<()>>,
+    responses: JoinSet<()>,
     // At most one progress edit, with newer snapshots coalesced in session state.
     panel_edits: JoinSet<PanelEdit>,
     // Bounded, owned deletion retries; never block audio on Discord DELETE.
@@ -138,10 +111,12 @@ pub(crate) struct GuildSession {
 impl GuildSession {
     async fn interaction(&mut self, mut request: Request) {
         if !self.shared.loaded(self.id) {
-            self.respond_error(
-                &request,
-                "Raydio commands are available only in a loaded server.",
-            );
+            request
+                .error(
+                    &self.shared.http,
+                    "Raydio commands are available only in a loaded server.",
+                )
+                .await;
             return;
         }
         if let Some(custom_id) = &request.custom_id {
@@ -166,19 +141,21 @@ impl GuildSession {
                         })
                 };
             if !valid {
-                self.respond(
-                    &request,
-                    View::text(if kind == "queue" {
-                        "This queue view is no longer active. Run `/queue` again."
-                    } else {
-                        "These player controls are no longer active. Run `/nowplaying` again."
-                    }),
-                );
+                let _ = request
+                    .respond(
+                        &self.shared.http,
+                        View::text(if kind == "queue" {
+                            "This queue view is no longer active. Run `/queue` again."
+                        } else {
+                            "These player controls are no longer active. Run `/nowplaying` again."
+                        }),
+                    )
+                    .await;
                 return;
             }
             if kind == "queue" {
                 let view = self.queue_view(action.parse().unwrap_or(0));
-                self.respond(&request, view);
+                let _ = request.respond(&self.shared.http, view).await;
                 return;
             }
             request.name = action.to_owned();
@@ -208,11 +185,13 @@ impl GuildSession {
             }
             "queue" => {
                 let view = self.queue_view(0);
-                self.respond(&request, view);
+                let _ = request.respond(&self.shared.http, view).await;
                 return;
             }
             "help" => {
-                self.respond(&request, View::text(commands::HELP));
+                let _ = request
+                    .respond(&self.shared.http, View::text(commands::HELP))
+                    .await;
                 return;
             }
             "ping" => {
@@ -222,17 +201,19 @@ impl GuildSession {
                 } else {
                     "unavailable".into()
                 };
-                self.respond(
-                    &request,
-                    View::text(format!(
-                        "Pong! Discord: {discord}. Lavalink: {}.",
-                        if self.shared.node.health().ready {
-                            "ready"
-                        } else {
-                            "unavailable"
-                        }
-                    )),
-                );
+                let _ = request
+                    .respond(
+                        &self.shared.http,
+                        View::text(format!(
+                            "Pong! Discord: {discord}. Lavalink: {}.",
+                            if self.shared.node.health().ready {
+                                "ready"
+                            } else {
+                                "unavailable"
+                            }
+                        )),
+                    )
+                    .await;
                 return;
             }
             "diagnostics" => {
@@ -280,24 +261,47 @@ impl GuildSession {
                         health.audio.missed_deadlines, health.audio.windows
                     ));
                 }
-                self.respond(&request, View::text(text));
+                let _ = request.respond(&self.shared.http, View::text(text)).await;
                 return;
             }
             _ => {}
         }
         match self.control(&request).await {
             Ok(text) => {
+                if request.updates_message() {
+                    // Apply the audio control first, then serialize its message
+                    // after any older progress snapshot already in flight.
+                    self.flush_refresh().await;
+                }
                 if request.updates_message() && self.queue.current.is_some() {
-                    self.update_panel_response(&request);
+                    let view = self.player_view();
+                    if request
+                        .respond_no_model(&self.shared.http, &view)
+                        .await
+                        .is_ok()
+                        && let Some(panel) = self.panel.as_mut()
+                    {
+                        panel.last_view = Some(view);
+                        // Discord has acknowledged a paused snapshot and later
+                        // persisted an older Playing snapshot in live tests.
+                        // Playing panels self-correct on the next progress edit;
+                        // paused panels need bounded reconciliation instead.
+                        if self.paused {
+                            self.panel_checks = 3;
+                            self.panel_check_at = Instant::now() + Duration::from_millis(500);
+                        } else {
+                            self.panel_checks = 0;
+                        }
+                    }
                 } else if request.updates_message() {
                     // The deferred component was already acknowledged. Its
                     // message is being deleted; do not edit a deleted webhook.
                     self.remove_panel().await;
                 } else {
-                    self.respond(&request, View::text(text));
+                    let _ = request.respond(&self.shared.http, View::text(text)).await;
                 }
             }
-            Err(error) => self.respond_error(&request, &error),
+            Err(error) => request.error(&self.shared.http, &error).await,
         }
         self.refresh().await;
     }
@@ -570,11 +574,6 @@ impl GuildSession {
             preparation_target: None,
             preparation_retry: Instant::now(),
             responses: JoinSet::new(),
-            acknowledgements: VecDeque::new(),
-            panel_intent: 0,
-            panel_pending: None,
-            panel_task: None,
-            panel_writes: Arc::new(tokio::sync::Mutex::new(())),
             panel_edits: JoinSet::new(),
             panel_deletions: JoinSet::new(),
             panel: None,
@@ -596,12 +595,8 @@ impl GuildSession {
                 _ = self.shared.cancel.cancelled() => break,
                 message = receiver.recv() => match message {
                     Some(Message::Interaction(request, ack)) => {
-                        if self.acknowledgements.len() < MAX_RESPONSES {
-                            self.acknowledgements.push_back(Acknowledging { request, ack, deadline: Instant::now() + Duration::from_secs(5) });
-                        } else {
-                            self.shared.interaction_errors.fetch_add(1, Ordering::Relaxed);
-                            tracing::warn!(guild = self.id, "Acknowledged command queue overloaded");
-                        }
+                        if matches!(timeout(Duration::from_secs(5), ack).await, Ok(Ok(true))) { self.interaction(request).await; }
+                        else { self.shared.interaction_errors.fetch_add(1, Ordering::Relaxed); tracing::warn!(guild = self.id, interaction = request.interaction.id.get(), "Command discarded because acknowledgement could not be confirmed"); }
                     }
                     Some(Message::Backend(payload)) => self.backend(payload).await,
                     Some(Message::VoiceChanged) => self.voice_changed().await,
@@ -620,26 +615,12 @@ impl GuildSession {
                             self.commit(pending, result).await;
                         }
                         Err(error) if error.is_panic() => {
-                            if let Some(pending) = self.loading.take() { self.respond_error(&pending.request, "YouTube could not load that request. Try another song."); }
+                            if let Some(pending) = self.loading.take() { pending.request.error(&self.shared.http, "YouTube could not load that request. Try another song.").await; }
                         }
                         _ => {}
                     }
                 }
-                acknowledged = async {
-                    let pending = self.acknowledgements.front_mut().expect("guarded pending acknowledgement");
-                    tokio::time::timeout_at(pending.deadline, &mut pending.ack).await
-                }, if !self.acknowledgements.is_empty() => {
-                    let pending = self.acknowledgements.pop_front().expect("pending acknowledgement");
-                    if matches!(acknowledged, Ok(Ok(true))) { self.interaction(pending.request).await; }
-                    else {
-                        self.shared.interaction_errors.fetch_add(1, Ordering::Relaxed);
-                        tracing::warn!(guild = self.id, interaction = pending.request.interaction.id.get(), "Command discarded because acknowledgement could not be confirmed");
-                    }
-                },
-                Some(result) = self.responses.join_next(), if !self.responses.is_empty() => {
-                    self.finish_response(result).await;
-                    self.refresh().await;
-                },
+                Some(_) = self.responses.join_next(), if !self.responses.is_empty() => {},
                 Some(result) = self.preparations.join_next(), if !self.preparations.is_empty() => {
                     self.finish_preparation(result);
                 },
@@ -668,13 +649,6 @@ impl GuildSession {
         self.preparations.abort_all();
         let _ = timeout(Duration::from_secs(3), self.cleanup(None)).await;
         self.panel_edits.shutdown().await;
-        // Completed responses survive abort_all and must still be retired.
-        // Pending HTTP work cannot consume the runtime's five-second actor
-        // shutdown budget before panel deletion gets a chance to finish.
-        self.responses.abort_all();
-        while let Some(result) = self.responses.join_next().await {
-            self.finish_response(result).await;
-        }
         // Allow all three one-second deletion attempts and their backoff to
         // finish, within the service's overall shutdown deadline.
         if timeout(Duration::from_secs(4), async {
@@ -689,6 +663,7 @@ impl GuildSession {
             );
         }
         self.panel_deletions.shutdown().await;
+        self.responses.abort_all();
         self.publish_activity();
     }
     fn publish_activity(&self) {
@@ -835,7 +810,7 @@ impl GuildSession {
             self.pending.push_front(pending);
         }
         while let Some(pending) = self.pending.pop_front() {
-            if self.response_slot() {
+            if self.responses.len() < 128 {
                 let shared = self.shared.clone();
                 self.responses.spawn(async move {
                     pending
@@ -845,7 +820,6 @@ impl GuildSession {
                             "That play request was canceled by a newer stop or disconnect.",
                         )
                         .await;
-                    Response::Done
                 });
             }
         }
@@ -857,32 +831,44 @@ impl GuildSession {
             "Play request preparing"
         );
         if !self.shared.node.health().ready {
-            self.respond_error(&request, "Music service is temporarily unavailable.");
+            request
+                .error(
+                    &self.shared.http,
+                    "Music service is temporarily unavailable.",
+                )
+                .await;
             return;
         }
         if request.option("request").trim().is_empty() {
-            self.respond_error(
-                &request,
-                "Use `/play request:` and enter search terms or a YouTube URL.",
-            );
+            request
+                .error(
+                    &self.shared.http,
+                    "Use `/play request:` and enter search terms or a YouTube URL.",
+                )
+                .await;
             return;
         }
         if self.pending.len() + usize::from(self.loading.is_some()) >= self.shared.config.pending {
-            self.respond_error(
-                &request,
-                "Too many play requests are already pending for this server.",
-            );
+            request
+                .error(
+                    &self.shared.http,
+                    "Too many play requests are already pending for this server.",
+                )
+                .await;
             return;
         }
         self.shared.ensure_bot_membership(self.id).await;
         match self.shared.access(self.id, request.user(), None) {
-            Ok(channel) if self.channel.is_some_and(|active| active != channel) => self
-                .respond_error(
-                    &request,
-                    "Join the bot's current voice channel before adding music.",
-                ),
+            Ok(channel) if self.channel.is_some_and(|active| active != channel) => {
+                request
+                    .error(
+                        &self.shared.http,
+                        "Join the bot's current voice channel before adding music.",
+                    )
+                    .await
+            }
             Ok(_) if self.queue.len() >= self.shared.config.limits.queue => {
-                self.respond_error(&request, "The queue is full.")
+                request.error(&self.shared.http, "The queue is full.").await
             }
             Ok(channel) => {
                 self.sequence = self.sequence.wrapping_add(1);
@@ -904,23 +890,27 @@ impl GuildSession {
                     interaction = request.interaction.id.get(),
                     "Play request denied by voice access"
                 );
-                self.respond_error(&request, &error);
+                request.error(&self.shared.http, &error).await;
             }
         }
     }
     async fn commit(&mut self, pending: Pending, resolution: Result<Resolution, Failure>) {
         let request = pending.request;
         if pending.epoch != self.epoch {
-            self.respond_error(
-                &request,
-                "That play request was canceled by a newer stop or disconnect.",
-            );
+            request
+                .error(
+                    &self.shared.http,
+                    "That play request was canceled by a newer stop or disconnect.",
+                )
+                .await;
             return;
         }
         let mut resolution = match resolution {
             Ok(value) => value,
             Err(error) => {
-                self.respond_error(&request, failure_message(error));
+                request
+                    .error(&self.shared.http, failure_message(error))
+                    .await;
                 return;
             }
         };
@@ -928,33 +918,37 @@ impl GuildSession {
             .shared
             .access(self.id, request.user(), Some(pending.channel))
         {
-            self.respond_error(&request, &error);
+            request.error(&self.shared.http, &error).await;
             return;
         }
         if self.channel.is_some_and(|active| active != pending.channel) {
-            self.respond_error(
-                &request,
-                "Join the bot's current voice channel before adding music.",
-            );
+            request
+                .error(
+                    &self.shared.http,
+                    "Join the bot's current voice channel before adding music.",
+                )
+                .await;
             return;
         }
         if self.queue.len() >= self.shared.config.limits.queue {
-            self.respond_error(&request, "The queue is full.");
+            request.error(&self.shared.http, "The queue is full.").await;
             return;
         }
         if self.channel.is_none() && self.join(pending.channel).await.is_err() {
             self.cleanup(None).await;
-            self.respond_error(
-                &request,
-                "I could not join that voice channel. Check its permissions and try again.",
-            );
+            request
+                .error(
+                    &self.shared.http,
+                    "I could not join that voice channel. Check its permissions and try again.",
+                )
+                .await;
             return;
         }
         if let Err(error) = self
             .shared
             .access(self.id, request.user(), Some(pending.channel))
         {
-            self.respond_error(&request, &error);
+            request.error(&self.shared.http, &error).await;
             return;
         }
         let label = request.label();
@@ -971,7 +965,7 @@ impl GuildSession {
             .queue
             .enqueue(resolution.tracks, self.shared.config.limits.queue);
         if added == 0 {
-            self.respond_error(&request, "The queue is full.");
+            request.error(&self.shared.http, "The queue is full.").await;
             return;
         }
         let omitted = resolution.omitted + resolved_count - added;
@@ -980,7 +974,12 @@ impl GuildSession {
         self.events[0] = self.events[0].saturating_add(1);
         if started {
             if self.start_current().await.is_err() {
-                self.respond_error(&request, "I joined, but Raydio could not start that track.");
+                request
+                    .error(
+                        &self.shared.http,
+                        "I joined, but Raydio could not start that track.",
+                    )
+                    .await;
                 return;
             }
             let mut notes = vec![];
@@ -1404,23 +1403,18 @@ impl GuildSession {
         }
     }
 
-    async fn notify(&mut self, text: &str) {
-        if let Some(channel) = self.notification
-            && self.response_slot()
-        {
-            let shared = self.shared.clone();
-            let text = text.to_owned();
-            self.responses.spawn(async move {
-                let _ = timeout(
-                    Duration::from_secs(2),
-                    shared.http.create_message(Id::new(channel)).content(&text),
-                )
-                .await;
-                Response::Done
-            });
+    async fn notify(&self, text: &str) {
+        if let Some(channel) = self.notification {
+            let _ = timeout(
+                Duration::from_secs(4),
+                self.shared
+                    .http
+                    .create_message(Id::new(channel))
+                    .content(text),
+            )
+            .await;
         }
     }
-
     async fn cleanup(&mut self, notification: Option<&str>) {
         // A destroyed player is a new lifetime. Drain already-completed ACKs
         // too; abort_all alone leaves them able to resurrect accepted intent.
@@ -1453,158 +1447,12 @@ impl GuildSession {
         }
         self.events[6] = self.events[6].saturating_add(1);
     }
-    fn response_slot(&self) -> bool {
-        if self.responses.len() < MAX_RESPONSES {
-            return true;
-        }
-        self.shared
-            .interaction_errors
-            .fetch_add(1, Ordering::Relaxed);
-        tracing::warn!(guild = self.id, "Interaction response queue overloaded");
-        false
-    }
-    fn respond(&mut self, request: &Request, view: View) {
-        if !self.response_slot() {
-            return;
-        }
-        let request = request.clone();
-        let shared = self.shared.clone();
-        self.responses.spawn(async move {
-            let _ = request.respond(&shared.http, view).await;
-            Response::Done
-        });
-    }
-    fn respond_error(&mut self, request: &Request, text: &str) {
-        if !self.response_slot() {
-            return;
-        }
-        let request = request.clone();
-        let text = text.to_owned();
-        let shared = self.shared.clone();
-        self.responses.spawn(async move {
-            request.error(&shared.http, &text).await;
-            Response::Done
-        });
-    }
-    fn update_panel_response(&mut self, request: &Request) {
-        if !self.response_slot() {
-            return;
-        }
-        let Some(panel) = &self.panel else {
-            return;
-        };
-        let (channel, message) = (panel.channel, panel.message);
-        let view = self.player_view();
-        self.panel_intent = self.panel_intent.wrapping_add(1);
-        let intent = self.panel_intent;
-        self.panel_pending = Some(intent);
-        let epoch = self.epoch;
-        let request = request.clone();
-        let shared = self.shared.clone();
-        let writes = self.panel_writes.clone();
-        let task = self.responses.spawn(async move {
-            let delivered = matches!(
-                timeout(Duration::from_secs(8), async {
-                    let _write = writes.lock().await;
-                    request.respond_no_model(&shared.http, &view).await
-                })
-                .await,
-                Ok(Ok(()))
-            );
-            Response::Updated {
-                intent,
-                epoch,
-                channel,
-                message,
-                view,
-                delivered,
-            }
-        });
-        self.panel_task = Some(task.id());
-    }
-    async fn finish_response(&mut self, result: Result<Response, tokio::task::JoinError>) {
-        let response = match result {
-            Ok(response) => response,
-            Err(error) => {
-                if self.panel_task == Some(error.id()) {
-                    self.panel_pending = None;
-                    self.panel_task = None;
-                }
-                return;
-            }
-        };
-        match response {
-            Response::Done => {}
-            Response::Created {
-                intent,
-                epoch,
-                panel,
-            } => {
-                if self.panel_pending == Some(intent) {
-                    self.panel_pending = None;
-                    self.panel_task = None;
-                }
-                if let Some(mut panel) = panel {
-                    if epoch == self.epoch
-                        && intent == self.panel_intent
-                        && self.queue.current.is_some()
-                    {
-                        // Media can advance while Discord is responding. Use
-                        // its current snapshot on the next independent refresh.
-                        panel.last_view = None;
-                        if let Some(previous) = self.panel.replace(panel)
-                            && self.panel.as_ref().is_some_and(|next| {
-                                (next.channel, next.message) != (previous.channel, previous.message)
-                            })
-                        {
-                            self.delete_panel(previous).await;
-                        }
-                    } else if !self.panel.as_ref().is_some_and(|active| {
-                        (active.channel, active.message) == (panel.channel, panel.message)
-                    }) {
-                        self.delete_panel(panel).await;
-                    }
-                }
-            }
-            Response::Updated {
-                intent,
-                epoch,
-                channel,
-                message,
-                view,
-                delivered,
-            } => {
-                if self.panel_pending == Some(intent) {
-                    self.panel_pending = None;
-                    self.panel_task = None;
-                }
-                if epoch == self.epoch
-                    && let Some(panel) = self.panel.as_mut()
-                    && (panel.channel, panel.message) == (channel, message)
-                {
-                    // A superseded HTTP write can still arrive late; force a
-                    // current refresh rather than trusting its stale snapshot.
-                    panel.last_view = (delivered && intent == self.panel_intent).then_some(view);
-                    if self.paused {
-                        self.panel_checks = 3;
-                        self.panel_check_at = Instant::now() + Duration::from_millis(500);
-                    }
-                }
-            }
-        }
-    }
     async fn present_player(&mut self, request: &Request, content: Option<String>) {
         if self.queue.current.is_none() {
             self.remove_panel().await;
         }
-        if !self.response_slot() {
-            return;
-        }
+        self.flush_refresh().await;
         self.panel_checks = 0;
-        self.panel_intent = self.panel_intent.wrapping_add(1);
-        let intent = self.panel_intent;
-        self.panel_pending = Some(intent);
-        let epoch = self.epoch;
         let token = random_token();
         let mut view = views::player(
             &self.queue,
@@ -1614,32 +1462,27 @@ impl GuildSession {
             self.position(),
         );
         view.content = content.or(view.content);
-        let request = request.clone();
-        let shared = self.shared.clone();
-        let task = self.responses.spawn(async move {
-            let panel = request
-                .respond(&shared.http, view.clone())
-                .await
-                .ok()
-                .map(|message| Panel {
-                    channel: message.channel_id.get(),
-                    message: message.id.get(),
-                    token,
-                    last_view: Some(view),
-                });
-            Response::Created {
-                intent,
-                epoch,
-                panel,
+        if let Ok(message) = request.respond(&self.shared.http, view.clone()).await
+            && self.queue.current.is_some()
+        {
+            let previous = self.panel.replace(Panel {
+                channel: message.channel_id.get(),
+                message: message.id.get(),
+                token,
+                last_view: Some(view),
+            });
+            // Keep working controls if creating the replacement fails. Once
+            // the new response exists, retire the old message across channels.
+            if let Some(previous) = previous
+                && (previous.channel, previous.message)
+                    != (message.channel_id.get(), message.id.get())
+            {
+                self.delete_panel(previous).await;
             }
-        });
-        self.panel_task = Some(task.id());
+        }
     }
 
     async fn remove_panel(&mut self) {
-        self.panel_intent = self.panel_intent.wrapping_add(1);
-        self.panel_pending = None;
-        self.panel_task = None;
         self.panel_checks = 0;
         self.panel_retry = Instant::now();
         // Cancel and drain stale refreshes before retiring their message.
@@ -1678,10 +1521,7 @@ impl GuildSession {
             self.remove_panel().await;
             return;
         }
-        if self.panel_pending.is_some()
-            || !self.panel_edits.is_empty()
-            || Instant::now() < self.panel_retry
-        {
+        if !self.panel_edits.is_empty() || Instant::now() < self.panel_retry {
             return;
         }
         let Some(panel) = &self.panel else {
@@ -1693,11 +1533,9 @@ impl GuildSession {
             if check {
                 let (channel, message) = (panel.channel, panel.message);
                 let shared = self.shared.clone();
-                let writes = self.panel_writes.clone();
                 self.panel_checks -= 1;
                 self.panel_check_at = Instant::now() + Duration::from_secs(1);
                 self.panel_edits.spawn(async move {
-                    let _write = writes.lock().await;
                     let result = timeout(Duration::from_secs(3), async {
                         let bytes = shared
                             .http
@@ -1737,9 +1575,7 @@ impl GuildSession {
         }
         let (channel, message) = (panel.channel, panel.message);
         let shared = self.shared.clone();
-        let writes = self.panel_writes.clone();
         self.panel_edits.spawn(async move {
-            let _write = writes.lock().await;
             let result = timeout(Duration::from_secs(4), shared
                 .http
                 .update_message(Id::new(channel), Id::new(message))
@@ -1759,7 +1595,6 @@ impl GuildSession {
             PanelEdit { channel, message, view, outcome }
         });
     }
-    #[cfg(test)]
     async fn flush_refresh(&mut self) {
         if let Some(result) = self.panel_edits.join_next().await {
             self.finish_refresh(result);
@@ -1930,9 +1765,6 @@ mod tests {
         session
             .present_player(&request("nowplaying", &[]), None)
             .await;
-        while let Some(result) = session.responses.join_next().await {
-            session.finish_response(result).await;
-        }
         while session.panel_deletions.join_next().await.is_some() {}
         assert_eq!(session.panel.as_ref().unwrap().message, 6);
         assert_eq!(session.queue.len(), 1);
@@ -1972,9 +1804,6 @@ mod tests {
         session
             .present_player(&request("nowplaying", &[]), None)
             .await;
-        while let Some(result) = session.responses.join_next().await {
-            session.finish_response(result).await;
-        }
         session.panel.as_mut().unwrap().last_view = None;
         session.refresh().await;
         session.flush_refresh().await;
@@ -2296,10 +2125,6 @@ mod tests {
             .await
             .unwrap()
             .unwrap();
-        session.flush_refresh().await;
-        while let Some(result) = session.responses.join_next().await {
-            session.finish_response(result).await;
-        }
         assert!(session.paused);
         assert!(paused_before_edit_finished.is_ok());
         assert_eq!(requests_while_blocked, 1);
@@ -2950,273 +2775,5 @@ mod tests {
         session.finish_preparation(result);
         owner.shutdown().await;
         backend.shutdown().await.unwrap();
-    }
-
-    #[tokio::test]
-    async fn slow_discord_responses_do_not_block_natural_handoff() {
-        for command in ["help", "queue", "nowplaying", "enqueue"] {
-            slow_response_does_not_block_natural_handoff_case(command).await;
-        }
-    }
-    async fn slow_response_does_not_block_natural_handoff_case(command: &str) {
-        let entered = Arc::new(tokio::sync::Notify::new());
-        let release = Arc::new(tokio::sync::Notify::new());
-        let router = axum::Router::new().fallback({
-            let entered = entered.clone();
-            let release = release.clone();
-            move || {
-                let entered = entered.clone();
-                let release = release.clone();
-                async move {
-                    entered.notify_one();
-                    release.notified().await;
-                    axum::Json(json!({}))
-                }
-            }
-        });
-        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
-        let address = listener.local_addr().unwrap();
-        let server = tokio::spawn(async move { axum::serve(listener, router).await.unwrap() });
-        let (mut shared, backend, owner, _events) = Shared::fixture().await;
-        Arc::get_mut(&mut shared).unwrap().http = twilight_http::Client::builder()
-            .token("fixture".into())
-            .proxy(address.to_string(), true)
-            .ratelimiter(None)
-            .build();
-        shared.cache.write().unwrap().guilds.insert(1, guild());
-        let mut session = GuildSession::new(1, shared.clone());
-        session.channel = Some(3);
-        session.queue.enqueue(vec![track("one")], 1000);
-        session.queue.loop_mode = LoopMode::Track;
-        session.start_current().await.unwrap();
-        let generation = session.generation;
-        if command == "enqueue" {
-            session
-                .commit(
-                    Pending {
-                        request: request("play", &[]),
-                        channel: 3,
-                        epoch: session.epoch,
-                        sequence: 1,
-                    },
-                    Ok(Resolution {
-                        tracks: vec![track("two")],
-                        playlist: None,
-                        rejected: 0,
-                        omitted: 0,
-                    }),
-                )
-                .await;
-        }
-        let (messages, receiver) = mpsc::channel(8);
-        let actor = tokio::spawn(session.run(receiver));
-        let (ack, ack_receiver) = oneshot::channel();
-        ack.send(true).unwrap();
-        if command != "enqueue" {
-            messages
-                .send(Message::Interaction(request(command, &[]), ack_receiver))
-                .await
-                .unwrap();
-        }
-        timeout(Duration::from_secs(2), entered.notified())
-            .await
-            .unwrap();
-        let started = Instant::now();
-        messages
-            .send(Message::Backend(
-                json!({"type":"TrackEndEvent","reason":"finished",
-            "track":{"userData":{"raydioGeneration":generation}}}),
-            ))
-            .await
-            .unwrap();
-        tokio::time::sleep(Duration::from_millis(350)).await;
-        let endpoint = format!("/v4/sessions/{}/players/1", shared.node.health().session);
-        let player = shared
-            .node
-            .request(reqwest::Method::GET, &endpoint, &[], None)
-            .await
-            .unwrap();
-        let stalled = player["track"]["userData"]["raydioGeneration"] == generation;
-        let restarted = timeout(Duration::from_secs(2), async {
-            loop {
-                let player = shared
-                    .node
-                    .request(reqwest::Method::GET, &endpoint, &[], None)
-                    .await
-                    .unwrap();
-                if player["track"]["userData"]["raydioGeneration"] == generation + 1 {
-                    break;
-                }
-                tokio::time::sleep(Duration::from_millis(10)).await;
-            }
-        })
-        .await
-        .is_ok();
-        eprintln!(
-            "AUDIT help: generation held={stalled}, restarted_after_release={restarted}, handoff_wait_ms={:.3}",
-            started.elapsed().as_secs_f64() * 1000.0
-        );
-        release.notify_one();
-        shared.cancel.cancel();
-        timeout(Duration::from_secs(5), actor)
-            .await
-            .unwrap()
-            .unwrap();
-        owner.shutdown().await;
-        backend.shutdown().await.unwrap();
-        server.abort();
-        let _ = server.await;
-        assert!(!stalled && restarted);
-    }
-
-    #[tokio::test]
-    async fn pending_ack_does_not_block_eof_and_commands_keep_admission_order() {
-        let (shared, backend, owner, _events) = Shared::fixture().await;
-        shared.cache.write().unwrap().guilds.insert(1, guild());
-        let mut session = GuildSession::new(1, shared.clone());
-        session.channel = Some(3);
-        session
-            .queue
-            .enqueue(vec![track("one"), track("two"), track("three")], 1000);
-        session.start_current().await.unwrap();
-        let generation = session.generation;
-        let (messages, receiver) = mpsc::channel(8);
-        let actor = tokio::spawn(session.run(receiver));
-        let (ack, ack_receiver) = oneshot::channel();
-        messages
-            .send(Message::Interaction(
-                request("volume", &[("level", json!(17))]),
-                ack_receiver,
-            ))
-            .await
-            .unwrap();
-        let (next_ack, next_receiver) = oneshot::channel();
-        next_ack.send(true).unwrap();
-        messages
-            .send(Message::Interaction(
-                request("volume", &[("level", json!(37))]),
-                next_receiver,
-            ))
-            .await
-            .unwrap();
-        messages.send(Message::Backend(json!({"type":"TrackEndEvent","reason":"finished","track":{"userData":{"raydioGeneration":generation}}}))).await.unwrap();
-        let endpoint = format!("/v4/sessions/{}/players/1", shared.node.health().session);
-        timeout(Duration::from_millis(500), async {
-            loop {
-                let player = shared
-                    .node
-                    .request(reqwest::Method::GET, &endpoint, &[], None)
-                    .await
-                    .unwrap();
-                if player["track"]["userData"]["raydioGeneration"] == generation + 1 {
-                    assert_eq!(
-                        player["volume"], shared.config.volume,
-                        "later acknowledged command overtook admission order"
-                    );
-                    break;
-                }
-                tokio::time::sleep(Duration::from_millis(5)).await;
-            }
-        })
-        .await
-        .expect("EOF waited for the unrelated ACK");
-        ack.send(true).unwrap();
-        timeout(Duration::from_millis(500), async {
-            loop {
-                let player = shared
-                    .node
-                    .request(reqwest::Method::GET, &endpoint, &[], None)
-                    .await
-                    .unwrap();
-                if player["volume"] == 37 {
-                    assert_eq!(
-                        player["track"]["userData"]["raydioGeneration"],
-                        generation + 1
-                    );
-                    break;
-                }
-                tokio::time::sleep(Duration::from_millis(5)).await;
-            }
-        })
-        .await
-        .expect("ordered volume commands did not execute");
-        shared.cancel.cancel();
-        actor.await.unwrap();
-        owner.shutdown().await;
-        backend.shutdown().await.unwrap();
-    }
-
-    #[tokio::test]
-    async fn completed_panel_creation_after_disconnect_is_retired() {
-        let (shared, backend, owner, server, calls) = panel_http_fixture().await;
-        let mut session = GuildSession::new(1, shared);
-        session.channel = Some(3);
-        session.queue.enqueue(vec![track("one")], 1000);
-        session
-            .present_player(&request("nowplaying", &[]), None)
-            .await;
-        session.cleanup(None).await;
-        while let Some(result) = session.responses.join_next().await {
-            session.finish_response(result).await;
-        }
-        while session.panel_deletions.join_next().await.is_some() {}
-        assert!(session.panel.is_none());
-        assert!(
-            calls
-                .lock()
-                .unwrap()
-                .iter()
-                .any(|(method, path)| method == "DELETE"
-                    && path == "/api/v10/channels/10/messages/6")
-        );
-        owner.shutdown().await;
-        backend.shutdown().await.unwrap();
-        server.abort();
-        let _ = server.await;
-    }
-
-    #[tokio::test]
-    async fn shutdown_aborts_held_responses_without_waiting_for_http_deadline() {
-        let entered = Arc::new(tokio::sync::Notify::new());
-        let router = axum::Router::new().fallback({
-            let entered = entered.clone();
-            move || {
-                let entered = entered.clone();
-                async move {
-                    entered.notify_one();
-                    std::future::pending::<axum::http::StatusCode>().await
-                }
-            }
-        });
-        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
-        let address = listener.local_addr().unwrap();
-        let server = tokio::spawn(async move { axum::serve(listener, router).await.unwrap() });
-        let (mut shared, backend, owner, _events) = Shared::fixture().await;
-        Arc::get_mut(&mut shared).unwrap().http = twilight_http::Client::builder()
-            .token("fixture".into())
-            .proxy(address.to_string(), true)
-            .ratelimiter(None)
-            .build();
-        shared.cache.write().unwrap().guilds.insert(1, guild());
-        let (messages, receiver) = mpsc::channel(8);
-        let actor = tokio::spawn(GuildSession::new(1, shared.clone()).run(receiver));
-        let (ack, ack_receiver) = oneshot::channel();
-        ack.send(true).unwrap();
-        messages
-            .send(Message::Interaction(request("help", &[]), ack_receiver))
-            .await
-            .unwrap();
-        timeout(Duration::from_secs(2), entered.notified())
-            .await
-            .unwrap();
-        shared.cancel.cancel();
-        timeout(Duration::from_secs(1), actor)
-            .await
-            .expect("shutdown waited for Discord HTTP")
-            .unwrap();
-        owner.shutdown().await;
-        backend.shutdown().await.unwrap();
-        server.abort();
-        let _ = server.await;
     }
 }

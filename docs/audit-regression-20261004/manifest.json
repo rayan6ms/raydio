@@ -1,0 +1,42 @@
+{
+  "productionRevision": "c4654c51ed67a77aa8145abad52c396f28b7c2a4",
+  "productionBinarySha256": "ee17f6259de1c1c2a3fd7f8e99049a036aeb36cc716d0b3455255e2f3401fe08",
+  "productionPid": 40678,
+  "candidateBranch": "candidate/audio-audit-20261004",
+  "candidateCommit": "2d8464dd39dc7ece6fb7008877bccfae3bd03918",
+  "candidateRuntimeRevision": "d2d3fad01346c526546c7e54ed122a58f944ad70",
+  "runtimeSourceMatchesPreviousExactly": true,
+  "runtimeSourceSha256": {
+    "Cargo.toml": "36192dee65028b41b871a84a9a593380d33585be03c50f6fb0ff7a84059aaf8e",
+    "Cargo.lock": "d58c47b3f6b38837a3a7fadbd2e27b77eac5e7e4a2462083f480ddef82c5545f",
+    "src/discord.rs": "679d08aad1582aabc3a5fed58acd0243ccd4468c4fbab3c34d6dfda24c1970ab",
+    "src/session.rs": "e5b88ca9d192a866e34b473b63b4541f324eb0baf6ddd2cbf6cecce0ca54f2a6",
+    "src/urls.rs": "6fd24f4533700d461e474b320a381675a6d2f01e5606fa164e8654b21a1740db"
+  },
+  "environmentDigestUnchanged": true,
+  "testbotActive": false,
+  "sourceTestsPassed": 69,
+  "formatPassed": true,
+  "warningsDeniedClippyPassed": true,
+  "browserAndCollectorCorrectionsRetained": true,
+  "firmwareTimerRestored": true,
+  "liveWindowsComplete": 4,
+  "decision": "Precautionary rollback. No consistent causal concealment/sender regression established; higher candidate discard counts remain unexplained. Audit corrections are pending in production.",
+  "browserDiagnosticTestProgramsPassed": 8,
+  "checkpointInstallIgnoresInitialTerminalReport": true,
+  "archiveProvenance": {
+    "priorReport": "a1/receiver-final-005c7e4eef4c92421792cb8133680365bd8f307ce3ad3663910a85c176de5537.json",
+    "priorRequestedAt": "2026-10-04T13:42:16.986Z",
+    "a1RequestedAt": "2026-10-04T15:17:19.771Z",
+    "reason": "Prior completed report saved during A1 preparation before the new report replaced it.",
+    "rawArchivePreserved": true,
+    "receiverMetricsFromActualReportOnly": true,
+    "archivedEventsWindowsCheckpointsFilteredByRequestedAt": true,
+    "hostSamplesFilteredByRecordingTime": true,
+    "checkpointSavesForEachRun": 7,
+    "a1CollectedCheckpointRows": 8
+  },
+  "pythonDiagnosticTestsPassed": 10,
+  "pythonDiagnosticTestCommand": "uv run --no-project python -m unittest test_summarize_receiver.py test_receiver_checkpoint.py (workdir: benchmarks)",
+  "initialPythonTestInvocation": "Repository-root invocation could not resolve receiver_checkpoint; retained initial log and reran successfully from benchmarks."
+}

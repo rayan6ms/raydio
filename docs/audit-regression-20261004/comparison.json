@@ -1,0 +1,604 @@
+{
+  "order": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "runs": [
+    {
+      "name": "a1",
+      "variant": "a",
+      "revision": "c4654c51ed67a77aa8145abad52c396f28b7c2a4",
+      "receiverSeconds": 299.9999248046875,
+      "startedAt": "2026-10-04T15:17:21.981Z",
+      "packetsReceived": 15000,
+      "lostNet": 0,
+      "positiveLoss": 1,
+      "negativeLossDeltas": -1,
+      "discarded": 0,
+      "concealmentMs": 29.125,
+      "silentConcealmentMs": 0.0,
+      "hostStealPercent": 0.14719903651539734,
+      "botCpuPercentOfOneCore": 3.554224883424094,
+      "pssMiB": {
+        "min": 16.3505859375,
+        "max": 16.4443359375,
+        "median": 16.4013671875
+      },
+      "senderCheckpointDelta": {
+        "active_send_gaps_100ms": 0,
+        "active_send_gaps_1s": 0,
+        "active_send_gaps_40ms": 0,
+        "frames_sent": 12000,
+        "frames_unavailable": 0,
+        "send_failures": 0,
+        "silence_frames_sent": 0,
+        "skipped_deadlines": 0,
+        "source_overruns": 0
+      },
+      "senderCoverage": {
+        "from": "2026-10-04T15:17:43.368390+00:00",
+        "to": "2026-10-04T15:21:43.368537+00:00",
+        "unobservedHeadSeconds": 21.38739,
+        "unobservedTailSeconds": 38.612388,
+        "maximumCheckpointGapSeconds": 60.000533
+      },
+      "collectionCoverage": {
+        "senderHost": {
+          "complete": true,
+          "samples": 453,
+          "inWindowSamples": 300,
+          "firstUnixSeconds": 1791126974.910562,
+          "lastUnixSeconds": 1791127427.982724,
+          "headSeconds": 0.16986799240112305,
+          "tailSeconds": 0.18666505813598633,
+          "maximumGapSeconds": 1.0031921863555908,
+          "allowedGapSeconds": 3.0,
+          "invalidRows": 0,
+          "inWindowErrors": 0,
+          "strictlyIncreasing": true
+        },
+        "receiverHost": {
+          "complete": true,
+          "samples": 446,
+          "inWindowSamples": 294,
+          "firstUnixSeconds": 1791126974.308262,
+          "lastUnixSeconds": 1791127427.5675824,
+          "headSeconds": 0.09711289405822754,
+          "tailSeconds": 0.9156463146209717,
+          "maximumGapSeconds": 1.882709264755249,
+          "allowedGapSeconds": 3.0,
+          "invalidRows": 0,
+          "inWindowErrors": 0,
+          "strictlyIncreasing": true
+        },
+        "receiverCheckpoints": {
+          "complete": true,
+          "samples": 7,
+          "inWindowSamples": 6,
+          "firstUnixSeconds": 1791127085.2095919,
+          "lastUnixSeconds": 1791127342.0440176,
+          "headSeconds": 43.22859191894531,
+          "tailSeconds": 7.957755088806152,
+          "maximumGapSeconds": 60.001585721969604,
+          "allowedGapSeconds": 90,
+          "invalidRows": 0,
+          "inWindowErrors": 0,
+          "strictlyIncreasing": true
+        }
+      },
+      "coverage": {
+        "receiverSeconds": 299.9999248046875,
+        "pcmSeconds": 300.0106666666667,
+        "completePollCoverage": true,
+        "completePcmCoverage": true,
+        "uninterruptedConnection": true,
+        "completeEventHistory": true,
+        "completeSpeakingObservation": true,
+        "completeTrackPhaseObservation": true,
+        "stableReceiverBuffer": true,
+        "retainedDiagnosticWindows": 2,
+        "droppedDiagnosticWindows": 0
+      },
+      "quietRequiringReviewAtLeast100Ms": [],
+      "quiet": [
+        {
+          "durationMs": 2258.0625,
+          "classification": "source-tail-candidate"
+        }
+      ],
+      "browserLongTasks": 0,
+      "checkpointErrors": 0,
+      "checkpointSaves": 7,
+      "largestStealIntervals": [
+        {
+          "from": "2026-10-04T15:20:41.579791+00:00",
+          "to": "2026-10-04T15:20:42.581771+00:00",
+          "stealTicks": 4,
+          "stealPercent": 1.9607843137254901
+        },
+        {
+          "from": "2026-10-04T15:18:34.306737+00:00",
+          "to": "2026-10-04T15:18:35.308852+00:00",
+          "stealTicks": 2,
+          "stealPercent": 0.9900990099009901
+        },
+        {
+          "from": "2026-10-04T15:18:45.330137+00:00",
+          "to": "2026-10-04T15:18:46.332965+00:00",
+          "stealTicks": 2,
+          "stealPercent": 0.9900990099009901
+        },
+        {
+          "from": "2026-10-04T15:19:51.472554+00:00",
+          "to": "2026-10-04T15:19:52.474554+00:00",
+          "stealTicks": 2,
+          "stealPercent": 0.9900990099009901
+        }
+      ],
+      "retainedLastGapTimes": [],
+      "checkpointSavesInCollectedFile": 8,
+      "checkpointSavesExcludedOtherRun": 1
+    },
+    {
+      "name": "b1",
+      "variant": "b",
+      "revision": "d2d3fad01346c526546c7e54ed122a58f944ad70",
+      "receiverSeconds": 300.0000310058594,
+      "startedAt": "2026-10-04T15:25:59.152Z",
+      "packetsReceived": 14992,
+      "lostNet": 0,
+      "positiveLoss": 0,
+      "negativeLossDeltas": 0,
+      "discarded": 6,
+      "concealmentMs": 393.8541666666667,
+      "silentConcealmentMs": 0.0,
+      "hostStealPercent": 0.28022014900328884,
+      "botCpuPercentOfOneCore": 3.4769356086297236,
+      "pssMiB": {
+        "min": 16.0595703125,
+        "max": 16.1923828125,
+        "median": 16.0634765625
+      },
+      "senderCheckpointDelta": {
+        "active_send_gaps_100ms": 0,
+        "active_send_gaps_1s": 0,
+        "active_send_gaps_40ms": 3,
+        "frames_sent": 11991,
+        "frames_unavailable": 0,
+        "send_failures": 0,
+        "silence_frames_sent": 0,
+        "skipped_deadlines": 7,
+        "source_overruns": 0
+      },
+      "senderCoverage": {
+        "from": "2026-10-04T15:26:20.494861+00:00",
+        "to": "2026-10-04T15:30:20.494134+00:00",
+        "unobservedHeadSeconds": 21.342861,
+        "unobservedTailSeconds": 38.657897,
+        "maximumCheckpointGapSeconds": 60.000492
+      },
+      "collectionCoverage": {
+        "senderHost": {
+          "complete": true,
+          "samples": 385,
+          "inWindowSamples": 298,
+          "firstUnixSeconds": 1791127518.448478,
+          "lastUnixSeconds": 1791127904.271177,
+          "headSeconds": 0.4801599979400635,
+          "tailSeconds": 0.9811239242553711,
+          "maximumGapSeconds": 1.7948100566864014,
+          "allowedGapSeconds": 3.0,
+          "invalidRows": 0,
+          "inWindowErrors": 0,
+          "strictlyIncreasing": true
+        },
+        "receiverHost": {
+          "complete": true,
+          "samples": 382,
+          "inWindowSamples": 295,
+          "firstUnixSeconds": 1791127517.299,
+          "lastUnixSeconds": 1791127904.493168,
+          "headSeconds": 0.4934694766998291,
+          "tailSeconds": 0.7347450256347656,
+          "maximumGapSeconds": 1.6592788696289062,
+          "allowedGapSeconds": 3.0,
+          "invalidRows": 0,
+          "inWindowErrors": 0,
+          "strictlyIncreasing": true
+        },
+        "receiverCheckpoints": {
+          "complete": true,
+          "samples": 7,
+          "inWindowSamples": 6,
+          "firstUnixSeconds": 1791127577.179184,
+          "lastUnixSeconds": 1791127859.2212389,
+          "headSeconds": 18.027184009552002,
+          "tailSeconds": 41.98005175590515,
+          "maximumGapSeconds": 60.00081467628479,
+          "allowedGapSeconds": 90,
+          "invalidRows": 0,
+          "inWindowErrors": 0,
+          "strictlyIncreasing": true
+        }
+      },
+      "coverage": {
+        "receiverSeconds": 300.0000310058594,
+        "pcmSeconds": 300.0106666666667,
+        "completePollCoverage": true,
+        "completePcmCoverage": true,
+        "uninterruptedConnection": true,
+        "completeEventHistory": true,
+        "completeSpeakingObservation": true,
+        "completeTrackPhaseObservation": true,
+        "stableReceiverBuffer": true,
+        "retainedDiagnosticWindows": 8,
+        "droppedDiagnosticWindows": 0
+      },
+      "quietRequiringReviewAtLeast100Ms": [],
+      "quiet": [
+        {
+          "durationMs": 2258.0625,
+          "classification": "source-tail-candidate"
+        }
+      ],
+      "browserLongTasks": 0,
+      "checkpointErrors": 0,
+      "checkpointSaves": 7,
+      "largestStealIntervals": [
+        {
+          "from": "2026-10-04T15:27:41.848353+00:00",
+          "to": "2026-10-04T15:27:42.850353+00:00",
+          "stealTicks": 64,
+          "stealPercent": 29.629629629629626
+        },
+        {
+          "from": "2026-10-04T15:27:42.850353+00:00",
+          "to": "2026-10-04T15:27:44.645163+00:00",
+          "stealTicks": 10,
+          "stealPercent": 2.793296089385475
+        },
+        {
+          "from": "2026-10-04T15:30:14.965608+00:00",
+          "to": "2026-10-04T15:30:15.967603+00:00",
+          "stealTicks": 3,
+          "stealPercent": 1.4851485148514851
+        },
+        {
+          "from": "2026-10-04T15:26:07.648095+00:00",
+          "to": "2026-10-04T15:26:08.650146+00:00",
+          "stealTicks": 2,
+          "stealPercent": 0.9950248756218906
+        }
+      ],
+      "retainedLastGapTimes": [
+        {
+          "utc": "2026-10-04T15:27:42.891000+00:00",
+          "lastGap": "58.573898ms",
+          "overlapsStealSpike": false
+        }
+      ],
+      "checkpointSavesInCollectedFile": 7,
+      "checkpointSavesExcludedOtherRun": 0
+    },
+    {
+      "name": "b2",
+      "variant": "b",
+      "revision": "d2d3fad01346c526546c7e54ed122a58f944ad70",
+      "receiverSeconds": 299.99940307617186,
+      "startedAt": "2026-10-04T15:33:40.541Z",
+      "packetsReceived": 15000,
+      "lostNet": 0,
+      "positiveLoss": 2,
+      "negativeLossDeltas": -2,
+      "discarded": 6,
+      "concealmentMs": 125.8125,
+      "silentConcealmentMs": 0.0,
+      "hostStealPercent": 0.1593398299256973,
+      "botCpuPercentOfOneCore": 3.507990301477958,
+      "pssMiB": {
+        "min": 16.3974609375,
+        "max": 16.5419921875,
+        "median": 16.4443359375
+      },
+      "senderCheckpointDelta": {
+        "active_send_gaps_100ms": 0,
+        "active_send_gaps_1s": 0,
+        "active_send_gaps_40ms": 0,
+        "frames_sent": 12000,
+        "frames_unavailable": 0,
+        "send_failures": 0,
+        "silence_frames_sent": 0,
+        "skipped_deadlines": 0,
+        "source_overruns": 0
+      },
+      "senderCoverage": {
+        "from": "2026-10-04T15:34:03.762212+00:00",
+        "to": "2026-10-04T15:38:03.762026+00:00",
+        "unobservedHeadSeconds": 23.221212,
+        "unobservedTailSeconds": 36.778377,
+        "maximumCheckpointGapSeconds": 60.000348
+      },
+      "collectionCoverage": {
+        "senderHost": {
+          "complete": true,
+          "samples": 433,
+          "inWindowSamples": 299,
+          "firstUnixSeconds": 1791127981.625945,
+          "lastUnixSeconds": 1791128414.757687,
+          "headSeconds": 0.2632122039794922,
+          "tailSeconds": 0.9896409511566162,
+          "maximumGapSeconds": 1.0968677997589111,
+          "allowedGapSeconds": 3.0,
+          "invalidRows": 0,
+          "inWindowErrors": 0,
+          "strictlyIncreasing": true
+        },
+        "receiverHost": {
+          "complete": true,
+          "samples": 427,
+          "inWindowSamples": 294,
+          "firstUnixSeconds": 1791127981.0355692,
+          "lastUnixSeconds": 1791128414.1655345,
+          "headSeconds": 0.7335958480834961,
+          "tailSeconds": 0.5608024597167969,
+          "maximumGapSeconds": 1.8817949295043945,
+          "allowedGapSeconds": 3.0,
+          "invalidRows": 0,
+          "inWindowErrors": 0,
+          "strictlyIncreasing": true
+        },
+        "receiverCheckpoints": {
+          "complete": true,
+          "samples": 7,
+          "inWindowSamples": 6,
+          "firstUnixSeconds": 1791128040.7447977,
+          "lastUnixSeconds": 1791128320.6076012,
+          "headSeconds": 20.203797817230225,
+          "tailSeconds": 39.79497313499451,
+          "maximumGapSeconds": 60.00167632102966,
+          "allowedGapSeconds": 90,
+          "invalidRows": 0,
+          "inWindowErrors": 0,
+          "strictlyIncreasing": true
+        }
+      },
+      "coverage": {
+        "receiverSeconds": 299.99940307617186,
+        "pcmSeconds": 300.0106666666667,
+        "completePollCoverage": true,
+        "completePcmCoverage": true,
+        "uninterruptedConnection": true,
+        "completeEventHistory": true,
+        "completeSpeakingObservation": true,
+        "completeTrackPhaseObservation": true,
+        "stableReceiverBuffer": true,
+        "retainedDiagnosticWindows": 8,
+        "droppedDiagnosticWindows": 0
+      },
+      "quietRequiringReviewAtLeast100Ms": [],
+      "quiet": [
+        {
+          "durationMs": 2258.0625,
+          "classification": "source-tail-candidate"
+        }
+      ],
+      "browserLongTasks": 0,
+      "checkpointErrors": 0,
+      "checkpointSaves": 7,
+      "largestStealIntervals": [
+        {
+          "from": "2026-10-04T15:33:47.821284+00:00",
+          "to": "2026-10-04T15:33:48.823265+00:00",
+          "stealTicks": 2,
+          "stealPercent": 0.9900990099009901
+        },
+        {
+          "from": "2026-10-04T15:36:51.224675+00:00",
+          "to": "2026-10-04T15:36:52.226864+00:00",
+          "stealTicks": 2,
+          "stealPercent": 0.9852216748768473
+        },
+        {
+          "from": "2026-10-04T15:37:41.426708+00:00",
+          "to": "2026-10-04T15:37:42.428797+00:00",
+          "stealTicks": 2,
+          "stealPercent": 0.9950248756218906
+        },
+        {
+          "from": "2026-10-04T15:37:46.437768+00:00",
+          "to": "2026-10-04T15:37:47.439872+00:00",
+          "stealTicks": 2,
+          "stealPercent": 0.9900990099009901
+        }
+      ],
+      "retainedLastGapTimes": [],
+      "checkpointSavesInCollectedFile": 7,
+      "checkpointSavesExcludedOtherRun": 0
+    },
+    {
+      "name": "a2",
+      "variant": "a",
+      "revision": "c4654c51ed67a77aa8145abad52c396f28b7c2a4",
+      "receiverSeconds": 300.17974389648435,
+      "startedAt": "2026-10-04T15:43:29.941Z",
+      "packetsReceived": 14980,
+      "lostNet": 0,
+      "positiveLoss": 1,
+      "negativeLossDeltas": -1,
+      "discarded": 1,
+      "concealmentMs": 604.125,
+      "silentConcealmentMs": 0.0,
+      "hostStealPercent": 0.48478769642260117,
+      "botCpuPercentOfOneCore": 3.6473249901180185,
+      "pssMiB": {
+        "min": 16.3291015625,
+        "max": 16.59375,
+        "median": 16.39453125
+      },
+      "senderCheckpointDelta": {
+        "active_send_gaps_100ms": 0,
+        "active_send_gaps_1s": 0,
+        "active_send_gaps_40ms": 12,
+        "frames_sent": 11974,
+        "frames_unavailable": 0,
+        "send_failures": 0,
+        "silence_frames_sent": 0,
+        "skipped_deadlines": 18,
+        "source_overruns": 0
+      },
+      "senderCoverage": {
+        "from": "2026-10-04T15:43:53.871407+00:00",
+        "to": "2026-10-04T15:47:53.871526+00:00",
+        "unobservedHeadSeconds": 23.930407,
+        "unobservedTailSeconds": 36.249218,
+        "maximumCheckpointGapSeconds": 60.000677
+      },
+      "collectionCoverage": {
+        "senderHost": {
+          "complete": true,
+          "samples": 500,
+          "inWindowSamples": 300,
+          "firstUnixSeconds": 1791128571.831685,
+          "lastUnixSeconds": 1791129072.037576,
+          "headSeconds": 0.06889605522155762,
+          "tailSeconds": 0.43916988372802734,
+          "maximumGapSeconds": 1.0080909729003906,
+          "allowedGapSeconds": 3.0,
+          "invalidRows": 0,
+          "inWindowErrors": 0,
+          "strictlyIncreasing": true
+        },
+        "receiverHost": {
+          "complete": true,
+          "samples": 495,
+          "inWindowSamples": 294,
+          "firstUnixSeconds": 1791128571.2507217,
+          "lastUnixSeconds": 1791129072.0572157,
+          "headSeconds": 0.5478370189666748,
+          "tailSeconds": 0.9784088134765625,
+          "maximumGapSeconds": 1.8801915645599365,
+          "allowedGapSeconds": 3.0,
+          "invalidRows": 0,
+          "inWindowErrors": 0,
+          "strictlyIncreasing": true
+        },
+        "receiverCheckpoints": {
+          "complete": true,
+          "samples": 7,
+          "inWindowSamples": 6,
+          "firstUnixSeconds": 1791128630.91522,
+          "lastUnixSeconds": 1791128910.1879447,
+          "headSeconds": 20.974220037460327,
+          "tailSeconds": 39.20422887802124,
+          "maximumGapSeconds": 60.000999450683594,
+          "allowedGapSeconds": 90,
+          "invalidRows": 0,
+          "inWindowErrors": 0,
+          "strictlyIncreasing": true
+        }
+      },
+      "coverage": {
+        "receiverSeconds": 300.17974389648435,
+        "pcmSeconds": 300.192,
+        "completePollCoverage": true,
+        "completePcmCoverage": true,
+        "uninterruptedConnection": true,
+        "completeEventHistory": true,
+        "completeSpeakingObservation": true,
+        "completeTrackPhaseObservation": true,
+        "stableReceiverBuffer": true,
+        "retainedDiagnosticWindows": 5,
+        "droppedDiagnosticWindows": 0
+      },
+      "quietRequiringReviewAtLeast100Ms": [],
+      "quiet": [
+        {
+          "durationMs": 2258.0625,
+          "classification": "source-tail-candidate"
+        }
+      ],
+      "browserLongTasks": 0,
+      "checkpointErrors": 0,
+      "checkpointSaves": 7,
+      "largestStealIntervals": [
+        {
+          "from": "2026-10-04T15:45:04.225233+00:00",
+          "to": "2026-10-04T15:45:05.227470+00:00",
+          "stealTicks": 61,
+          "stealPercent": 29.468599033816425
+        },
+        {
+          "from": "2026-10-04T15:45:05.227470+00:00",
+          "to": "2026-10-04T15:45:06.229812+00:00",
+          "stealTicks": 50,
+          "stealPercent": 24.154589371980677
+        },
+        {
+          "from": "2026-10-04T15:43:57.075132+00:00",
+          "to": "2026-10-04T15:43:58.077079+00:00",
+          "stealTicks": 47,
+          "stealPercent": 22.48803827751196
+        },
+        {
+          "from": "2026-10-04T15:43:42.035563+00:00",
+          "to": "2026-10-04T15:43:43.038376+00:00",
+          "stealTicks": 21,
+          "stealPercent": 10.194174757281553
+        }
+      ],
+      "retainedLastGapTimes": [
+        {
+          "utc": "2026-10-04T15:43:42.292000+00:00",
+          "lastGap": "58.249685ms",
+          "overlapsStealSpike": true
+        },
+        {
+          "utc": "2026-10-04T15:43:57.791000+00:00",
+          "lastGap": "58.734068ms",
+          "overlapsStealSpike": true
+        },
+        {
+          "utc": "2026-10-04T15:45:05.892000+00:00",
+          "lastGap": "59.143178ms",
+          "overlapsStealSpike": true
+        }
+      ],
+      "checkpointSavesInCollectedFile": 7,
+      "checkpointSavesExcludedOtherRun": 0
+    }
+  ],
+  "aggregates": {
+    "a": {
+      "receiverSeconds": 600.1796687011719,
+      "totalConcealmentMs": 633.25,
+      "discarded": 1,
+      "netLoss": 0,
+      "concealmentMsPerMinute": 63.30604314242046,
+      "active_send_gaps_40ms": 12,
+      "skipped_deadlines": 18
+    },
+    "b": {
+      "receiverSeconds": 599.9994340820313,
+      "totalConcealmentMs": 519.6666666666667,
+      "discarded": 12,
+      "netLoss": 0,
+      "concealmentMsPerMinute": 51.96671568149698,
+      "active_send_gaps_40ms": 3,
+      "skipped_deadlines": 7
+    }
+  },
+  "observedConcealmentRateChangePercent": -17.911919459905658,
+  "codeRegressionEstablished": false,
+  "codeImprovementEstablished": false,
+  "releaseDecision": "Previous exact runtime restored; new coupled audit bundle retained on candidate/audio-audit-20261004 pending qualification.",
+  "reason": "Balanced pairs reverse direction and host steal varies; new-build discard counts are higher in both repeats and their cause is unresolved.",
+  "limitations": [
+    "Two five-minute repetitions per build on one receiver/network path do not establish causation or statistical non-regression.",
+    "Sender deltas cover the interior minute-checkpoint intervals; exact uncovered head/tail are in each summary.",
+    "Host-steal correlations cover retained last-gap timestamps only; they do not identify every gap.",
+    "Packet-discard counter polls do not give exact packet-arrival times or distinguish every discard reason.",
+    "Source quiet reference is reused from October 2, not a fresh media digest."
+  ]
+}

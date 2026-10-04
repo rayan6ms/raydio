@@ -4,6 +4,8 @@ Status: **audit completed; findings are not fixed or deployed by this audit.**
 
 Follow-up: all seven findings now have implementation fixes and regression
 evidence in [the repair report](AUDIO-NETWORK-SEARCH-FIXES-2026-10-04.md).
+Those changes are now retained on a candidate branch after a precautionary
+rollout reversal; see [the repeated comparison](AUDIO-AUDIT-REGRESSION-RETEST-2026-10-04.md).
 The audit below preserves the original observations and their limits.
 
 Six new faults were reproduced, plus a notification race whose full playback
