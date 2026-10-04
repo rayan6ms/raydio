@@ -51,7 +51,7 @@ Evidence and command logs are in [deep-audit-fixes-20261004](deep-audit-fixes-20
   additional optional-author and whole-playback allocation regressions. Those
   focused suites pass (three parser and four allocation tests).
 - Crust full workspace/all-target suite: 183 passed, four existing manual exclusions.
-- Raydio all-target suite with the new pinned dependencies: 73 passed.
+- Raydio all-target suite with the new pinned dependencies: 74 passed.
 - Relevant all-target warnings-denied Clippy checks pass for all three repositories.
 - Mantle audit, deny and vet pass; Crust deny passes. Raydio formatting passes.
   Ordinary Raydio audit reports no vulnerabilities. Its optional strict
@@ -59,7 +59,7 @@ Evidence and command logs are in [deep-audit-fixes-20261004](deep-audit-fixes-20
   unmaintained warning (RUSTSEC-2026-0173); the crate is absent from the current
   Linux target dependency tree. No exemption or unrelated dependency upgrade
   is introduced. Native release/package checks are recorded with deployment evidence.
-- Diagnostic controls: 57 Python tests and eight Bun programs pass, including
+- Diagnostic controls: 58 Python tests and eight Bun programs pass, including
   a regression for forwarding the selected bot identity to the recorder.
 
 ## Live qualification protocol
@@ -85,6 +85,15 @@ was retained and later persisted completely, without missing archived events.
 These limitations prevent a strong causal before/after network-quality claim.
 The final candidate check must start persistence and host sampling before its
 recording and run without builds, source probes or control changes.
+
+The summary now accepts an explicit host-coverage slack, preserving the old
+90 s minute-sampling default. Both 1 Hz observations use 3 s instead, so the
+baseline's missing ~70 s receiver-host head is explicitly flagged incomplete.
+Regression coverage checks complete 1 Hz samples, a missing head and an internal
+gap. Receiver checkpoint cadence retains its separate minute-sampling policy.
+Actor shutdown also aborts pending HTTP tasks before draining completed results;
+a held-response regression finishes shutdown within one second, respecting the
+existing five-second actor shutdown budget rather than waiting the HTTP deadline.
 
 The source quiet reference is the independently decoded exact video saved on
 October 2 (4,167,934 bytes, SHA-256

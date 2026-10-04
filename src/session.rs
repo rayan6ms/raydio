@@ -668,15 +668,13 @@ impl GuildSession {
         self.preparations.abort_all();
         let _ = timeout(Duration::from_secs(3), self.cleanup(None)).await;
         self.panel_edits.shutdown().await;
-        // Retire responses delivered while the session was being destroyed.
-        // The global budget includes queued panel locks and the HTTP deadline.
-        let _ = timeout(Duration::from_secs(9), async {
-            while let Some(result) = self.responses.join_next().await {
-                self.finish_response(result).await;
-            }
-        })
-        .await;
-        self.responses.shutdown().await;
+        // Completed responses survive abort_all and must still be retired.
+        // Pending HTTP work cannot consume the runtime's five-second actor
+        // shutdown budget before panel deletion gets a chance to finish.
+        self.responses.abort_all();
+        while let Some(result) = self.responses.join_next().await {
+            self.finish_response(result).await;
+        }
         // Allow all three one-second deletion attempts and their backoff to
         // finish, within the service's overall shutdown deadline.
         if timeout(Duration::from_secs(4), async {
@@ -3171,6 +3169,51 @@ mod tests {
                 .any(|(method, path)| method == "DELETE"
                     && path == "/api/v10/channels/10/messages/6")
         );
+        owner.shutdown().await;
+        backend.shutdown().await.unwrap();
+        server.abort();
+        let _ = server.await;
+    }
+
+    #[tokio::test]
+    async fn shutdown_aborts_held_responses_without_waiting_for_http_deadline() {
+        let entered = Arc::new(tokio::sync::Notify::new());
+        let router = axum::Router::new().fallback({
+            let entered = entered.clone();
+            move || {
+                let entered = entered.clone();
+                async move {
+                    entered.notify_one();
+                    std::future::pending::<axum::http::StatusCode>().await
+                }
+            }
+        });
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let address = listener.local_addr().unwrap();
+        let server = tokio::spawn(async move { axum::serve(listener, router).await.unwrap() });
+        let (mut shared, backend, owner, _events) = Shared::fixture().await;
+        Arc::get_mut(&mut shared).unwrap().http = twilight_http::Client::builder()
+            .token("fixture".into())
+            .proxy(address.to_string(), true)
+            .ratelimiter(None)
+            .build();
+        shared.cache.write().unwrap().guilds.insert(1, guild());
+        let (messages, receiver) = mpsc::channel(8);
+        let actor = tokio::spawn(GuildSession::new(1, shared.clone()).run(receiver));
+        let (ack, ack_receiver) = oneshot::channel();
+        ack.send(true).unwrap();
+        messages
+            .send(Message::Interaction(request("help", &[]), ack_receiver))
+            .await
+            .unwrap();
+        timeout(Duration::from_secs(2), entered.notified())
+            .await
+            .unwrap();
+        shared.cancel.cancel();
+        timeout(Duration::from_secs(1), actor)
+            .await
+            .expect("shutdown waited for Discord HTTP")
+            .unwrap();
         owner.shutdown().await;
         backend.shutdown().await.unwrap();
         server.abort();

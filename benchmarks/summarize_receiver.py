@@ -4,6 +4,7 @@ from pathlib import Path
 import re
 import statistics
 import argparse
+import math
 from quiet_classification import classify_quiet
 from collection_coverage import collection_coverage
 parser=argparse.ArgumentParser(description="Summarize receiver evidence without hiding extended song-boundary silence")
@@ -11,7 +12,11 @@ parser.add_argument('--input', required=True, type=Path)
 parser.add_argument('--output', required=True, type=Path)
 parser.add_argument('--source-tail-ms', required=True, type=float)
 parser.add_argument('--source-head-ms', default=0, type=float)
+parser.add_argument('--max-host-gap-seconds', default=90, type=float,
+                    help='Coverage slack for the declared host sampling cadence; use 3 for 1 Hz checks')
 args=parser.parse_args()
+if not math.isfinite(args.max_host_gap_seconds) or not 0 < args.max_host_gap_seconds <= 90:
+    parser.error('max host gap must be finite and within (0, 90] seconds')
 root=args.input
 r=json.loads((root/'receiver.json').read_text())
 start=dt.datetime.fromisoformat(r['startedAt'].replace('Z','+00:00'))
@@ -134,9 +139,11 @@ receiver_saves = ([row for line in checkpoint_path.read_text().splitlines()
 summary['collectionCoverage'] = {
     'senderHost': collection_coverage(resources, start.timestamp(), end.timestamp(),
         timestamp=lambda row: dt.datetime.fromisoformat(row['utc']).timestamp(),
+        max_gap=args.max_host_gap_seconds,
         error=lambda row: 'error' in row),
     'receiverHost': collection_coverage(receiver_hosts, start.timestamp(), end.timestamp(),
         timestamp=lambda row: row['savedAt'],
+        max_gap=args.max_host_gap_seconds,
         error=lambda row: bool(row.get('host', {}).get('errors'))),
     'receiverCheckpoints': collection_coverage(receiver_saves, start.timestamp(), end.timestamp(),
         timestamp=lambda row: row['savedAt']),

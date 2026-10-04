@@ -32,6 +32,14 @@ class CollectionCoverageTests(unittest.TestCase):
         self.assertFalse(self.coverage([0, 60, 120, 180, 240, 300],
                                       error=lambda row: row['t'] == 120)['complete'])
 
+    def test_one_second_cadence_rejects_missing_head_and_internal_gap(self):
+        times = list(range(301))
+        self.assertTrue(self.coverage(times, max_gap=3)['complete'])
+        late = times[70:]
+        self.assertTrue(self.coverage(late)['complete'])  # Historical minute-sampling policy.
+        self.assertFalse(self.coverage(late, max_gap=3)['complete'])
+        self.assertFalse(self.coverage(times[:120] + times[125:], max_gap=3)['complete'])
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,20 +1,8 @@
-   Compiling mantle-xaac v0.0.0 (https://github.com/rayan6ms/mantle?rev=87c2eaf08bace355f7696cec4676eea8885fab9a#87c2eaf0)
-   Compiling crust v0.0.0 (https://github.com/rayan6ms/crust?rev=e460724bdf72256e3be4f19f80a67832a4cfa85b#e460724b)
-   Compiling mantle-opus v0.0.0 (https://github.com/rayan6ms/mantle?rev=87c2eaf08bace355f7696cec4676eea8885fab9a#87c2eaf0)
-   Compiling mantle-audio v0.0.0 (https://github.com/rayan6ms/mantle?rev=87c2eaf08bace355f7696cec4676eea8885fab9a#87c2eaf0)
-   Compiling mantle-symphonia-isomp4 v0.6.1 (https://github.com/rayan6ms/mantle?rev=87c2eaf08bace355f7696cec4676eea8885fab9a#87c2eaf0)
-   Compiling mantle-core v0.0.0 (https://github.com/rayan6ms/mantle?rev=87c2eaf08bace355f7696cec4676eea8885fab9a#87c2eaf0)
-   Compiling mantle-media v0.0.0 (https://github.com/rayan6ms/mantle?rev=87c2eaf08bace355f7696cec4676eea8885fab9a#87c2eaf0)
-   Compiling crust-server v0.0.0 (https://github.com/rayan6ms/crust?rev=e460724bdf72256e3be4f19f80a67832a4cfa85b#e460724b)
-   Compiling crust-mantle-adapter v0.0.0 (https://github.com/rayan6ms/crust?rev=e460724bdf72256e3be4f19f80a67832a4cfa85b#e460724b)
-   Compiling crust-oto-adapter v0.0.0 (https://github.com/rayan6ms/crust?rev=e460724bdf72256e3be4f19f80a67832a4cfa85b#e460724b)
-   Compiling crust-protocol v0.0.0 (https://github.com/rayan6ms/crust?rev=e460724bdf72256e3be4f19f80a67832a4cfa85b#e460724b)
    Compiling raydio v0.2.2 (/home/rayan/Documents/Projects/raydio-rust)
-   Compiling crust-testkit v0.0.0 (https://github.com/rayan6ms/crust?rev=e460724bdf72256e3be4f19f80a67832a4cfa85b#e460724b)
-    Finished `test` profile [unoptimized] target(s) in 2m 13s
+    Finished `test` profile [unoptimized] target(s) in 18.12s
      Running unittests src/lib.rs (target/debug/deps/raydio-ff7ebed36f7f593e)
 
-running 70 tests
+running 71 tests
 test backend::buffering_tests::prefix_is_bounded_and_complete_staging_remains_available ... ok
 test commands::tests::all_nineteen_commands_keep_the_original_options_and_scope ... ok
 test commands::tests::assigned_metadata_and_order_do_not_require_a_command_rewrite ... ok
@@ -63,6 +51,7 @@ test session::tests::queue_controls_drive_crust_and_cleanup_preserves_voice_rule
 test session::tests::queue_end_and_terminal_buttons_delete_panels_without_editing_deleted_responses ... ok
 test session::tests::replacement_and_disconnect_delete_only_owned_panel_messages ... ok
 test session::tests::same_player_stop_cancels_overtaken_intent_and_rejoin_prepares_again ... ok
+test session::tests::shutdown_aborts_held_responses_without_waiting_for_http_deadline ... ok
 test session::tests::slow_discord_responses_do_not_block_natural_handoff ... ok
 test session::tests::slow_progress_edit_does_not_block_track_restart ... ok
 test session::tests::stale_track_events_cannot_advance_a_repeated_encoded_track ... ok
@@ -86,7 +75,7 @@ test views::tests::utf16_limits_do_not_split_emoji ... ok
 test voice::tests::compact_channels_follow_permission_updates_limits_and_deletes ... ok
 test voice::tests::private_voice_uses_role_aggregation_then_member_overwrites ... ok
 
-test result: ok. 70 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.57s
+test result: ok. 71 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.63s
 
      Running unittests src/main.rs (target/debug/deps/raydio-e64609f4f8d476a5)
 
@@ -107,7 +96,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 running 1 test
 test reconnect_preserves_resumed_sessions_and_invalidates_replacements ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.03s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.02s
 
      Running unittests examples/discord_voice_probe.rs (target/debug/examples/discord_voice_probe-aa6b55b5590ddc38)
 

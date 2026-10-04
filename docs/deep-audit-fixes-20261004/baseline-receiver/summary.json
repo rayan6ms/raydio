@@ -246,7 +246,9 @@
     "off-boundary-quiet": 2,
     "source-tail-candidate": 1
   },
-  "evidenceWarnings": [],
+  "evidenceWarnings": [
+    "receiverHost collection did not cover the observation"
+  ],
   "collectionCoverage": {
     "senderHost": {
       "complete": true,
@@ -257,13 +259,13 @@
       "headSeconds": 0.051666975021362305,
       "tailSeconds": 0.3215610980987549,
       "maximumGapSeconds": 1.0042510032653809,
-      "allowedGapSeconds": 90,
+      "allowedGapSeconds": 3.0,
       "invalidRows": 0,
       "inWindowErrors": 0,
       "strictlyIncreasing": true
     },
     "receiverHost": {
-      "complete": true,
+      "complete": false,
       "samples": 303,
       "inWindowSamples": 227,
       "firstUnixSeconds": 1791118906.0852783,
@@ -271,7 +273,7 @@
       "headSeconds": 69.73727822303772,
       "tailSeconds": 0.3706786632537842,
       "maximumGapSeconds": 1.6634266376495361,
-      "allowedGapSeconds": 90,
+      "allowedGapSeconds": 3.0,
       "invalidRows": 0,
       "inWindowErrors": 0,
       "strictlyIncreasing": true

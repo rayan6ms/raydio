@@ -1,14 +1,2 @@
-    Checking crust v0.0.0 (https://github.com/rayan6ms/crust?rev=e460724bdf72256e3be4f19f80a67832a4cfa85b#e460724b)
-    Checking mantle-opus v0.0.0 (https://github.com/rayan6ms/mantle?rev=87c2eaf08bace355f7696cec4676eea8885fab9a#87c2eaf0)
-    Checking mantle-audio v0.0.0 (https://github.com/rayan6ms/mantle?rev=87c2eaf08bace355f7696cec4676eea8885fab9a#87c2eaf0)
-    Checking mantle-xaac v0.0.0 (https://github.com/rayan6ms/mantle?rev=87c2eaf08bace355f7696cec4676eea8885fab9a#87c2eaf0)
-    Checking mantle-symphonia-isomp4 v0.6.1 (https://github.com/rayan6ms/mantle?rev=87c2eaf08bace355f7696cec4676eea8885fab9a#87c2eaf0)
-    Checking mantle-core v0.0.0 (https://github.com/rayan6ms/mantle?rev=87c2eaf08bace355f7696cec4676eea8885fab9a#87c2eaf0)
-    Checking mantle-media v0.0.0 (https://github.com/rayan6ms/mantle?rev=87c2eaf08bace355f7696cec4676eea8885fab9a#87c2eaf0)
-    Checking crust-mantle-adapter v0.0.0 (https://github.com/rayan6ms/crust?rev=e460724bdf72256e3be4f19f80a67832a4cfa85b#e460724b)
-    Checking crust-oto-adapter v0.0.0 (https://github.com/rayan6ms/crust?rev=e460724bdf72256e3be4f19f80a67832a4cfa85b#e460724b)
-    Checking crust-protocol v0.0.0 (https://github.com/rayan6ms/crust?rev=e460724bdf72256e3be4f19f80a67832a4cfa85b#e460724b)
-    Checking crust-server v0.0.0 (https://github.com/rayan6ms/crust?rev=e460724bdf72256e3be4f19f80a67832a4cfa85b#e460724b)
     Checking raydio v0.2.2 (/home/rayan/Documents/Projects/raydio-rust)
-    Checking crust-testkit v0.0.0 (https://github.com/rayan6ms/crust?rev=e460724bdf72256e3be4f19f80a67832a4cfa85b#e460724b)
-    Finished `dev` profile [unoptimized] target(s) in 14.48s
+    Finished `dev` profile [unoptimized] target(s) in 5.81s
