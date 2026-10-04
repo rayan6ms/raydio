@@ -1,0 +1,28 @@
+--- a/src/urls.rs
++++ b/src/urls.rs
+@@ -128,3 +128,25 @@
+         ));
+     }
+ }
++
++
++#[cfg(test)]
++mod audit_mix_tests {
++    use super::*;
++    use mantle_media::{route_youtube_identifier, YoutubeSourceOptions, YoutubeRoute};
++    #[test]
++    fn audit_mix_seed_lost_in_canonicalization() {
++        for list in ["RDMMdQw4w9WgXcQ", "RDEMfixtureMix"] {
++            let source = format!("https://www.youtube.com/watch?v=dQw4w9WgXcQ&list={list}");
++            let options = YoutubeSourceOptions::default();
++            assert!(matches!(route_youtube_identifier(&source, &options), Some(YoutubeRoute::Mix{..})));
++            let Input::Playlist(canonical) = classify(&source) else { panic!("playlist expected") };
++            let routed = route_youtube_identifier(&canonical, &options);
++            eprintln!("AUDIT mix: list={list}, direct=Mix, canonical={routed:?}");
++            assert!(matches!(routed, Some(YoutubeRoute::NoTrack)));
++        }
++        let ordinary = "https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ";
++        let Input::Playlist(canonical) = classify(ordinary) else { panic!() };
++        assert!(matches!(route_youtube_identifier(&canonical, &YoutubeSourceOptions::default()), Some(YoutubeRoute::Mix{..})));
++    }
++}

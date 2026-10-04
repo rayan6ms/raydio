@@ -1,0 +1,22 @@
+{
+  "mantle-full-tests": {
+    "passed": 288,
+    "ignored": 9
+  },
+  "search-regressions": {
+    "passed": 3,
+    "ignored": 0
+  },
+  "playback-allocation": {
+    "passed": 4,
+    "ignored": 0
+  },
+  "crust-full-tests": {
+    "passed": 183,
+    "ignored": 4
+  },
+  "raydio-tests": {
+    "passed": 73,
+    "ignored": 0
+  }
+}

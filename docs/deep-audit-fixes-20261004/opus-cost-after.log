@@ -1,0 +1,21 @@
+   Compiling mantle-audio v0.0.0 (/home/rayan/Documents/Projects/mantle/crates/mantle-audio)
+   Compiling mantle-symphonia-isomp4 v0.6.1 (/home/rayan/Documents/Projects/mantle/third_party/symphonia-format-isomp4)
+   Compiling mantle-media v0.0.0 (/home/rayan/Documents/Projects/mantle/crates/mantle-media)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.56s
+     Running unittests src/lib.rs (target/debug/deps/mantle_media-371144c121de9b43)
+
+running 1 test
+test youtube_playback::tests::opus_path_cost_probe ... opus_cost filtered=false trial=0 frames=2408 us_per_frame=65.592
+opus_cost filtered=false trial=1 frames=2408 us_per_frame=63.977
+opus_cost filtered=false trial=2 frames=2408 us_per_frame=63.219
+opus_cost filtered=false trial=3 frames=2408 us_per_frame=63.091
+opus_cost filtered=false trial=4 frames=2408 us_per_frame=62.729
+opus_cost filtered=true trial=0 frames=2408 us_per_frame=381.538
+opus_cost filtered=true trial=1 frames=2408 us_per_frame=401.286
+opus_cost filtered=true trial=2 frames=2408 us_per_frame=362.700
+opus_cost filtered=true trial=3 frames=2408 us_per_frame=360.732
+opus_cost filtered=true trial=4 frames=2408 us_per_frame=361.791
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 51 filtered out; finished in 5.27s
+

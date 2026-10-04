@@ -1,0 +1,44 @@
+[
+  {
+    "repo": "raydio-rust",
+    "file": "src/session.rs",
+    "original_sha256": "e5b88ca9d192a866e34b473b63b4541f324eb0baf6ddd2cbf6cecce0ca54f2a6",
+    "injected_sha256": "b1235041321b120e38933238cc4dd47e1030dcc2f9ec8811de190d7f73720424",
+    "restored_sha256": "e5b88ca9d192a866e34b473b63b4541f324eb0baf6ddd2cbf6cecce0ca54f2a6"
+  },
+  {
+    "repo": "raydio-rust",
+    "file": "src/urls.rs",
+    "original_sha256": "6fd24f4533700d461e474b320a381675a6d2f01e5606fa164e8654b21a1740db",
+    "injected_sha256": "4972d5e861195004b4e7b170e24c9be3933e3365f438edc526a5732b22d10239",
+    "restored_sha256": "6fd24f4533700d461e474b320a381675a6d2f01e5606fa164e8654b21a1740db"
+  },
+  {
+    "repo": "mantle",
+    "file": "crates/mantle-media/src/youtube.rs",
+    "original_sha256": "eb624416ed5a0d8683f3e38e6a85ffcfb9a916e0f03e1d5cf18581e85b22be42",
+    "injected_sha256": "864e76f17a9bf28710b7aff63cc96bc7818e5f27e073b13665b6e24dbd9784c7",
+    "restored_sha256": "eb624416ed5a0d8683f3e38e6a85ffcfb9a916e0f03e1d5cf18581e85b22be42"
+  },
+  {
+    "repo": "mantle",
+    "file": "crates/mantle-media/src/youtube_playback.rs",
+    "original_sha256": "89973ffc0afabe0649a5a0c20c6e3289001961075315147f893cdad4a74addcc",
+    "injected_sha256": "c81a775aba049d77ef171451dfb309713c7275e1623d0d50243a314dc1308f94",
+    "restored_sha256": "89973ffc0afabe0649a5a0c20c6e3289001961075315147f893cdad4a74addcc"
+  },
+  {
+    "repo": "crust",
+    "file": "crates/crust-server/tests/p10_voice.rs",
+    "original_sha256": "8291f27aa1cd3a0b5e8b5c30afe3133eda52482ee5fa38c448ef26ff4abcce6e",
+    "injected_sha256": "56e8e1df89ace222f5ebbfa5d733e80d76c6f1ba699b63ae0e7d89b086d06a85",
+    "restored_sha256": "8291f27aa1cd3a0b5e8b5c30afe3133eda52482ee5fa38c448ef26ff4abcce6e"
+  },
+  {
+    "repo": "crust",
+    "file": "crates/crust-oto-adapter/src/lib.rs",
+    "original_sha256": "a46983a675f565697a7492e4ae98de15001e9e126766aa57fcaa2d162e8e416f",
+    "injected_sha256": "3cc1d6d94cefb39b9f06cdf56281f1d0f610d05669f3f000d0a3584313e543c5",
+    "restored_sha256": "a46983a675f565697a7492e4ae98de15001e9e126766aa57fcaa2d162e8e416f"
+  }
+]

@@ -1,0 +1,60 @@
+warning[duplicate]: found 2 duplicate entries for crate 'getrandom'
+   ┌─ /home/rayan/Documents/Projects/mantle/Cargo.lock:35:1
+   │  
+35 │ ╭ getrandom 0.2.17 registry+https://github.com/rust-lang/crates.io-index
+36 │ │ getrandom 0.3.4 registry+https://github.com/rust-lang/crates.io-index
+   │ ╰─────────────────────────────────────────────────────────────────────┘ lock entries
+   │  
+   ├ getrandom v0.2.17
+     └── ring v0.17.14
+         ├── rustls v0.23.45
+         │   └── ureq v3.4.2
+         │       └── mantle-media v0.0.0
+         │           ├── mantle-jvm v0.0.0
+         │           ├── mantle-media-bench v0.0.0
+         │           └── mantle-worker-bench v0.0.0
+         └── rustls-webpki v0.103.15
+             └── rustls v0.23.45 (*)
+   ├ getrandom v0.3.4
+     ├── ahash v0.8.12
+     │   └── ristretto_classfile v0.32.1
+     │       ├── mantle-jvm-gate v0.0.0
+     │       └── mantle-reference v0.0.0
+     └── ristretto_classfile v0.32.1 (*)
+
+warning[duplicate]: found 2 duplicate entries for crate 'windows-sys'
+    ┌─ /home/rayan/Documents/Projects/mantle/Cargo.lock:156:1
+    │  
+156 │ ╭ windows-sys 0.52.0 registry+https://github.com/rust-lang/crates.io-index
+157 │ │ windows-sys 0.61.2 registry+https://github.com/rust-lang/crates.io-index
+    │ ╰────────────────────────────────────────────────────────────────────────┘ lock entries
+    │  
+    ├ windows-sys v0.52.0
+      └── ring v0.17.14
+          ├── rustls v0.23.45
+          │   └── ureq v3.4.2
+          │       └── mantle-media v0.0.0
+          │           ├── mantle-jvm v0.0.0
+          │           ├── mantle-media-bench v0.0.0
+          │           └── mantle-worker-bench v0.0.0
+          └── rustls-webpki v0.103.15
+              └── rustls v0.23.45 (*)
+    ├ windows-sys v0.61.2
+      ├── nu-ansi-term v0.50.3
+      │   └── tracing-subscriber v0.3.23
+      │       └── loom v0.5.6
+      │           └── (dev) mantle-jvm v0.0.0
+      ├── socket2 v0.6.5
+      │   └── mantle-media v0.0.0
+      │       ├── mantle-jvm v0.0.0 (*)
+      │       ├── mantle-media-bench v0.0.0
+      │       └── mantle-worker-bench v0.0.0
+      └── winapi-util v0.1.11
+          ├── same-file v1.0.6
+          │   └── walkdir v2.5.0
+          │       └── (build) jni v0.22.4
+          │           ├── mantle-jvm v0.0.0 (*)
+          │           └── mantle-reference v0.0.0
+          └── walkdir v2.5.0 (*)
+
+advisories ok, bans ok, licenses ok, sources ok

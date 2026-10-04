@@ -1,0 +1,9 @@
+   Compiling crust-server v0.0.0 (/home/rayan/Documents/Projects/crust/crates/crust-server)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.82s
+     Running tests/p07_players.rs (target/debug/deps/p07_players-0dcbb3ea93221a4f)
+
+running 1 test
+test one_slow_guild_does_not_block_its_shard_and_same_guild_commands_serialize ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.05s
+

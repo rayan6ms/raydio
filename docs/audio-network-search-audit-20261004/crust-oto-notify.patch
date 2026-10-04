@@ -1,0 +1,36 @@
+--- a/crates/crust-oto-adapter/src/lib.rs
++++ b/crates/crust-oto-adapter/src/lib.rs
+@@ -2344,3 +2344,33 @@
+         );
+     }
+ }
++
++
++#[cfg(test)]
++mod audit_notify_interleaving {
++    use super::*;
++    use futures_util::FutureExt;
++    #[tokio::test]
++    async fn audit_deferred_source_wait_misses_failure_between_check_and_poll() {
++        let (frames,_reader)=oto::frame_channel();
++        let shared=Arc::new(BridgeShared{backlog:frames.backlog(),changed:Notify::new(),state:AtomicU8::new(BRIDGE_RUNNING),failure:Mutex::new(None)});
++        // This is the current next_event order. A producer on another runtime
++        // thread can publish between the snapshot check and the select poll.
++        let deferred=async {shared.changed.notified().await};
++        assert!(shared.take_failure().is_none());
++        shared.fail(VoiceError::new(VoiceErrorKind::Protocol,"audit failure"));
++        tokio::pin!(deferred);
++        let missed=futures_util::poll!(&mut deferred).is_pending();
++        let retained=shared.failure.lock().unwrap().is_some();
++        shared.changed.notify_waiters();
++        assert!(futures_util::poll!(&mut deferred).is_ready());
++        assert!(shared.take_failure().is_some());
++        // Eager construction is a control, not an implementation change.
++        let eager=shared.changed.notified();
++        assert!(shared.take_failure().is_none());
++        shared.fail(VoiceError::new(VoiceErrorKind::Protocol,"control failure"));
++        let eager_ready=eager.now_or_never().is_some();
++        eprintln!("AUDIT notify: deferred_notification_missed={missed}, failure_retained={retained}, eager_wait_ready={eager_ready}");
++        assert!(missed&&retained&&eager_ready);
++    }
++}

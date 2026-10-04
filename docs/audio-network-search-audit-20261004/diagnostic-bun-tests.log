@@ -1,0 +1,15 @@
+RUN test_audio_meter.mjs
+PASS: actual audio worklet timestamps exact one-second silence; clipping, invalid samples and empty input remain separate
+RUN test_browser_buffer_trial.mjs
+PASS: repeated targets, persistence, strict coverage and identity guards, restoration on failures
+RUN test_browser_checkpoint.mjs
+PASS: failed preflight -> new run -> progress/retry -> final save; deduplication and bounded lifetime
+RUN test_browser_counter_audit.mjs
+PASS: endpoint-only observer, signed corrections, identity/counter/stale validation and cleanup
+RUN test_browser_endurance.mjs
+PASS: six-hour simulation, UI replacement/absence preserves receiver counters, true disconnect/identity/reset failures, bounded diagnostics and cleanup
+RUN test_browser_observer_trial.mjs
+PASS: balanced order, per-window persistence, failed windows retained, concurrency and lifetime guards
+RUN test_receiver_buffer.mjs
+PASS: existing/future/cached peers, reconnects, unsupported settings, native semantics, exact restoration, cleanup and extension scope
+PASS: 7 diagnostic programs

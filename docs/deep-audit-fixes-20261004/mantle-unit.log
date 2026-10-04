@@ -1,0 +1,77 @@
+   Compiling mantle-symphonia-isomp4 v0.6.1 (/home/rayan/Documents/Projects/mantle/third_party/symphonia-format-isomp4)
+   Compiling mantle-media v0.0.0 (/home/rayan/Documents/Projects/mantle/crates/mantle-media)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.98s
+     Running unittests src/lib.rs (target/debug/deps/mantle_media-371144c121de9b43)
+
+running 52 tests
+test bandcamp::tests::decoder_handles_named_and_numeric_entities_once ... ok
+test beam::tests::canonical_url_uses_the_legacy_source_host ... ok
+test getyarn::tests::canonical_url_upgrades_historical_http_pages ... ok
+test http_input::tests::bounded_proxy_retains_socks4_and_numeric_socks5_support ... ok
+test http_input::tests::bounded_socks_auth_remote_dns_and_http_pool_preserve_bytes ... ok
+test http_input::tests::completed_ranges_return_connections_to_the_shared_pool ... 3 staged 4 MiB sources, 20 ms/connect: separate 3 connections / 138.116 ms; pooled 1 connections / 92.901 ms
+ok
+test http_input::tests::content_range_parser_rejects_duplicates_and_inconsistent_numbers ... ok
+test http_input::tests::dependency_trace_logging_is_compile_time_disabled ... ok
+test http_input::tests::public_address_policy_denies_special_ranges ... ok
+test http_input::tests::request_count_configuration_has_hard_ceilings ... ok
+test http_input::tests::shared_range_agent_requires_identical_transport_policy ... ok
+test http_input::tests::socks_handshake_timeout_does_not_wait_for_the_proxy_to_close ... SOCKS handshake deadline=200 ms observed=203.933 ms
+ok
+test http_input::tests::source_proxy_authority_is_the_only_private_exception ... ok
+test http_input::tests::staging_storage_is_private_and_anonymous ... ok
+test niconico::tests::playlist_and_origin_failures_are_bounded_and_explicit ... ok
+test niconico::tests::sequence_iv_places_the_media_sequence_in_the_low_64_bits ... ok
+test progressive_input::tests::body_recovery_cannot_reset_the_total_download_deadline ... ok
+test progressive_input::tests::cancellation_and_drop_join_a_downloader_while_origin_is_stalled ... ok
+test progressive_input::tests::complete_staging_keeps_the_short_request_deadline ... ok
+test progressive_input::tests::continuous_progress_does_not_reset_the_total_download_deadline ... ok
+test progressive_input::tests::dropping_the_last_reader_also_cancels_without_external_signal ... ok
+test progressive_input::tests::forward_seek_waits_for_real_bytes_and_replay_keeps_independent_offsets ... ok
+test progressive_input::tests::healthy_progressive_transfer_can_outlive_one_request_timeout ... ok
+test progressive_input::tests::opens_at_prefix_and_reads_cached_bytes_during_a_stall ... ok
+test progressive_input::tests::progressive_startup_avoids_waiting_for_a_delayed_remainder ... 128 KiB source with gated 400 ms remainder: full=404.115 ms progressive=2.108 ms; identical bytes
+ok
+test progressive_input::tests::rejects_invalid_progressive_bounds_before_network_access ... ok
+test progressive_input::tests::stalled_body_preserves_inactivity_deadline_and_empty_reads ... ok
+test progressive_input::tests::truncation_is_an_error_not_clean_eof_or_zero_filled_audio ... ok
+test soundcloud::tests::routes_and_rejects_strict_inputs ... ok
+test source::tests::probe_details_match_lavaplayer_ascii_modified_utf_records ... ok
+test source::tests::schemes_playlist_hints_and_extensions_are_strict_and_deterministic ... ok
+test tests::derives_bounded_opus_packet_durations_from_the_toc ... ok
+test tests::parses_lc_and_explicit_he_audio_specific_configs ... ok
+test twitch::tests::routing_normalizes_current_mobile_and_go_hosts ... ok
+test vimeo::tests::routing_keeps_unlisted_hashes_but_discards_tracking_queries ... ok
+test youtube::live_player_script_tests::current_player_script_matches_native_cipher_grammar ... ignored, requires MANTLE_YOUTUBE_PLAYER_SCRIPT_PATH from the bounded live validator
+test youtube::partial_search_regressions::music_and_mix_skip_item_local_metadata_errors ... ok
+test youtube::partial_search_regressions::unusable_search_items_preserve_neighbors_but_not_limit_violations ... ok
+test youtube::playlist_regressions::playlist_duration_accepts_numbers_and_preserves_unknown_finite_values ... ok
+test youtube::playlist_regressions::unavailable_playlist_entries_are_filtered_without_reordering ... ok
+test youtube::single_flight_regressions::owner_drop_timeout_and_shutdown_release_bounded_waiters ... ok
+test youtube_cipher_process::tests::deno_profile_is_self_contained_and_grants_no_permissions ... ok
+test youtube_playback::opus_continuity_regressions::passthrough_to_identity_preserves_continuous_decoder_samples ... AUDIT switch: frame=0, warm_rms=0.10687990, cold_rms=0.10687990, difference_rms=0.00000000
+AUDIT switch: frame=1, warm_rms=0.10699043, cold_rms=0.10699043, difference_rms=0.00000000
+AUDIT switch: frame=2, warm_rms=0.10367289, cold_rms=0.10367289, difference_rms=0.00000000
+AUDIT switch: frame=3, warm_rms=0.10472282, cold_rms=0.10472282, difference_rms=0.00000000
+AUDIT switch: frame=4, warm_rms=0.10576458, cold_rms=0.10576458, difference_rms=0.00000000
+ok
+test youtube_playback::opus_continuity_regressions::valid_opus_variants_are_normalized_without_dropped_samples ... AUDIT opus: channels=1, packet_ms=20, filtered=false, first_read=Ok(true)
+AUDIT opus: channels=1, packet_ms=20, filtered=true, first_read=Ok(true)
+AUDIT opus: channels=2, packet_ms=10, filtered=false, first_read=Ok(true)
+AUDIT opus: channels=2, packet_ms=10, filtered=true, first_read=Ok(true)
+AUDIT opus: channels=2, packet_ms=20, filtered=false, first_read=Ok(true)
+AUDIT opus: channels=2, packet_ms=20, filtered=true, first_read=Ok(true)
+AUDIT opus: channels=2, packet_ms=40, filtered=false, first_read=Ok(true)
+AUDIT opus: channels=2, packet_ms=40, filtered=true, first_read=Ok(true)
+ok
+test youtube_playback::tests::fallback_duplicates_mono_and_emits_one_padded_final_frame ... ok
+test youtube_playback::tests::fallback_resamples_low_rate_pcm_into_monotonic_fixed_opus_frames ... ok
+test youtube_playback::tests::filter_changes_preserve_exact_audio_for_decoded_and_resampled_input ... ok
+test youtube_playback::tests::opus_path_cost_probe ... ignored, explicit bounded audio hot-path comparison
+test youtube_playback::tests::pcm_seek_after_eof_resets_decoder_history ... ok
+test youtube_playback::tests::repeated_opus_bypass_transitions_preserve_packet_order_and_source_clock ... ok
+test youtube_playback::tests::seek_after_eof_reproduces_fresh_transcoded_audio ... ok
+test youtube_playback::tests::variable_rate_stage_changes_pcm_transcoder_paced_duration ... ok
+
+test result: ok. 50 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 16.36s
+

@@ -1,0 +1,28 @@
+--- a/crates/mantle-media/src/youtube.rs
++++ b/crates/mantle-media/src/youtube.rs
+@@ -5116,3 +5116,25 @@
+             .expect("current player script must match the bounded native cipher grammar");
+     }
+ }
++
++
++#[cfg(test)]
++mod audit_search_tests {
++    use super::*;
++    use serde_json::json;
++    fn result(duration: &str) -> Value {
++        json!({"videoRenderer":{"videoId":"dQw4w9WgXcQ","title":{"simpleText":"Fixture"},"lengthText":{"simpleText":duration}}})
++    }
++    #[test]
++    fn audit_one_bad_search_item_discards_good_neighbors() {
++        let response = |items: Vec<Value>| serde_json::to_vec(&json!({"contents":{"sectionListRenderer":{"contents":[{"itemSectionRenderer":{"contents":items}}]}}})).unwrap();
++        let good = parse_search_response(&response(vec![result("3:20"),result("4:10")]), "fixture", 100, 4096, 32).unwrap().unwrap();
++        let mixed = parse_search_response(&response(vec![result("3:20"),result("unsupported duration"),result("4:10")]), "fixture", 100, 4096, 32);
++        eprintln!("AUDIT search: control_tracks={}, mixed_error={:?}", good.tracks.len(), mixed.as_ref().err());
++        assert_eq!(good.tracks.len(), 2);
++        assert!(mixed.is_err());
++        let mut unavailable = result("bad");
++        unavailable["videoRenderer"]["unplayableText"] = json!({"simpleText":"Unavailable"});
++        assert_eq!(parse_search_response(&response(vec![result("3:20"),unavailable,result("4:10")]), "fixture", 100, 4096, 32).unwrap().unwrap().tracks.len(), 2);
++    }
++}

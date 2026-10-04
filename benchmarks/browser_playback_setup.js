@@ -70,7 +70,7 @@
         if (!window.raydioCheckpoint?.timer) throw Error('Install persistence first');
         // The recorder independently requires one advancing inbound receiver.
         // It returns a status on preflight failure; never label promise resolution success.
-        void window.raydioEndurance.start({seconds,pcm:true,scheduling:true})
+        void window.raydioEndurance.start({seconds,botName:state.botName,pcm:true,scheduling:true})
             .then(()=>window.raydioCheckpoint.save());
         return {auditRequested:true, messageId:identity(a)};
     };

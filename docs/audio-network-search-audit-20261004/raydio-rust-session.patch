@@ -1,0 +1,69 @@
+--- a/src/session.rs
++++ b/src/session.rs
+@@ -2776,4 +2776,66 @@
+         owner.shutdown().await;
+         backend.shutdown().await.unwrap();
+     }
++
++    #[tokio::test]
++    async fn audit_slow_help_blocks_natural_handoff() {
++        let entered = Arc::new(tokio::sync::Notify::new());
++        let release = Arc::new(tokio::sync::Notify::new());
++        let router = axum::Router::new().fallback({
++            let entered = entered.clone();
++            let release = release.clone();
++            move || {
++                let entered = entered.clone();
++                let release = release.clone();
++                async move {
++                    entered.notify_one();
++                    release.notified().await;
++                    axum::Json(json!({}))
++                }
++            }
++        });
++        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
++        let address = listener.local_addr().unwrap();
++        let server = tokio::spawn(async move { axum::serve(listener, router).await.unwrap() });
++        let (mut shared, backend, owner, _events) = Shared::fixture().await;
++        Arc::get_mut(&mut shared).unwrap().http = twilight_http::Client::builder()
++            .token("fixture".into()).proxy(address.to_string(), true).ratelimiter(None).build();
++        shared.cache.write().unwrap().guilds.insert(1, guild());
++        let mut session = GuildSession::new(1, shared.clone());
++        session.channel = Some(3);
++        session.queue.enqueue(vec![track("one")], 1000);
++        session.queue.loop_mode = LoopMode::Track;
++        session.start_current().await.unwrap();
++        let generation = session.generation;
++        let (messages, receiver) = mpsc::channel(8);
++        let actor = tokio::spawn(session.run(receiver));
++        let (ack, ack_receiver) = oneshot::channel();
++        ack.send(true).unwrap();
++        messages.send(Message::Interaction(request("help", &[]), ack_receiver)).await.unwrap();
++        timeout(Duration::from_secs(2), entered.notified()).await.unwrap();
++        let started = Instant::now();
++        messages.send(Message::Backend(json!({"type":"TrackEndEvent","reason":"finished",
++            "track":{"userData":{"raydioGeneration":generation}}}))).await.unwrap();
++        tokio::time::sleep(Duration::from_millis(350)).await;
++        let endpoint = format!("/v4/sessions/{}/players/1", shared.node.health().session);
++        let player = shared.node.request(reqwest::Method::GET, &endpoint, &[], None).await.unwrap();
++        let stalled = player["track"]["userData"]["raydioGeneration"] == generation;
++        release.notify_one();
++        let restarted = timeout(Duration::from_secs(2), async {
++            loop {
++                let player = shared.node.request(reqwest::Method::GET, &endpoint, &[], None).await.unwrap();
++                if player["track"]["userData"]["raydioGeneration"] == generation + 1 { break; }
++                tokio::time::sleep(Duration::from_millis(10)).await;
++            }
++        }).await.is_ok();
++        eprintln!("AUDIT help: generation held={stalled}, restarted_after_release={restarted}, handoff_wait_ms={:.3}", started.elapsed().as_secs_f64()*1000.0);
++        shared.cancel.cancel();
++        timeout(Duration::from_secs(5), actor).await.unwrap().unwrap();
++        owner.shutdown().await;
++        backend.shutdown().await.unwrap();
++        server.abort();
++        let _ = server.await;
++        assert!(stalled && restarted);
++    }
++
+ }

@@ -1,0 +1,19 @@
+   Compiling mantle-media v0.0.0 (/home/rayan/Documents/Projects/mantle/crates/mantle-media)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.46s
+     Running tests/phase7_allocations.rs (target/debug/deps/phase7_allocations-79c10563990e05a8)
+
+running 4 tests
+test concurrent_allocation_measurements_are_isolated ... ok
+test decoded_reads_have_a_stable_bounded_allocation_envelope_after_warmup ... tone-pcm-s16le.wav: frames=64, max_calls=1, max_bytes=4608, total_calls=64, total_bytes=294912
+tone-mp3.mp3: frames=64, max_calls=1, max_bytes=576, total_calls=64, total_bytes=36864
+tone-aac-lc.m4a: frames=64, max_calls=1, max_bytes=369, total_calls=64, total_bytes=21899
+tone-he-aac-v1.m4a: frames=64, max_calls=1, max_bytes=335, total_calls=64, total_bytes=21397
+tone-he-aac-v2.m4a: frames=64, max_calls=1, max_bytes=249, total_calls=64, total_bytes=15936
+ok
+test opus_packet_extraction_has_two_bounded_backend_allocations_per_packet ... tone-opus.webm: packets=64, max_calls=2, max_bytes=644, total_calls=128, total_bytes=41216
+ok
+test warm_opus_playback_adds_no_allocations_to_the_demux_envelope ... warm_opus_playback: frames=64 calls=128 bytes=41216
+ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+

@@ -1,0 +1,11 @@
+   Compiling mantle-media v0.0.0 (/home/rayan/Documents/Projects/mantle/crates/mantle-media)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.58s
+     Running unittests src/lib.rs (target/debug/deps/mantle_media-371144c121de9b43)
+
+running 3 tests
+test youtube::partial_search_regressions::malformed_optional_author_uses_fallback_without_hiding_limits ... ok
+test youtube::partial_search_regressions::music_and_mix_skip_item_local_metadata_errors ... ok
+test youtube::partial_search_regressions::unusable_search_items_preserve_neighbors_but_not_limit_violations ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 50 filtered out; finished in 0.00s
+

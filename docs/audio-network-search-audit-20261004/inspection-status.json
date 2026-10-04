@@ -1,0 +1,35 @@
+{
+  "utc": "2026-10-04T06:45:49.346431+00:00",
+  "local_source_dependencies": {
+    "raydio-youtube-tunnel.service": {
+      "Id": "raydio-youtube-tunnel.service",
+      "ActiveState": "active",
+      "MainPID": "18941"
+    },
+    "raydio-youtube-companion.service": {
+      "Id": "raydio-youtube-companion.service",
+      "ActiveState": "active",
+      "MainPID": "1606"
+    }
+  },
+  "oracle": "MainPID=38709\nNRestarts=0\nId=raydio.service\nActiveState=active\n\nMainPID=0\nNRestarts=0\nId=raydio-testbot.service\nActiveState=inactive\n",
+  "repositories": {
+    "raydio-rust": {
+      "head": "409046f6c9ce21e63714aea7496044f6d4f09972",
+      "status_before_ledger_updates": "?? docs/audio-network-search-audit-20261004/\n?? target-dave-recovery-20260923/\n"
+    },
+    "mantle": {
+      "head": "c241f9104810cca1a868fc7238ba94cd8567a92e",
+      "status_before_ledger_updates": ""
+    },
+    "crust": {
+      "head": "c69d2b77fe7e42071ed76012fedcccbe85f2a04f",
+      "status_before_ledger_updates": ""
+    },
+    "oto": {
+      "head": "8d7a0cbd4e74fa796e0e99cd8634901ce1917bd4",
+      "status_before_ledger_updates": " M PROJECT_LEDGER.md\n M crates/oto/src/gateway.rs\n M crates/oto/src/pacer.rs\n"
+    }
+  },
+  "audit_oto_revision": "62d2fc87e5dc239695a8b86a7372a4edc1caa933"
+}

@@ -19,6 +19,7 @@ use twilight_model::{
     http::interaction::{InteractionResponse, InteractionResponseData, InteractionResponseType},
 };
 
+#[derive(Clone)]
 pub struct Request {
     pub interaction: Arc<Interaction>,
     pub name: String,

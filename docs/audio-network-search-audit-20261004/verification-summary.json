@@ -1,0 +1,146 @@
+{
+  "rust_test_totals_by_log": {
+    "cross-guild-isolation-control.log": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    "crust-characterization.log": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    "crust-voice-regressions.log": {
+      "passed": 10,
+      "failed": 0,
+      "ignored": 0
+    },
+    "diagnostic-bun-tests.log": {
+      "see_log": true
+    },
+    "diagnostic-python-tests.log": {
+      "see_log": true
+    },
+    "mantle-characterization.log": {
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    "mantle-regressions.log": {
+      "passed": 284,
+      "failed": 0,
+      "ignored": 8
+    },
+    "notify-characterization.log": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    "oto-adapter-regressions.log": {
+      "passed": 16,
+      "failed": 0,
+      "ignored": 1
+    },
+    "raydio-characterization.log": {
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    "raydio-regressions.log": {
+      "passed": 69,
+      "failed": 0,
+      "ignored": 0
+    }
+  },
+  "python_diagnostic_tests": 57,
+  "bun_diagnostic_programs": 7,
+  "fixtures": [
+    {
+      "file": "fixtures/tone-opus-1ch-20ms.webm",
+      "bytes": 16719,
+      "sha256": "678089ead98b1436bfcc5ae453577d6847ea82546a57b6b33fa15e658134e6c7",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "opus",
+            "sample_rate": "48000",
+            "channels": 1
+          }
+        ],
+        "format": {
+          "duration": "1.008000"
+        }
+      },
+      "independent_ffmpeg_decode_exit": 0
+    },
+    {
+      "file": "fixtures/tone-opus-2ch-10ms.webm",
+      "bytes": 16066,
+      "sha256": "ec202f7d9b9499f4585578b08494d586cf1aa618dc81d8f700f4157089e282b4",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "opus",
+            "sample_rate": "48000",
+            "channels": 2
+          }
+        ],
+        "format": {
+          "duration": "1.008000"
+        }
+      },
+      "independent_ffmpeg_decode_exit": 0
+    },
+    {
+      "file": "fixtures/tone-opus-2ch-20ms.webm",
+      "bytes": 16260,
+      "sha256": "99db4b3ab80dd3c540b22b7ffa15ddc430f3e78c7566fca4eb5d472bba59c68a",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "opus",
+            "sample_rate": "48000",
+            "channels": 2
+          }
+        ],
+        "format": {
+          "duration": "1.008000"
+        }
+      },
+      "independent_ffmpeg_decode_exit": 0
+    },
+    {
+      "file": "fixtures/tone-opus-2ch-40ms.webm",
+      "bytes": 13180,
+      "sha256": "40c1960cd9345370a1092da92855269488cd3a55dc9973fcc24723370b7e00e3",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "opus",
+            "sample_rate": "48000",
+            "channels": 2
+          }
+        ],
+        "format": {
+          "duration": "1.008000"
+        }
+      },
+      "independent_ffmpeg_decode_exit": 0
+    }
+  ],
+  "filter_transition_first_frame": {
+    "warm_rms": 0.1068799,
+    "cold_rms": 0.03166791,
+    "amplitude_reduction_percent": 70.37056546647219,
+    "rms_level_change_db": -10.565532735712475
+  },
+  "no_live_receiver_test_this_audit": true
+}

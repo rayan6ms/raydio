@@ -1,0 +1,11 @@
+   Compiling crust-server v0.0.0 (/home/rayan/Documents/Projects/crust/crates/crust-server)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.51s
+     Running tests/p10_voice.rs (target/debug/deps/p10_voice-720425f3089a5dfe)
+
+running 1 test
+test audit_lagged_event_monitor_stops_observing_close ... AUDIT monitor: injected_lag=false, close_observed=true, next_event_calls=1
+AUDIT monitor: injected_lag=true, close_observed=false, next_event_calls=1
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.47s
+

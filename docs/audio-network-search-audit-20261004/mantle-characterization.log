@@ -1,0 +1,25 @@
+   Compiling mantle-media v0.0.0 (/home/rayan/Documents/Projects/mantle/crates/mantle-media)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.78s
+     Running unittests src/lib.rs (target/debug/deps/mantle_media-371144c121de9b43)
+
+running 3 tests
+test youtube::audit_search_tests::audit_one_bad_search_item_discards_good_neighbors ... AUDIT search: control_tracks=2, mixed_error=Some(YoutubeError { kind: InvalidResponse, attempts: 0 })
+ok
+test youtube_playback::audit_opus_tests::audit_passthrough_to_identity_cold_decoder_transient ... AUDIT switch: frame=0, warm_rms=0.10687990, cold_rms=0.03166791, difference_rms=0.08020892
+AUDIT switch: frame=1, warm_rms=0.10699043, cold_rms=0.06242594, difference_rms=0.04711920
+AUDIT switch: frame=2, warm_rms=0.10367289, cold_rms=0.08192474, difference_rms=0.02408129
+AUDIT switch: frame=3, warm_rms=0.10472282, cold_rms=0.09526229, difference_rms=0.01062167
+AUDIT switch: frame=4, warm_rms=0.10576458, cold_rms=0.10121735, difference_rms=0.00500286
+ok
+test youtube_playback::audit_opus_tests::audit_valid_opus_variants_rejected ... AUDIT opus: channels=1, packet_ms=20, filtered=false, initialize_error=YoutubePlaybackError { kind: IncompatibleFormat }
+AUDIT opus: channels=1, packet_ms=20, filtered=true, initialize_error=YoutubePlaybackError { kind: IncompatibleFormat }
+AUDIT opus: channels=2, packet_ms=10, filtered=false, first_read=Err(YoutubePlaybackError { kind: AudioPipeline })
+AUDIT opus: channels=2, packet_ms=10, filtered=true, first_read=Err(YoutubePlaybackError { kind: IncompatibleFormat })
+AUDIT opus: channels=2, packet_ms=20, filtered=false, first_read=Ok(true)
+AUDIT opus: channels=2, packet_ms=20, filtered=true, first_read=Ok(true)
+AUDIT opus: channels=2, packet_ms=40, filtered=false, first_read=Err(YoutubePlaybackError { kind: AudioPipeline })
+AUDIT opus: channels=2, packet_ms=40, filtered=true, first_read=Err(YoutubePlaybackError { kind: AudioPipeline })
+ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 47 filtered out; finished in 0.03s
+

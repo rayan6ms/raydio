@@ -1,0 +1,76 @@
+--- a/crates/mantle-media/src/youtube_playback.rs
++++ b/crates/mantle-media/src/youtube_playback.rs
+@@ -1786,3 +1786,73 @@
+         assert!(output.data().is_empty());
+     }
+ }
++
++
++#[cfg(test)]
++mod audit_opus_tests {
++    use super::*;
++    use mantle_audio::FilterChainBuilder;
++    struct Identity;
++    impl mantle_audio::PcmFilter for Identity {
++        fn process(&mut self, _: &mut PcmFrame) -> Result<(), AudioFrameError> { Ok(()) }
++        fn reset(&mut self) {}
++    }
++    impl PcmFilterFactory for Identity {
++        fn build(&self, _: PcmFormat, builder: &mut FilterChainBuilder) -> Result<(), AudioFrameError> { builder.push(Identity) }
++    }
++    fn open(channels: u16, duration: u16) -> MediaSession {
++        MediaSession::open_file(format!("/home/rayan/Documents/Projects/raydio-rust/docs/audio-network-search-audit-20261004/fixtures/tone-opus-{channels}ch-{duration}ms.webm"), MediaLimits::default()).unwrap()
++    }
++    #[test]
++    fn audit_valid_opus_variants_rejected() {
++        for (channels,duration) in [(1,20),(2,10),(2,20),(2,40)] {
++            for filtered in [false,true] {
++                let session = open(channels,duration);
++                assert_eq!(session.info().channels, channels);
++                let mut playback = match YoutubePlaybackSession::from_probed_media_session(session) {
++                    Ok(value) => value,
++                    Err(error) => { eprintln!("AUDIT opus: channels={channels}, packet_ms={duration}, filtered={filtered}, initialize_error={error:?}"); assert_eq!(channels,1); continue; }
++                };
++                if filtered { playback.set_filter_factory(Some(&Identity)).unwrap(); }
++                let mut slot = EncodedFrameSlot::new();
++                let first = playback.read_frame(&mut slot);
++                eprintln!("AUDIT opus: channels={channels}, packet_ms={duration}, filtered={filtered}, first_read={first:?}");
++                if duration == 20 {
++                    assert!(first.unwrap());
++                    let mut frames = 1;
++                    while playback.read_frame(&mut slot).unwrap() { frames += 1; }
++                    assert!(frames >= 50);
++                } else { assert!(first.is_err()); }
++            }
++        }
++    }
++    #[test]
++    fn audit_passthrough_to_identity_cold_decoder_transient() {
++        let session = MediaSession::open_file(concat!(env!("CARGO_MANIFEST_DIR"),"/../../tests/media/fixtures/tone-opus.webm"), MediaLimits::default()).unwrap();
++        let mut reference = MediaSession::open_file(concat!(env!("CARGO_MANIFEST_DIR"),"/../../tests/media/fixtures/tone-opus.webm"), MediaLimits::default()).unwrap();
++        let mut packet = EncodedPacket::with_capacity(reference.limits().max_packet_bytes);
++        let format = PcmFormat::new(48000,2).unwrap();
++        let mut decoder = PcmOpusDecoder::new(format,960).unwrap();
++        let mut decoded = PcmFrame::with_capacity(1920);
++        let mut playback = YoutubePlaybackSession::from_probed_media_session(session).unwrap();
++        let mut slot = EncodedFrameSlot::new();
++        for _ in 0..50 {
++            assert!(reference.read_encoded(&mut packet).unwrap());
++            decoder.decode(packet.data(),packet.timestamp(),&mut decoded).unwrap();
++            assert!(playback.read_frame(&mut slot).unwrap());
++        }
++        playback.set_filter_factory(Some(&Identity)).unwrap();
++        for index in 0..5 {
++            assert!(reference.read_encoded(&mut packet).unwrap());
++            decoder.decode(packet.data(),packet.timestamp(),&mut decoded).unwrap();
++            assert!(playback.read_frame(&mut slot).unwrap());
++            let YoutubePlaybackInner::Opus(inner) = &playback.inner else { panic!() };
++            let expected = decoded.samples();
++            let actual = inner.decoded.samples();
++            let rms = |samples: &[f32]| (samples.iter().map(|x| f64::from(*x).powi(2)).sum::<f64>() / samples.len() as f64).sqrt();
++            let error = (expected.iter().zip(actual).map(|(a,b)| f64::from(a-b).powi(2)).sum::<f64>() / expected.len() as f64).sqrt();
++            eprintln!("AUDIT switch: frame={index}, warm_rms={:.8}, cold_rms={:.8}, difference_rms={error:.8}",rms(expected),rms(actual));
++            if index == 0 { assert!(error > 0.001); }
++        }
++    }
++}

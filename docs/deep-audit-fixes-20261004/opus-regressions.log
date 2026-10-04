@@ -1,0 +1,23 @@
+   Compiling mantle-media v0.0.0 (/home/rayan/Documents/Projects/mantle/crates/mantle-media)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.28s
+     Running unittests src/lib.rs (target/debug/deps/mantle_media-371144c121de9b43)
+
+running 2 tests
+test youtube_playback::opus_continuity_regressions::passthrough_to_identity_preserves_continuous_decoder_samples ... AUDIT switch: frame=0, warm_rms=0.10687990, cold_rms=0.10687990, difference_rms=0.00000000
+AUDIT switch: frame=1, warm_rms=0.10699043, cold_rms=0.10699043, difference_rms=0.00000000
+AUDIT switch: frame=2, warm_rms=0.10367289, cold_rms=0.10367289, difference_rms=0.00000000
+AUDIT switch: frame=3, warm_rms=0.10472282, cold_rms=0.10472282, difference_rms=0.00000000
+AUDIT switch: frame=4, warm_rms=0.10576458, cold_rms=0.10576458, difference_rms=0.00000000
+ok
+test youtube_playback::opus_continuity_regressions::valid_opus_variants_are_normalized_without_dropped_samples ... AUDIT opus: channels=1, packet_ms=20, filtered=false, first_read=Ok(true)
+AUDIT opus: channels=1, packet_ms=20, filtered=true, first_read=Ok(true)
+AUDIT opus: channels=2, packet_ms=10, filtered=false, first_read=Ok(true)
+AUDIT opus: channels=2, packet_ms=10, filtered=true, first_read=Ok(true)
+AUDIT opus: channels=2, packet_ms=20, filtered=false, first_read=Ok(true)
+AUDIT opus: channels=2, packet_ms=20, filtered=true, first_read=Ok(true)
+AUDIT opus: channels=2, packet_ms=40, filtered=false, first_read=Ok(true)
+AUDIT opus: channels=2, packet_ms=40, filtered=true, first_read=Ok(true)
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 48 filtered out; finished in 0.21s
+

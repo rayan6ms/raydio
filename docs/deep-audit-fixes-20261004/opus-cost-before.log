@@ -1,0 +1,19 @@
+   Compiling mantle-media v0.0.0 (/home/rayan/Documents/Projects/mantle/crates/mantle-media)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.85s
+     Running unittests src/lib.rs (target/debug/deps/mantle_media-371144c121de9b43)
+
+running 1 test
+test youtube_playback::tests::opus_path_cost_probe ... opus_cost filtered=false trial=0 frames=2408 us_per_frame=6.093
+opus_cost filtered=false trial=1 frames=2408 us_per_frame=5.409
+opus_cost filtered=false trial=2 frames=2408 us_per_frame=5.051
+opus_cost filtered=false trial=3 frames=2408 us_per_frame=5.054
+opus_cost filtered=false trial=4 frames=2408 us_per_frame=5.075
+opus_cost filtered=true trial=0 frames=2408 us_per_frame=352.181
+opus_cost filtered=true trial=1 frames=2408 us_per_frame=360.630
+opus_cost filtered=true trial=2 frames=2408 us_per_frame=351.553
+opus_cost filtered=true trial=3 frames=2408 us_per_frame=366.316
+opus_cost filtered=true trial=4 frames=2408 us_per_frame=351.822
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 47 filtered out; finished in 4.36s
+

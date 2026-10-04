@@ -1,0 +1,10 @@
+   Compiling crust-oto-adapter v0.0.0 (/home/rayan/Documents/Projects/crust/crates/crust-oto-adapter)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.28s
+     Running unittests src/lib.rs (target/debug/deps/crust_oto_adapter-9916a6a4993059ae)
+
+running 1 test
+test audit_notify_interleaving::audit_deferred_source_wait_misses_failure_between_check_and_poll ... AUDIT notify: deferred_notification_missed=true, failure_retained=true, eager_wait_ready=true
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 17 filtered out; finished in 0.00s
+

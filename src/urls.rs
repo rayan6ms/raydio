@@ -43,12 +43,34 @@ pub fn classify(input: &str) -> Input {
             .find(|(k, _)| k == key)
             .map(|(_, v)| v.into_owned())
     };
+    let segments: Vec<_> = url.path_segments().into_iter().flatten().collect();
     if let Some(list) = parameter("list").filter(|v| valid_identifier(v)) {
+        // Personalized mixes cannot infer their seed from the list ID. Keep
+        // the explicit video while still requesting the complete mix.
+        let seed = if url.host_str() == Some("youtu.be") {
+            segments.first().map(|id| (*id).to_owned())
+        } else if url.path() == "/watch" {
+            parameter("v")
+        } else if matches!(segments.first(), Some(&"shorts" | &"live" | &"embed")) {
+            segments.get(1).map(|id| (*id).to_owned())
+        } else {
+            None
+        }
+        .filter(|id| id.len() == 11 && valid_identifier(id));
+        if list.starts_with("RD")
+            && let Some(seed) = seed
+        {
+            let mut canonical = Url::parse("https://www.youtube.com/watch").expect("constant URL");
+            canonical
+                .query_pairs_mut()
+                .append_pair("v", &seed)
+                .append_pair("list", &list);
+            return Input::Playlist(canonical.into());
+        }
         let mut canonical = Url::parse("https://www.youtube.com/playlist").expect("constant URL");
         canonical.query_pairs_mut().append_pair("list", &list);
         return Input::Playlist(canonical.into());
     }
-    let segments: Vec<_> = url.path_segments().into_iter().flatten().collect();
     let video = if url.host_str() == Some("youtu.be") {
         segments.first().is_some_and(|id| valid_identifier(id))
     } else if url.path() == "/watch" {
@@ -67,6 +89,34 @@ pub fn classify(input: &str) -> Input {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn seeded_mixes_reach_mantle_with_their_original_seed() {
+        use mantle_media::{YoutubeRoute, YoutubeSourceOptions, route_youtube_identifier};
+        for list in ["RDdQw4w9WgXcQ", "RDMMdQw4w9WgXcQ", "RDEMfixtureMix"] {
+            for origin in [
+                "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                "https://music.youtube.com/watch?v=dQw4w9WgXcQ",
+                "https://youtu.be/dQw4w9WgXcQ?ignored=1",
+                "https://youtube.com/shorts/dQw4w9WgXcQ?ignored=1",
+            ] {
+                let Input::Playlist(identifier) = classify(&format!("{origin}&list={list}")) else {
+                    panic!("mix classification")
+                };
+                assert_eq!(
+                    route_youtube_identifier(&identifier, &YoutubeSourceOptions::default()),
+                    Some(YoutubeRoute::Mix {
+                        playlist_id: list.into(),
+                        selected_video_id: "dQw4w9WgXcQ".into(),
+                    })
+                );
+                assert!(!identifier.contains("ignored"));
+            }
+        }
+        assert_eq!(
+            classify("https://youtube.com/watch?v=bad%2Fseed&list=RDMMexample"),
+            Input::Playlist("https://www.youtube.com/playlist?list=RDMMexample".into())
+        );
+    }
     #[test]
     fn mixed_links_keep_the_full_playlist() {
         for url in [

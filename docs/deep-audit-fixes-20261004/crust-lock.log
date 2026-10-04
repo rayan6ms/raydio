@@ -1,0 +1,15 @@
+    Updating git repository `https://github.com/rayan6ms/mantle`
+     Locking 6 packages to latest Rust 1.97.1 compatible versions
+      Adding mantle-audio v0.0.0 (https://github.com/rayan6ms/mantle?rev=87c2eaf08bace355f7696cec4676eea8885fab9a#87c2eaf0)
+    Removing mantle-audio v0.0.0 (https://github.com/rayan6ms/mantle?rev=c241f9104810cca1a868fc7238ba94cd8567a92e#c241f910)
+      Adding mantle-core v0.0.0 (https://github.com/rayan6ms/mantle?rev=87c2eaf08bace355f7696cec4676eea8885fab9a#87c2eaf0)
+    Removing mantle-core v0.0.0 (https://github.com/rayan6ms/mantle?rev=c241f9104810cca1a868fc7238ba94cd8567a92e#c241f910)
+      Adding mantle-media v0.0.0 (https://github.com/rayan6ms/mantle?rev=87c2eaf08bace355f7696cec4676eea8885fab9a#87c2eaf0)
+    Removing mantle-media v0.0.0 (https://github.com/rayan6ms/mantle?rev=c241f9104810cca1a868fc7238ba94cd8567a92e#c241f910)
+      Adding mantle-opus v0.0.0 (https://github.com/rayan6ms/mantle?rev=87c2eaf08bace355f7696cec4676eea8885fab9a#87c2eaf0)
+    Removing mantle-opus v0.0.0 (https://github.com/rayan6ms/mantle?rev=c241f9104810cca1a868fc7238ba94cd8567a92e#c241f910)
+      Adding mantle-symphonia-isomp4 v0.6.1 (https://github.com/rayan6ms/mantle?rev=87c2eaf08bace355f7696cec4676eea8885fab9a#87c2eaf0)
+    Removing mantle-symphonia-isomp4 v0.6.1 (https://github.com/rayan6ms/mantle?rev=c241f9104810cca1a868fc7238ba94cd8567a92e#c241f910)
+      Adding mantle-xaac v0.0.0 (https://github.com/rayan6ms/mantle?rev=87c2eaf08bace355f7696cec4676eea8885fab9a#87c2eaf0)
+    Removing mantle-xaac v0.0.0 (https://github.com/rayan6ms/mantle?rev=c241f9104810cca1a868fc7238ba94cd8567a92e#c241f910)
+note: pass `--verbose` to see 18 unchanged dependencies behind latest
