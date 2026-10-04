@@ -1,0 +1,116 @@
+{
+  "basis": "1 Hz host samples and retained last-gap timestamps; correlations do not prove causation",
+  "largestOracleStealIntervals": [
+    {
+      "from": "2026-10-04T13:45:04.692251+00:00",
+      "to": "2026-10-04T13:45:05.694531+00:00",
+      "seconds": 1.0022799968719482,
+      "stealTicks": 67,
+      "stealPercent": 32.21153846153847,
+      "botCpuPercent": 12.97042746594988
+    },
+    {
+      "from": "2026-10-04T13:43:57.854353+00:00",
+      "to": "2026-10-04T13:43:59.511171+00:00",
+      "seconds": 1.656818151473999,
+      "stealTicks": 54,
+      "stealPercent": 15.976331360946746,
+      "botCpuPercent": 4.828532324372929
+    },
+    {
+      "from": "2026-10-04T13:45:03.648818+00:00",
+      "to": "2026-10-04T13:45:04.692251+00:00",
+      "seconds": 1.0434329509735107,
+      "stealTicks": 26,
+      "stealPercent": 12.380952380952381,
+      "botCpuPercent": 10.542124426621827
+    },
+    {
+      "from": "2026-10-04T13:45:05.694531+00:00",
+      "to": "2026-10-04T13:45:06.696748+00:00",
+      "seconds": 1.0022170543670654,
+      "stealTicks": 9,
+      "stealPercent": 4.433497536945813,
+      "botCpuPercent": 3.991151400358131
+    },
+    {
+      "from": "2026-10-04T13:43:56.852217+00:00",
+      "to": "2026-10-04T13:43:57.854353+00:00",
+      "seconds": 1.002135992050171,
+      "stealTicks": 6,
+      "stealPercent": 3.015075376884422,
+      "botCpuPercent": 3.9914742427490295
+    }
+  ],
+  "retainedSenderGapTimes": [
+    {
+      "utc": "2026-10-04T13:43:58.491000+00:00",
+      "lastGap": "58.85657ms",
+      "windowOverlapsHighHostSteal": true,
+      "allGapTimestampsRetained": false
+    },
+    {
+      "utc": "2026-10-04T13:45:05.391000+00:00",
+      "lastGap": "58.836632ms",
+      "windowOverlapsHighHostSteal": true,
+      "allGapTimestampsRetained": false
+    }
+  ],
+  "largeConcealmentPolls": [
+    {
+      "utc": "2026-10-04T13:43:31.394379+00:00",
+      "pollMs": 1002.323974609375,
+      "receivedPackets": 50,
+      "lostNet": 0,
+      "discarded": 0,
+      "concealedMs": 219.41666666666666,
+      "silentConcealedMs": 28.708333333333332
+    },
+    {
+      "utc": "2026-10-04T13:43:58.565392+00:00",
+      "pollMs": 1002.56787109375,
+      "receivedPackets": 42,
+      "lostNet": 0,
+      "discarded": 0,
+      "concealedMs": 131.97916666666666,
+      "silentConcealedMs": 0
+    },
+    {
+      "utc": "2026-10-04T13:45:05.723795+00:00",
+      "pollMs": 1001.482177734375,
+      "receivedPackets": 40,
+      "lostNet": 0,
+      "discarded": 0,
+      "concealedMs": 208.04166666666666,
+      "silentConcealedMs": 0
+    },
+    {
+      "utc": "2026-10-04T13:45:33.796699+00:00",
+      "pollMs": 1002.6982421875,
+      "receivedPackets": 55,
+      "lostNet": 0,
+      "discarded": 0,
+      "concealedMs": 317.8125,
+      "silentConcealedMs": 86.04166666666667
+    },
+    {
+      "utc": "2026-10-04T13:47:10.971702+00:00",
+      "pollMs": 1001.9931640625,
+      "receivedPackets": 51,
+      "lostNet": 0,
+      "discarded": 0,
+      "concealedMs": 279.9791666666667,
+      "silentConcealedMs": 0
+    }
+  ],
+  "maxLocalHostSamplerLateMs": 652.2598289993766,
+  "warnings": [
+    "Only two last-gap timestamps are retained; do not claim the cause of every sender gap.",
+    "Receiver concealment also occurs before any sender gaps and after gaps stop.",
+    "Zero net RTP loss does not imply zero source-time omissions or zero playout concealment.",
+    "No builds, source probes, packet captures or player controls occurred during the candidate recording.",
+    "The short baseline has different host contention and incomplete local host coverage; no causal release regression or improvement is established."
+  ],
+  "browserLongTasks": 0,
+  "localSamplerInterpretation": "Sampler timing alone does not prove an audio callback or whole-host stall; delayed samples remain below the declared 3 s coverage slack."
+}

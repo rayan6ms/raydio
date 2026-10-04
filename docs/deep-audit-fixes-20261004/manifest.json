@@ -1,0 +1,39 @@
+{
+  "revision": "d2d3fad01346c526546c7e54ed122a58f944ad70",
+  "binarySha256": "58c5a023653eb6dfe926846edd5d92b1102f7f6173a3bde0aeb85550759f64cc",
+  "packageBytes": 7587914,
+  "binaryBytes": 18661496,
+  "mantle": "87c2eaf08bace355f7696cec4676eea8885fab9a",
+  "crust": "e460724bdf72256e3be4f19f80a67832a4cfa85b",
+  "oto": "62d2fc87e5dc239695a8b86a7372a4edc1caa933",
+  "receiverBufferOverride": null,
+  "track": "4moWSMi1L_4",
+  "volume": 70,
+  "baselineLimitations": [
+    "Local compilation overlaps receiver baseline",
+    "Local host sampler misses first ~70 seconds",
+    "Reused October 2 source quiet reference; no fresh media digest comparison"
+  ],
+  "liveCheck": {
+    "baselineRevision": "c4654c5",
+    "runtimeRevision": "d2d3fad01346c526546c7e54ed122a58f944ad70",
+    "durationSeconds": 300.0246372070313,
+    "startedAt": "2026-10-04T13:42:19.213Z",
+    "finishedAt": "2026-10-04T13:47:19.290Z",
+    "fixedSummary": "fixed-receiver/summary.json",
+    "baselineSummary": "baseline-receiver/summary.json",
+    "receiverCoverageComplete": true,
+    "senderHostCoverageComplete": true,
+    "receiverHostCoverageComplete": true,
+    "persistenceErrors": 0,
+    "networkQualityImprovementEstablished": false,
+    "acceptance": "Seven reproduced fault conditions corrected; functional live playback successful; concealment and sender timing improvement unproven.",
+    "cleanup": "Test playback ended, browser receiver disconnected, named collectors stopped, Raydio active and Testbot inactive."
+  },
+  "diagnostics": {
+    "pythonTestsPassed": 58,
+    "bunProgramsPassed": 8,
+    "composerPreparationLiveVerified": true,
+    "sourceReferenceProvenance": "October 2 independent decode reused; no fresh October 4 media digest"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "search": {
+    "fresh": [
+      {
+        "id": "chat-messages___chat-messages-1545073304765731047-1555995903029153916",
+        "text": "migole\n — \nYesterday at 02:32 pm\nSaturday, 3 October 2026 at 02:32 pm\n/seek 8:55"
+      },
+      {
+        "id": "chat-messages___chat-messages-1545073304765731047-1556131900639285319",
+        "text": "migole\n — \nYesterday at 11:32 pm\nSaturday, 3 October 2026 at 11:32 pm\n/play akcent stay with me"
+      },
+      {
+        "id": "chat-messages___chat-messages-1545073304765731047-1556299771323359294",
+        "text": "migole\n — \n10:39 am\nSunday, 4 October 2026 at 10:39 am\n/play chop suey"
+      },
+      {
+        "id": "chat-messages___chat-messages-1545073304765731047-1556300038630674553",
+        "text": "migole\n used \nplay\nRaydio\nAPP\n — \n10:40 am\nSunday, 4 October 2026 at 10:40 am\nRaydio • Now Playing\nChop Suey!\n━●━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n0:08 / 3:31\nChannel\nSystem Of A Down\nRequested by\nmigole\nUp next\nNothing queued\nVolume\n70%\nPlaying • Loop: OFF • refreshes every second\nPrevious\n,\nPause\n,\nNext\n,\nStop\n,\n,\nQueue\n,\nLoop: OFF\n,\nLeave\n,\n,\n(edited)\nSunday, 4 October 2026 at 10:40 am"
+      }
+    ],
+    "peers": [
+      "connected"
+    ],
+    "time": "2026-10-04T13:40:58.768Z"
+  },
+  "leave": {
+    "verified": true,
+    "panelId": "1556300038630674553",
+    "absentAfterLeave": true
+  },
+  "persistence": {
+    "elapsedSeconds": 32.086610107421876,
+    "hostSamples": 605,
+    "remainingSeconds": 1191.781723125001,
+    "requestedAt": "2026-10-04T13:42:16.986Z",
+    "verified": true
+  }
+}

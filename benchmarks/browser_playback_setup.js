@@ -25,25 +25,59 @@
         return matches[0];
     };
     const api = window.raydioPlaybackSetup = {};
-    api.prepare = ({request='https://youtu.be/dQw4w9WgXcQ', botName='bot1544468432907669644'}={}) => {
+    api.prepare = async ({request='https://youtu.be/dQw4w9WgXcQ', botName='bot1544468432907669644'}={}) => {
         idle();
-        if (state?.submitted) throw Error('Existing submitted trial; reinstall setup for a new trial');
+        if (state?.submitted || state?.preparing) throw Error('Existing trial; await preparation or reinstall setup');
         if (typeof request !== 'string' || !request.trim() || request.length > 1000 || /[\r\n]/.test(request))
             throw Error('Use one nonempty request');
         const ids = articles().map(snowflake).filter(Boolean).map(BigInt);
         if (!ids.length) throw Error('Message identities unavailable; cannot check response freshness');
-        state = {request:request.trim(), botName, lastMessage:ids.reduce((a,b)=>a>b?a:b), submitted:false};
+        state = {request:request.trim(), botName, lastMessage:ids.reduce((a,b)=>a>b?a:b), preparing:true, prepared:false, submitted:false};
+        const render = () => new Promise(resolve=>setTimeout(resolve,100));
+        const until = async (check, message) => {
+            for (let attempt=0; attempt<40; attempt++) {
+                const value=check(); if (value) return value;
+                await render();
+            }
+            throw Error(message);
+        };
+        const paste = text => {
+            const data=new DataTransfer(); data.setData('text/plain',text);
+            box().dispatchEvent(new ClipboardEvent('paste', {clipboardData:data,bubbles:true,cancelable:true}));
+        };
         const e = box(); e.focus();
         const range = document.createRange(), selection = window.getSelection();
         range.selectNodeContents(e); selection.removeAllRanges(); selection.addRange(range);
-        document.execCommand('delete');
-        const data = new DataTransfer(); data.setData('text/plain', '/play ' + state.request);
-        e.dispatchEvent(new ClipboardEvent('paste', {clipboardData:data, bubbles:true, cancelable:true}));
+        // Let Slate accept the selection, then use its public cut handler.
+        // execCommand('delete') can mutate the DOM without clearing its draft,
+        // leaving later pastes invisible or appended to the stale command.
+        await new Promise(resolve=>setTimeout(resolve,200));
+        e.dispatchEvent(new ClipboardEvent('cut', {clipboardData:new DataTransfer(), bubbles:true, cancelable:true}));
+        await new Promise(resolve=>setTimeout(resolve,200));
+        // A full pasted command can remain plain text. Select the bot's public
+        // slash-command option first, then fill its parsed request field.
+        try {
+            paste('/');
+            const option=await until(() => {
+                const matches=[...document.querySelectorAll('[role="option"]')].filter(o=>
+                    clean(o.innerText).startsWith('/play\n') && clean(o.innerText.split('\n').at(-1))===state.botName);
+                if (matches.length>1) throw Error('Ambiguous bot play options; do not submit');
+                return matches[0];
+            },'Selected bot play option unavailable; do not submit');
+            option.click();
+            await until(()=>clean(box().querySelector('[class*="commandName"]')?.textContent)==='/play'
+                && clean(box().querySelector('[class*="optionPillKey"]')?.textContent)==='request',
+                'Discord has not selected the play request field');
+            paste(state.request);
+            await until(()=>clean(box().querySelector('[class*="optionPillValue"]')?.textContent)===state.request,
+                'Discord has not parsed the request; do not submit');
+            state.prepared = true;
+        } finally { state.preparing = false; }
         return {prepared:true};
     };
     api.submit = () => {
         idle();
-        if (!state || state.submitted) throw Error('Prepare once before submitting');
+        if (!state?.prepared || state.submitted) throw Error('Prepare once and await completion before submitting');
         const e = box();
         if (clean(e.querySelector('[class*="commandName"]')?.textContent) !== '/play'
             || clean(e.querySelector('[class*="optionPillKey"]')?.textContent) !== 'request'

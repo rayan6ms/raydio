@@ -1,0 +1,8 @@
+MainPID=40011
+Result=success
+NRestarts=0
+ActiveState=active
+inactive
+/opt/raydio/releases/d2d3fad01346c526546c7e54ed122a58f944ad70
+58c5a023653eb6dfe926846edd5d92b1102f7f6173a3bde0aeb85550759f64cc  /opt/raydio/current/bin/raydio
+40011

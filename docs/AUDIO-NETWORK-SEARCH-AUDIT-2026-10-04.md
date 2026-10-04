@@ -2,6 +2,10 @@
 
 Status: **audit completed; findings are not fixed or deployed by this audit.**
 
+Follow-up: all seven findings now have implementation fixes and regression
+evidence in [the repair report](AUDIO-NETWORK-SEARCH-FIXES-2026-10-04.md).
+The audit below preserves the original observations and their limits.
+
 Six new faults were reproduced, plus a notification race whose full playback
 impact still needs an integration reproduction. None is established as the cause
 of a historical receiver loss/concealment incident. The useful next work is to

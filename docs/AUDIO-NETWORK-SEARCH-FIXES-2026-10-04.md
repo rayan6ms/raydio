@@ -104,4 +104,82 @@ agreement and no overlapping anomaly; extended or anomalous quiet remains
 flagged for review. Neither a successful UDP send nor one short receiver
 observation guarantees future delivery or proves a downstream loss fix.
 
-Deployment and final receiver results will be appended after verification.
+## Release and final live check
+
+The release is deployed on the existing Oracle instance at revision
+`d2d3fad01346c526546c7e54ed122a58f944ad70`. The verified binary SHA-256 is
+`58c5a023653eb6dfe926846edd5d92b1102f7f6173a3bde0aeb85550759f64cc`.
+The binary is 18,661,496 bytes and the deployment archive 7,587,914 bytes.
+The package/backend checks and update command passed. Raydio is the sole bot
+process, PID 40011, with zero service restarts; Testbot is inactive. Subsequent
+documentation and browser-helper changes do not change this runtime binary.
+
+Controlled Discord UI checks submitted `/play chop suey` to Raydio and observed
+ten autocomplete suggestions, including System Of A Down. The plain-term
+request produced a fresh **Chop Suey!** panel and advancing playback. Leaving
+removed that panel. A new request for the exact comparison URL produced a
+fresh **Stay With Me** panel at volume 70; Loop was explicitly enabled. These
+checks used test only. THE CLUB received no test commands.
+
+The candidate recorded **300.025 seconds**, from 13:42:19.213 through
+13:47:19.290 UTC. Receiver, PCM, speaking, track-phase and event coverage are
+complete. Both 1 Hz host samplers cover the complete interval under the declared
+3 s slack. Seven checkpoint saves succeeded, with no persistence errors or
+dropped incident windows. Browser buffering stayed unchanged. No builds,
+source probes, packet captures or player controls occurred during this interval.
+
+| Five-minute measurement | Baseline | Fixed release |
+| --- | ---: | ---: |
+| Received packets | 15,000 | 14,982 |
+| Net RTP loss | 0 | 0 |
+| Positive / negative loss-counter deltas | +14 / −14 | 0 / 0 |
+| Discarded packets | 4 | 5 |
+| Concealed audio | 509.875 ms | 1,343.313 ms |
+| Silent concealed audio | 53.458 ms | 114.750 ms |
+| Sender gaps >40 ms, interior checkpoint interval | 1 | 8 |
+| Sender gaps >100 ms / >1 s, same interval | 0 / 0 | 0 / 0 |
+| Skipped sender deadlines, same interval | 2 | 16 |
+| Source unavailable / overrun / send failures | 0 / 0 / 0 | 0 / 0 / 0 |
+| Median bot PSS | 19.516 MiB | 20.374 MiB |
+| Average bot CPU, one core | 3.751% | 3.708% |
+| Oracle host CPU steal | 0.224% | 0.415% |
+
+There were no voice disconnects or terminal sender errors. PCM contained no
+clipping, non-finite samples or empty frames. The longest off-boundary quiet
+interval was **83.021 ms**, compared with 31.417 ms in the baseline. No
+off-boundary quiet reached 100 ms. Both runs contained a 2,258.063 ms quiet
+interval at a natural loop boundary, compatible with the retained source
+head/tail reference. It remains a source-tail candidate, not a proven fresh
+waveform match. The candidate's logged finish-to-start handoff was 1.448 ms.
+
+**This live check is not a measured improvement in overall concealment or
+sender timing.** Concealment increased by 833.438 ms and median PSS by about
+0.858 MiB. The small CPU difference is not a demonstrated optimization. The
+fixes remove their reproduced fault conditions, but the short observations have
+different host contention and the baseline has incomplete local host coverage.
+They do not isolate a release regression or establish its absence.
+
+[The retained timing analysis](deep-audit-fixes-20261004/live-timing-analysis.json)
+correlates two observable last-gap timestamps, 13:43:58.491 and 13:45:05.391 UTC,
+with Oracle steal intervals of 15.976% and 32.212%. The largest logged sender
+gap was 59.932 ms. This supports host scheduling pressure as a contributor;
+only the last gap in each checkpoint is retained, so it does not identify the
+cause of every gap. Receiver concealment also occurred before any sender gaps
+and after their counts stopped increasing. No browser main-thread long task
+was observed. Zero net RTP loss does not mean zero source-time omissions or
+perfect receiver playout.
+
+The seven repairs are accepted on their targeted regression evidence and the
+successful functional live check. Overall audio-quality improvement remains
+unproven; a matched repeated baseline/candidate comparison is required before
+making that claim. No further transport or worker adjustment is justified by
+this single window. The measured recording and test playback have ended; its
+named collectors are stopped and production Raydio remains active.
+
+The browser setup helper now clears Slate's actual draft through a paced public
+cut event, selects the chosen bot's `/play` option, and fills the parsed request
+field. It never submits an unparsed full-command paste. Missing or ambiguous
+options fail within a bounded wait, and concurrent preparation or premature
+submission is rejected. The amended regression and all eight Bun programs
+pass. A final controlled UI preparation also succeeded without submitting an
+extra playback command.

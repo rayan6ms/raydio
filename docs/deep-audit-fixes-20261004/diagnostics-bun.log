@@ -4,5 +4,5 @@ PASS: failed preflight -> new run -> progress/retry -> final save; deduplication
 PASS: endpoint-only observer, signed corrections, identity/counter/stale validation and cleanup
 PASS: six-hour simulation, UI replacement/absence preserves receiver counters, true disconnect/identity/reset failures, bounded diagnostics and cleanup
 PASS: balanced order, per-window persistence, failed windows retained, concurrency and lifetime guards
+PASS: stale draft clearing, explicit bot selection, parsed request, bounded failures, single submission and recorder identity
 PASS: existing/future/cached peers, reconnects, unsupported settings, native semantics, exact restoration, cleanup and extension scope
-PASS: fresh player, single submission and selected bot identity reach the receiver recorder
