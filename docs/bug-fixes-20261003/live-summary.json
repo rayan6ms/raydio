@@ -1,0 +1,189 @@
+{
+  "codeRevision": "c4654c51ed67a77aa8145abad52c396f28b7c2a4",
+  "artifact": {
+    "packageBytes": 7566282,
+    "binaryBytes": 18585752,
+    "sha256": "346233cf1e1f1f546d5a35c886f51ab98f3f82b1b2d11320c47fea68225e2f0f",
+    "maxGlibc": "2.34",
+    "isolatedAudioWorker": false
+  },
+  "receiver": {
+    "startedAt": "2026-10-04T02:35:02.548Z",
+    "finishedAt": "2026-10-04T02:40:02.599Z",
+    "status": "completed",
+    "coverage": {
+      "completeEventHistory": true,
+      "completePcmCoverage": true,
+      "completePollCoverage": true,
+      "completeSpeakingObservation": true,
+      "completeTrackPhaseObservation": true,
+      "droppedDiagnosticWindows": 0,
+      "pcmSeconds": 300.0106666666667,
+      "receiverSeconds": 299.99963012695315,
+      "retainedDiagnosticWindows": 2,
+      "stableReceiverBuffer": true,
+      "uninterruptedConnection": true
+    },
+    "delta": {
+      "bytesReceived": 3901279,
+      "concealedSamples": 0,
+      "concealmentEvents": 0,
+      "fecPacketsDiscarded": 0,
+      "fecPacketsReceived": 0,
+      "insertedSamplesForDeceleration": 221,
+      "jitterBufferDelay": 1819699.2,
+      "jitterBufferEmittedCount": 14399040,
+      "jitterBufferMinimumDelay": 757324.7999999998,
+      "jitterBufferTargetDelay": 1727884.7999999998,
+      "nackCount": 12,
+      "packetsDiscarded": 0,
+      "packetsLost": 0,
+      "packetsReceived": 14999,
+      "removedSamplesForAcceleration": 963,
+      "silentConcealedSamples": 0,
+      "timestamp": 299999.6301269531,
+      "totalSamplesReceived": 14400000
+    },
+    "bufferTargetMs": 120,
+    "quietEvents": [
+      {
+        "audioEndMs": 31697.679166662198,
+        "audioSeconds": 32.92,
+        "durationMs": 20.083333333333332,
+        "endFrame": 1522175,
+        "kind": "quiet",
+        "ms": 31825.69999999553,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "tail",
+          "loop": false,
+          "playing": true,
+          "positionSeconds": 212
+        },
+        "reportDelayMs": 128.02083333333212,
+        "sequence": 4
+      },
+      {
+        "audioEndMs": 32696.583333333332,
+        "audioSeconds": 33.922666666666665,
+        "durationMs": 976.25,
+        "endFrame": 1570140,
+        "kind": "quiet",
+        "ms": 32828,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "tail",
+          "loop": false,
+          "playing": true,
+          "positionSeconds": 212
+        },
+        "reportDelayMs": 131.41666666666788,
+        "sequence": 6
+      },
+      {
+        "audioEndMs": 244771.11666666222,
+        "audioSeconds": 245.98666666666668,
+        "durationMs": 20.083333333333332,
+        "endFrame": 11749756,
+        "kind": "quiet",
+        "ms": 244891.29999999702,
+        "phase": {
+          "durationSeconds": 213,
+          "label": "tail",
+          "loop": false,
+          "playing": true,
+          "positionSeconds": 211
+        },
+        "reportDelayMs": 120.08333333331393,
+        "sequence": 19
+      },
+      {
+        "audioEndMs": 246038.2666666607,
+        "audioSeconds": 247.24,
+        "durationMs": 1243.7291666666667,
+        "endFrame": 11810560,
+        "kind": "quiet",
+        "ms": 246139.59999999404,
+        "phase": {
+          "durationSeconds": 249,
+          "label": "head",
+          "loop": false,
+          "playing": true,
+          "positionSeconds": 0
+        },
+        "reportDelayMs": 101.33333333334303,
+        "sequence": 21
+      }
+    ]
+  },
+  "transitions": [
+    {
+      "finishedAt": "2026-10-04T02:35:35.054683Z",
+      "startedAt": "2026-10-04T02:35:35.056060Z",
+      "finishToStartLogMs": 1.377,
+      "finishedGeneration": 1,
+      "startedGeneration": 2
+    },
+    {
+      "finishedAt": "2026-10-04T02:39:08.138764Z",
+      "startedAt": "2026-10-04T02:39:08.140429Z",
+      "finishToStartLogMs": 1.665,
+      "finishedGeneration": 2,
+      "startedGeneration": 3
+    }
+  ],
+  "senderCheckpointWindow": {
+    "from": "2026-10-04T02:34:58.756303Z",
+    "to": "2026-10-04T02:39:58.756031Z",
+    "overlapQualification": "Includes 3.792 seconds before receiver measurement and ends 3.792 seconds before measurement ends. This is a checkpoint delta, not exact per-packet coverage.",
+    "initial": {
+      "frames_sent": 8838,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 60,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 24,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    "final": {
+      "frames_sent": 23836,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 61,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 25,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    "delta": {
+      "frames_sent": 14998,
+      "silence_frames_sent": 0,
+      "frames_unavailable": 0,
+      "skipped_deadlines": 1,
+      "send_failures": 0,
+      "source_overruns": 0,
+      "active_send_gaps_40ms": 1,
+      "active_send_gaps_100ms": 0,
+      "active_send_gaps_1s": 0
+    },
+    "newGapMs": 42.820372
+  },
+  "postRecordingCleanup": {
+    "leftVoice": true,
+    "playerPanelRemoved": true,
+    "raydioActive": true,
+    "testbotActive": false,
+    "mainPid": 38709,
+    "restartsSinceDeployment": 0,
+    "normalShutdownSilenceFrames": 5
+  },
+  "limitations": [
+    "Five-minute smoke test, not a six-hour endurance qualification or before/after performance benchmark.",
+    "120 ms receiver buffer helper was enabled; default Discord listener buffers were not tested.",
+    "Boundary-associated quiet retained; no independent source PCM comparison, so intentional source silence is not proven.",
+    "No recorded audio payloads."
+  ]
+}

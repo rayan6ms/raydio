@@ -1,0 +1,75 @@
+{
+  "start": "2026-10-04T02:35:02.548Z",
+  "end": "2026-10-04T02:40:02.599Z",
+  "samples": 299,
+  "allSamplerRows": 361,
+  "errors": [],
+  "rssKiB": {
+    "min": 22060,
+    "median": 22148.0,
+    "max": 22284,
+    "samples": 30
+  },
+  "pssKiB": {
+    "min": 19630,
+    "median": 19718.0,
+    "max": 19817,
+    "samples": 30
+  },
+  "cgroupBytes": {
+    "min": 12599296,
+    "median": 13099008,
+    "max": 17494016,
+    "samples": 299
+  },
+  "threads": {
+    "min": 5,
+    "median": 5,
+    "max": 6,
+    "samples": 299
+  },
+  "oneCoreCpuPercent": 3.780205651223293,
+  "cgroupThrottledUsecDelta": 0,
+  "cgroupMemoryEventsDelta": {
+    "low": 0,
+    "high": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0,
+    "oom_group_kill": 0
+  },
+  "udpDelta": {
+    "InDatagrams": 345,
+    "NoPorts": 0,
+    "InErrors": 0,
+    "OutDatagrams": 14977,
+    "RcvbufErrors": 0,
+    "SndbufErrors": 0,
+    "InCsumErrors": 0,
+    "IgnoredMulti": 0,
+    "MemErrors": 0
+  },
+  "netDevicesDelta": {
+    "lo": {
+      "rxBytes": 4408290,
+      "rxPackets": 1249,
+      "rxErrors": 0,
+      "rxDrops": 0,
+      "txBytes": 4408290,
+      "txPackets": 1249,
+      "txErrors": 0,
+      "txDrops": 0
+    },
+    "ens3": {
+      "rxBytes": 5968063,
+      "rxPackets": 4294,
+      "rxErrors": 0,
+      "rxDrops": 0,
+      "txBytes": 5970873,
+      "txPackets": 17559,
+      "txErrors": 0,
+      "txDrops": 0
+    }
+  },
+  "hostMemAvailableMinKiB": 559184
+}
