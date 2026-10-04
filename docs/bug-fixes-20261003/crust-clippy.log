@@ -1,0 +1,10 @@
+    Blocking waiting for file lock on build directory
+    Checking mantle-opus v0.0.0 (https://github.com/rayan6ms/mantle?rev=c241f9104810cca1a868fc7238ba94cd8567a92e#c241f910)
+    Checking mantle-audio v0.0.0 (https://github.com/rayan6ms/mantle?rev=c241f9104810cca1a868fc7238ba94cd8567a92e#c241f910)
+    Checking mantle-xaac v0.0.0 (https://github.com/rayan6ms/mantle?rev=c241f9104810cca1a868fc7238ba94cd8567a92e#c241f910)
+    Checking mantle-symphonia-isomp4 v0.6.1 (https://github.com/rayan6ms/mantle?rev=c241f9104810cca1a868fc7238ba94cd8567a92e#c241f910)
+    Checking mantle-core v0.0.0 (https://github.com/rayan6ms/mantle?rev=c241f9104810cca1a868fc7238ba94cd8567a92e#c241f910)
+    Checking mantle-media v0.0.0 (https://github.com/rayan6ms/mantle?rev=c241f9104810cca1a868fc7238ba94cd8567a92e#c241f910)
+    Checking crust-mantle-adapter v0.0.0 (/home/rayan/Documents/Projects/crust/crates/crust-mantle-adapter)
+    Checking crust-server v0.0.0 (/home/rayan/Documents/Projects/crust/crates/crust-server)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2m 25s

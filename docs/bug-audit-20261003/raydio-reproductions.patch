@@ -1,0 +1,91 @@
+diff --git a/src/session.rs b/src/session.rs
+index 5abd79c..dfa6f5b 100644
+--- a/src/session.rs
++++ b/src/session.rs
+@@ -2473,4 +2473,86 @@ mod tests {
+         owner.shutdown().await;
+         backend.shutdown().await.unwrap();
+     }
++
++    #[tokio::test]
++    async fn audit_unknown_duration_gets_fifteen_second_deadline() {
++        let (shared, backend, owner, _events) = Shared::fixture().await;
++        let mut session = GuildSession::new(1, shared);
++        let mut unknown = track("unknown-duration");
++        unknown.duration_ms = 0;
++        session.queue.enqueue(vec![unknown], 1000);
++        session.started = true;
++        session.schedule_end();
++        let deadline_ms = session.end_deadline.unwrap().saturating_duration_since(Instant::now()).as_millis();
++        assert!((14_900..=15_000).contains(&deadline_ms));
++        eprintln!("AUDIT: accepted finite unknown duration arms end watchdog in {deadline_ms} ms");
++        owner.shutdown().await;
++        backend.shutdown().await.unwrap();
++    }
++
++    #[tokio::test]
++    async fn audit_fresh_progress_does_not_protect_a_track_from_wall_clock_watchdog() {
++        let (shared, backend, owner, _events) = Shared::fixture().await;
++        shared.cache.write().unwrap().guilds.insert(1, guild());
++        let mut session = GuildSession::new(1, shared.clone());
++        session.channel = Some(3);
++        session.queue.enqueue(vec![track("still-playing"), track("next")], 1000);
++        session.start_current().await.unwrap();
++        session.started = true;
++        // Model the wall-clock budget expiring after accumulated pacing stalls.
++        let expired = Instant::now() - Duration::from_secs(1);
++        session.end_deadline = Some(expired);
++        session.backend(json!({"op":"playerUpdate","state":{"position":5_000,"connected":true}})).await;
++        assert_eq!(session.position_ms, 5_000);
++        assert_eq!(session.end_deadline, Some(expired));
++        session.tick().await;
++        assert_eq!(session.queue.current.as_ref().unwrap().identifier, "next");
++        assert_eq!(session.events[5], 1);
++        eprintln!("AUDIT: watchdog replaced healthy current track at reported position 5000 / 20000 ms");
++        owner.shutdown().await;
++        backend.shutdown().await.unwrap();
++    }
++
++    #[test]
++    fn audit_previous_can_overfill_an_admitted_full_queue() {
++        let mut queue = Queue::default();
++        queue.enqueue(vec![track("history"), track("current")], 2);
++        queue.finish();
++        assert_eq!(queue.enqueue(vec![track("new")], 2), 1);
++        assert_eq!(queue.len(), 2);
++        assert!(queue.previous());
++        assert_eq!(queue.len(), 3);
++        eprintln!("AUDIT: queue cap 2 -> previous -> queue length {}", queue.len());
++    }
++
++    #[tokio::test]
++    async fn audit_cleanup_keeps_a_completed_preparation_ack_in_its_joinset() {
++        let (shared, backend, owner, _events) = Shared::fixture().await;
++        shared.cache.write().unwrap().guilds.insert(1, guild());
++        let mut session = GuildSession::new(1, shared);
++        session.channel = Some(3);
++        let old_epoch = session.epoch;
++        session.preparations.spawn(async move { (old_epoch, Some("old-next-track".to_owned()), true) });
++        tokio::task::yield_now().await;
++        session.cleanup(None).await;
++        assert_ne!(session.epoch, old_epoch);
++        // abort_all does not remove a result that has already completed.
++        let (epoch, target, success) = session.preparations.join_next().await.unwrap().unwrap();
++        assert_eq!(epoch, old_epoch);
++        assert!(success);
++        assert_eq!(target.as_deref(), Some("old-next-track"));
++        // Apply the exact successful-result branch used by run(), which ignores epoch.
++        session.preparation_target = target;
++        for _ in 0..2 {
++            session.preparation_retry = Instant::now();
++            session.prepare_next();
++            let (_, attempted, ok) = session.preparations.join_next().await.unwrap().unwrap();
++            assert!(attempted.is_none());
++            assert!(!ok, "player was destroyed by cleanup, so cancellation returns 404");
++            assert_eq!(session.preparation_target.as_deref(), Some("old-next-track"));
++        }
++        eprintln!("AUDIT: completed old-epoch preparation ack survives cleanup; accepting it causes repeat failed cancellation requests after player destruction");
++        owner.shutdown().await;
++        backend.shutdown().await.unwrap();
++    }
+ }

@@ -150,6 +150,11 @@ pub fn player(queue: &Queue, session: &str, paused: bool, volume: u16, position:
     };
     let progress = if track.stream {
         "🔴 **LIVE**".to_owned()
+    } else if track.duration_ms == 0 {
+        format!(
+            "`{} elapsed • duration unknown`",
+            format_duration(position, false)
+        )
     } else {
         let marker = if track.duration_ms == 0 {
             0
@@ -274,7 +279,11 @@ fn compact(track: &Track) -> String {
         "**{}** — {} [{}] • {}",
         safe(&track.title, 60),
         safe(&track.author, 30),
-        format_duration(track.duration_ms, track.stream),
+        if !track.stream && track.duration_ms == 0 {
+            "Unknown".into()
+        } else {
+            format_duration(track.duration_ms, track.stream)
+        },
         safe(&track.requested_by, 24)
     )
 }
@@ -293,6 +302,11 @@ pub fn queue(
     let page = requested_page.min(pages - 1);
     let progress = if current.stream {
         "LIVE".into()
+    } else if current.duration_ms == 0 {
+        format!(
+            "{} elapsed • duration unknown",
+            format_duration(position, false)
+        )
     } else {
         format!(
             "{} elapsed • {} remaining",
@@ -318,16 +332,25 @@ pub fn queue(
         current.duration_ms.saturating_sub(position)
     };
     let mut streams = usize::from(current.stream);
+    let mut unknown = usize::from(!current.stream && current.duration_ms == 0);
     for track in &queue.upcoming {
         if track.stream {
             streams += 1;
+        } else if track.duration_ms == 0 {
+            unknown += 1;
         } else {
             time = time.saturating_add(track.duration_ms);
         }
     }
+    let unknown_note = if unknown == 0 {
+        String::new()
+    } else {
+        format!(" • {unknown} unknown duration not included")
+    };
     lines.push(format!(
-        "Finite queue time remaining: {}{}",
+        "Finite queue time remaining: {}{}{}",
         format_duration(time, false),
+        unknown_note,
         if streams > 0 {
             format!(" • {streams} live not included")
         } else {
@@ -355,6 +378,29 @@ pub fn queue(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn unknown_finite_duration_shows_elapsed_without_inventing_remaining_time() {
+        let track = Track {
+            encoded: "unknown".into(),
+            identifier: "unknown".into(),
+            title: "Unknown length".into(),
+            author: "Artist".into(),
+            duration_ms: 0,
+            stream: false,
+            uri: None,
+            requester_id: "1".into(),
+            requested_by: "user".into(),
+        };
+        let mut q = Queue::default();
+        q.enqueue(vec![track], 2);
+        let panel = serde_json::to_string(&player(&q, "id", false, 70, 20_000).embeds).unwrap();
+        let list = queue(&q, "id", 0, false, 70, 20_000).content.unwrap();
+        assert!(panel.contains("0:20 elapsed"));
+        assert!(panel.contains("duration unknown"));
+        assert!(list.contains("unknown duration not included"));
+        assert!(!panel.contains("LIVE"));
+    }
     #[test]
     fn utf16_limits_do_not_split_emoji() {
         assert_eq!(truncate("😀😀a", 4), "😀…");

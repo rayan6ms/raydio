@@ -1,0 +1,10 @@
+{
+  "README.md": "a93e5454421ab241fe1cf238e56f2a3f45a23faed48f4f39378f980aa45a3b25",
+  "crust-reproduction.patch": "af7f31ce1ebf9875775ff83d5b80a8666e75b01bf56c50d0565d6b7d8da44687",
+  "crust-tests.log": "994e9d6993280c35831ca64d4f4b4c6033e0ea4d885a89c42747d73d04659e3f",
+  "manifest.json": "450abdb0e460860435f5b01d2e044bc1cef21d53f59738c7fd0dbda7eea11544",
+  "mantle-reproductions.patch": "b7d7db316276c4954eed43fd491d4623a572b57bd7bacfa091c8ce5a6ae7125c",
+  "mantle-tests.log": "579954bf8a314e2bb955931a6da5be2ee28d87ac3f0e9c67a79b6bcf66764f3a",
+  "raydio-reproductions.patch": "b460510b5381ad8d769daf37bac32166fecb403305c5620b0359087c49e75eb9",
+  "raydio-tests.log": "986e4ebcd59d17c12603eb3cc532db4735b56f93343c48ae000158d24842bbd8"
+}

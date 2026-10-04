@@ -1,0 +1,13 @@
+   Compiling mantle-media v0.0.0 (/home/rayan/Documents/Projects/mantle/crates/mantle-media)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.06s
+     Running unittests src/lib.rs (target/debug/deps/mantle_media-371144c121de9b43)
+
+running 3 tests
+test youtube::audit_characterization::audit_false_playability_is_still_enqueued ... AUDIT: playlist isPlayable=false still produces 1 finite track
+ok
+test youtube::audit_characterization::audit_missing_duration_becomes_zero_length_finite_track ... AUDIT: absent playlist duration becomes finite duration=0
+ok
+test youtube::audit_characterization::audit_oauth_lock_wait_cannot_be_cancelled ... AUDIT: cancellation did not release OAuth mutex waiter during 150 ms hold; after release it returned InvalidAuthentication
+ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 44 filtered out; finished in 0.15s

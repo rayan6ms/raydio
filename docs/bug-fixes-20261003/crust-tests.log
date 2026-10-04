@@ -1,0 +1,232 @@
+   Compiling mantle-xaac v0.0.0 (https://github.com/rayan6ms/mantle?rev=c241f9104810cca1a868fc7238ba94cd8567a92e#c241f910)
+   Compiling mantle-opus v0.0.0 (https://github.com/rayan6ms/mantle?rev=c241f9104810cca1a868fc7238ba94cd8567a92e#c241f910)
+   Compiling mantle-audio v0.0.0 (https://github.com/rayan6ms/mantle?rev=c241f9104810cca1a868fc7238ba94cd8567a92e#c241f910)
+   Compiling mantle-symphonia-isomp4 v0.6.1 (https://github.com/rayan6ms/mantle?rev=c241f9104810cca1a868fc7238ba94cd8567a92e#c241f910)
+   Compiling mantle-core v0.0.0 (https://github.com/rayan6ms/mantle?rev=c241f9104810cca1a868fc7238ba94cd8567a92e#c241f910)
+   Compiling mantle-media v0.0.0 (https://github.com/rayan6ms/mantle?rev=c241f9104810cca1a868fc7238ba94cd8567a92e#c241f910)
+   Compiling crust-mantle-adapter v0.0.0 (/home/rayan/Documents/Projects/crust/crates/crust-mantle-adapter)
+   Compiling crust-server v0.0.0 (/home/rayan/Documents/Projects/crust/crates/crust-server)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2m 46s
+     Running unittests src/lib.rs (target/debug/deps/crust_mantle_adapter-39a2a326d2c7eaa9)
+
+running 43 tests
+test filters::tests::crust_timescale_allocates_zero_times_after_construction ... ok
+test filters::tests::fixed_filter_golden_vectors_match_lavadsp_formulas ... ok
+test filters::tests::karaoke_rejects_invalid_parameters_and_boundary_filters_remain_finite ... ok
+test filters::tests::p09_filter_benchmark_report ... ignored, manual release-profile filter benchmark; run with --ignored --nocapture
+test filters::tests::phase_vocoder_timescale_changes_stream_duration ... ok
+test filters::tests::player_volume_matches_frozen_lavaplayer_signed_pcm_oracle_without_allocations ... ok
+test filters::tests::remaining_fixed_filter_golden_vectors_match_lavadsp_formulas ... ok
+test filters::tests::timescale_reset_replacement_removal_and_ratio_bounds_are_deterministic ... ok
+test filters::tests::timescale_speed_pitch_and_rate_are_independent_and_fractionally_paced ... ok
+test filters::tests::wsola_finish_flushes_exact_duration_at_speed_boundaries ... ok
+test route_outcome_tests::youtube_login_challenge_retires_the_selected_route ... ok
+test tests::blocked_controls_expire_without_mutating_media ... ok
+test tests::buffered_audio_remains_available_while_next_read_is_blocked ... ok
+test tests::cancelled_queued_seek_never_changes_position ... ok
+test tests::cold_open_error_cancellation_and_abandoned_read_return_permits ... ok
+test tests::cold_play_is_admitted_and_offline_repeat_bypasses_source_slots ... ok
+test tests::completed_staged_input_repeats_and_resets_sequence_without_reopening_source ... ok
+test tests::completed_streaming_fallback_does_not_retain_a_decoder_or_source ... ok
+test tests::deferred_filters_are_bounded_ordered_and_drained_before_stop ... ok
+test tests::disabled_route_planner_reuses_source_http_connection ... ok
+test tests::dropping_load_guard_cancels_worker_and_reaps_watcher ... ok
+test tests::failed_or_cancelled_preparation_leaves_normal_playback_available ... ok
+test tests::filter_update_waiting_on_a_source_read_does_not_block_buffered_audio ... ok
+test tests::identical_filters_do_not_wait_for_a_source_read_but_queued_changes_stay_ordered ... ok
+test tests::outbound_policy_preserves_identity_and_rejects_known_family_mismatch ... ok
+test tests::p18_offline_mantle_playback_benchmark_report ... ignored, release-only P18 Mantle full-playback performance gate
+test tests::pause_retains_read_ahead_and_resume_delivers_in_order ... ok
+test tests::pending_frame_does_not_block_stop_in_running_actor ... ok
+test tests::player_churn_reaps_dead_allocations ... ok
+test tests::preparation_replacement_coalesces_and_never_replaces_playing_audio ... ok
+test tests::prepared_adoption_transfers_its_connection_and_recovers_on_stop ... ok
+test tests::prepared_natural_handoff_preserves_every_frame_and_current_filters ... ok
+test tests::preparing_a_slow_source_does_not_block_frame_or_stop_delivery ... ok
+test tests::production_source_http_defaults_to_mantles_public_internet_policy ... ok
+test tests::progressive_options_are_bounded_and_reach_the_player ... ok
+test tests::read_ahead_is_bounded_and_eof_waits_for_the_last_delivered_frame ... ok
+test tests::real_adapter_passes_the_shared_contract_through_mantle ... ok
+test tests::routed_mantle_requests_bind_the_selected_local_ip_without_cross_route_reuse ... ok
+test tests::seek_and_replacement_discard_frames_from_the_previous_position ... ok
+test tests::speculative_admission_is_owned_until_source_cleanup_and_recovers ... ok
+test tests::staged_input_cleanup_cancellation_and_stopped_controls ... ok
+test tests::stop_acknowledges_without_waiting_for_read_and_stale_result_is_discarded ... ok
+test tests::youtube_login_failures_keep_a_diagnostic_message ... ok
+
+test result: ok. 41 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 4.39s
+
+     Running unittests src/lib.rs (target/debug/deps/crust_server-3cd4e5ec673914a2)
+
+running 30 tests
+test config::tests::debug_redacts_password_and_proxy_secret ... ok
+test config::tests::frozen_representative_fixture_loads_with_opaque_sections ... ok
+test config::tests::p08_media_limits_load_from_yaml_and_reject_zero ... ok
+test config::tests::p11_player_update_interval_supports_lavalink_seconds_and_crust_milliseconds ... ok
+test config::tests::p12_stats_interval_is_bounded_and_configurable ... ok
+test config::tests::precedence_is_defaults_then_yaml_then_environment_then_cli ... ok
+test config::tests::production_resource_policy_is_validated_and_centralized ... ok
+test config::tests::representative_lavalink_config_maps ... ok
+test config::tests::routeplanner_yaml_is_typed_and_family_checked ... ok
+test config::tests::strict_yaml_rejects_unknown_security_keys ... ok
+test json_limits::tests::parsing_rejects_duplicate_depth_and_element_ambiguity ... ok
+test json_limits::tests::retained_object_is_checked_without_allocating_a_serialized_copy ... ok
+test player::source_progress_tests::ready_frames_eof_and_cancelled_demands_do_not_emit_stuck ... ok
+test player::source_progress_tests::threshold_observes_one_incident_and_keeps_the_exact_pending_frame ... ok
+test security_tests::password_verifier_compares_fixed_length_digests ... ok
+test security_tests::websocket_sink_writes_are_deadline_and_cancellation_bounded ... ok
+test session::tests::acknowledged_critical_publish_waits_for_websocket_delivery ... ok
+test session::tests::concurrent_resume_admission_is_bounded_without_mutating_the_second_session ... ok
+test session::tests::creation_update_resume_and_player_survival_are_owned ... ok
+test session::tests::critical_backlog_is_bounded_and_state_updates_coalesce ... ok
+test session::tests::expiry_cross_user_and_simultaneous_attempts_cannot_steal_a_session ... ok
+test session::tests::per_session_player_admission_recovers_without_consuming_global_capacity ... ok
+test session::tests::session_debug_representations_never_disclose_session_ids ... ok
+test session::tests::shutdown_invalidates_an_in_flight_handshake_without_panicking ... ok
+test session::tests::thousand_slow_session_backlogs_saturate_at_fixed_bounds_and_recover ... ok
+test stats::tests::frame_windows_are_per_player_averages_and_survive_counter_reset ... ok
+test stats::tests::linux_probe_parsers_reject_malformed_or_unbounded_values ... ok
+test stats::tests::runtime_probe_is_cached_for_the_bounded_refresh_interval ... ok
+test stats::tests::runtime_sampler_maps_rss_and_bounded_cpu_deltas ... ok
+test stats::tests::unavailable_runtime_values_and_wire_overflow_degrade_safely ... ok
+
+test result: ok. 30 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running unittests src/main.rs (target/debug/deps/crust_server-e46c498b678877cd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/p05_server.rs (target/debug/deps/p05_server-f5ea92564c432dc8)
+
+running 2 tests
+test http_auth_version_info_stats_and_owned_errors_match_v4_shapes ... ok
+test websocket_validates_headers_emits_ready_and_reconnects ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests/p06_sessions.rs (target/debug/deps/p06_sessions-aee5bf525799c868)
+
+running 2 tests
+test cross_user_and_expired_resume_attempts_create_fresh_sessions ... ok
+test session_patch_and_resume_match_the_frozen_v4_shapes ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/p07_players.rs (target/debug/deps/p07_players-0dcbb3ea93221a4f)
+
+running 5 tests
+test filter_replacements_apply_defaults_null_removal_and_validation ... ok
+test one_slow_guild_does_not_block_its_shard_and_same_guild_commands_serialize ... ok
+test playback_no_replace_controls_and_track_start_order_use_fake_mantle ... ok
+test player_crud_and_patch_null_semantics_match_the_frozen_corpus ... ok
+test player_survives_resume_and_replays_its_latest_state_snapshot ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/p08_load_tracks.rs (target/debug/deps/p08_load_tracks-b1ef98775ffb9712)
+
+running 7 tests
+test decode_batch_obeys_the_configured_body_limit ... ok
+test decode_batch_rejects_too_many_tracks_before_adapter_work ... ok
+test load_result_variants_match_lavalink_shapes_and_preserve_opaque_json ... ok
+test media_admission_is_bounded_and_recovers_after_request_cancellation ... ok
+test media_routes_fail_closed_when_no_adapter_is_installed ... ok
+test single_and_batch_decode_match_alias_precedence_and_error_contracts ... ok
+test source_request_admission_is_an_independent_nonblocking_bound ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/p10_voice.rs (target/debug/deps/p10_voice-720425f3089a5dfe)
+
+running 9 tests
+test asynchronous_frame_failure_publishes_exception_and_load_failed_end ... ok
+test controls_overtaking_eof_keep_old_and_new_generations_separate ... ok
+test natural_source_end_publishes_track_end_without_another_rest_command ... ok
+test non_snowflake_session_identity_fails_before_credentials_reach_the_backend ... ok
+test player_routes_voice_updates_and_media_discontinuities_through_one_backend_pacer ... ok
+test player_volume_reaches_media_and_survives_filter_replacement_without_wire_leaks ... ok
+test server_shutdown_deadline_includes_voice_backend_teardown ... ok
+test snapshot_at_eof_preserves_terminal_generation ... ok
+test volume_and_filters_preserve_voice_source_and_terminal_delivery ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/p11_playback_events.rs (target/debug/deps/p11_playback_events-375a8b8c6666a624)
+
+running 12 tests
+test audio_attachment_is_deferred_until_the_voice_generation_is_ready ... ok
+test configured_stuck_detection_preserves_frame_and_rejects_stale_sources ... ok
+test exception_and_stuck_payloads_follow_track_start_in_exact_order ... ok
+test idle_players_do_not_create_periodic_refresh_work ... ok
+test non_resumable_client_disconnect_explicitly_shuts_down_player_voice ... ok
+test periodic_player_updates_refresh_latest_state_without_overlapping_a_player ... ok
+test player_destroy_delivers_cleanup_before_tearing_down_voice ... ok
+test production_oto_backend_carries_mantle_opus_through_rest_controls_to_udp ... ok
+test replacement_stop_finish_and_frame_failure_keep_causal_event_order ... ok
+test speculative_preparation_is_authenticated_validated_and_leaves_playback_unchanged ... ok
+test terminal_voice_close_emits_exact_event_then_disconnected_player_state ... ok
+test terminal_voice_loss_during_resumable_disconnect_replays_once_in_order ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.72s
+
+     Running tests/p12_stats_identity.rs (target/debug/deps/p12_stats_identity-ce7afc7012f354fe)
+
+running 3 tests
+test rest_and_websocket_stats_report_real_player_state_and_frame_windows ... ok
+test resumable_sessions_preserve_their_frame_window_without_duplicate_initial_stats ... ok
+test standard_and_crust_identity_are_compatible_truthful_and_separate ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/p13_routeplanner.rs (target/debug/deps/p13_routeplanner-ecf0a4586419f78c)
+
+running 5 tests
+test configured_status_and_free_operations_use_the_lavalink_wire_shape ... ok
+test disabled_endpoints_match_lavalink_status_and_error_semantics ... ok
+test every_declared_strategy_has_its_exact_discriminator_and_detail_fields ... ok
+test free_address_rejects_dns_names_malformed_json_and_oversized_bodies ... ok
+test literal_free_address_input_never_performs_dns_resolution ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/p15_operations.rs (target/debug/deps/p15_operations-92996c99c8be05f4)
+
+running 4 tests
+test disabled_prometheus_endpoint_is_not_registered ... ok
+test health_probes_are_public_and_readiness_flips_during_shutdown ... ok
+test info_reports_only_enabled_admitted_sources_and_filters ... ok
+test prometheus_endpoint_is_public_bounded_and_low_cardinality ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/p16_extensions.rs (target/debug/deps/p16_extensions-2b6923d0f16fda9c)
+
+running 1 test
+test in_tree_extensions_are_bounded_sorted_and_reported_separately ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/p17_security_resources.rs (target/debug/deps/p17_security_resources-b5e74943c1843726)
+
+running 5 tests
+test encoded_play_obeys_saturated_load_and_source_admission_and_recovers ... ok
+test malformed_ambiguous_and_unbounded_json_is_rejected_before_player_creation ... ok
+test per_session_and_global_player_overload_recover_without_partial_state ... ok
+test player_identifier_loads_share_source_and_outbound_admission_and_recover ... ok
+test typed_resource_policy_is_the_server_diagnostic_and_bind_gate ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+   Doc-tests crust_mantle_adapter
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests crust_server
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

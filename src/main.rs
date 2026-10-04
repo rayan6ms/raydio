@@ -90,7 +90,7 @@ async fn run() -> Result<()> {
     // Enable only credential-free preparation and HTTP phase summaries.
     tracing_subscriber::fmt()
         .with_env_filter(format!(
-            "warn,raydio={level},crust_oto_adapter={level},crust_mantle_adapter::startup={level},mantle_media::startup={level}"
+            "warn,raydio={level},crust_oto_adapter={level},crust_mantle_adapter::startup={level},crust_mantle_adapter::preparation={level},mantle_media::startup={level}"
         ))
         .init();
     let cancel = CancellationToken::new();

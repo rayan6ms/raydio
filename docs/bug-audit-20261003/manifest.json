@@ -1,0 +1,37 @@
+{
+  "audit_date": "2026-10-03",
+  "bot_head": "308f3437097960cf89b449ded9146e0536ee02e7",
+  "production_source_revision_reported_by_previous_deployment": "2e669b4c99e000a9131b65dd2bbf61b3569190e2",
+  "production_not_modified": true,
+  "pins": {
+    "crust": "a22951576491d90f934bfc24c4a32c60e8f13944",
+    "mantle": "aba9bb1418210d912da951beb5ac5b048d456b56",
+    "oto": "62d2fc87e5dc239695a8b86a7372a4edc1caa933"
+  },
+  "temporary_test_files_restored": [
+    {
+      "repository": "raydio-rust",
+      "path": "src/session.rs",
+      "restored_sha256": "69ef09bb7f21941e63ffb5bbe0f0eebe9b04872b7bc5e40177d1a4c9c65a8a12",
+      "patch": "raydio-reproductions.patch"
+    },
+    {
+      "repository": "mantle",
+      "path": "crates/mantle-media/src/youtube.rs",
+      "restored_sha256": "a1ac73cc015d6bb90ebb6a808ee28cf49a2b209522e8c117c9b69ac65be07b65",
+      "patch": "mantle-reproductions.patch"
+    },
+    {
+      "repository": "crust",
+      "path": "crates/crust-server/tests/p17_security_resources.rs",
+      "restored_sha256": "7cb9bcbd9aab472e06908bcb7154b304662666dff04287a2e1aa3fd1ce8b01ac",
+      "patch": "crust-reproduction.patch"
+    }
+  ],
+  "characterization_tests": {
+    "raydio": 4,
+    "mantle": 3,
+    "crust": 1
+  },
+  "verification": "Local deterministic characterization and authenticated loopback HTTP; no Discord playback or Oracle tests run during this audit."
+}

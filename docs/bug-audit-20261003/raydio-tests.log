@@ -1,0 +1,15 @@
+   Compiling raydio v0.2.2 (/home/rayan/Documents/Projects/raydio-rust)
+    Finished `test` profile [unoptimized] target(s) in 6.30s
+     Running unittests src/lib.rs (target/debug/deps/raydio-dd12f076a4906765)
+
+running 4 tests
+test session::tests::audit_cleanup_keeps_a_completed_preparation_ack_in_its_joinset ... AUDIT: completed old-epoch preparation ack survives cleanup; accepting it causes repeat failed cancellation requests after player destruction
+ok
+test session::tests::audit_fresh_progress_does_not_protect_a_track_from_wall_clock_watchdog ... AUDIT: watchdog replaced healthy current track at reported position 5000 / 20000 ms
+ok
+test session::tests::audit_previous_can_overfill_an_admitted_full_queue ... AUDIT: queue cap 2 -> previous -> queue length 3
+ok
+test session::tests::audit_unknown_duration_gets_fifteen_second_deadline ... AUDIT: accepted finite unknown duration arms end watchdog in 14999 ms
+ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 57 filtered out; finished in 0.19s

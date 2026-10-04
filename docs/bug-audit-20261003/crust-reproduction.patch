@@ -1,0 +1,37 @@
+diff --git a/crates/crust-server/tests/p17_security_resources.rs b/crates/crust-server/tests/p17_security_resources.rs
+index ad10d34..19a0d91 100644
+--- a/crates/crust-server/tests/p17_security_resources.rs
++++ b/crates/crust-server/tests/p17_security_resources.rs
+@@ -351,3 +351,32 @@ async fn player_identifier_loads_share_source_and_outbound_admission_and_recover
+     socket.close(None).await.unwrap();
+     harness.stop().await;
+ }
++
++#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
++async fn audit_encoded_play_ignores_saturated_load_and_source_admission() {
++    let mut configured = config();
++    configured.max_concurrent_loads = 1;
++    configured.max_concurrent_source_requests = 1;
++    configured.max_outbound_connections = 3;
++    let fake = Arc::new(FakeMantle::default());
++    fake.hold_loads();
++    let harness = Harness::with_adapter(configured, fake.clone()).await;
++    let (mut socket, session) = open_session(harness.address, "300000000000001705").await;
++    let held_app = harness.app.clone();
++    let held = tokio::spawn(async move {
++        response(&held_app, authorized("GET", "/v4/loadtracks?identifier=fixture%3Aheld", Body::empty())).await
++    });
++    tokio::time::timeout(std::time::Duration::from_secs(1), async {
++        while fake.active_loads() != 1 { tokio::task::yield_now().await; }
++    }).await.unwrap();
++    assert_eq!(response(&harness.app, authorized("GET", "/v4/loadtracks?identifier=fixture%3Adenied", Body::empty())).await.0, StatusCode::SERVICE_UNAVAILABLE);
++    let path = format!("/v4/sessions/{session}/players/1730");
++    let played = response(&harness.app, authorized("PATCH", &path, r#"{"track":{"encoded":"fake-v1:fixture:cold-play"}}"#)).await;
++    assert_eq!(played.0, StatusCode::OK);
++    assert_eq!(played.1["track"]["info"]["identifier"], "fixture:cold-play");
++    eprintln!("AUDIT: load/source limits=1 occupied; GET load=503 while encoded PATCH starts a track with HTTP {}", played.0);
++    fake.release_loads();
++    assert_eq!(held.await.unwrap().0, StatusCode::OK);
++    socket.close(None).await.unwrap();
++    harness.stop().await;
++}

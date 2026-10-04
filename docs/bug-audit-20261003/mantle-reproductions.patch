@@ -1,0 +1,63 @@
+diff --git a/crates/mantle-media/src/youtube.rs b/crates/mantle-media/src/youtube.rs
+index 36ce87c..abb9297 100644
+--- a/crates/mantle-media/src/youtube.rs
++++ b/crates/mantle-media/src/youtube.rs
+@@ -4890,3 +4890,58 @@ mod live_player_script_tests {
+             .expect("current player script must match the bounded native cipher grammar");
+     }
+ }
++
++#[cfg(test)]
++mod audit_characterization {
++    use super::*;
++    use serde_json::json;
++
++    fn renderer() -> Value {
++        json!({"playlistVideoRenderer":{"isPlayable":true,"videoId":"dQw4w9WgXcQ","title":{"simpleText":"Fixture"},"shortBylineText":{"simpleText":"Artist"},"lengthSeconds":"60"}})
++    }
++
++    #[test]
++    fn audit_false_playability_is_still_enqueued() {
++        let mut item = renderer();
++        item["playlistVideoRenderer"]["isPlayable"] = json!(false);
++        let tracks = parse_playlist_tracks(&[item], 10, 4096, 10).unwrap();
++        assert_eq!(tracks.len(), 1);
++        eprintln!("AUDIT: playlist isPlayable=false still produces {} finite track", tracks.len());
++    }
++
++    #[test]
++    fn audit_missing_duration_becomes_zero_length_finite_track() {
++        let mut item = renderer();
++        item["playlistVideoRenderer"].as_object_mut().unwrap().remove("lengthSeconds");
++        let tracks = parse_playlist_tracks(&[item], 10, 4096, 10).unwrap();
++        assert_eq!(tracks.len(), 1);
++        assert_eq!(tracks[0].info.duration, Duration::ZERO);
++        assert!(!tracks[0].info.is_stream);
++        eprintln!("AUDIT: absent playlist duration becomes finite duration=0");
++    }
++
++    #[test]
++    fn audit_oauth_lock_wait_cannot_be_cancelled() {
++        use std::sync::mpsc;
++        let manager = Arc::new(YoutubeAudioSourceManager::new(YoutubeSourceOptions::default(), YoutubeAuthentication::new(None, None, None).unwrap()).unwrap());
++        let held = manager.oauth.lock().unwrap();
++        let (checked, observed) = mpsc::channel();
++        let signal = MediaCancellation::linked(move || { let _ = checked.send(()); false });
++        let waiter_signal = signal.clone();
++        let waiter_manager = manager.clone();
++        let (done, completion) = mpsc::channel();
++        let waiter = std::thread::spawn(move || {
++            let result = waiter_manager.refresh_oauth_access_token(false, &waiter_signal);
++            let _ = done.send(result.map_err(|e| e.kind()));
++        });
++        // The initial cancellation check passed, so the next step waits on the mutex.
++        observed.recv_timeout(Duration::from_secs(1)).unwrap();
++        signal.cancel();
++        let outcome = completion.recv_timeout(Duration::from_millis(150));
++        drop(held);
++        waiter.join().unwrap();
++        assert!(matches!(outcome, Err(mpsc::RecvTimeoutError::Timeout)));
++        assert_eq!(completion.recv_timeout(Duration::from_secs(1)).unwrap(), Err(YoutubeErrorKind::InvalidAuthentication));
++        eprintln!("AUDIT: cancellation did not release OAuth mutex waiter during 150 ms hold; after release it returned InvalidAuthentication");
++    }
++}

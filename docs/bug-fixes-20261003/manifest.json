@@ -1,0 +1,36 @@
+{
+  "dependencies": {
+    "crust": "c69d2b77fe7e42071ed76012fedcccbe85f2a04f",
+    "mantle": "c241f9104810cca1a868fc7238ba94cd8567a92e"
+  },
+  "oto": "62d2fc87e5dc239695a8b86a7372a4edc1caa933",
+  "sourceSha256": {
+    "src/session.rs": "e5b88ca9d192a866e34b473b63b4541f324eb0baf6ddd2cbf6cecce0ca54f2a6",
+    "src/playback.rs": "5667160e5254ed525a47dbd976524e62ffe3a25c5dd5bba7c444786ca09f905c",
+    "src/views.rs": "f5418fca2d85d20c06389de06991f6f6f19af7c8f054498ee0eda433a7019730",
+    "src/main.rs": "ac17ae88027a15f7f5d9043349ae647f907a76fd8d76af4f525bd20ed160dc42",
+    "Cargo.toml": "36192dee65028b41b871a84a9a593380d33585be03c50f6fb0ff7a84059aaf8e",
+    "Cargo.lock": "d58c47b3f6b38837a3a7fadbd2e27b77eac5e7e4a2462083f480ddef82c5545f"
+  },
+  "tests": {
+    "raydio": {
+      "passed": 69,
+      "ignored": 0
+    },
+    "crust": {
+      "passed": 126,
+      "ignored": 2
+    },
+    "mantleMedia": {
+      "passed": 250,
+      "ignored": 8
+    }
+  },
+  "audioWorkerFeature": false,
+  "releaseBuilder": {
+    "image": "localhost/raydio-builder:bookworm97",
+    "cpus": 1,
+    "memoryMiB": 1536,
+    "memoryAndSwapMiB": 2048
+  }
+}

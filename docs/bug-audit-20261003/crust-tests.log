@@ -1,0 +1,10 @@
+   Compiling crust-server v0.0.0 (/home/rayan/Documents/Projects/crust/crates/crust-server)
+   Compiling crust-mantle-adapter v0.0.0 (/home/rayan/Documents/Projects/crust/crates/crust-mantle-adapter)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.22s
+     Running tests/p17_security_resources.rs (target/debug/deps/p17_security_resources-f0464e37ce12f2c3)
+
+running 1 test
+test audit_encoded_play_ignores_saturated_load_and_source_admission ... AUDIT: load/source limits=1 occupied; GET load=503 while encoded PATCH starts a track with HTTP 200 OK
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.01s

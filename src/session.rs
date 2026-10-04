@@ -1,7 +1,7 @@
 use crate::{
     commands,
     discord::Request,
-    playback::{LoopMode, Queue},
+    playback::{LoopMode, PreviousOutcome, Queue},
     resolver::{Failure, Resolution},
     runtime::Shared,
     views::{self, View},
@@ -78,7 +78,9 @@ pub(crate) struct GuildSession {
     paused: bool,
     position_ms: u64,
     position_at: Instant,
+    progress_at: Instant,
     end_deadline: Option<Instant>,
+    watchdog_retry: Instant,
     started: bool,
     connected: bool,
     idle_at: Option<Instant>,
@@ -385,6 +387,7 @@ impl GuildSession {
                     .map_err(transport_error)?;
                 self.position_ms = self.position();
                 self.position_at = Instant::now();
+                self.progress_at = Instant::now();
                 self.paused = paused;
                 self.schedule_end();
                 Ok(if paused {
@@ -469,8 +472,19 @@ impl GuildSession {
             }
             .into()),
             "previous" | "jump" | "skip" => {
-                if name == "previous" && !self.queue.previous() {
-                    return Ok("There is no previous track in this session.".into());
+                if name == "previous" {
+                    match self.queue.previous(self.shared.config.limits.queue) {
+                        PreviousOutcome::Started => {}
+                        PreviousOutcome::NoHistory => {
+                            return Ok("There is no previous track in this session.".into());
+                        }
+                        PreviousOutcome::Full => {
+                            return Ok(
+                                "The queue is full. Remove a queued track before using Previous."
+                                    .into(),
+                            );
+                        }
+                    }
                 }
                 if name == "jump" && !self.queue.jump(request.index("position")) {
                     return Ok("There is no upcoming song at that position.".into());
@@ -546,7 +560,9 @@ impl GuildSession {
             paused: false,
             position_ms: 0,
             position_at: Instant::now(),
+            progress_at: Instant::now(),
             end_deadline: None,
+            watchdog_retry: Instant::now(),
             started: false,
             connected: false,
             idle_at: None,
@@ -606,16 +622,7 @@ impl GuildSession {
                 }
                 Some(_) = self.responses.join_next(), if !self.responses.is_empty() => {},
                 Some(result) = self.preparations.join_next(), if !self.preparations.is_empty() => {
-                    match result {
-                        // Even an intent overtaken by Stop must be remembered:
-                        // the next pass then cancels it in HTTP submission order.
-                        Ok((_, target, true)) => self.preparation_target = target,
-                        Ok((epoch, _, false)) if epoch == self.epoch => {
-                            self.preparation_retry = Instant::now() + Duration::from_secs(5);
-                            tracing::warn!(guild_id = self.id, "Next-track preparation unavailable; normal loading remains active");
-                        }
-                        _ => {},
-                    }
+                    self.finish_preparation(result);
                 },
                 Some(_) = self.panel_deletions.join_next(), if !self.panel_deletions.is_empty() => {},
                 Some(result) = self.panel_edits.join_next(), if !self.panel_edits.is_empty() => {
@@ -704,17 +711,35 @@ impl GuildSession {
             (epoch, target, success)
         });
     }
+    fn finish_preparation(
+        &mut self,
+        result: Result<(u64, Option<String>, bool), tokio::task::JoinError>,
+    ) {
+        match result {
+            // Stop preserves this player, so remember overtaken accepted intent
+            // and cancel it in submission order. Cleanup drains the whole set.
+            Ok((_, target, true)) => self.preparation_target = target,
+            Ok((epoch, _, false)) if epoch == self.epoch => {
+                self.preparation_retry = Instant::now() + Duration::from_secs(5);
+                tracing::warn!(
+                    guild_id = self.id,
+                    "Next-track preparation unavailable; normal loading remains active"
+                );
+            }
+            _ => {}
+        }
+    }
     fn schedule_end(&mut self) {
         self.end_deadline = self
             .queue
             .current
             .as_ref()
-            .filter(|track| !track.stream && !self.paused)
+            .filter(|track| !track.stream && track.duration_ms > 0 && !self.paused)
             .and_then(|track| {
                 Instant::now().checked_add(Duration::from_millis(
                     track
                         .duration_ms
-                        .saturating_sub(self.position())
+                        .saturating_sub(self.position_ms)
                         .saturating_add(15_000),
                 ))
             });
@@ -1058,6 +1083,8 @@ impl GuildSession {
             self.generation = self.generation.wrapping_add(1);
             self.position_ms = 0;
             self.position_at = Instant::now();
+            self.progress_at = Instant::now();
+            self.watchdog_retry = Instant::now();
             self.started = false;
             self.paused = false;
             self.schedule_end();
@@ -1092,11 +1119,7 @@ impl GuildSession {
             return;
         }
         if payload["op"] == "playerUpdate" {
-            self.position_ms = payload["state"]["position"]
-                .as_u64()
-                .unwrap_or(self.position_ms);
-            self.position_at = Instant::now();
-            self.connected = payload["state"]["connected"].as_bool().unwrap_or(false);
+            self.observe_progress(&payload);
             return;
         }
         let kind = payload["type"].as_str().unwrap_or("");
@@ -1135,6 +1158,9 @@ impl GuildSession {
         }
         match kind {
             "TrackStartEvent" => {
+                if self.started {
+                    return;
+                }
                 tracing::info!(
                     generation = self.generation,
                     guild_id = self.id,
@@ -1143,6 +1169,7 @@ impl GuildSession {
                 );
                 self.started = true;
                 self.position_at = Instant::now();
+                self.progress_at = Instant::now();
                 self.schedule_end();
                 self.events[2] = self.events[2].saturating_add(1);
             }
@@ -1269,23 +1296,113 @@ impl GuildSession {
                 .await;
             return;
         }
-        if self.shared.node.health().ready
-            && self.end_deadline.is_some_and(|at| Instant::now() >= at)
+        self.check_playback().await;
+        self.refresh().await;
+    }
+    fn observe_progress(&mut self, payload: &Value) {
+        // Crust's observation extension correlates updates as well as EOF with
+        // this exact Play, including repeated encoded identities.
+        if payload["crust"]["userData"]["raydioGeneration"].as_u64() != Some(self.generation) {
+            return;
+        }
+        let Some(position) = payload["state"]["position"].as_u64() else {
+            return;
+        };
+        self.connected = payload["state"]["connected"].as_bool().unwrap_or(false);
+        if position > self.position_ms {
+            self.progress_at = Instant::now();
+            self.position_ms = position;
+            self.schedule_end();
+        }
+        // Never move backwards on an old/coalesced update. Unchanged updates
+        // refresh the UI clock but cannot keep a stalled source alive forever.
+        self.position_at = Instant::now();
+    }
+
+    async fn check_playback(&mut self) {
+        if self.queue.current.is_none()
+            || self.paused
+            || !self.shared.node.health().ready
+            || Instant::now() < self.watchdog_retry
         {
+            return;
+        }
+        let stalled = self.progress_at.elapsed() >= Duration::from_secs(60);
+        if !stalled && self.end_deadline.is_none_or(|at| Instant::now() < at) {
+            return;
+        }
+        // A deadline is a reason to verify, never evidence of natural EOF.
+        self.watchdog_retry = Instant::now() + Duration::from_secs(5);
+        let path = format!(
+            "/v4/sessions/{}/players/{}",
+            self.shared.node.health().session,
+            self.id
+        );
+        let result = timeout(
+            Duration::from_secs(2),
+            self.shared
+                .node
+                .request(reqwest::Method::GET, &path, &[], None),
+        )
+        .await;
+        let Ok(Ok(player)) = result else {
+            self.end_deadline = Some(Instant::now() + Duration::from_secs(5));
+            self.recover_unverifiable_stall().await;
+            return;
+        };
+        self.recover_playback(&player).await;
+    }
+
+    async fn recover_playback(&mut self, player: &Value) {
+        let current =
+            player["crust"]["userData"]["raydioGeneration"].as_u64() == Some(self.generation);
+        let terminal = player["crust"]["terminal"]["userData"]["raydioGeneration"].as_u64()
+            == Some(self.generation);
+        if current {
+            self.observe_progress(player);
+            if player["paused"] == true || self.progress_at.elapsed() < Duration::from_secs(60) {
+                self.schedule_end();
+                return;
+            }
+        } else if !(player["track"].is_null() && terminal) {
+            // A reconnect/stale snapshot must not finish a different generation.
+            self.end_deadline = Some(Instant::now() + Duration::from_secs(5));
+            self.recover_unverifiable_stall().await;
+            return;
+        }
+        let finished = !current && player["crust"]["terminal"]["reason"] == "finished";
+        self.events[5] = self.events[5].saturating_add(1);
+        tracing::warn!(
+            guild_id = self.id,
+            generation = self.generation,
+            position_ms = self.position_ms,
+            finished,
+            "playback watchdog verified recovery"
+        );
+        if finished {
+            self.queue.finish();
+            self.events[3] = self.events[3].saturating_add(1);
+            let _ = self.start_current().await;
+        } else {
+            self.track_failure().await;
+        }
+    }
+
+    async fn recover_unverifiable_stall(&mut self) {
+        // Fresh correlated updates still protect audio even if GET fails.
+        // A silent/missing player cannot retain the queue indefinitely, but
+        // absence of verification must never be called a natural finish.
+        if self.progress_at.elapsed() >= Duration::from_secs(90) {
             self.events[5] = self.events[5].saturating_add(1);
             tracing::warn!(
                 guild_id = self.id,
-                queued_tracks = self.queue.upcoming.len(),
                 generation = self.generation,
-                position_ms = self.position_ms,
-                duration_ms = self.queue.current.as_ref().map(|track| track.duration_ms),
-                "track end watchdog advancing playback"
+                "playback stalled and backend verification remained unavailable"
             );
-            self.queue.finish();
-            let _ = self.start_current().await;
+            self.track_failure().await;
         }
-        self.refresh().await;
     }
+
     async fn notify(&self, text: &str) {
         if let Some(channel) = self.notification {
             let _ = timeout(
@@ -1299,7 +1416,9 @@ impl GuildSession {
         }
     }
     async fn cleanup(&mut self, notification: Option<&str>) {
-        self.preparations.abort_all();
+        // A destroyed player is a new lifetime. Drain already-completed ACKs
+        // too; abort_all alone leaves them able to resurrect accepted intent.
+        self.preparations.shutdown().await;
         self.preparation_target = None;
         self.preparation_retry = Instant::now();
         self.invalidate().await;
@@ -2411,7 +2530,19 @@ mod tests {
         session.start_current().await.unwrap();
         session.end_deadline = Some(Instant::now() - Duration::from_secs(1));
         session.tick().await;
+        assert_eq!(
+            session.queue.current.as_ref().unwrap().identifier,
+            "one",
+            "expiry alone cannot replace active media"
+        );
+        session.progress_at = Instant::now() - Duration::from_secs(61);
+        session.watchdog_retry = Instant::now();
+        session.tick().await;
         assert_eq!(session.queue.current.as_ref().unwrap().identifier, "two");
+        assert_eq!(
+            session.queue.consecutive_failures, 1,
+            "a stall is not natural EOF"
+        );
         shared
             .cache
             .write()
@@ -2470,6 +2601,178 @@ mod tests {
         session.queue.current.as_mut().unwrap().stream = true;
         session.schedule_end();
         assert!(session.end_deadline.is_none());
+        owner.shutdown().await;
+        backend.shutdown().await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn unknown_duration_has_no_metadata_end_deadline() {
+        let (shared, backend, owner, _events) = Shared::fixture().await;
+        shared.cache.write().unwrap().guilds.insert(1, guild());
+        let mut session = GuildSession::new(1, shared);
+        session.channel = Some(3);
+        let mut unknown = track("unknown-duration");
+        unknown.duration_ms = 0;
+        session.queue.enqueue(vec![unknown], 1000);
+        session.start_current().await.unwrap();
+        session.started = true;
+        session.progress_at = Instant::now() - Duration::from_secs(20);
+        session.schedule_end();
+        session.tick().await;
+        assert!(session.end_deadline.is_none());
+        assert_eq!(
+            session.queue.current.as_ref().unwrap().identifier,
+            "unknown-duration"
+        );
+        assert!(!session.queue.current.as_ref().unwrap().stream);
+        owner.shutdown().await;
+        backend.shutdown().await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn verified_terminal_recovers_lost_end_once_with_correct_reason() {
+        for reason in ["finished", "loadFailed", "stopped"] {
+            let (shared, backend, owner, _events) = Shared::fixture().await;
+            let mut session = GuildSession::new(1, shared);
+            session.channel = Some(3);
+            session
+                .queue
+                .enqueue(vec![track("one"), track("two")], 1000);
+            session.start_current().await.unwrap();
+            let generation = session.generation;
+            let snapshot = json!({"track":null,"crust":{"userData":null,
+                "terminal":{"userData":{"raydioGeneration":generation},"reason":reason}}});
+            session.recover_playback(&snapshot).await;
+            assert_eq!(session.queue.current.as_ref().unwrap().identifier, "two");
+            assert_eq!(
+                session.queue.history.len(),
+                usize::from(reason == "finished")
+            );
+            assert_eq!(
+                session.queue.consecutive_failures,
+                u8::from(reason != "finished")
+            );
+            session.recover_playback(&snapshot).await;
+            assert_eq!(session.queue.current.as_ref().unwrap().identifier, "two");
+            assert_eq!(session.events[5], 1);
+            owner.shutdown().await;
+            backend.shutdown().await.unwrap();
+        }
+    }
+
+    #[tokio::test]
+    async fn unverifiable_stall_has_a_bound_and_is_never_natural_completion() {
+        let (shared, backend, owner, _events) = Shared::fixture().await;
+        let mut session = GuildSession::new(1, shared);
+        session.channel = Some(3);
+        session
+            .queue
+            .enqueue(vec![track("one"), track("two")], 1000);
+        session.start_current().await.unwrap();
+        session.progress_at = Instant::now() - Duration::from_secs(61);
+        session.recover_playback(&json!({"track":null})).await;
+        assert_eq!(session.queue.current.as_ref().unwrap().identifier, "one");
+        session.progress_at = Instant::now() - Duration::from_secs(91);
+        session.recover_playback(&json!({"track":null})).await;
+        assert_eq!(session.queue.current.as_ref().unwrap().identifier, "two");
+        assert!(session.queue.history.is_empty());
+        assert_eq!(session.queue.consecutive_failures, 1);
+        owner.shutdown().await;
+        backend.shutdown().await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn fresh_progress_and_stale_updates_preserve_unfinished_playback() {
+        let (shared, backend, owner, _events) = Shared::fixture().await;
+        shared.cache.write().unwrap().guilds.insert(1, guild());
+        let mut session = GuildSession::new(1, shared.clone());
+        session.channel = Some(3);
+        session
+            .queue
+            .enqueue(vec![track("still-playing"), track("next")], 1000);
+        session.start_current().await.unwrap();
+        session.started = true;
+        // Model the wall-clock budget expiring after accumulated pacing stalls.
+        let expired = Instant::now() - Duration::from_secs(1);
+        session.end_deadline = Some(expired);
+        session.backend(json!({"op":"playerUpdate","crust":{"userData":{"raydioGeneration":session.generation}},"state":{"position":5_000,"connected":true}})).await;
+        assert_eq!(session.position_ms, 5_000);
+        assert!(session.end_deadline.unwrap() > Instant::now());
+        session.tick().await;
+        assert_eq!(
+            session.queue.current.as_ref().unwrap().identifier,
+            "still-playing"
+        );
+        assert_eq!(session.events[5], 0);
+        session.backend(json!({"op":"playerUpdate","crust":{"userData":{"raydioGeneration":session.generation - 1}},"state":{"position":99_000,"connected":true}})).await;
+        assert_eq!(session.position_ms, 5_000);
+        let progress = session.progress_at;
+        session.backend(json!({"op":"playerUpdate","crust":{"userData":{"raydioGeneration":session.generation}},"state":{"position":5_000,"connected":true}})).await;
+        assert_eq!(
+            session.progress_at, progress,
+            "unchanged updates cannot hide stalls"
+        );
+        owner.shutdown().await;
+        backend.shutdown().await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn cleanup_drains_completed_and_inflight_preparation_acknowledgements() {
+        let (shared, backend, owner, _events) = Shared::fixture().await;
+        shared.cache.write().unwrap().guilds.insert(1, guild());
+        let mut session = GuildSession::new(1, shared);
+        session.channel = Some(3);
+        let old_epoch = session.epoch;
+        session
+            .preparations
+            .spawn(async move { (old_epoch, Some("old-next-track".to_owned()), true) });
+        tokio::task::yield_now().await;
+        session.cleanup(None).await;
+        assert_ne!(session.epoch, old_epoch);
+        assert!(session.preparations.is_empty());
+        assert!(session.preparation_target.is_none());
+        session.prepare_next();
+        assert!(
+            session.preparations.is_empty(),
+            "idle cleanup must not retry 404 cancellation"
+        );
+        session.preparations.spawn(std::future::pending());
+        session.cleanup(None).await;
+        assert!(session.preparations.is_empty());
+        owner.shutdown().await;
+        backend.shutdown().await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn same_player_stop_cancels_overtaken_intent_and_rejoin_prepares_again() {
+        let (shared, backend, owner, _events) = Shared::fixture().await;
+        shared.cache.write().unwrap().guilds.insert(1, guild());
+        let mut session = GuildSession::new(1, shared);
+        session.channel = Some(3);
+        session
+            .queue
+            .enqueue(vec![track("one"), track("two")], 1000);
+        session.start_current().await.unwrap();
+        let old_epoch = session.epoch;
+        session.control(&request("stop", &[])).await.unwrap();
+        assert_ne!(session.epoch, old_epoch);
+        session.finish_preparation(Ok((old_epoch, Some(track("two").encoded), true)));
+        session.prepare_next();
+        let result = session.preparations.join_next().await.unwrap();
+        assert!(matches!(&result, Ok((_, None, true))));
+        session.finish_preparation(result);
+        assert!(session.preparation_target.is_none());
+        session.cleanup(None).await;
+        session.channel = Some(3);
+        session
+            .queue
+            .enqueue(vec![track("one"), track("two")], 1000);
+        session.start_current().await.unwrap();
+        session.started = true;
+        session.prepare_next();
+        let result = session.preparations.join_next().await.unwrap();
+        assert!(matches!(&result, Ok((_, Some(target), true)) if target == &track("two").encoded));
+        session.finish_preparation(result);
         owner.shutdown().await;
         backend.shutdown().await.unwrap();
     }

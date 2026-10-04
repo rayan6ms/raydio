@@ -4,6 +4,13 @@ use serde::{Deserialize, Serialize};
 pub const HISTORY_LIMIT: usize = 20;
 pub const FAILURE_LIMIT: u8 = 3;
 
+#[derive(Debug, Eq, PartialEq)]
+pub enum PreviousOutcome {
+    Started,
+    NoHistory,
+    Full,
+}
+
 #[derive(Clone, Copy, Debug, Default, Deserialize, Serialize, Eq, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum LoopMode {
@@ -19,6 +26,7 @@ pub struct Track {
     pub identifier: String,
     pub title: String,
     pub author: String,
+    /// Zero means unknown for a finite track, matching the source/wire sentinel.
     pub duration_ms: u64,
     pub stream: bool,
     pub uri: Option<String>,
@@ -41,6 +49,7 @@ impl Queue {
     pub fn preparation_target(&self, position_ms: u64) -> Option<&Track> {
         let current = self.current.as_ref()?;
         if current.stream
+            || current.duration_ms == 0
             || self.loop_mode == LoopMode::Track
             || current.duration_ms.saturating_sub(position_ms) > 45_000
         {
@@ -109,25 +118,32 @@ impl Queue {
         self.remember(old);
         self.next();
     }
-    pub fn previous(&mut self) -> bool {
+    pub fn previous(&mut self, max_tracks: usize) -> PreviousOutcome {
         if self.current.is_none() {
-            return false;
+            return PreviousOutcome::NoHistory;
         }
-        let Some(previous) = self.history.pop() else {
-            return false;
+        let Some(previous) = self.history.last() else {
+            return PreviousOutcome::NoHistory;
         };
-        if self.loop_mode == LoopMode::Queue
-            && let Some(index) = self.upcoming.iter().rposition(|track| {
-                track.encoded == previous.encoded && track.requester_id == previous.requester_id
+        let duplicate = (self.loop_mode == LoopMode::Queue)
+            .then(|| {
+                self.upcoming.iter().rposition(|track| {
+                    track.encoded == previous.encoded && track.requester_id == previous.requester_id
+                })
             })
-        {
+            .flatten();
+        if duplicate.is_none() && self.len() >= max_tracks {
+            return PreviousOutcome::Full;
+        }
+        let previous = self.history.pop().expect("checked history");
+        if let Some(index) = duplicate {
             self.upcoming.remove(index);
         }
         if let Some(current) = self.current.take() {
             self.upcoming.insert(0, current);
         }
         self.current = Some(previous);
-        true
+        PreviousOutcome::Started
     }
     pub fn jump(&mut self, position: usize) -> bool {
         if self.current.is_none() {
@@ -253,7 +269,7 @@ mod tests {
         q.loop_mode = LoopMode::Queue;
         q.finish();
         assert_eq!(q.upcoming, [track(0)]);
-        assert!(q.previous());
+        assert_eq!(q.previous(1000), PreviousOutcome::Started);
         assert_eq!(q.current, Some(track(0)));
         assert_eq!(q.upcoming, [track(1)]);
         assert!(q.history.is_empty());
@@ -321,6 +337,45 @@ mod tests {
     fn durations_are_stable() {
         assert_eq!(format_duration(3723000, false), "1:02:03");
         assert_eq!(format_duration(0, true), "LIVE");
+    }
+
+    #[test]
+    fn unknown_finite_duration_does_not_trigger_preparation() {
+        let mut q = queue(2);
+        q.current.as_mut().unwrap().duration_ms = 0;
+        assert!(q.preparation_target(20_000).is_none());
+        assert!(!q.current.as_ref().unwrap().stream);
+    }
+
+    #[test]
+    fn previous_capacity_refusal_is_transactional_in_all_loop_modes() {
+        for mode in [LoopMode::Off, LoopMode::Track, LoopMode::Queue] {
+            let mut q = queue(2);
+            q.skip();
+            q.enqueue(vec![track(2)], 2);
+            q.loop_mode = mode;
+            let before = q.clone();
+            for _ in 0..3 {
+                assert_eq!(q.previous(2), PreviousOutcome::Full);
+                assert_eq!(q.current, before.current);
+                assert_eq!(q.upcoming, before.upcoming);
+                assert_eq!(q.history, before.history);
+            }
+            q.clear();
+            assert_eq!(q.previous(2), PreviousOutcome::Started);
+            assert_eq!(q.len(), 2);
+        }
+        let mut q = queue(2);
+        q.loop_mode = LoopMode::Queue;
+        q.finish();
+        assert_eq!(
+            q.previous(2),
+            PreviousOutcome::Started,
+            "queue repeat frees its own slot"
+        );
+        assert_eq!(q.len(), 2);
+        assert_eq!(q.current, Some(track(0)));
+        assert_eq!(q.upcoming, [track(1)]);
     }
 
     #[test]
